@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="activity_background">#f5f7fa</color>
+    <color name="gray">#696969</color>
+    <color name="table_title_selected">#5d91be</color>
+    <color name="table_title_unselected">#696969</color>
+
+</resources>

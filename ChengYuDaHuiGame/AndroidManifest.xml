@@ -9,6 +9,7 @@
         android:targetSdkVersion="19" />
 
     <application
+        android:name="com.zhaoyan.juyou.game.chengyudahui.JuYouApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -21,6 +22,21 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.CommunicationTestActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.UserInfoSettingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ConnectFriendsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
     </application>
 

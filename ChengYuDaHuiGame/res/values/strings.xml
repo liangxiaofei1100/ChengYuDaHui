@@ -4,5 +4,18 @@
     <string name="app_name">成语大会</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="disconnect">断开连接</string>
+    <string name="connect_friends">连朋友</string>
+    <string name="search_ap_tips">在Wi-Fi热点创建的Wi-Fi局域网中与其他人互连。</string>
+    <string name="search_wifi_tips">在当前Wi-Fi网络下与其他人互连。</string>
+    <string name="connecting">正在连接</string>
+    <string name="creating_server">正在创建连接...</string>
+    <string name="create_server">创建连接</string>
+    <string name="search_connect">搜索加入</string>
+    <string name="search_result_none">未发现好友</string>
+    <string name="searching">搜索中...</string>
+    <string name="wifi_server_number_wifi_name_default">Wi-Fi连接</string>
+    <string name="wifi_server_number">%1$s (%2$d)</string>
+    <string name="ap_server_number">热点连接  (%d)</string>
 
 </resources>
