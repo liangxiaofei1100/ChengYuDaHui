@@ -113,7 +113,7 @@ public class ChengYuWriter {
 	private String handleSymbols(String name, String chengyu) {
 		chengyu = chengyu.replaceAll(SYMBOL_FROM, "出自：");
 		chengyu = chengyu.replaceAll(SYMBOL_NOW, "后");
-		chengyu = chengyu.replaceAll(SYMBOL_NOW, name);
+		chengyu = chengyu.replaceAll(SYMBOL_NAME, name);
 		return chengyu;
 	}
 
