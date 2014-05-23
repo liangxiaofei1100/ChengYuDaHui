@@ -15,6 +15,9 @@ public class ChengYuWriter {
 	private static final String SEPERATOR_COMMENT = "释义：";
 	private static final String SEPERATOR_ORIGINAL = "出处：";
 	private static final String SEPERATOR_EXAMPLE = "示例：";
+	private static final String SYMBOL_NAME = "～";
+	private static final String SYMBOL_FROM = "★";
+	private static final String SYMBOL_NOW = "◇";
 
 	public ChengYuWriter(String chengyuFilePath, ChengYuDatabase database) {
 		mChengYuFilePath = chengyuFilePath;
@@ -63,6 +66,9 @@ public class ChengYuWriter {
 		try {
 			name = handleErrorFormate(getSubString(chengyu, null,
 					SEPERATOR_PINYIN));
+			// Handle symbols.
+			chengyu = handleSymbols(name, chengyu);
+			
 			pinyin = handleErrorFormate(getSubString(chengyu, SEPERATOR_PINYIN,
 					SEPERATOR_COMMENT));
 			comment = handleErrorFormate(getSubString(chengyu,
@@ -102,6 +108,13 @@ public class ChengYuWriter {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private String handleSymbols(String name, String chengyu) {
+		chengyu = chengyu.replaceAll(SYMBOL_FROM, "出自：");
+		chengyu = chengyu.replaceAll(SYMBOL_NOW, "后");
+		chengyu = chengyu.replaceAll(SYMBOL_NOW, name);
+		return chengyu;
 	}
 
 	private String getSubString(String string, String start, String end)
