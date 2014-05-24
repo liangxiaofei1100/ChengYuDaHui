@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class ChengYuWriter {
 	private String mChengYuFilePath;
@@ -31,8 +33,8 @@ public class ChengYuWriter {
 		}
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 		String line = null;
-		int id = 1;
 		int lineNumber = 0;
+		ArrayList<ChengYu> list = new ArrayList<ChengYu>();
 		try {
 			while ((line = bufferedReader.readLine()) != null) {
 				lineNumber++;
@@ -41,10 +43,15 @@ public class ChengYuWriter {
 					continue;
 				}
 				// write one ChengYu into dababase.
-				writeOneChengYuIntoDatabase(id, line, lineNumber);
-				id++;
+				addChengYuToList(line, lineNumber, list);
 			}
-			System.out.println("writeToDataBase total number: " + id);
+			System.out.println("read finish, total number: " + list.size());
+			System.out.println("writeToDataBase begin.");
+			int n = writeChengYuIntoDatabase(list);
+			System.out.println("writeToDataBase finish. total number: " + n);
+			System.out.println("write to file begin.");
+			writeChengYuIntoFile(list);
+			System.out.println("write to file end.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -53,6 +60,101 @@ public class ChengYuWriter {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void writeChengYuIntoFile(ArrayList<ChengYu> list)
+			throws IOException {
+		File outFile = new File(Config.OUT_TEXT_FILE_PATH);
+		if (outFile.exists()) {
+			outFile.delete();
+		}
+		FileWriter writer = new FileWriter(outFile);
+		String line = "";
+		for (ChengYu chengyu : list) {
+			line = chengyu.name + " " + SEPERATOR_PINYIN + chengyu.pinyin
+					+ SEPERATOR_COMMENT + chengyu.comment + SEPERATOR_ORIGINAL
+					+ chengyu.original + SEPERATOR_EXAMPLE + chengyu.example;
+			writer.append(line);
+			writer.append("\n\n");
+		}
+		writer.flush();
+		writer.close();
+	}
+
+	private int writeChengYuIntoDatabase(ArrayList<ChengYu> list) {
+		int id = 1;
+		for (ChengYu chengyu : list) {
+			insertChengYu(id, chengyu.name, chengyu.pinyin, chengyu.comment,
+					chengyu.original, chengyu.example);
+			id++;
+		}
+		return id - 1;
+	}
+
+	private void insertChengYu(int id, String name, String pinyin,
+			String comment, String original, String example) {
+		Statement statement = null;
+		String sql = null;
+		try {
+			statement = mDatabase.createStatement();
+			sql = "insert into " + ChengYuDatabase.ChengYuTable.TABLE_NAME
+					+ " values(" + id + ", '" + name + "','" + pinyin + "','"
+					+ comment + "','" + original + "','" + example + "');";
+			statement.execute(sql);
+			// System.out.println("write id " + id + " ,name " + name +
+			// " done");
+		} catch (SQLException e) {
+			System.err.println("Sql = " + sql + " id = " + id + ", name = "
+					+ name);
+			e.printStackTrace();
+		} finally {
+			try {
+				if (statement != null) {
+					statement.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void addChengYuToList(String chengyu, int lineNumber,
+			ArrayList<ChengYu> list) {
+		String name = null;
+		String pinyin = null;
+		String comment = null;
+		String original = null;
+		String example = null;
+		try {
+			name = handleErrorFormate(getSubString(chengyu, null,
+					SEPERATOR_PINYIN));
+			// Handle symbols.
+			chengyu = handleSymbols(name, chengyu);
+
+			pinyin = handleErrorFormate(getSubString(chengyu, SEPERATOR_PINYIN,
+					SEPERATOR_COMMENT));
+			comment = handleErrorFormate(getSubString(chengyu,
+					SEPERATOR_COMMENT, SEPERATOR_ORIGINAL));
+			original = handleErrorFormate(getSubString(chengyu,
+					SEPERATOR_ORIGINAL, SEPERATOR_EXAMPLE));
+			example = handleErrorFormate(getSubString(chengyu,
+					SEPERATOR_EXAMPLE, null));
+		} catch (Exception e1) {
+			System.err.println("Seperate line error. lineNumber = "
+					+ lineNumber + ", chengyu = " + chengyu);
+			e1.printStackTrace();
+			return;
+		}
+		boolean isRepeat = false;
+		for (ChengYu item : list) {
+			if (item.name.equals(name)) {
+				isRepeat = true;
+				break;
+			}
+		}
+		if (!isRepeat) {
+			list.add(new ChengYu(name, pinyin, comment, original, example));
 		}
 	}
 
@@ -68,7 +170,7 @@ public class ChengYuWriter {
 					SEPERATOR_PINYIN));
 			// Handle symbols.
 			chengyu = handleSymbols(name, chengyu);
-			
+
 			pinyin = handleErrorFormate(getSubString(chengyu, SEPERATOR_PINYIN,
 					SEPERATOR_COMMENT));
 			comment = handleErrorFormate(getSubString(chengyu,
