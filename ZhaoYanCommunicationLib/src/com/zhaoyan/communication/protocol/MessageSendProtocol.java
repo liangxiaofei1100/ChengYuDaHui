@@ -204,7 +204,7 @@ public class MessageSendProtocol implements IProtocol {
 			Map<Integer, SocketCommunication> communications = userManager
 					.getAllCommmunication();
 			for (int id : communications.keySet()) {
-				if (id != sendUserID) {
+				if (id != sendUserID && id != UserManager.SERVER_USER_ID) {
 					communications.get(id).sendMessage(baseMessageData);
 				} else {
 					// Ignore, the communication is the message comes from.

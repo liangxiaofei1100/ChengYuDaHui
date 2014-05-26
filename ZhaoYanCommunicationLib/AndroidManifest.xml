@@ -8,6 +8,13 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="19" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -22,6 +29,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name="com.zhaoyan.communication.LoginService" >
+        </service>
+        <service android:name="com.zhaoyan.communication.FileTransferService" >
+            <meta-data
+                android:name="app_id"
+                android:value="111" />
+        </service>
+        <service android:name="com.zhaoyan.communication.ScreenMonitor" >
+        </service>
+
+        <provider
+            android:name="com.zhaoyan.communication.provider.ZhaoYanCommunicationProvider"
+            android:authorities="com.zhaoyan.communication.provider.ZhaoYanCommunicationProvider"
+            android:exported="false" >
+        </provider>
     </application>
 
 </manifest>
