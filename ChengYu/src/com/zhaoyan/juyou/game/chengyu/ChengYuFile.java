@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ChengYuFile {
 	public static final String SEPERATOR_PINYIN = "拼音：";
@@ -17,8 +18,6 @@ public class ChengYuFile {
 	public static final String SEPERATOR_OPPOSITE = "反义词：";
 	public static final String SEPERATOR_SIMILAR = "近义词：";
 	public static final String SEPERATOR_STORY = "成语故事：";
-
-	public static final String NONE = "无";
 
 	public static final String OPPOSITE_SIMILAR_SEPERATOR = "、";
 
@@ -107,13 +106,14 @@ public class ChengYuFile {
 		for (ChengYu chengYu : list) {
 			nameList.add(chengYu.name);
 		}
+		System.out.println("name list size " + nameList.size());
 
 		for (ChengYu chengYu : list) {
 			boolean checSimilar = checkSimilarAndOpposite(nameList,
 					chengYu.similar, chengYu);
 			boolean checkOpposite = checkSimilarAndOpposite(nameList,
 					chengYu.opposite, chengYu);
-			
+
 			if (!checSimilar || !checkOpposite) {
 				checkPass = false;
 			}
@@ -133,11 +133,14 @@ public class ChengYuFile {
 				if (similarOrOppositeOne.endsWith("。")) {
 					similarOrOppositeOne = similarOrOppositeOne.substring(0,
 							similarOrOppositeOne.indexOf("。"));
-					System.err.println("similarOrOpposite format error: end with 。 Chengyu: " + chengYu.name);
+					System.err
+							.println("similarOrOpposite format error: end with 。 Chengyu: "
+									+ chengYu.name);
 				}
 				if (!nameList.contains(similarOrOppositeOne)) {
 					System.err.println("similarOrOpposite not found. ChengYu: "
-							+ chengYu.name + ", similarOrOpposite: " + similarOrOppositeOne);
+							+ chengYu.name + ", similarOrOpposite: "
+							+ similarOrOppositeOne);
 					checkPass = false;
 				}
 			}
@@ -151,32 +154,47 @@ public class ChengYuFile {
 
 		// Separate all sessions.
 		String strs[] = line.split(REGEX_SEPERATOR_ALL);
-		for (String str : strs) {
+		
+		boolean needCheck = false;
+		
+		for (int i = 0; i < strs.length; i++) {
+			String str = strs[i];
+
 			// Separate one session to get the session's meaning.
-			int i = line.indexOf(str);
-			String subString = line.substring(0, i).trim();
+			int index = line.indexOf(str);
+			int lastIndex = line.lastIndexOf(str);
+			// There may be more than one str match. The index of chengyu.example is 4.
+			
+			if (i > 4 && index != lastIndex) {
+				index = lastIndex;
+				needCheck = true;
+			}
+			String subString = line.substring(0, index).trim();
+
 			// Handle error format
 			try {
 				str = handleErrorFormat(str);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			// Replace none with "";
-			if (NONE.equals(str)) {
-				str = "";
+
+			switch (i) {
+			case 0:
+				chengyu.name = str;
+				break;
+			case 1:
+				chengyu.pinyin = str;
+			case 2:
+				chengyu.comment = str;
+			case 3:
+				chengyu.original = str;
+			case 4:
+				chengyu.example = str;
+			default:
+				break;
 			}
 
-			if (subString.equals("")) {
-				chengyu.name = str;
-			} else if (subString.endsWith(SEPERATOR_PINYIN)) {
-				chengyu.pinyin = str;
-			} else if (subString.endsWith(SEPERATOR_COMMENT)) {
-				chengyu.comment = str;
-			} else if (subString.endsWith(SEPERATOR_ORIGINAL)) {
-				chengyu.original = str;
-			} else if (subString.endsWith(SEPERATOR_EXAMPLE)) {
-				chengyu.example = str;
-			} else if (subString.endsWith(SEPERATOR_ENGLISH)) {
+			if (subString.endsWith(SEPERATOR_ENGLISH)) {
 				chengyu.english = str;
 			} else if (subString.endsWith(SEPERATOR_SIMILAR)) {
 				chengyu.similar = str;
@@ -186,7 +204,9 @@ public class ChengYuFile {
 				chengyu.story = str;
 			}
 		}
-
+		if (needCheck) {
+			System.out.println("Check: " + chengyu);
+		}
 		return chengyu;
 	}
 
