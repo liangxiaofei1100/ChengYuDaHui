@@ -7,8 +7,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
+/**
+ * Read and write ChengYu TXT file.
+ * 
+ */
 public class ChengYuFile {
 	public static final String SEPERATOR_PINYIN = "拼音：";
 	public static final String SEPERATOR_COMMENT = "释义：";
@@ -99,7 +102,7 @@ public class ChengYuFile {
 	 * 
 	 * @param list
 	 */
-	public boolean checkSimilarAndOpposite(ArrayList<ChengYu> list) {
+	public static boolean checkSimilarAndOpposite(ArrayList<ChengYu> list) {
 		boolean checkPass = true;
 
 		ArrayList<String> nameList = new ArrayList<>();
@@ -122,7 +125,7 @@ public class ChengYuFile {
 		return checkPass;
 	}
 
-	private boolean checkSimilarAndOpposite(ArrayList<String> nameList,
+	private static boolean checkSimilarAndOpposite(ArrayList<String> nameList,
 			String similarOrOpposite, ChengYu chengYu) {
 		boolean checkPass = true;
 		if (!similarOrOpposite.equals("")) {
@@ -154,17 +157,18 @@ public class ChengYuFile {
 
 		// Separate all sessions.
 		String strs[] = line.split(REGEX_SEPERATOR_ALL);
-		
+
 		boolean needCheck = false;
-		
+
 		for (int i = 0; i < strs.length; i++) {
 			String str = strs[i];
 
 			// Separate one session to get the session's meaning.
 			int index = line.indexOf(str);
 			int lastIndex = line.lastIndexOf(str);
-			// There may be more than one str match. The index of chengyu.example is 4.
-			
+			// There may be more than one str match. The index of
+			// chengyu.example is 4.
+
 			if (i > 4 && index != lastIndex) {
 				index = lastIndex;
 				needCheck = true;

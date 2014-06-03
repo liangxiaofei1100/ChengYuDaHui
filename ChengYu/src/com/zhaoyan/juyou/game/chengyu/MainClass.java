@@ -1,7 +1,6 @@
 package com.zhaoyan.juyou.game.chengyu;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -13,22 +12,34 @@ public class MainClass {
 
 	public static void main(String[] args) throws ClassNotFoundException,
 			FileNotFoundException {
+		log("Start...");
 		// Read all from file.
+		ArrayList<ChengYu> chengyuList = readFromExcelFile();
+		// Write into database.
+		writeIntoDataBase(chengyuList);
+		log("Finished.");
+	}
+
+	private static ArrayList<ChengYu> readFromExcelFile() {
 		log("Read start...");
 		long readStart = System.currentTimeMillis();
-		ChengYuFile chengYuFile = new ChengYuFile(Config.CHENGYU_FILE_PATH);
-		ArrayList<ChengYu> chengyuList = chengYuFile.readAll();
+		ChengYuExcelFile excelFile = new ChengYuExcelFile();
+		ArrayList<ChengYu> chengyuList = excelFile
+				.readAll(Config.CHENGYU_EXCEL_FILE_PATH);
 		long readEnd = System.currentTimeMillis();
 		log("Read end. total: " + chengyuList.size() + ", cost time: "
 				+ (readEnd - readStart) + " ms");
 		// Check Similar and Opposite.
 		log("Check Similar and Opposite start ");
 		long checkStart = System.currentTimeMillis();
-		boolean checkResult = chengYuFile.checkSimilarAndOpposite(chengyuList);
+		boolean checkResult = ChengYuFile.checkSimilarAndOpposite(chengyuList);
 		long checkEnd = System.currentTimeMillis();
 		log("Check Similar and Opposite end. checkResult " + checkResult
 				+ ", cost time: " + (checkEnd - checkStart) + "ms.");
+		return chengyuList;
+	}
 
+	private static void writeIntoDataBase(ArrayList<ChengYu> chengYus) {
 		// Write into database.
 		log("Connect database.");
 		ChengYuDatabase database = new ChengYuDatabase(
@@ -43,7 +54,7 @@ public class MainClass {
 				// write chengyu into database.
 				log("Write to database start...");
 				long start = System.currentTimeMillis();
-				database.writeIntoDatabase(chengyuList);
+				database.writeIntoDatabase(chengYus);
 				long end = System.currentTimeMillis();
 				log("Write to database end. cost time: " + (end - start)
 						+ " ms.");
@@ -51,11 +62,8 @@ public class MainClass {
 			log("Read from database start...");
 			ArrayList<ChengYu> chengYu = database.readFromDataBase();
 			log("Read from database end. total " + chengYu.size());
-			chengYuFile.writeIntoFile(chengYu);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		} finally {
 			try {
 				database.close();
@@ -63,7 +71,6 @@ public class MainClass {
 				e.printStackTrace();
 			}
 		}
-		log("Finished.");
 	}
 
 	private static void log(String log) {

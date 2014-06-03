@@ -28,7 +28,7 @@ public class ChengYuDatabaseTest {
 		ArrayList<ChengYu> list = database.readFromDataBase();
 		ChengYu chengYu = null;
 		for (ChengYu chengYuItem : list) {
-			if (chengYuItem.name.equals(ChengYuTest.ZuoSiYouXiang)) {
+			if (chengYuItem.name.equals(ChengYuTest.ZUO_SI_YOU_XIANG)) {
 				chengYu = chengYuItem;
 			}
 		}
@@ -41,10 +41,10 @@ public class ChengYuDatabaseTest {
 		ArrayList<ChengYu> list = database.readFromDataBase();
 		ChengYu chengYu = null;
 		for (ChengYu chengYuItem : list) {
-			if (chengYuItem.name.equals(ChengYuTest.ZuoTiYouQing)) {
+			if (chengYuItem.name.equals(ChengYuTest.WU_WANG_BU_LI)) {
 				chengYu = chengYuItem;
 			}
 		}
-		ChengYuTest.testZuoTiYouQing(chengYu);
+		ChengYuTest.testWuWangBuLi(chengYu);
 	}
 }

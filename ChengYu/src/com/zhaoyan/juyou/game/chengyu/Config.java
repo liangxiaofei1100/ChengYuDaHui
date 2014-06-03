@@ -7,5 +7,5 @@ public class Config {
 	public static final String OUT_EXCEL_FILE_PATH = "out/chengyu.xlsx";
 
 	public static final String CHENGYU_FILE_PATH = "res/chengyu/chengyu.txt";
-
+	public static final String CHENGYU_EXCEL_FILE_PATH = "res/chengyu/chengyu.xlsx";
 }
