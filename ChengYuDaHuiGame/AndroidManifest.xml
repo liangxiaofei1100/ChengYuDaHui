@@ -38,6 +38,17 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+
+        <provider
+            android:name="com.zhaoyan.juyou.game.chengyudahui.db.ChengyuProvider"
+            android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.chengyuprovider"
+            android:enabled="false" >
+        </provider>
     </application>
 
 </manifest>

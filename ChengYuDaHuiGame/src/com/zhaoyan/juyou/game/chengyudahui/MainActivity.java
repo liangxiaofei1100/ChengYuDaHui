@@ -10,9 +10,13 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements OnClickListener {
+	public static String DB_PATH="";
+	public static Button mStudyBtn, mSpeakBtn, mPaintBtn, mScoreBtn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +27,13 @@ public class MainActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+		if (mStudyBtn != null) {
+			mStudyBtn.setOnClickListener(this);
+			mSpeakBtn.setOnClickListener(this);
+			mPaintBtn.setOnClickListener(this);
+			mScoreBtn.setOnClickListener(this);
+		}
+		DB_PATH=this.getFilesDir().getAbsolutePath()+ "/database/chengyu.db";
 	}
 
 	@Override
@@ -58,7 +69,34 @@ public class MainActivity extends ActionBarActivity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
+			mStudyBtn = (Button) rootView.findViewById(R.id.study_btn);
+			mSpeakBtn = (Button) rootView.findViewById(R.id.speak_btn);
+			mPaintBtn = (Button) rootView.findViewById(R.id.paint_btn);
+			mScoreBtn = (Button) rootView.findViewById(R.id.score_btn);
 			return rootView;
+		}
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		// TODO Auto-generated method stub
+		switch (arg0.getId()) {
+		case R.id.study_btn:
+			
+
+			break;
+		case R.id.speak_btn:
+
+			break;
+		case R.id.paint_btn:
+
+			break;
+		case R.id.score_btn:
+
+			break;
+
+		default:
+			break;
 		}
 	}
 

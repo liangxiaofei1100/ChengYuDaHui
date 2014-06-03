@@ -17,5 +17,12 @@
     <string name="wifi_server_number_wifi_name_default">Wi-Fi连接</string>
     <string name="wifi_server_number">%1$s (%2$d)</string>
     <string name="ap_server_number">热点连接  (%d)</string>
+    <string name="study_every_day">天天学成语</string>
+    <string name="game_by_speak">你说我来猜</string>
+    <string name="game_by_paint">你画我来猜</string>
+    <string name="get_score">轻松拿金币</string>
+    <string name="local_mode">单机模式</string>
+    <string name="internet_mode">聚会模式</string>
+    <string name="count_down_sample">01:01</string>
 
 </resources>
