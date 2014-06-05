@@ -10,6 +10,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.util.Log;
+
 /**
  * need to more,just modify for query
  * 
@@ -45,7 +47,8 @@ public class ChengyuProvider extends ContentProvider {
 	@Override
 	public boolean onCreate() {
 		// TODO Auto-generated method stub
-		return false;
+		mChengyuDbHelper = new ChengyuDbHelper();
+		return mChengyuDbHelper == null ? false : true;
 	}
 
 	@Override
@@ -57,7 +60,6 @@ public class ChengyuProvider extends ContentProvider {
 		case 0:
 			builder.setTables(ChengyuColums.TableName);
 			break;
-
 		default:
 			throw new IllegalArgumentException("Unknow Uri : " + arg0);
 		}

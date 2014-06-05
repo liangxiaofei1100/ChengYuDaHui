@@ -3,6 +3,7 @@ package com.zhaoyan.juyou.game.chengyudahui.db;
 import java.io.File;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class ChengyuDbHelper {
 
