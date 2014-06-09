@@ -28,5 +28,8 @@
     <string name="start_game">开始游戏</string>
     <string name="game_right">正确</string>
     <string name="game_next">换词</string>
-
+    <string name="paint_clean">清除</string>
+	<string name="speak_time_setting">时间设定</string>
+	<string name="setting_time">请输入时间</string>
+	<string name="setting_time_unit">秒</string>
 </resources>

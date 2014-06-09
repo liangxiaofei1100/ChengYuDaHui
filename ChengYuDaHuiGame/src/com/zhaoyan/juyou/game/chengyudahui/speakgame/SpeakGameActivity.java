@@ -13,6 +13,7 @@ import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,18 +21,22 @@ import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class SpeakGameActivity extends Activity implements OnClickListener {
 	private Button mLocalBtn, mInterBtn, mStartGameBtn, mLocalRightBtn,
-			mLocalChangeBtn;
-	private View mModeSelectView, mLocalGameView, mInterGameView;
+			mLocalChangeBtn, mGameTimeSetting;
+	private View mModeSelectView, mLocalGameView, mInterGameView,
+			mGameSettingAndStartLayout;
 	private int mGameMode = -1;// if 0 ,local mode; else if 1 ,Internet mode
 	private Random mRandom;
 	private TextView mLocalChengyuName, mLocalCountDown, mLocalInfoForChengyu;
 	private int mGameSocre, mRemainderTime;
 	private Timer mCountDownTimer;
-	private final int COUNT_DOWN = 0, GAME_TIME = 300;
+	private final int COUNT_DOWN = 0;
+	private int GAME_TIME = 300;
+	private AlertDialog mTimeSetting;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +53,16 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 		mLocalChengyuName = (TextView) findViewById(R.id.speak_chengyu_game_name);
 		mLocalRightBtn = (Button) findViewById(R.id.speak_game_right);
 		mLocalCountDown = (TextView) findViewById(R.id.count_down);
+		mLocalCountDown.setText(GAME_TIME + "");
 		mLocalInfoForChengyu = (TextView) findViewById(R.id.info_for_chengyu);
-
+		mGameSettingAndStartLayout = findViewById(R.id.mode_setting_layout);
+		mGameTimeSetting = (Button) findViewById(R.id.speak_game_time_setting);
 		mLocalBtn.setOnClickListener(this);
 		mInterBtn.setOnClickListener(this);
 		mStartGameBtn.setOnClickListener(this);
 		mLocalChangeBtn.setOnClickListener(this);
 		mLocalRightBtn.setOnClickListener(this);
+		mGameTimeSetting.setOnClickListener(this);
 	}
 
 	@Override
@@ -63,7 +71,7 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 		switch (arg0.getId()) {
 		case R.id.local_mode:
 			mModeSelectView.setVisibility(View.GONE);
-			mStartGameBtn.setVisibility(View.VISIBLE);
+			mGameSettingAndStartLayout.setVisibility(View.VISIBLE);
 			mGameMode = 0;
 			break;
 		case R.id.internet_mode:
@@ -73,7 +81,7 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.speak_game_start:// if mode==-1,change it to be 0,for local
 									// mode
-			mStartGameBtn.setVisibility(View.GONE);
+			mGameSettingAndStartLayout.setVisibility(View.GONE);
 			if (mGameMode != 0 && mGameMode != 1) {
 				mGameMode = 0;
 			}
@@ -85,6 +93,38 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 		case R.id.speak_game_right:
 			mGameSocre++;
 			initGameWord();
+			break;
+		case R.id.speak_game_time_setting:
+			if (mTimeSetting == null) {
+				final View v = this.getLayoutInflater().inflate(
+						R.layout.time_setting_layout, null);
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle("设置单局游戏时间");
+				builder.setView(v);
+				builder.setPositiveButton("确定",
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								// TODO Auto-generated method stub
+								EditText edit = (EditText) v
+										.findViewById(R.id.setting_time_dialog_edit);
+								String time = edit.getText().toString();
+								if(time.trim().length()>0){
+									GAME_TIME=Integer.valueOf(time);
+								}
+							}
+						});
+				builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+			}
+			mTimeSetting.show();
 			break;
 		default:
 			break;

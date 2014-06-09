@@ -2,6 +2,7 @@ package com.zhaoyan.juyou.game.chengyudahui;
 
 import com.zhaoyan.juyou.game.chengyudahui.db.CopyDBFile;
 import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
+import com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty;
 import com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameActivity;
 import com.zhaoyan.juyou.game.chengyudahui.study.StudyActivity;
 
@@ -112,7 +113,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			intent.setClass(this, SpeakGameActivity.class);
 			break;
 		case R.id.paint_btn:
-
+			intent.setClass(this, PaintGameActivty.class);
 			break;
 		case R.id.score_btn:
 
