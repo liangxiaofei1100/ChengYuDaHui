@@ -58,6 +58,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 	private String[] mPaintColor = new String[] { "红色", "绿色", "蓝色", "黑色", "黄色" };
 	private AlertDialog selectColor;
 	private List<Point> tempList;
+	private boolean isMain = true;
 
 	private class Operator {
 		private List<Point> pointLists;
@@ -128,57 +129,59 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 		mPaint.setStrokeWidth(5);
 		mCanvas.drawBitmap(mPaintBitmap, new Matrix(), mPaint);
 		mPaintImage.setImageBitmap(mPaintBitmap);
-		mPaintImage.setOnTouchListener(new OnTouchListener() {
+		if (isMain)
+			mPaintImage.setOnTouchListener(new OnTouchListener() {
 
-			@Override
-			public boolean onTouch(View arg0, MotionEvent arg1) {
-				// TODO Auto-generated method stub
+				@Override
+				public boolean onTouch(View arg0, MotionEvent arg1) {
+					// TODO Auto-generated method stub
 
-				switch (arg1.getAction()) {
-				case MotionEvent.ACTION_DOWN:
-					if (tempList == null) {
-						tempList = new ArrayList<PaintGameActivty.Point>();
-					} else {
+					switch (arg1.getAction()) {
+					case MotionEvent.ACTION_DOWN:
+						if (tempList == null) {
+							tempList = new ArrayList<PaintGameActivty.Point>();
+						} else {
+							tempList.clear();
+						}
+						if (firstLocation == null) {
+							firstLocation = new Point();
+						}
+						firstLocation.x = arg1.getX();
+						firstLocation.y = arg1.getY();
+						tempList.add(new Point(firstLocation.x, firstLocation.y));
+						break;
+					case MotionEvent.ACTION_MOVE:
+						if (secondLocation == null)
+							secondLocation = new Point();
+						secondLocation.x = arg1.getX();
+						secondLocation.y = arg1.getY();
+						mCanvas.drawLine(firstLocation.x, firstLocation.y,
+								secondLocation.x, secondLocation.y, mPaint);
+						firstLocation.x = secondLocation.x;
+						firstLocation.y = secondLocation.y;
+						tempList.add(new Point(secondLocation.x,
+								secondLocation.y));
+						mPaintImage.setImageBitmap(mPaintBitmap);
+						break;
+					case MotionEvent.ACTION_UP:
+						if (cancelOperator == null) {
+							cancelOperator = new ArrayList<PaintGameActivty.Operator>();
+						}
+						Operator op = new Operator();
+						op.pointLists.addAll(tempList);
+						cancelOperator.add(op);
+						if (cancelOperator.size() > 10) {
+							cancelOperator.remove(0);
+						}
 						tempList.clear();
-					}
-					if (firstLocation == null) {
-						firstLocation = new Point();
-					}
-					firstLocation.x = arg1.getX();
-					firstLocation.y = arg1.getY();
-					tempList.add(new Point(firstLocation.x, firstLocation.y));
-					break;
-				case MotionEvent.ACTION_MOVE:
-					if (secondLocation == null)
-						secondLocation = new Point();
-					secondLocation.x = arg1.getX();
-					secondLocation.y = arg1.getY();
-					mCanvas.drawLine(firstLocation.x, firstLocation.y,
-							secondLocation.x, secondLocation.y, mPaint);
-					firstLocation.x = secondLocation.x;
-					firstLocation.y = secondLocation.y;
-					tempList.add(new Point(secondLocation.x, secondLocation.y));
-					mPaintImage.setImageBitmap(mPaintBitmap);
-					break;
-				case MotionEvent.ACTION_UP:
-					if (cancelOperator == null) {
-						cancelOperator = new ArrayList<PaintGameActivty.Operator>();
-					}
-					Operator op = new Operator();
-					op.pointLists.addAll(tempList);
-					cancelOperator.add(op);
-					if (cancelOperator.size() > 10) {
-						cancelOperator.remove(0);
-					}
-					tempList.clear();
-					break;
+						break;
 
-				default:
-					break;
+					default:
+						break;
+					}
+					return true;
 				}
-				return true;
-			}
-		});
+			});
 	}
 
 	private void showWord() {
@@ -208,6 +211,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 
 	private void cleanPaint() {
 		if (mPrepareFlag) {
+		
 			mCanvas.drawColor(Color.GRAY);
 			mPaintImage.setImageBitmap(mPaintBitmap);
 			if (cancelOperator != null)

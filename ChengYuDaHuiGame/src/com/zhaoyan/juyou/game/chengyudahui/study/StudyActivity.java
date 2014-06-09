@@ -1,5 +1,6 @@
 package com.zhaoyan.juyou.game.chengyudahui.study;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,12 +10,14 @@ import java.util.Random;
 import com.zhaoyan.juyou.game.chengyudahui.MainActivity;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
+import com.zhaoyan.juyou.game.chengyudahui.db.HistoryData.HistoryColums;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -107,6 +110,11 @@ public class StudyActivity extends Activity {
 						ChengyuColums.EXAMPLE, ChengyuColums.ENGLISH,
 						ChengyuColums.SIMILAR, ChengyuColums.OPPOSITE },
 				"_id in (" + s + ")", null, null);
+		ContentValues values=new ContentValues();
+		values.put(HistoryColums.KIND, 0);
+		values.put(HistoryColums.NAME, s);
+		values.put(HistoryColums.TIME, MainActivity.getDate());
+		
 	}
 
 	private void queryChengyu(final String string) {

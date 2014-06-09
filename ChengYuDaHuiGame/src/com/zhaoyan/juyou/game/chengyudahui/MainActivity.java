@@ -1,13 +1,14 @@
 package com.zhaoyan.juyou.game.chengyudahui;
 
+import java.text.SimpleDateFormat;
 import com.zhaoyan.juyou.game.chengyudahui.db.CopyDBFile;
 import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
 import com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty;
 import com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameActivity;
 import com.zhaoyan.juyou.game.chengyudahui.study.StudyActivity;
-
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -24,7 +25,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	public static String DB_PATH = "", DB_DIR;
 	public static Button mStudyBtn, mSpeakBtn, mPaintBtn, mScoreBtn;
 	public static int DB_NUMBER = -1;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,6 +66,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+
+	@SuppressLint("SimpleDateFormat") public static String getDate() {
+		SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		return sDateFormat.format(new java.util.Date());
 	}
 
 	@Override

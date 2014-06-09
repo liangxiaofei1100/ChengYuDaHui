@@ -1,18 +1,21 @@
 package com.zhaoyan.juyou.game.chengyudahui.speakgame;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import com.zhaoyan.juyou.game.chengyudahui.MainActivity;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
-
+import com.zhaoyan.juyou.game.chengyudahui.db.HistoryData.HistoryColums;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -37,6 +40,7 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 	private final int COUNT_DOWN = 0;
 	private int GAME_TIME = 300;
 	private AlertDialog mTimeSetting;
+	private List<String> chengyuList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -110,19 +114,22 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 								EditText edit = (EditText) v
 										.findViewById(R.id.setting_time_dialog_edit);
 								String time = edit.getText().toString();
-								if(time.trim().length()>0){
-									GAME_TIME=Integer.valueOf(time);
+								if (time.trim().length() > 0) {
+									GAME_TIME = Integer.valueOf(time);
+									mLocalCountDown.setText(GAME_TIME + "");
 								}
 							}
 						});
-				builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface arg0, int arg1) {
-						// TODO Auto-generated method stub
-						
-					}
-				});
+				builder.setNegativeButton("取消",
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								// TODO Auto-generated method stub
+
+							}
+						});
+				mTimeSetting = builder.create();
 			}
 			mTimeSetting.show();
 			break;
@@ -210,8 +217,10 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 
 	}
 
+	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
 
+		@SuppressLint("SimpleDateFormat")
 		@Override
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
@@ -225,6 +234,12 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 						mCountDownTimer = null;
 					}
 					mLocalCountDown.setText("时间到！ 得分： " + mGameSocre);
+					ContentValues values = new ContentValues();
+					values.put(HistoryColums.KIND, 1);
+					values.put(HistoryColums.TIME, MainActivity.getDate());
+					values.put(HistoryColums.NAME, mGameSocre);
+					getContentResolver()
+							.insert(HistoryColums.CONTENT_URI, null);
 				} else {
 					mLocalCountDown.setText("" + mRemainderTime);
 				}

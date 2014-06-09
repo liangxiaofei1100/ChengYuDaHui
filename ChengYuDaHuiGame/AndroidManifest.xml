@@ -52,7 +52,7 @@
             android:name="com.zhaoyan.juyou.game.chengyudahui.study.StudyActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
-         <activity
+        <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
@@ -60,6 +60,11 @@
         <provider
             android:name="com.zhaoyan.juyou.game.chengyudahui.db.ChengyuProvider"
             android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.chengyuprovider"
+            android:exported="false" >
+        </provider>
+        <provider
+            android:name="com.zhaoyan.juyou.game.chengyudahui.db.HistoryProvider"
+            android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.historyrovider"
             android:exported="false" >
         </provider>
     </application>
