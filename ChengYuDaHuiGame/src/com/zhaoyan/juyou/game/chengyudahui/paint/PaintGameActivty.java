@@ -21,6 +21,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,7 +48,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 	private TextView mPaintChengyuName;
 	private Button mChangeWordBtn, mPaintCleanBtn, mPaintRightBtn;
 	private Bitmap mPaintBitmap;
-	private Point firstLocation, secondLocation;
+	private Point firstPoint, secondPoint, thirdPoint;
 	private Paint mPaint;
 	private Canvas mCanvas;
 	private int mWidth, mHeight;
@@ -58,7 +59,9 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 	private String[] mPaintColor = new String[] { "红色", "绿色", "蓝色", "黑色", "黄色" };
 	private AlertDialog selectColor;
 	private List<Point> tempList;
-	private boolean isMain = true;
+	private boolean isMain = true, drawLine = true;
+	private Path mPath;
+	private final int BACKGROUND_COLOR=Color.GRAY;
 
 	private class Operator {
 		private List<Point> pointLists;
@@ -88,7 +91,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 		setContentView(R.layout.paint_surface);
 		mPaintChengyuName = (TextView) findViewById(R.id.paint_chengyu_name);
 		mPaintImage = (ImageView) findViewById(R.id.paint_image_view);
-		mPaintChengyuName.setText("桃李不言下自成蹊");
+		mPaintChengyuName.setText("");
 		mPaintCleanBtn = (Button) findViewById(R.id.paint_clean_btn);
 		mChangeWordBtn = (Button) findViewById(R.id.paint_change_word_btn);
 		mPaintRightBtn = (Button) findViewById(R.id.paint_chengyu_right);
@@ -123,7 +126,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 		mPaintBitmap = Bitmap.createBitmap(mWidth, mHeight,
 				Bitmap.Config.ARGB_8888);
 		mCanvas = new Canvas(mPaintBitmap);
-		mCanvas.drawColor(Color.GRAY);
+		mCanvas.drawColor(BACKGROUND_COLOR);
 		mPaint = new Paint();
 		mPaint.setColor(Color.RED);
 		mPaint.setStrokeWidth(5);
@@ -143,25 +146,24 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 						} else {
 							tempList.clear();
 						}
-						if (firstLocation == null) {
-							firstLocation = new Point();
+						if (firstPoint == null) {
+							firstPoint = new Point();
 						}
-						firstLocation.x = arg1.getX();
-						firstLocation.y = arg1.getY();
-						tempList.add(new Point(firstLocation.x, firstLocation.y));
+						firstPoint.x = arg1.getX();
+						firstPoint.y = arg1.getY();
+						tempList.add(new Point(firstPoint.x, firstPoint.y));
+						if (mPath == null) {
+							mPath = new Path();
+						}
+						mPath.reset();
+						mPath.moveTo(firstPoint.x, firstPoint.y);
 						break;
 					case MotionEvent.ACTION_MOVE:
-						if (secondLocation == null)
-							secondLocation = new Point();
-						secondLocation.x = arg1.getX();
-						secondLocation.y = arg1.getY();
-						mCanvas.drawLine(firstLocation.x, firstLocation.y,
-								secondLocation.x, secondLocation.y, mPaint);
-						firstLocation.x = secondLocation.x;
-						firstLocation.y = secondLocation.y;
-						tempList.add(new Point(secondLocation.x,
-								secondLocation.y));
-						mPaintImage.setImageBitmap(mPaintBitmap);
+						if (drawLine) {
+							drawLine(arg1);
+						} else {
+							drawQuad(arg1);
+						}
 						break;
 					case MotionEvent.ACTION_UP:
 						if (cancelOperator == null) {
@@ -211,8 +213,8 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 
 	private void cleanPaint() {
 		if (mPrepareFlag) {
-		
-			mCanvas.drawColor(Color.GRAY);
+
+			mCanvas.drawColor(BACKGROUND_COLOR);
 			mPaintImage.setImageBitmap(mPaintBitmap);
 			if (cancelOperator != null)
 				cancelOperator.clear();
@@ -354,6 +356,45 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 				fp.y = p.y;
 			}
 			cancelOperator.add(op);
+		}
+
+	}
+
+	private void drawLine(MotionEvent event) {
+		if (secondPoint == null)
+			secondPoint = new Point();
+		secondPoint.x = event.getX();
+		secondPoint.y = event.getY();
+		mCanvas.drawLine(firstPoint.x, firstPoint.y, secondPoint.x,
+				secondPoint.y, mPaint);
+		// mCanvas.drawPath(mPath, mPaint);
+		firstPoint.x = secondPoint.x;
+		firstPoint.y = secondPoint.y;
+		tempList.add(new Point(secondPoint.x, secondPoint.y));
+		mPaintImage.setImageBitmap(mPaintBitmap);
+	}
+
+	private void drawQuad(MotionEvent event) {
+		if (secondPoint == null) {
+			secondPoint = new Point();
+			secondPoint.x = event.getX();
+			secondPoint.y = event.getY();
+		} else {
+			if (thirdPoint == null) {
+				thirdPoint = new Point();
+			}
+			thirdPoint.x = event.getX();
+			thirdPoint.y = event.getY();
+			mPath.quadTo(secondPoint.x, secondPoint.y, thirdPoint.x,
+					thirdPoint.y);
+			mCanvas.drawPath(mPath, mPaint);
+			firstPoint.x = secondPoint.x;
+			firstPoint.y = secondPoint.y;
+			secondPoint.x = thirdPoint.x;
+			secondPoint.y = thirdPoint.y;
+//			mPath.reset();
+			mPath.moveTo(firstPoint.x, firstPoint.y);
+			mPaintImage.setImageBitmap(mPaintBitmap);
 		}
 
 	}

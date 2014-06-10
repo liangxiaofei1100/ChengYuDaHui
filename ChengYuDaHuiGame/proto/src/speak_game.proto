@@ -1,0 +1,18 @@
+message SpeakGame{
+	required	Command command=2[default = START];
+	optional 	int32 word=2;
+	optional 	int32 time=3;
+	optional 	RoleType type=3[default = OBSERVER];
+	enum Command{
+		START=1;
+		READY=2;
+		MSG=3;
+		NEXT=4;
+		ROLE=5;
+	}
+	enume RoleType{
+		REFEREE=1;
+		ACTOR=2;
+		OBSERVER=3;
+	}
+}

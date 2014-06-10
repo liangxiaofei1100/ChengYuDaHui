@@ -7,16 +7,21 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import com.zhaoyan.juyou.game.chengyudahui.MainActivity;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.ConnectFriendsActivity;
+import com.zhaoyan.juyou.game.chengyudahui.activity.UserInfoSettingActivity;
 import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
 import com.zhaoyan.juyou.game.chengyudahui.db.HistoryData.HistoryColums;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
@@ -80,7 +85,7 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.internet_mode:
 			mModeSelectView.setVisibility(View.GONE);
-			mStartGameBtn.setVisibility(View.VISIBLE);
+			mGameSettingAndStartLayout.setVisibility(View.VISIBLE);
 			mGameMode = 1;
 			break;
 		case R.id.speak_game_start:// if mode==-1,change it to be 0,for local
@@ -148,7 +153,11 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 			countDown();
 			break;
 		case 1:
-
+			mGameSettingAndStartLayout.setVisibility(View.VISIBLE);
+			Intent intent = new Intent();
+			intent.setClass(this, UserInfoSettingActivity.class);
+			intent.putExtra("Game", "speak");
+			startActivity(intent);
 			break;
 		default:
 			break;
