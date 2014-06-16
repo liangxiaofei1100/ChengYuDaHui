@@ -1,5 +1,6 @@
 package com.zhaoyan.juyou.game.chengyudahui;
 
+import com.zhaoyan.juyou.game.chengyudahui.activity.BaiduLoginActivity;
 import com.zhaoyan.juyou.game.chengyudahui.activity.CommunicationTestActivity;
 
 import android.support.v7.app.ActionBarActivity;
@@ -41,6 +42,9 @@ public class MainActivity extends ActionBarActivity {
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
+		} else if (id == R.id.action_frontia) {
+			Intent intent = new Intent(MainActivity.this, BaiduLoginActivity.class);
+			startActivity(intent);
 		}
 		return super.onOptionsItemSelected(item);
 	}

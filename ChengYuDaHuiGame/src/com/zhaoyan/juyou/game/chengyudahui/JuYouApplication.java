@@ -1,9 +1,9 @@
 package com.zhaoyan.juyou.game.chengyudahui;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
+import com.baidu.frontia.FrontiaApplication;
 import com.zhaoyan.common.net.NetWorkUtil;
 import com.zhaoyan.communication.FileTransferService;
 import com.zhaoyan.communication.ProtocolCommunication;
@@ -16,7 +16,7 @@ import com.zhaoyan.communication.search.SearchUtil;
 import com.zhaoyan.communication.search.ServerSearcher;
 import com.zhaoyan.communication.util.Log;
 
-public class JuYouApplication extends Application {
+public class JuYouApplication extends FrontiaApplication {
 	private static final String TAG = "JuYouApplication";
 	private static boolean mIsInit = false;
 
