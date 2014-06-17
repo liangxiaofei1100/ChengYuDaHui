@@ -12,7 +12,8 @@ import com.zhaoyan.communication.provider.ZhaoYanCommunicationData;
 import com.zhaoyan.communication.util.Log;
 
 public class UserInfoSettingActivity extends Activity {
-	private static final String TAG = UserInfoSettingActivity.class.getSimpleName();
+	private static final String TAG = UserInfoSettingActivity.class
+			.getSimpleName();
 	private Context mContext;
 
 	@Override
@@ -20,11 +21,12 @@ public class UserInfoSettingActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		mContext = this;
 		login();
-		
+
 		Intent intent = new Intent();
 		intent.setClass(this, ConnectFriendsActivity.class);
+		intent.putExtra("Game", getIntent().getStringExtra("Game"));
 		startActivity(intent);
-		
+
 		finish();
 	}
 

@@ -8,9 +8,35 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.zhaoyan.juyou.game.chengyudahui.MainActivity$PlaceholderFragment" >
 
-    <TextView
+    <Button
+        android:id="@+id/study_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/study_every_day" />
+
+    <Button
+        android:id="@+id/speak_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/study_btn"
+        android:layout_centerHorizontal="true"
+        android:text="@string/game_by_speak" />
+
+    <Button
+        android:id="@+id/paint_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/speak_btn"
+        android:layout_centerHorizontal="true"
+        android:text="@string/game_by_paint" />
+
+    <Button
+        android:id="@+id/score_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/paint_btn"
+        android:layout_centerHorizontal="true"
+        android:text="@string/get_score" />
 
 </RelativeLayout>
