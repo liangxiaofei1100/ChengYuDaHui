@@ -1,29 +1,60 @@
 package com.zhaoyan.juyou.game.chengyudahui.activity;
 
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.bae.GetUserInfo;
+import com.zhaoyan.juyou.game.chengyudahui.bae.ZhaoYanUser;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.BaiduFrontiaUser;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class JiFenMainActivity extends Activity {
 	private TextView tv_imei, tv_device, tv_os, tv_phone, tv_mail, tv_name, tv_downloadCount, tv_uploadCount,
 			tv_startCount;
 	private Button b_edit, downloadBtn, uploadBtn,myAppBtn;
 	private BaiduFrontiaUser user;
+	private Context mContext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		mContext = this;
+		
 		setContentView(R.layout.jifen_main);
 		setupViews();
+		Intent intent = getIntent();
+		String userName = intent.getStringExtra("user_name");
+		
+		getUserInfo(userName);
+	}
+
+	private void getUserInfo(String userName) {
+		GetUserInfo getUserInfo = new GetUserInfo();
+		getUserInfo.getUserInfo(userName);
+		getUserInfo.setGetUserInfoResultListener(new GetUserInfo.GetUserInfoResultListener() {
+			
+			@Override
+			public void onGetUserInfoSuccess(ZhaoYanUser user) {
+				tv_name.setText("账号名：" + user.userName);
+				tv_phone.setText("手机号码：" + user.phone);
+				tv_mail.setText("邮箱地址：" + user.email);
+				tv_downloadCount.setText("金币：" + user.gold);
+			}
+			
+			@Override
+			public void onGetUserInfoFail(String message) {
+				Toast.makeText(mContext, "获得用户信息失败："+message, Toast.LENGTH_LONG).show();
+			}
+		});
 	}
 
 	private void setupViews() {

@@ -21,7 +21,6 @@
             android:id="@+id/accountEt"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:editable="false"
             android:singleLine="true"
             android:textSize="16dp" />
     </LinearLayout>
