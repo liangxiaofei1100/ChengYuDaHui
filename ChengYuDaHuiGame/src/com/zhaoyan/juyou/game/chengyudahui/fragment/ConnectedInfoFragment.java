@@ -1,11 +1,16 @@
 package com.zhaoyan.juyou.game.chengyudahui.fragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.DropBoxManager.Entry;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.os.UserManager;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
@@ -29,7 +34,12 @@ import com.zhaoyan.communication.search.SearchUtil;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.adapter.ConnectedUserAdapter;
+import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGameMsg;
+import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGameMsg.Command;
+import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGameMsg.GameType;
+import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGameMsg.RoleType;
 import com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameInternet;
+import com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakMessageSend;
 
 public class ConnectedInfoFragment extends ListFragment implements
 		OnClickListener, LoaderCallbacks<Cursor>,
@@ -79,6 +89,11 @@ public class ConnectedInfoFragment extends ListFragment implements
 		mProtocolCommunication = ProtocolCommunication.getInstance();
 		mProtocolCommunication.registerOnCommunicationListenerExternal(this,
 				100);
+		if (!com.zhaoyan.communication.UserManager
+				.isManagerServer(com.zhaoyan.communication.UserManager
+						.getInstance().getLocalUser())) {
+			mStartGame.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -117,8 +132,19 @@ public class ConnectedInfoFragment extends ListFragment implements
 			disconnect();
 			break;
 		case R.id.btn_ci_start:
-			mProtocolCommunication.sendMessageToAll("start".getBytes(), 100);
+			SpeakGameMsg msg = SpeakMessageSend.getInstance().getSendMessage(
+					GameType.SPEAK, Command.START, 0, 0, RoleType.UNKONWN);
+			mProtocolCommunication.sendMessageToAll(msg.toByteArray(), 100);
+			ArrayList<User> temp = new ArrayList<User>();
+			for (java.util.Map.Entry<Integer, User> entry : com.zhaoyan.communication.UserManager
+					.getInstance().getAllUser().entrySet()) {
+				temp.add(entry.getValue());
+			}
 			Intent intent = new Intent();
+			Bundle bundle = new Bundle();
+			bundle.putParcelableArrayList("allUser", temp);
+			intent.putExtra("user", bundle);
+			intent.putExtra("number", temp.size());
 			if (mode != null && "speak".equals(mode)) {
 				intent.setClass(getActivity(), SpeakGameInternet.class);
 			} else {
@@ -172,7 +198,14 @@ public class ConnectedInfoFragment extends ListFragment implements
 	@Override
 	public void onReceiveMessage(byte[] arg0, User arg1) throws RemoteException {
 		// TODO Auto-generated method stub
-
+		SpeakGameMsg msg = SpeakMessageSend.getInstance().parseMsg(arg0);
+		if (GameType.SPEAK == msg.getGame()) {
+			if (Command.START == msg.getCommand()) {
+				Intent intent = new Intent();
+				intent.setClass(this.mContext, SpeakGameInternet.class);
+				this.mContext.startActivity(intent);
+			}
+		}
 	}
 
 	@Override

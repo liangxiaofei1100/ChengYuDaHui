@@ -25,6 +25,14 @@
         android:layout_height="match_parent"
         android:visibility="gone" >
 
+        <TextView
+            android:visibility="gone"
+            android:textSize="25sp"
+            android:layout_centerInParent="true"
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <Button
             android:id="@+id/referee_internet_game"
             android:layout_width="wrap_content"

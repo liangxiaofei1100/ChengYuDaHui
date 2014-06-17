@@ -56,6 +56,10 @@
             android:name="com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
+         <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameInternet"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
 
         <provider
             android:name="com.zhaoyan.juyou.game.chengyudahui.db.ChengyuProvider"

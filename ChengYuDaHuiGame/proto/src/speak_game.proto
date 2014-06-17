@@ -1,18 +1,33 @@
-message SpeakGame{
+package com.zhaoyan.juyou.game.chengyudahui;
+
+option java_package = "com.zhaoyan.juyou.game.chengyudahui.protocol.pb";
+option java_outer_classname = "SpeakGameProtos";
+
+message SpeakGameMsg{
+	required	GameType game=1[default = SPEAK];
 	required	Command command=2[default = START];
-	optional 	int32 word=2;
-	optional 	int32 time=3;
-	optional 	RoleType type=3[default = OBSERVER];
+	optional 	int32 word=3;
+	optional 	int32 time=4;
+	optional 	RoleType type=5[default = UNKONWN];
 	enum Command{
 		START=1;
 		READY=2;
 		MSG=3;
 		NEXT=4;
 		ROLE=5;
+		GAMESTART=6;
+		ROLYEREADY=7;
+		SCORE=8;
+		TIME=9;
 	}
-	enume RoleType{
+	enum RoleType{
 		REFEREE=1;
 		ACTOR=2;
 		OBSERVER=3;
+		UNKONWN=4;
+	}
+	enum GameType{
+		SPEAK=1;
+		PAINT=2;
 	}
 }
