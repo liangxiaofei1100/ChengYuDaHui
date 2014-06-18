@@ -7,6 +7,7 @@ import android.content.SharedPreferences.Editor;
 import com.zhaoyan.juyou.account.bae.GetUserInfo;
 import com.zhaoyan.juyou.account.bae.Login;
 import com.zhaoyan.juyou.account.bae.RegisterUser;
+import com.zhaoyan.juyou.account.bae.RegisterUserCheckUserName;
 
 public class ZhaoYanAccountManager {
 
@@ -72,8 +73,10 @@ public class ZhaoYanAccountManager {
 	 * 
 	 * @param account
 	 */
-	public void registerCheckZhaoYanAccount(String account) {
-
+	public static void registerCheckZhaoYanAccount(String userName, CheckUserNameResultListener listener) {
+		RegisterUserCheckUserName checkUserName =new RegisterUserCheckUserName();
+		checkUserName.setCheckResultListener(listener);
+		checkUserName.checkUserName(userName);
 	}
 
 	/**
