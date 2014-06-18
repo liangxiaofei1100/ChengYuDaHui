@@ -2,13 +2,16 @@ package com.zhaoyan.juyou.game.chengyudahui;
 
 import com.zhaoyan.juyou.game.chengyudahui.activity.BaiduLoginActivity;
 import com.zhaoyan.juyou.game.chengyudahui.activity.CommunicationTestActivity;
+import com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity;
 
 import java.text.SimpleDateFormat;
+
 import com.zhaoyan.juyou.game.chengyudahui.db.CopyDBFile;
 import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
 import com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty;
 import com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameActivity;
 import com.zhaoyan.juyou.game.chengyudahui.study.StudyActivity;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.annotation.SuppressLint;
@@ -127,7 +130,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			intent.setClass(this, PaintGameActivty.class);
 			break;
 		case R.id.score_btn:
-
+			intent.setClass(this, GetGoldActivity.class);
 			break;
 
 		default:

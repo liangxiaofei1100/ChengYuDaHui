@@ -1,10 +1,10 @@
-package com.zhaoyan.juyou.game.chengyudahui.bae;
+package com.zhaoyan.juyou.account;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-public class UserInfoUtils {
+public class ZhaoyanAccountUtils {
 
 	/**
 	 * Parse ZhaoYanUser from json string.
@@ -12,8 +12,8 @@ public class UserInfoUtils {
 	 * @param jsonData
 	 * @return
 	 */
-	public static ZhaoYanUser parseUserInfo(String jsonData) {
-		ZhaoYanUser user = new ZhaoYanUser();
+	public static ZhaoYanAccount parseUserInfo(String jsonData) {
+		ZhaoYanAccount user = new ZhaoYanAccount();
 
 		JSONTokener jsonParser = new JSONTokener(jsonData);
 		JSONObject userJsonObject = null;

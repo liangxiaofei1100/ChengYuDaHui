@@ -1,4 +1,4 @@
-package com.zhaoyan.juyou.game.chengyudahui.bae;
+package com.zhaoyan.juyou.account.bae;
 
 public class BAEHttpUtils {
 	public static final String URL_SEVLET_PATH = "http://test20140527.duapp.com/servlet/";

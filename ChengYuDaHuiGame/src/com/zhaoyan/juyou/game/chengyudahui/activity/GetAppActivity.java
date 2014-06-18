@@ -52,6 +52,8 @@ public class GetAppActivity extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// 使用百度分配给应用的APIKEY（与APP一一对应），初始化百度云盘
+		Frontia.init(this.getApplicationContext(), Conf.APIKEY);
 		mCloudStorage = Frontia.getStorage();
 		
 		setTitle("应用下载");

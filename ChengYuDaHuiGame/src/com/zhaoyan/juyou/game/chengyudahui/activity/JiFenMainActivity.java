@@ -1,8 +1,9 @@
 package com.zhaoyan.juyou.game.chengyudahui.activity;
 
+import com.zhaoyan.juyou.account.GetUserInfoResultListener;
+import com.zhaoyan.juyou.account.ZhaoYanAccount;
+import com.zhaoyan.juyou.account.bae.GetUserInfo;
 import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.bae.GetUserInfo;
-import com.zhaoyan.juyou.game.chengyudahui.bae.ZhaoYanUser;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.BaiduFrontiaUser;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
 
@@ -40,10 +41,10 @@ public class JiFenMainActivity extends Activity {
 	private void getUserInfo(String userName) {
 		GetUserInfo getUserInfo = new GetUserInfo();
 		getUserInfo.getUserInfo(userName);
-		getUserInfo.setGetUserInfoResultListener(new GetUserInfo.GetUserInfoResultListener() {
+		getUserInfo.setGetUserInfoResultListener(new GetUserInfoResultListener() {
 			
 			@Override
-			public void onGetUserInfoSuccess(ZhaoYanUser user) {
+			public void onGetUserInfoSuccess(ZhaoYanAccount user) {
 				tv_name.setText("账号名：" + user.userName);
 				tv_phone.setText("手机号码：" + user.phone);
 				tv_mail.setText("邮箱地址：" + user.email);

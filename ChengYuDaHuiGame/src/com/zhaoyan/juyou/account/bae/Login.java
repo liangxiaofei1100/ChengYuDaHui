@@ -1,4 +1,4 @@
-package com.zhaoyan.juyou.game.chengyudahui.bae;
+package com.zhaoyan.juyou.account.bae;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -18,33 +18,34 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
-import com.zhaoyan.juyou.game.chengyudahui.utils.AsyncTaskUtils;
-
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class RegisterUser {
-	private static final String TAG = RegisterUser.class.getSimpleName();
-	private RegisterResultListener mRegisterResultListener;
+import com.zhaoyan.juyou.account.LoginResultListener;
+import com.zhaoyan.juyou.account.ZhaoYanAccount;
+import com.zhaoyan.juyou.account.ZhaoyanAccountUtils;
+import com.zhaoyan.juyou.game.chengyudahui.utils.AsyncTaskUtils;
+
+public class Login {
+	private static final String TAG = Login.class.getSimpleName();
+	private LoginResultListener mLoginResultListener;
 	private static boolean mIsRunning = false;
 
-	public void registerUser(String username, String password) {
+	public void login(String username, String password) {
 		Log.d(TAG, "mIsRunning = " + mIsRunning);
 		if (mIsRunning) {
 			return;
 		}
-
-		RegisterTask task = new RegisterTask();
+		LoginTask task = new LoginTask();
 		AsyncTaskUtils.execute(task, username, password);
 	}
 
-	public void setRegisterResultListener(
-			RegisterResultListener registerResultListener) {
-		mRegisterResultListener = registerResultListener;
+	public void setLoginResultListener(LoginResultListener listener) {
+		mLoginResultListener = listener;
 
 	}
 
-	private class RegisterTask extends AsyncTask<String, Void, Boolean> {
+	private class LoginTask extends AsyncTask<String, Void, Boolean> {
 		private String mRespondMessage = "";
 
 		@Override
@@ -60,10 +61,10 @@ public class RegisterUser {
 			String username = arg0[0];
 			String password = arg0[1];
 			try {
-				URI uri = new URI(BAEHttpUtils.getRegisterURL());
+				URI uri = new URI(BAEHttpUtils.getLoginURL());
 				HttpPost httpPost = new HttpPost(uri);
 				List<NameValuePair> list = new ArrayList<NameValuePair>();
-				list.add(new BasicNameValuePair("username", username));
+				list.add(new BasicNameValuePair("usernameOrEmail", username));
 				list.add(new BasicNameValuePair("password", password));
 
 				httpPost.setEntity(new UrlEncodedFormEntity(list, HTTP.UTF_8));
@@ -81,16 +82,16 @@ public class RegisterUser {
 						+ mRespondMessage);
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
-				Log.e(TAG, "Register error", e);
+				Log.e(TAG, "Login erro. " + e);
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
-				Log.e(TAG, "Register error", e);
+				Log.e(TAG, "Login error. " + e);
 			} catch (IOException e) {
 				e.printStackTrace();
-				Log.e(TAG, "Register error", e);
+				Log.e(TAG, "Login error. " + e);
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
-				Log.e(TAG, "Register error", e);
+				Log.e(TAG, "Login error. " + e);
 			}
 			return result;
 		}
@@ -100,35 +101,31 @@ public class RegisterUser {
 			super.onPostExecute(result);
 			Log.d(TAG, "end. result = " + result);
 			mIsRunning = false;
-			if (mRegisterResultListener == null) {
+			if (mLoginResultListener == null) {
 				return;
 			}
 
 			if (result) {
-				mRegisterResultListener
-						.onRegisterSccess(getRespondMessage(mRespondMessage));
+				ZhaoYanAccount user = ZhaoyanAccountUtils
+						.parseUserInfo(mRespondMessage);
+				mLoginResultListener
+						.onLoginSuccess("欢迎，" + user.userName, user);
 			} else {
-				mRegisterResultListener
-						.onRegisterFail(getRespondMessage(mRespondMessage));
+				mLoginResultListener
+						.onLoginFail(getRespondMessage(mRespondMessage));
 			}
 		}
 	}
 
 	private String getRespondMessage(String respondMessage) {
 		String message = respondMessage;
-		if ("User name is already exist.".equals(respondMessage)) {
-			message = "账号已存在";
-		} else if ("Unkown error.".equals(respondMessage)) {
-			message = "未知错误";
+		if (respondMessage.startsWith("User not exist.")) {
+			message = "账号不存在，请先注册。";
+		} else if ("Password dismatch.".equals(respondMessage)) {
+			message = "密码错误";
 		}
 
 		return message;
-	}
-
-	public interface RegisterResultListener {
-		void onRegisterSccess(String message);
-
-		void onRegisterFail(String message);
 	}
 
 }

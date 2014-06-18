@@ -1,4 +1,4 @@
-package com.zhaoyan.juyou.game.chengyudahui.bae;
+package com.zhaoyan.juyou.account.bae;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -18,31 +18,35 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
-import com.zhaoyan.juyou.game.chengyudahui.utils.AsyncTaskUtils;
-
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
 
-public class Login {
-	private static final String TAG = Login.class.getSimpleName();
-	private LoginResultListener mLoginResultListener;
+import com.zhaoyan.juyou.account.GetUserInfoResultListener;
+import com.zhaoyan.juyou.account.ZhaoYanAccount;
+import com.zhaoyan.juyou.account.ZhaoyanAccountUtils;
+import com.zhaoyan.juyou.game.chengyudahui.utils.AsyncTaskUtils;
+
+public class GetUserInfo {
+	private static final String TAG = GetUserInfo.class.getSimpleName();
+	private GetUserInfoResultListener mGetUserInfoResultListener;
 	private static boolean mIsRunning = false;
 
-	public void login(String username, String password) {
+	public void getUserInfo(String username) {
 		Log.d(TAG, "mIsRunning = " + mIsRunning);
 		if (mIsRunning) {
 			return;
 		}
-		LoginTask task = new LoginTask();
-		AsyncTaskUtils.execute(task, username, password);
+		GetUserInfoTask task = new GetUserInfoTask();
+		AsyncTaskUtils.execute(task, username);
 	}
 
-	public void setLoginResultListener(LoginResultListener listener) {
-		mLoginResultListener = listener;
+	public void setGetUserInfoResultListener(GetUserInfoResultListener listener) {
+		mGetUserInfoResultListener = listener;
 
 	}
 
-	private class LoginTask extends AsyncTask<String, Void, Boolean> {
+	private class GetUserInfoTask extends AsyncTask<String, Void, Boolean> {
 		private String mRespondMessage = "";
 
 		@Override
@@ -56,13 +60,12 @@ public class Login {
 			Log.d(TAG, "start...");
 			boolean result = false;
 			String username = arg0[0];
-			String password = arg0[1];
+
 			try {
-				URI uri = new URI(BAEHttpUtils.getLoginURL());
+				URI uri = new URI(BAEHttpUtils.getGetUserInfoURL());
 				HttpPost httpPost = new HttpPost(uri);
 				List<NameValuePair> list = new ArrayList<NameValuePair>();
 				list.add(new BasicNameValuePair("usernameOrEmail", username));
-				list.add(new BasicNameValuePair("password", password));
 
 				httpPost.setEntity(new UrlEncodedFormEntity(list, HTTP.UTF_8));
 				HttpResponse response = new DefaultHttpClient()
@@ -98,35 +101,32 @@ public class Login {
 			super.onPostExecute(result);
 			Log.d(TAG, "end. result = " + result);
 			mIsRunning = false;
-			if (mLoginResultListener == null) {
+			if (mGetUserInfoResultListener == null) {
 				return;
 			}
 
 			if (result) {
-				ZhaoYanUser user = UserInfoUtils.parseUserInfo(mRespondMessage);
-				mLoginResultListener.onLoginSuccess("欢迎，" + user.userName);
+				ZhaoYanAccount user = ZhaoyanAccountUtils
+						.parseUserInfo(mRespondMessage);
+				if (TextUtils.isEmpty(user.userName)) {
+					mGetUserInfoResultListener.onGetUserInfoFail("读取用户信息错误");
+				} else {
+					mGetUserInfoResultListener.onGetUserInfoSuccess(user);
+				}
 			} else {
-				mLoginResultListener
-						.onLoginFail(getRespondMessage(mRespondMessage));
+				mGetUserInfoResultListener
+						.onGetUserInfoFail(getRespondMessage(mRespondMessage));
 			}
 		}
 	}
 
 	private String getRespondMessage(String respondMessage) {
 		String message = respondMessage;
-		if (respondMessage.startsWith("User not exist.")) {
-			message = "账号不存在，请先注册。";
-		} else if ("Password dismatch.".equals(respondMessage)) {
-			message = "密码错误";
+		if ("User not exist.".equals(respondMessage)) {
+			message = "账号不存在";
 		}
 
 		return message;
 	}
 
-	public interface LoginResultListener {
-
-		void onLoginSuccess(String message);
-
-		void onLoginFail(String message);
-	}
 }

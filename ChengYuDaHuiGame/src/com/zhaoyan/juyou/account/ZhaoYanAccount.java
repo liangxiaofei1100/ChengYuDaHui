@@ -1,6 +1,6 @@
-package com.zhaoyan.juyou.game.chengyudahui.bae;
+package com.zhaoyan.juyou.account;
 
-public class ZhaoYanUser {
+public class ZhaoYanAccount {
 	public int id = -1;
 	/** login user name */
 	public String userName = "";

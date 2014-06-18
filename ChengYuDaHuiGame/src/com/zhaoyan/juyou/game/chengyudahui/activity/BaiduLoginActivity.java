@@ -28,9 +28,12 @@ import com.baidu.frontia.api.FrontiaStorageListener.DataInfoListener;
 import com.baidu.frontia.api.FrontiaStorageListener.DataOperationListener;
 import com.zhaoyan.common.net.NetWorkUtil;
 import com.zhaoyan.communication.util.Log;
+import com.zhaoyan.juyou.account.LoginResultListener;
+import com.zhaoyan.juyou.account.RegisterResultListener;
+import com.zhaoyan.juyou.account.ZhaoYanAccount;
+import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
+import com.zhaoyan.juyou.account.bae.Login;
 import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.bae.Login;
-import com.zhaoyan.juyou.game.chengyudahui.bae.RegisterUser;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.BaiduFrontiaUser;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
 
@@ -53,8 +56,6 @@ public class BaiduLoginActivity extends Activity {
 
 		setContentView(R.layout.baidu_login);
 
-		// 使用百度分配给应用的APIKEY（与APP一一对应），初始化百度云盘
-		Frontia.init(this.getApplicationContext(), Conf.APIKEY);
 		mCloudStorage = Frontia.getStorage();
 		frontiaData = new FrontiaData();
 		TelephonyManager telephonyManager = (TelephonyManager) this
@@ -96,7 +97,7 @@ public class BaiduLoginActivity extends Activity {
 		logIn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//checkUserInfoBeforeLogin();
+				// checkUserInfoBeforeLogin();
 				login();
 			}
 		});
@@ -111,15 +112,14 @@ public class BaiduLoginActivity extends Activity {
 		 * @Override public void onClick(View v) { queryUserInfo(); } });
 		 */
 	}
-	
-	private void launchJiFenMainActivity(){
+
+	private void launchJiFenMainActivity() {
 		Intent intent = new Intent();
 		Bundle bundle = new Bundle();
 		bundle.putSerializable("USER", user);
 		bundle.putString("user_name", accountEt.getText().toString());
 		intent.putExtras(bundle);
-		intent.setClass(BaiduLoginActivity.this,
-				JiFenMainActivity.class);
+		intent.setClass(BaiduLoginActivity.this, JiFenMainActivity.class);
 		startActivity(intent);
 	}
 
@@ -134,24 +134,26 @@ public class BaiduLoginActivity extends Activity {
 		if (!checkAccountAndPassword(account, password)) {
 			return;
 		}
-		
-		Login login = new Login();
-		login.login(account, password);
-		login.setLoginResultListener(new Login.LoginResultListener() {
-			
-			@Override
-			public void onLoginSuccess(String message) {
-				toast("登录成功："+ message);
-				launchJiFenMainActivity();
-			}
-			
+
+		ZhaoYanAccountManager.loginZhaoYanAccount(account, password, new LoginResultListener() {
 			@Override
 			public void onLoginFail(String message) {
 				toast("登录失败：" + message);
 			}
+
+			@Override
+			public void onLoginSuccess(String message, ZhaoYanAccount account) {
+				toast("登录成功：" + message);
+				launchJiFenMainActivity();				
+			}
+
+			@Override
+			public void onNetworkError(String message) {
+				
+			}
 		});
 	}
-	
+
 	private void registerNewUser() {
 		if (!NetWorkUtil.isNetworkConnected(this)) {
 			toast("无网络连接");
@@ -164,23 +166,21 @@ public class BaiduLoginActivity extends Activity {
 			return;
 		}
 
-		RegisterUser registerUser = new RegisterUser();
-		registerUser
-				.setRegisterResultListener(new RegisterUser.RegisterResultListener() {
+		RegisterResultListener listener = new RegisterResultListener() {
 
-					@Override
-					public void onRegisterSccess(String message) {
-						toast("注册成功");
-					}
+			@Override
+			public void onRegisterSccess(String message) {
+				toast("注册成功");
+			}
 
-					@Override
-					public void onRegisterFail(String message) {
-						toast("注册失败：" + message);
-					}
+			@Override
+			public void onRegisterFail(String message) {
+				toast("注册失败：" + message);
+			}
 
-				});
-		registerUser.registerUser(account, password);
-
+		};
+		ZhaoYanAccountManager.registerZhaoYanAccount(account, password,
+				listener);
 	}
 
 	private boolean checkAccountAndPassword(String account, String password) {
