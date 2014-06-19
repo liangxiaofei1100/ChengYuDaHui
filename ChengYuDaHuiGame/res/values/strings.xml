@@ -17,5 +17,24 @@
     <string name="wifi_server_number_wifi_name_default">Wi-Fi连接</string>
     <string name="wifi_server_number">%1$s (%2$d)</string>
     <string name="ap_server_number">热点连接  (%d)</string>
+    <string name="study_every_day">天天学成语</string>
+    <string name="game_by_speak">你说我来猜</string>
+    <string name="game_by_paint">你画我来猜</string>
+    <string name="get_score">轻松拿金币</string>
+    <string name="local_mode">单机模式</string>
+    <string name="internet_mode">聚会模式</string>
+    <string name="count_down_sample">01:01</string>
+    <string name="search_chengyu">输入搜索成语</string>
+    <string name="start_game">开始游戏</string>
+    <string name="game_right">正确</string>
+    <string name="game_next">换词</string>
+    <string name="paint_clean">清除</string>
+    <string name="speak_time_setting">时间设定</string>
+    <string name="setting_time">请输入时间</string>
+    <string name="setting_time_unit">秒</string>
+    <string name="game_loading">Loading....</string>
+    <string name="referee">裁判员</string>
+    <string name="actor">表演者</string>
+    <string name="observer">观察者</string>
 
 </resources>

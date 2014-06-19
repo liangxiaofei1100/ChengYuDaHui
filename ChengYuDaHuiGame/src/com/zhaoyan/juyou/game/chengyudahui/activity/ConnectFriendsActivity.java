@@ -38,6 +38,7 @@ public class ConnectFriendsActivity extends BaseFragmentActivity implements
 	private static final int MSG_UPDATE_USER = 3;
 	private Handler mHandler;
 	private BroadcastReceiver mReceiver;
+	private String gameSelect;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class ConnectFriendsActivity extends BaseFragmentActivity implements
 		mCommunicationManager = SocketCommunicationManager.getInstance();
 		mUserManager = UserManager.getInstance();
 		mUserManager.registerOnUserChangedListener(this);
-
+		gameSelect=getIntent().getStringExtra("Game");
 		mFragmentManager = getSupportFragmentManager();
 		initTitle(R.string.connect_friends);
 
@@ -77,6 +78,7 @@ public class ConnectFriendsActivity extends BaseFragmentActivity implements
 				.findFragmentByTag(FRAGMENT_TAG_CONNECTED_INFO);
 		if (mConnectedInfoFragment == null) {
 			mConnectedInfoFragment = new ConnectedInfoFragment();
+			mConnectedInfoFragment.mode=gameSelect;
 		}
 
 		// Restore from save instance.

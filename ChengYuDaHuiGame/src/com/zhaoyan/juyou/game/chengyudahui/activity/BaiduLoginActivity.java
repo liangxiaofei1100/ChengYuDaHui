@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,7 +26,13 @@ import com.baidu.frontia.api.FrontiaStorage;
 import com.baidu.frontia.api.FrontiaStorageListener;
 import com.baidu.frontia.api.FrontiaStorageListener.DataInfoListener;
 import com.baidu.frontia.api.FrontiaStorageListener.DataOperationListener;
+import com.zhaoyan.common.net.NetWorkUtil;
 import com.zhaoyan.communication.util.Log;
+import com.zhaoyan.juyou.account.LoginResultListener;
+import com.zhaoyan.juyou.account.RegisterResultListener;
+import com.zhaoyan.juyou.account.ZhaoYanAccount;
+import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
+import com.zhaoyan.juyou.account.bae.Login;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.BaiduFrontiaUser;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
@@ -40,35 +47,36 @@ public class BaiduLoginActivity extends Activity {
 	private ProgressDialog progressDialog;
 	private BaiduFrontiaUser user;
 	private EditText accountEt, passwordEt;
+	public static final int ACCOUNT_MAX_LENGTH = 30;
+	public static final int PASSWORD_MAX_LENGTH = 30;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.baidu_login);
-		
-		// 使用百度分配给应用的APIKEY（与APP一一对应），初始化百度云盘
-		Frontia.init(this.getApplicationContext(), Conf.APIKEY);
+
 		mCloudStorage = Frontia.getStorage();
 		frontiaData = new FrontiaData();
-		TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+		TelephonyManager telephonyManager = (TelephonyManager) this
+				.getSystemService(Context.TELEPHONY_SERVICE);
 		user = new BaiduFrontiaUser();
 		user.imei = telephonyManager.getDeviceId();
 		setupViews();
 		creatDownloadDirection();
 		// checkIfnewUser();
-		
+
 	}
 
 	private void setupViews() {
-	//	delete = (Button) findViewById(R.id.deleteBtn);
-	//	query = (Button) findViewById(R.id.checkBtn);
+		// delete = (Button) findViewById(R.id.deleteBtn);
+		// query = (Button) findViewById(R.id.checkBtn);
 		progressDialog = new ProgressDialog(BaiduLoginActivity.this);
 		progressDialog.setCancelable(false);
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		progressDialog.setMessage("正在连接网络，请稍等……");
-	//	baiduInfo = (TextView) findViewById(R.id.baiduInfoTV);
+		// baiduInfo = (TextView) findViewById(R.id.baiduInfoTV);
 		register = (Button) findViewById(R.id.register);
 		logIn = (Button) findViewById(R.id.logoIn);
 		accountEt = (EditText) findViewById(R.id.accountEt);
@@ -80,52 +88,138 @@ public class BaiduLoginActivity extends Activity {
 		register.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				checkIfnewUserBeforeRegister();
+				// checkIfnewUserBeforeRegister();
+				registerNewUser();
 			}
+
 		});
 		// 登录按钮，登录账户
 		logIn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				checkUserInfoBeforeLogin();
-				// 注册成功后直接进入登陆界面
-				Intent intent = new Intent();
-				Bundle bundle = new Bundle();
-				bundle.putSerializable("USER", user);
-				intent.putExtras(bundle);
-				intent.setClass(BaiduLoginActivity.this, JiFenMainActivity.class);
-				startActivity(intent);
-			}
-		});
-		
-/*
-		// 从baidu云盘删除所有账号信息
-		delete.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				deleteData();
+				// checkUserInfoBeforeLogin();
+				login();
 			}
 		});
 
-		// 查询所有账户信息
-		query.setOnClickListener(new OnClickListener() {
+		/*
+		 * // 从baidu云盘删除所有账号信息 delete.setOnClickListener(new OnClickListener() {
+		 * 
+		 * @Override public void onClick(View v) { deleteData(); } });
+		 * 
+		 * // 查询所有账户信息 query.setOnClickListener(new OnClickListener() {
+		 * 
+		 * @Override public void onClick(View v) { queryUserInfo(); } });
+		 */
+	}
+
+	private void launchJiFenMainActivity() {
+		Intent intent = new Intent();
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("USER", user);
+		bundle.putString("user_name", accountEt.getText().toString());
+		intent.putExtras(bundle);
+		intent.setClass(BaiduLoginActivity.this, JiFenMainActivity.class);
+		startActivity(intent);
+	}
+
+	private void login() {
+		if (!NetWorkUtil.isNetworkConnected(this)) {
+			toast("无网络连接");
+			return;
+		}
+
+		String account = accountEt.getText().toString();
+		String password = passwordEt.getText().toString();
+		if (!checkAccountAndPassword(account, password)) {
+			return;
+		}
+
+		ZhaoYanAccountManager.loginZhaoYanAccount(account, password, new LoginResultListener() {
 			@Override
-			public void onClick(View v) {
-				queryUserInfo();
+			public void onLoginFail(String message) {
+				toast("登录失败：" + message);
+			}
+
+			@Override
+			public void onLoginSuccess(String message, ZhaoYanAccount account) {
+				toast("登录成功：" + message);
+				launchJiFenMainActivity();				
+			}
+
+			@Override
+			public void onNetworkError(String message) {
+				
 			}
 		});
-		*/
+	}
+
+	private void registerNewUser() {
+		if (!NetWorkUtil.isNetworkConnected(this)) {
+			toast("无网络连接");
+			return;
+		}
+
+		String account = accountEt.getText().toString();
+		String password = passwordEt.getText().toString();
+		if (!checkAccountAndPassword(account, password)) {
+			return;
+		}
+
+		RegisterResultListener listener = new RegisterResultListener() {
+
+			@Override
+			public void onRegisterSccess(String message) {
+				toast("注册成功");
+			}
+
+			@Override
+			public void onRegisterFail(String message) {
+				toast("注册失败：" + message);
+			}
+
+		};
+		ZhaoYanAccountManager.registerZhaoYanAccount(account, password,
+				listener);
+	}
+
+	private boolean checkAccountAndPassword(String account, String password) {
+		boolean result = true;
+		if (TextUtils.isEmpty(account)) {
+			toast("请输入账号");
+			result = false;
+		} else if (TextUtils.isEmpty(password)) {
+			toast("请输入密码");
+			result = false;
+		} else if (account.length() > ACCOUNT_MAX_LENGTH) {
+			toast("账号长度过长");
+			result = false;
+		} else if (password.length() > PASSWORD_MAX_LENGTH) {
+			toast("密码长度过长");
+			result = false;
+		}
+		return result;
+	}
+
+	private void toast(String message) {
+		Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.CENTER, 0, 0);
+		toast.show();
 	}
 
 	private void creatDownloadDirection() {
 		// 创建下载目录
 		try {
-			File downloadDir = new File(Environment.getExternalStorageDirectory().getPath() + Conf.LOCAL_APP_DOWNLOAD_PATH);
-			String remotePathString = Environment.getExternalStorageDirectory().getPath() + Conf.LOCAL_APP_DOWNLOAD_PATH;
+			File downloadDir = new File(Environment
+					.getExternalStorageDirectory().getPath()
+					+ Conf.LOCAL_APP_DOWNLOAD_PATH);
+			String remotePathString = Environment.getExternalStorageDirectory()
+					.getPath() + Conf.LOCAL_APP_DOWNLOAD_PATH;
 			if (!downloadDir.exists())
 				downloadDir.mkdirs();
 		} catch (Exception e) {
-			Toast.makeText(this, "创建下载目录失败，请检查sdcard是否安装正常！", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "创建下载目录失败，请检查sdcard是否安装正常！", Toast.LENGTH_LONG)
+					.show();
 		}
 	}
 
@@ -138,12 +232,16 @@ public class BaiduLoginActivity extends Activity {
 
 			@Override
 			public void onSuccess(List<FrontiaData> dataList) {
-				Log.i(Tag, "saveUserInfo---->query账户信息成功！" + "共查询到" + dataList.size() + "个结果");
+				Log.i(Tag,
+						"saveUserInfo---->query账户信息成功！" + "共查询到"
+								+ dataList.size() + "个结果");
 				if (dataList.size() == 1) {
 					frontiaData = dataList.get(0);
 					progressDialog.dismiss();
-					if (frontiaData.get("PASSWORD").toString().equals(passwordEt.getText().toString())) {
-						Toast toast = Toast.makeText(BaiduLoginActivity.this, "登录成功", Toast.LENGTH_SHORT);
+					if (frontiaData.get("PASSWORD").toString()
+							.equals(passwordEt.getText().toString())) {
+						Toast toast = Toast.makeText(BaiduLoginActivity.this,
+								"登录成功", Toast.LENGTH_SHORT);
 						toast.setGravity(Gravity.CENTER, 0, 0);
 						toast.show();
 						frontiaData = dataList.get(0);
@@ -153,28 +251,35 @@ public class BaiduLoginActivity extends Activity {
 						user.mail = frontiaData.get("MAIL").toString();
 						user.name = frontiaData.get("NAME").toString();
 						user.password = frontiaData.get("PASSWORD").toString();
-						user.downloadAppCount = frontiaData.get("DOWNLOAD_COUNT").toString();
-						user.uploadAppCount = frontiaData.get("UPLOAD_COUNT").toString();
-						user.startAppCount = frontiaData.get("START_COUNT").toString();
+						user.downloadAppCount = frontiaData.get(
+								"DOWNLOAD_COUNT").toString();
+						user.uploadAppCount = frontiaData.get("UPLOAD_COUNT")
+								.toString();
+						user.startAppCount = frontiaData.get("START_COUNT")
+								.toString();
 						// 进入登陆界面
 						Intent intent = new Intent();
 						Bundle bundle = new Bundle();
 						bundle.putSerializable("USER", user);
 						intent.putExtras(bundle);
-						intent.setClass(BaiduLoginActivity.this, JiFenMainActivity.class);
+						intent.setClass(BaiduLoginActivity.this,
+								JiFenMainActivity.class);
 						startActivity(intent);
 					} else {
-						Toast toast = Toast.makeText(BaiduLoginActivity.this, "密码错误，登陆失败！", Toast.LENGTH_SHORT);
+						Toast toast = Toast.makeText(BaiduLoginActivity.this,
+								"密码错误，登陆失败！", Toast.LENGTH_SHORT);
 						toast.setGravity(Gravity.CENTER, 0, 0);
 						toast.show();
 					}
 				} else if (dataList.size() > 1) {
-					Toast toast = Toast.makeText(BaiduLoginActivity.this, "服务器数据出错！！！", Toast.LENGTH_SHORT);
+					Toast toast = Toast.makeText(BaiduLoginActivity.this,
+							"服务器数据出错！！！", Toast.LENGTH_SHORT);
 					toast.setGravity(Gravity.CENTER, 0, 0);
 					toast.show();
 				} else {
 					progressDialog.dismiss();
-					Toast toast = Toast.makeText(BaiduLoginActivity.this, "用户未注册，请先注册！", Toast.LENGTH_SHORT);
+					Toast toast = Toast.makeText(BaiduLoginActivity.this,
+							"用户未注册，请先注册！", Toast.LENGTH_SHORT);
 					toast.setGravity(Gravity.CENTER, 0, 0);
 					toast.show();
 				}
@@ -185,8 +290,9 @@ public class BaiduLoginActivity extends Activity {
 			public void onFailure(int errCode, String errMsg) {
 				progressDialog.dismiss();
 				Log.e(TAG, "errCode:" + errCode + ",errMsg:" + errMsg);
-				Toast toast = Toast.makeText(BaiduLoginActivity.this, "网络出错，请确保网络正常连接后再使用软件！"
-						+ "\n" + "errCode:" + errCode + ",errMsg:" + errMsg, Toast.LENGTH_SHORT);
+				Toast toast = Toast.makeText(BaiduLoginActivity.this,
+						"网络出错，请确保网络正常连接后再使用软件！" + "\n" + "errCode:" + errCode
+								+ ",errMsg:" + errMsg, Toast.LENGTH_SHORT);
 				toast.setGravity(Gravity.CENTER, 0, 0);
 				toast.show();
 				Log.i(Tag, "saveUserInfo---->query账户信息失败！");
@@ -204,10 +310,13 @@ public class BaiduLoginActivity extends Activity {
 
 			@Override
 			public void onSuccess(List<FrontiaData> dataList) {
-				Log.i(Tag, "saveUserInfo---->query账户信息成功！" + "共查询到" + dataList.size() + "个结果");
+				Log.i(Tag,
+						"saveUserInfo---->query账户信息成功！" + "共查询到"
+								+ dataList.size() + "个结果");
 				if (dataList.size() >= 1) {
 					progressDialog.dismiss();
-					Toast toast = Toast.makeText(BaiduLoginActivity.this, "您已经注册过账号，请直接登录", Toast.LENGTH_SHORT);
+					Toast toast = Toast.makeText(BaiduLoginActivity.this,
+							"您已经注册过账号，请直接登录", Toast.LENGTH_SHORT);
 					toast.setGravity(Gravity.CENTER, 0, 0);
 					toast.show();
 					logIn.setEnabled(true);
@@ -221,7 +330,8 @@ public class BaiduLoginActivity extends Activity {
 			@Override
 			public void onFailure(int errCode, String errMsg) {
 				progressDialog.dismiss();
-				Toast toast = Toast.makeText(BaiduLoginActivity.this, "网络出错，请确保网络正常连接后再使用软件！", Toast.LENGTH_SHORT);
+				Toast toast = Toast.makeText(BaiduLoginActivity.this,
+						"网络出错，请确保网络正常连接后再使用软件！", Toast.LENGTH_SHORT);
 				toast.setGravity(Gravity.CENTER, 0, 0);
 				toast.show();
 				Log.i(Tag, "saveUserInfo---->query账户信息失败！");
@@ -251,33 +361,37 @@ public class BaiduLoginActivity extends Activity {
 		frontiaData.put("DOWNLOAD_COUNT", user.downloadAppCount); //
 		frontiaData.put("UPLOAD_COUNT", user.uploadAppCount); //
 		frontiaData.put("START_COUNT", user.startAppCount); //
-		mCloudStorage.insertData(frontiaData, new FrontiaStorageListener.DataInsertListener() {
+		mCloudStorage.insertData(frontiaData,
+				new FrontiaStorageListener.DataInsertListener() {
 
-			@Override
-			public void onSuccess() {
-				progressDialog.dismiss();
-				Log.i(Tag, "saveUserInfo---->保存了一个用户IMEI信息！");
-				Toast toast = Toast.makeText(BaiduLoginActivity.this, "恭喜你，注册成功！", Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.CENTER, 0, 0);
-				toast.show();
-				// 注册成功后直接进入登陆界面
-				Intent intent = new Intent();
-				Bundle bundle = new Bundle();
-				bundle.putSerializable("USER", user);
-				intent.putExtras(bundle);
-				intent.setClass(BaiduLoginActivity.this, JiFenMainActivity.class);
-				startActivity(intent);
-			}
+					@Override
+					public void onSuccess() {
+						progressDialog.dismiss();
+						Log.i(Tag, "saveUserInfo---->保存了一个用户IMEI信息！");
+						Toast toast = Toast.makeText(BaiduLoginActivity.this,
+								"恭喜你，注册成功！", Toast.LENGTH_SHORT);
+						toast.setGravity(Gravity.CENTER, 0, 0);
+						toast.show();
+						// 注册成功后直接进入登陆界面
+						Intent intent = new Intent();
+						Bundle bundle = new Bundle();
+						bundle.putSerializable("USER", user);
+						intent.putExtras(bundle);
+						intent.setClass(BaiduLoginActivity.this,
+								JiFenMainActivity.class);
+						startActivity(intent);
+					}
 
-			@Override
-			public void onFailure(int errCode, String errMsg) {
-				progressDialog.dismiss();
-				Toast toast = Toast.makeText(BaiduLoginActivity.this, "网络出错，注册失败！", Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.CENTER, 0, 0);
-				toast.show();
-			}
+					@Override
+					public void onFailure(int errCode, String errMsg) {
+						progressDialog.dismiss();
+						Toast toast = Toast.makeText(BaiduLoginActivity.this,
+								"网络出错，注册失败！", Toast.LENGTH_SHORT);
+						toast.setGravity(Gravity.CENTER, 0, 0);
+						toast.show();
+					}
 
-		});
+				});
 	}
 
 	public void queryUserInfo() {
@@ -295,7 +409,8 @@ public class BaiduLoginActivity extends Activity {
 				StringBuilder sb = new StringBuilder();
 				int i = 0;
 				for (FrontiaData d : dataList) {
-					sb.append(i).append(":").append(d.toJSON().toString()).append("\n");
+					sb.append(i).append(":").append(d.toJSON().toString())
+							.append("\n");
 					i++;
 				}
 				if (dataList.size() > 0) {
@@ -303,7 +418,8 @@ public class BaiduLoginActivity extends Activity {
 				} else {
 					baiduInfo.setText("百度云盘现在没有存储数据！");
 				}
-				Toast toast = Toast.makeText(BaiduLoginActivity.this, "查询数据成功！", Toast.LENGTH_SHORT);
+				Toast toast = Toast.makeText(BaiduLoginActivity.this,
+						"查询数据成功！", Toast.LENGTH_SHORT);
 				toast.setGravity(Gravity.CENTER, 0, 0);
 				toast.show();
 			}
@@ -311,7 +427,8 @@ public class BaiduLoginActivity extends Activity {
 			@Override
 			public void onFailure(int errCode, String errMsg) {
 				progressDialog.dismiss();
-				Toast toast = Toast.makeText(BaiduLoginActivity.this, "网络出错，查询数据失败！", Toast.LENGTH_SHORT);
+				Toast toast = Toast.makeText(BaiduLoginActivity.this,
+						"网络出错，查询数据失败！", Toast.LENGTH_SHORT);
 				toast.setGravity(Gravity.CENTER, 0, 0);
 				toast.show();
 
@@ -328,7 +445,8 @@ public class BaiduLoginActivity extends Activity {
 			@Override
 			public void onSuccess(long count) {
 				progressDialog.dismiss();
-				Toast toast = Toast.makeText(BaiduLoginActivity.this, "删除数据成功！", Toast.LENGTH_SHORT);
+				Toast toast = Toast.makeText(BaiduLoginActivity.this,
+						"删除数据成功！", Toast.LENGTH_SHORT);
 				toast.setGravity(Gravity.CENTER, 0, 0);
 				toast.show();
 			}
@@ -336,13 +454,14 @@ public class BaiduLoginActivity extends Activity {
 			@Override
 			public void onFailure(int errCode, String errMsg) {
 				progressDialog.dismiss();
-				Toast toast = Toast.makeText(BaiduLoginActivity.this, "删除数据失败！", Toast.LENGTH_SHORT);
+				Toast toast = Toast.makeText(BaiduLoginActivity.this,
+						"删除数据失败！", Toast.LENGTH_SHORT);
 				toast.setGravity(Gravity.CENTER, 0, 0);
 				toast.show();
 			}
 		});
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();

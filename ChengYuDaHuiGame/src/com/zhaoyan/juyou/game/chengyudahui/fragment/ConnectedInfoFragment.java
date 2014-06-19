@@ -1,8 +1,16 @@
 package com.zhaoyan.juyou.game.chengyudahui.fragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.DropBoxManager.Entry;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.os.UserManager;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
@@ -18,27 +26,45 @@ import com.zhaoyan.common.net.NetWorkUtil;
 import com.zhaoyan.communication.ProtocolCommunication;
 import com.zhaoyan.communication.SocketCommunicationManager;
 import com.zhaoyan.communication.connect.ServerCreator;
+import com.zhaoyan.communication.ipc.CommunicationManager;
+import com.zhaoyan.communication.ipc.aidl.OnCommunicationListenerExternal;
+import com.zhaoyan.communication.ipc.aidl.User;
 import com.zhaoyan.communication.provider.ZhaoYanCommunicationData;
 import com.zhaoyan.communication.search.SearchUtil;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.adapter.ConnectedUserAdapter;
+import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGameMsg;
+import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGameMsg.Command;
+import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGameMsg.GameType;
+import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGameMsg.RoleType;
+import com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameInternet;
+import com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakMessageSend;
 
 public class ConnectedInfoFragment extends ListFragment implements
-		OnClickListener, LoaderCallbacks<Cursor> {
+		OnClickListener, LoaderCallbacks<Cursor>,
+		OnCommunicationListenerExternal {
 	private static final String TAG = "ConnectedInfoFragment";
-	private Button mDisconnectButton;
+	private Button mDisconnectButton, mStartGame;
 	private Context mContext;
 	private ServerCreator mServerCreator;
-
+	public String mode;
 	private ListView mListView;
 	private ConnectedUserAdapter mAdapter;
+	private ProtocolCommunication mProtocolCommunication;
 
-	protected static final String[] PROJECTION = { ZhaoYanCommunicationData.User._ID,
-			ZhaoYanCommunicationData.User.USER_NAME, ZhaoYanCommunicationData.User.USER_ID,
-			ZhaoYanCommunicationData.User.HEAD_ID, ZhaoYanCommunicationData.User.THIRD_LOGIN, ZhaoYanCommunicationData.User.HEAD_DATA,
-			ZhaoYanCommunicationData.User.IP_ADDR, ZhaoYanCommunicationData.User.STATUS, ZhaoYanCommunicationData.User.TYPE,
-			ZhaoYanCommunicationData.User.SSID, ZhaoYanCommunicationData.User.SIGNATURE };
+	protected static final String[] PROJECTION = {
+			ZhaoYanCommunicationData.User._ID,
+			ZhaoYanCommunicationData.User.USER_NAME,
+			ZhaoYanCommunicationData.User.USER_ID,
+			ZhaoYanCommunicationData.User.HEAD_ID,
+			ZhaoYanCommunicationData.User.THIRD_LOGIN,
+			ZhaoYanCommunicationData.User.HEAD_DATA,
+			ZhaoYanCommunicationData.User.IP_ADDR,
+			ZhaoYanCommunicationData.User.STATUS,
+			ZhaoYanCommunicationData.User.TYPE,
+			ZhaoYanCommunicationData.User.SSID,
+			ZhaoYanCommunicationData.User.SIGNATURE };
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,6 +86,14 @@ public class ConnectedInfoFragment extends ListFragment implements
 		mAdapter = new ConnectedUserAdapter(mContext, null, true);
 		mListView.setAdapter(mAdapter);
 		getLoaderManager().initLoader(0, null, this);
+		mProtocolCommunication = ProtocolCommunication.getInstance();
+		mProtocolCommunication.registerOnCommunicationListenerExternal(this,
+				100);
+		if (!com.zhaoyan.communication.UserManager
+				.isManagerServer(com.zhaoyan.communication.UserManager
+						.getInstance().getLocalUser())) {
+			mStartGame.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -73,9 +107,12 @@ public class ConnectedInfoFragment extends ListFragment implements
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
 		String selection = ZhaoYanCommunicationData.User.STATUS + "="
 				+ ZhaoYanCommunicationData.User.STATUS_SERVER_CREATED + " or "
-				+ ZhaoYanCommunicationData.User.STATUS + "=" + ZhaoYanCommunicationData.User.STATUS_CONNECTED;
-		return new CursorLoader(mContext, ZhaoYanCommunicationData.User.CONTENT_URI,
-				PROJECTION, selection, null, ZhaoYanCommunicationData.User.SORT_ORDER_DEFAULT);
+				+ ZhaoYanCommunicationData.User.STATUS + "="
+				+ ZhaoYanCommunicationData.User.STATUS_CONNECTED;
+		return new CursorLoader(mContext,
+				ZhaoYanCommunicationData.User.CONTENT_URI, PROJECTION,
+				selection, null,
+				ZhaoYanCommunicationData.User.SORT_ORDER_DEFAULT);
 	}
 
 	@Override
@@ -94,6 +131,27 @@ public class ConnectedInfoFragment extends ListFragment implements
 		case R.id.btn_ci_disconnect:
 			disconnect();
 			break;
+		case R.id.btn_ci_start:
+			SpeakGameMsg msg = SpeakMessageSend.getInstance().getSendMessage(
+					GameType.SPEAK, Command.START, 0, 0, RoleType.UNKONWN);
+			mProtocolCommunication.sendMessageToAll(msg.toByteArray(), 100);
+			ArrayList<User> temp = new ArrayList<User>();
+			for (java.util.Map.Entry<Integer, User> entry : com.zhaoyan.communication.UserManager
+					.getInstance().getAllUser().entrySet()) {
+				temp.add(entry.getValue());
+			}
+			Intent intent = new Intent();
+			Bundle bundle = new Bundle();
+			bundle.putParcelableArrayList("allUser", temp);
+			intent.putExtra("user", bundle);
+			intent.putExtra("number", temp.size());
+			if (mode != null && "speak".equals(mode)) {
+				intent.setClass(getActivity(), SpeakGameInternet.class);
+			} else {
+
+			}
+			getActivity().startActivity(intent);
+			break;
 		default:
 			break;
 		}
@@ -102,7 +160,9 @@ public class ConnectedInfoFragment extends ListFragment implements
 	private void initView(View rootView) {
 		mDisconnectButton = (Button) rootView
 				.findViewById(R.id.btn_ci_disconnect);
+		mStartGame = (Button) rootView.findViewById(R.id.btn_ci_start);
 		mDisconnectButton.setOnClickListener(this);
+		mStartGame.setOnClickListener(this);
 	}
 
 	private void disconnect() {
@@ -127,5 +187,36 @@ public class ConnectedInfoFragment extends ListFragment implements
 		// disconnect current network if connected to the WiFi AP created by
 		// our application.
 		SearchUtil.clearWifiConnectHistory(mContext);
+	}
+
+	@Override
+	public IBinder asBinder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void onReceiveMessage(byte[] arg0, User arg1) throws RemoteException {
+		// TODO Auto-generated method stub
+		SpeakGameMsg msg = SpeakMessageSend.getInstance().parseMsg(arg0);
+		if (GameType.SPEAK == msg.getGame()) {
+			if (Command.START == msg.getCommand()) {
+				Intent intent = new Intent();
+				intent.setClass(this.mContext, SpeakGameInternet.class);
+				this.mContext.startActivity(intent);
+			}
+		}
+	}
+
+	@Override
+	public void onUserConnected(User arg0) throws RemoteException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onUserDisconnected(User arg0) throws RemoteException {
+		// TODO Auto-generated method stub
+
 	}
 }

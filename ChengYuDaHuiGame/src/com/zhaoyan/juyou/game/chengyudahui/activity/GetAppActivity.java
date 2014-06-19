@@ -142,6 +142,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.get_app_main);
+		Frontia.init(this.getApplicationContext(), Conf.APIKEY);
 		mCloudStorage = Frontia.getStorage();
 		
 		setTitle("应用下载");
