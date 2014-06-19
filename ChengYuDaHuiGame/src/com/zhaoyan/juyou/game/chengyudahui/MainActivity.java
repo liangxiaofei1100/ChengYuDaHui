@@ -1,7 +1,5 @@
 package com.zhaoyan.juyou.game.chengyudahui;
 
-import com.zhaoyan.juyou.game.chengyudahui.activity.BaiduLoginActivity;
-import com.zhaoyan.juyou.game.chengyudahui.activity.CommunicationTestActivity;
 import com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity;
 
 import java.text.SimpleDateFormat;
@@ -87,10 +85,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
-		} else if (id == R.id.action_frontia) {
-			Intent intent = new Intent(MainActivity.this, BaiduLoginActivity.class);
-			startActivity(intent);
-		}
+		} 
 		return super.onOptionsItemSelected(item);
 	}
 
