@@ -11,10 +11,10 @@ public class AppJSON {
     public static final String UPDATE_TIME = "update_time";//应用上传或者更新时间
     public static final String APP_LANGUAGE = "app_language";//应用语言
     public static final String APP_VERSION = "app_version";//应用版本号
-    public static final String DOWNLOAD_COUNT = "download_count";//被下载次数
     public static final String INTRODUCE = "introduce" ;//详细介绍
     public static final String TITLE = "title";//简介
-    public static final String SIZE = "size";//应用大小
+    public static final String SIZE_STR = "size_str";//应用大小MB
+    public static final String SIZE = "size";//Bytes
     
     public static final String APP_URL = "app_url"; //app下载地址
     public static final String ICON_URL = "icon_url";// app icon 地址

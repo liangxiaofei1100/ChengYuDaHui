@@ -87,7 +87,14 @@ public class BaiduLoginActivity extends Activity {
 		logIn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				checkUserInfoBeforeLogin();
+//				checkUserInfoBeforeLogin();
+				// 注册成功后直接进入登陆界面
+				Intent intent = new Intent();
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("USER", user);
+				intent.putExtras(bundle);
+				intent.setClass(BaiduLoginActivity.this, JiFenMainActivity.class);
+				startActivity(intent);
 			}
 		});
 		

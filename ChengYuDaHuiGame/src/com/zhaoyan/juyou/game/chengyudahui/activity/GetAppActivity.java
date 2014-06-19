@@ -10,13 +10,20 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -32,14 +39,18 @@ import com.baidu.frontia.api.FrontiaStorageListener.DataInfoListener;
 import com.baidu.frontia.api.FrontiaStorageListener.DataOperationListener;
 import com.baidu.frontia.api.FrontiaStorageListener.FileProgressListener;
 import com.baidu.frontia.api.FrontiaStorageListener.FileTransferListener;
+import com.zhaoyan.common.file.APKUtil;
+import com.zhaoyan.common.util.SharedPreferenceUtil;
 import com.zhaoyan.communication.util.Log;
+import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.adapter.GetAppAdapter;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.AppInfo;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.BaiduFrontiaUser;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
+import com.zhaoyan.juyou.game.chengyudahui.frontia.GetAppListener;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
-public class GetAppActivity extends ListActivity {
+public class GetAppActivity extends ListActivity implements OnItemClickListener {
 	private static final String TAG = "GetAppActivity";
 	private ListView listView;
 	private ProgressDialog progressDialog;
@@ -48,13 +59,99 @@ public class GetAppActivity extends ListActivity {
 	private FrontiaStorage mCloudStorage;
 	private String lastDownloadApk;
 	private BaiduFrontiaUser user;
+	
+	private SharedPreferences sp = null;
+	
+	private AppReceiver mAppReceiver = null;
+	
+	private GetAppListener getAppListener = new GetAppListener() {
+		
+		@Override
+		public void onCallBack(Bundle bundle) {
+			int flag = bundle.getInt(GetAppListener.CALLBACK_FLAG);
+			Log.d(TAG, "onCallBack flag:" + flag);
+			
+			Message message = mHandler.obtainMessage(flag);
+			message.setData(bundle);
+			mHandler.removeMessages(flag);
+			mHandler.sendMessage(message);
+		}
+	};
+	
+	private Handler mHandler = new Handler(){
+		public void handleMessage(android.os.Message msg) {
+			Bundle bundle = null;
+			bundle = msg.getData();
+			AppInfo appInfo = null;
+			if (bundle != null) {
+				int position = bundle.getInt(GetAppListener.KEY_ITEM_POSITION);
+				appInfo = appList.get(position);
+			}
+			
+			switch (msg.what) {
+			case GetAppListener.MSG_STOP_DOWNLOAD:
+				stopDownload(appInfo);
+				appInfo.setStatus(Conf.NOT_DOWNLOAD);
+				appInfo.setProgressBytes(0);
+				appInfo.setPercent(0);
+				break;
+			case GetAppListener.MSG_START_DOWNLOAD:
+			case GetAppListener.MSG_UPDATE_APP:
+				appInfo.setStatus(Conf.DOWNLOADING);
+				appInfo.setProgressBytes(0);
+				appInfo.setPercent(0);
+				
+				mAdapter.notifyDataSetChanged();
+				
+				startDownload(appInfo);
+				break;
+			case GetAppListener.MSG_UPDATE_UI:
+				mAdapter.notifyDataSetChanged();
+				break;
+			case GetAppListener.MSG_INSTALL_APP:
+				String localPath = appInfo.getAppLocalPath();
+				if (new File(localPath).exists()) {
+					APKUtil.installApp(getApplicationContext(), localPath);
+				} else {
+					appInfo.setStatus(Conf.DOWNLOADING);
+					appInfo.setProgressBytes(0);
+					appInfo.setPercent(0);
+					
+					mAdapter.notifyDataSetChanged();
+					
+					startDownload(appInfo);
+				}
+				break;
+			case GetAppListener.MSG_OPEN_APP:
+				String packagename = appInfo.getPackageName();
+				PackageManager pm = getPackageManager();
+				Intent intent = pm.getLaunchIntentForPackage(packagename);
+				if (null != intent) {
+					startActivity(intent);
+				} else {
+					Toast.makeText(getApplicationContext(), "Cannot open this app", Toast.LENGTH_SHORT).show();
+				}
+				break;
+			default:
+				break;
+			}
+		};
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.get_app_main);
 		mCloudStorage = Frontia.getStorage();
 		
 		setTitle("应用下载");
+		
+		mAppReceiver = new AppReceiver();
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Intent.ACTION_PACKAGE_ADDED);
+		filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+		filter.addDataScheme("package");
+		registerReceiver(mAppReceiver, filter);
 
 		progressDialog = new ProgressDialog(GetAppActivity.this);
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -71,45 +168,61 @@ public class GetAppActivity extends ListActivity {
 		
 		mAdapter = new GetAppAdapter(appList, getApplicationContext());
 		listView.setAdapter(mAdapter);
+		mAdapter.registerKeyListener(getAppListener);
 		queryAppInfos();
 		
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				ListView listView = (ListView) arg0;
-//				HashMap<String, Object> map = (HashMap<String, Object>) listView.getItemAtPosition(arg2);
-				AppInfo appInfo = appList.get(arg2);
-				
-				String sdCardPathString = Environment.getExternalStorageDirectory().getPath();
-				if (!new File(sdCardPathString).exists()) {
-					new File(sdCardPathString).mkdirs();
-				}
-				String fileSizeStr = appInfo.getSize();
-				long aviable = Utils.getAvailableBlockSize(sdCardPathString);
-				if (aviable <= 1024 * 1024 * 1024) {
-//					String fileSizeStr = Utils.getFormatSize(fileSize);
-					String availableStr = Utils.getFormatSize(aviable);
-					Toast.makeText(getApplicationContext(), "可用空间不足"
-							+ "\n" + "文件大小:" + fileSizeStr + "\n"
-							+ "可用空间:" + availableStr, Toast.LENGTH_SHORT).show();
-					return;
-				}
-				
-				String remotePathString = appInfo.getAppUrl();
-				FrontiaFile mFile = new FrontiaFile();
-				Log.d(TAG, "remotePath:" + remotePathString);
-				mFile.setRemotePath(remotePathString);
+		listView.setOnItemClickListener(this);
+		
+		sp = SharedPreferenceUtil.getSharedPreference(getApplicationContext(), Conf.SHARED_PREFS_NAME);
+	}
+	
+	public void startDownload(AppInfo appInfo){
+		String sdCardPathString = Environment.getExternalStorageDirectory().getPath();
+		if (!new File(sdCardPathString).exists()) {
+			new File(sdCardPathString).mkdirs();
+		}
+		long filesize = appInfo.getAppSize();
+		long aviable = Utils.getAvailableBlockSize(sdCardPathString);
+		if (aviable <= filesize) {
+			String fileSizeStr = Utils.getFormatSize(filesize);
+			String availableStr = Utils.getFormatSize(aviable);
+			Toast.makeText(getApplicationContext(), "可用空间不足"
+					+ "\n" + "文件大小:" + fileSizeStr + "\n"
+					+ "可用空间:" + availableStr, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		String remotePathString = appInfo.getAppUrl();
+		FrontiaFile file = new FrontiaFile();
+		Log.d(TAG, "remotePath:" + remotePathString);
+		file.setRemotePath(remotePathString);
 
-				// 首先获得要下载的APP的name,在转换成本地path作为下载后的保存位置
-				int index = remotePathString.lastIndexOf('/');// 从路径的末尾倒数第一个'/'作为文件名和路径的分隔符
-				String appName = remotePathString.substring(index + 1);// 获得从‘/’字符以后的字串，即文件名；
-				
-				String nativePath = sdCardPathString+Conf.LOCAL_APP_DOWNLOAD_PATH+"/" + appName;
-				Log.d(TAG, "nativePath:" + nativePath);
-				mFile.setNativePath(nativePath);
-				downloadFile(mFile);
-			}
-		});
+		// 首先获得要下载的APP的name,在转换成本地path作为下载后的保存位置
+		int index = remotePathString.lastIndexOf('/');// 从路径的末尾倒数第一个'/'作为文件名和路径的分隔符
+		String appName = remotePathString.substring(index + 1);// 获得从‘/’字符以后的字串，即文件名；
+		
+		String nativePath = sdCardPathString+Conf.LOCAL_APP_DOWNLOAD_PATH+"/" + appName;
+		Log.d(TAG, "nativePath:" + nativePath);
+		file.setNativePath(nativePath);
+		downloadFile(appInfo, file);
+	}
+	
+	public void stopDownload(AppInfo appInfo){
+		String sdCardPathString = Environment.getExternalStorageDirectory().getPath();
+		
+		String remotePathString = appInfo.getAppUrl();
+		FrontiaFile file = new FrontiaFile();
+		Log.d(TAG, "remotePath:" + remotePathString);
+		file.setRemotePath(remotePathString);
+
+		int index = remotePathString.lastIndexOf('/');
+		String appName = remotePathString.substring(index + 1);
+		String nativePath = sdCardPathString + Conf.LOCAL_APP_DOWNLOAD_PATH
+				+ "/" + appName;
+		Log.d(TAG, "nativePath:" + nativePath);
+		file.setNativePath(nativePath);
+		
+		mCloudStorage.stopTransferring(file);
 	}
 	
 	private List<AppInfo> appList = new ArrayList<AppInfo>();
@@ -131,6 +244,23 @@ public class GetAppActivity extends ListActivity {
 				for (int i = 0; i < arg0.size(); i++) {
 					jsonObject = arg0.get(i).toJSON();
 					AppInfo appInfo = AppInfo.parseJson(jsonObject);
+					
+					boolean isInstalled = APKUtil.isAppInstalled(getApplicationContext(), appInfo.getPackageName());
+					boolean isVersionEqual = appInfo.getAppVersion().equals(APKUtil.getInstalledAppVersion(getApplicationContext(), appInfo.getPackageName()));
+					
+					String localPath = sp.getString(appInfo.getPackageName(), null);
+					
+					if (isInstalled ) {
+						if (!isVersionEqual) {
+							appInfo.setStatus(Conf.NEED_UDPATE);
+						}
+						appInfo.setStatus(Conf.INSTALLED);
+					} else if (localPath != null) {
+						appInfo.setStatus(Conf.DOWNLOADED);
+						appInfo.setAppLocalPath(localPath);
+					} else {
+						appInfo.setStatus(Conf.NOT_DOWNLOAD);
+					}
 					appList.add(appInfo);
 				}
 				
@@ -140,35 +270,39 @@ public class GetAppActivity extends ListActivity {
 			@Override
 			public void onFailure(int arg0, String arg1) {
 				Log.e(TAG, "query apps.onFailure.error code:" + arg0 + ".errorMsg:" + arg1);
+				Toast.makeText(GetAppActivity.this, "查询失败.errMsg:" + arg1, Toast.LENGTH_LONG).show();
 				progressDialog.dismiss();
 			}
 		});
 	}
 
-	protected void downloadFile(final FrontiaFile mFile) {
-		progressDialog.setMessage("正在准备下载……");
-		progressDialog.setOnCancelListener(new OnCancelListener() {
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				Log.d(TAG, "onCancel");
-				showCancelDownloadDialog(mFile);
-			}
-		});
-		progressDialog.show();
+	double prev = 0;
+	protected void downloadFile(final AppInfo appInfo, final FrontiaFile mFile) {
+		
 		Log.d(TAG, "ready to downloadFile,remote path:" + mFile.getRemotePath()
 				+ ",local path:" + mFile.getNativePath());
+		prev = 0;
 		mCloudStorage.downloadFile(mFile, new FileProgressListener() {
 			@Override
 			public void onProgress(String source, long bytes, long total) {
 				Log.d(TAG, "downloading..." + bytes);
-				String dlMsg = "正在下载:" + source;
-				String totalSize = Utils.getFormatSize(total);
-				String dlSized = Utils.getFormatSize(bytes);
-				String dlPercent = bytes * 100 / total + "%";
-				progressDialog.setMessage(dlMsg + "\n"
-										+ "文件大小:" + totalSize + "\n"
-										+ "已下载:" + dlSized + "\n"
-										+ "下载进度:" + dlPercent );
+//				String dlMsg = "正在下载:" + source;
+				int percent = (int) (bytes * 100 / total);
+				Log.d(TAG, "prev=" + prev + ",percent=" + percent);
+				if (prev != percent) {
+					appInfo.setProgressBytes(bytes);
+					appInfo.setPercent(percent);
+					mHandler.sendMessage(mHandler.obtainMessage(GetAppListener.MSG_UPDATE_UI));
+					prev = percent;
+				}
+//				String totalSize = Utils.getFormatSize(total);
+//				String dlSized = Utils.getFormatSize(bytes);
+//				String dlPercent = bytes * 100 / total + "%";
+//				progressDialog.setMessage(dlMsg + "\n"
+//										+ "文件大小:" + totalSize + "\n"
+//										+ "已下载:" + dlSized + "\n"
+//										+ "下载进度:" + dlPercent );
+				
 			}
 
 		}, new FileTransferListener() {
@@ -177,13 +311,20 @@ public class GetAppActivity extends ListActivity {
 				Log.d(TAG, "======onSuccess======");
 				lastDownloadApk = newTargetName;
 				Log.d(TAG,"Local File:"+ newTargetName +",Clound File:"+source);
-				progressDialog.dismiss();
-				showInstallDialog();
+//				showInstallDialog();
+				appInfo.setStatus(Conf.DOWNLOADED);
+				mAdapter.notifyDataSetChanged();
+				Editor editor = sp.edit();
+				editor.putString(appInfo.getPackageName(), newTargetName);
+				editor.commit();
+				//key:app package name,value:app local file path
+				
+				APKUtil.installApp(getApplicationContext(), newTargetName);
 				//start a thread to update cloud data
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						updateDownloadCountData();
+//						updateDownloadCountData();
 					}
 				}).start();
 			}
@@ -279,5 +420,44 @@ public class GetAppActivity extends ListActivity {
 		});
 		builder.setNegativeButton("取消", null);
 		builder.create().show();
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	class AppReceiver extends BroadcastReceiver{
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			Log.d(TAG, "action:" + action);
+	        if (action.equals(Intent.ACTION_PACKAGE_ADDED)) {   
+	            String packageName = intent.getData().getSchemeSpecificPart(); 
+	            for(AppInfo appInfo : appList){
+	            	if (packageName.equals(appInfo.getPackageName())) {
+						appInfo.setStatus(Conf.INSTALLED);
+						mAdapter.notifyDataSetChanged();
+					}
+	            }
+	        } else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)) {   
+	        	String packageName = intent.getData().getSchemeSpecificPart(); 
+	            Log.d(TAG, "action removed :" + packageName);
+	            for(AppInfo appInfo : appList){
+	            	if (packageName.equals(appInfo.getPackageName())) {
+						appInfo.setStatus(Conf.DOWNLOADED);
+						mAdapter.notifyDataSetChanged();
+					}
+	            }
+	        }
+		}
+	}  
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		unregisterReceiver(mAppReceiver);
 	}
 }

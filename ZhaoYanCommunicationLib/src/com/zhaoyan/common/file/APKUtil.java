@@ -5,12 +5,17 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.util.DisplayMetrics;
 
 import com.zhaoyan.communication.R;
@@ -231,5 +236,40 @@ public class APKUtil {
 			e.printStackTrace();
 		}
 		return name;
+	}
+	
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	public static void installApp(Context context, String apkPath){
+		File apkFile = new File(apkPath);
+		Intent intent = new Intent();
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			intent.setAction(Intent.ACTION_INSTALL_PACKAGE);
+			intent.setData(Uri.fromFile(apkFile));
+		} else {
+			intent.setAction(Intent.ACTION_VIEW);
+			intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive"); 
+		}
+		context.startActivity(intent);
+	}
+	
+	public static boolean isAppInstalled(Context context,String packageName){
+		PackageInfo packageInfo = null;
+		try {
+			packageInfo = context.getPackageManager().getPackageInfo(packageName, 0);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		return packageInfo == null ? false : true;
+	}
+	
+	public static String getInstalledAppVersion(Context context,String packageName){
+		PackageInfo packageInfo = null;
+		try {
+			packageInfo = context.getPackageManager().getPackageInfo(packageName, 0);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		return packageInfo != null ? packageInfo.versionName : null;
 	}
 }

@@ -10,13 +10,13 @@ public class AppInfo {
     private String update_time;//应用上传或者更新时间
     private String app_language;//应用语言
     private String app_version;//应用版本号
-    private int download_count;//被下载次数
     private String introduce ;//详细介绍
     private String title;//简介
-    private String size;//应用大小
+    private String sizeStr;//应用大小
+    private long size;
     
-    private String app_url; //app下载地址
-    private String icon_url;// app icon 地址
+    private String app_url; //app云端下载地址
+    private String icon_url;// app icon 云端地址
     //暂定显示两张app界面截图介绍
     private String jiemian_url1;//app 界面截图介绍地址1
     private String jiemian_url2;//app 界面截图介绍地址2
@@ -25,6 +25,13 @@ public class AppInfo {
     
     private String packageName;//应用包名
     
+    private int status;
+    
+    private long progressBytes;
+    private int percent;
+    
+    private String app_local_path;
+    
     public AppInfo(){
     	
     }
@@ -32,8 +39,8 @@ public class AppInfo {
     public AppInfo(int app_id,String app_label,
     		String author_id,String update_time,
     		String app_language,String app_version,
-    		int download_count,String introduce,String title,
-    		String size,String author,
+    		String introduce,String title,
+    		long size,String author,
     		String app_url, String icon_url,
     		String jiemian_url1, String jiemian_url2,
     		String app_type, String packageName
@@ -42,7 +49,6 @@ public class AppInfo {
     	this.app_label = app_label;
     	this.author_id = author_id;
     	this.author = author;
-    	this.download_count = download_count ;
     	this.introduce = introduce;
     	this.title = title;
     	this.size = size;
@@ -67,19 +73,19 @@ public class AppInfo {
     	return app_id;
     }
     
-    public void setDownloadCount(int downloadCount){
-    	this.download_count = downloadCount;
-    }
-    
-    public int getDownloadCount(){
-    	return download_count;
-    }
-    
     public void setSize(String size){
-    	this.size = size;
+    	this.sizeStr = size;
     }
     
     public String getSize(){
+    	return sizeStr;
+    }
+    
+    public void setAppSize(long size){
+    	this.size = size;
+    }
+    
+    public long getAppSize(){
     	return size;
     }
     
@@ -199,6 +205,39 @@ public class AppInfo {
 		return packageName;
 	}
 	
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public void setProgressBytes(long bytes){
+		this.progressBytes = bytes;
+	}
+	
+	public long getProgressBytes(){
+		return progressBytes;
+	}
+	
+	public void setPercent(int percent){
+		this.percent = percent;
+	}
+	
+	public int getPercent(){
+		return percent;
+	}
+	
+	public void setAppLocalPath(String localPath){
+		this.app_local_path = localPath;
+	}
+	
+	public String getAppLocalPath(){
+		return app_local_path;
+	}
+	
+	
 	public static AppInfo parseJson(JSONObject jsonObject){
 		AppInfo appInfo = null;
 		int app_id = 0;
@@ -208,10 +247,9 @@ public class AppInfo {
 		String update_time = "";
 		String app_language = "";
 		String app_version = "";
-		int download_count = 0;
 		String introduce = "";
 		String title = "";
-		String size = "";
+		long size = 0;
 
 		String app_url = "";
 		String icon_url = "";
@@ -230,10 +268,9 @@ public class AppInfo {
 			update_time = jsonObject.getString(AppJSON.UPDATE_TIME);
 			app_language = jsonObject.getString(AppJSON.APP_LANGUAGE);
 			app_version = jsonObject.getString(AppJSON.APP_VERSION);
-			download_count = jsonObject.getInt(AppJSON.DOWNLOAD_COUNT);
 			introduce = jsonObject.getString(AppJSON.INTRODUCE);
 			title = jsonObject.getString(AppJSON.TITLE);
-			size = jsonObject.getString(AppJSON.SIZE);
+			size = jsonObject.getLong(AppJSON.SIZE);
 			app_url = jsonObject.getString(AppJSON.APP_URL);
 			icon_url = jsonObject.getString(AppJSON.ICON_URL);
 			jiemian_url1 = jsonObject.getString(AppJSON.JIEMIAN_URL1);
@@ -244,7 +281,7 @@ public class AppInfo {
 			e.printStackTrace();
 		}
 		appInfo = new AppInfo(app_id, app_label, author_id, update_time, app_language, 
-				app_version, download_count, 
+				app_version, 
 				introduce, title, size, author, app_url, icon_url, jiemian_url1, 
 				jiemian_url2, app_type, packageName);
 		
@@ -254,8 +291,8 @@ public class AppInfo {
 	public String toString(){
 		String info = "appid=" + app_id + ",app_label=" + app_label + ",author_id=" + author_id
 				+ ",author=" + author+ ",update_time=" + update_time + ",app_language=" + app_language
-				+ ",app_version=" + app_version + ",download_count=" + download_count
-				+ ",introduce=" + introduce + ",title=" + title + ",size=" + size
+				+ ",app_version=" + app_version
+				+ ",introduce=" + introduce + ",title=" + title + ",size=" + sizeStr
 				+ ",app_url=" + app_url+ ",icon_url=" + icon_url + ",jiemian_url1" + jiemian_url1
 				+",jiemian_url2=" + jiemian_url2 + ",app_type=" + app_type + ",packageName=" + packageName;
 		

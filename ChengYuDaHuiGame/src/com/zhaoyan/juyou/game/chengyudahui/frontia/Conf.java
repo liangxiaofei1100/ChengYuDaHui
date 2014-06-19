@@ -8,6 +8,9 @@ public class Conf {
     public final static String CLOUD_ICON_LOCATION = "icons/";
     public final static String CLOUD_INFO_LOCATION = "infos/";
     public final static String LOCAL_APP_DOWNLOAD_PATH = "/baiduApp";
+    
+    public final static String SHARED_PREFS_NAME = "dlapp";
+    
     //request_code
     public final static int REQUEST_CODE1 = 2;
     public final static int REQUEST_CODE2 = 3;
@@ -18,5 +21,12 @@ public class Conf {
     public final static int RESULT_CODE2 = 11;
     public final static int RESULT_CODE3 = 12;
     public final static int RESULT_CODE4 = 13;
+    
+    //app status
+    public static final int NOT_DOWNLOAD = 0;
+    public static final int DOWNLOADING = 1;
+    public static final int DOWNLOADED = 2;
+    public static final int INSTALLED = 3;
+    public static final int NEED_UDPATE = 4;
     
 }
