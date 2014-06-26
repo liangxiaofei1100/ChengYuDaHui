@@ -1,8 +1,13 @@
 package com.zhaoyan.juyou.game.chengyudahui;
 
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 
+import com.baidu.android.pushservice.CustomPushNotificationBuilder;
+import com.baidu.android.pushservice.PushConstants;
+import com.baidu.android.pushservice.PushManager;
 import com.baidu.frontia.FrontiaApplication;
 import com.zhaoyan.common.net.NetWorkUtil;
 import com.zhaoyan.communication.FileTransferService;
@@ -15,6 +20,8 @@ import com.zhaoyan.communication.connect.ServerCreator;
 import com.zhaoyan.communication.search.SearchUtil;
 import com.zhaoyan.communication.search.ServerSearcher;
 import com.zhaoyan.communication.util.Log;
+import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
+import com.zhaoyan.juyou.game.chengyudahui.push.PushUtils;
 
 public class JuYouApplication extends FrontiaApplication {
 	private static final String TAG = "JuYouApplication";
@@ -50,6 +57,8 @@ public class JuYouApplication extends FrontiaApplication {
 		SocketCommunicationManager.getInstance().init(context);
 		// Initialize ProtocolCommunication
 		ProtocolCommunication.getInstance().init(context);
+		//bind baidu push service
+		PushUtils.startBind(context);
 	}
 
 	public static synchronized void quitApplication(Context context) {
