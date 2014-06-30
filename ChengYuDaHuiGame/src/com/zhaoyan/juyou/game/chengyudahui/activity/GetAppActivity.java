@@ -85,7 +85,10 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 			AppInfo appInfo = null;
 			if (bundle != null) {
 				int position = bundle.getInt(GetAppListener.KEY_ITEM_POSITION);
+				Log.d(TAG, "handlerMessage.position=" + position);
 				appInfo = appList.get(position);
+			} else {
+				Log.v(TAG, "handlerMessage appinfo is null");
 			}
 			
 			switch (msg.what) {
@@ -110,6 +113,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 				break;
 			case GetAppListener.MSG_INSTALL_APP:
 				String localPath = appInfo.getAppLocalPath();
+				Log.d(TAG, "MSG_INSTALL_APP.localPath:" + localPath);
 				if (new File(localPath).exists()) {
 					APKUtil.installApp(getApplicationContext(), localPath);
 				} else {
@@ -202,6 +206,11 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 		int index = remotePathString.lastIndexOf('/');// 从路径的末尾倒数第一个'/'作为文件名和路径的分隔符
 		String appName = remotePathString.substring(index + 1);// 获得从‘/’字符以后的字串，即文件名；
 		
+		String localDir = sdCardPathString + Conf.LOCAL_APP_DOWNLOAD_PATH;
+		if (!new File(localDir).exists()) {
+			new File(localDir).mkdirs();
+		}
+		
 		String nativePath = sdCardPathString+Conf.LOCAL_APP_DOWNLOAD_PATH+"/" + appName;
 		Log.d(TAG, "nativePath:" + nativePath);
 		file.setNativePath(nativePath);
@@ -247,15 +256,20 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 					AppInfo appInfo = AppInfo.parseJson(jsonObject);
 					
 					boolean isInstalled = APKUtil.isAppInstalled(getApplicationContext(), appInfo.getPackageName());
-					boolean isVersionEqual = appInfo.getAppVersion().equals(APKUtil.getInstalledAppVersion(getApplicationContext(), appInfo.getPackageName()));
+					String serverVersion = appInfo.getAppVersion();
+					String localVersion = APKUtil.getInstalledAppVersion(getApplicationContext(), appInfo.getPackageName());
+					boolean isVersionEqual =serverVersion.equals(localVersion);
+					Log.d(TAG, "serverVersion:" + serverVersion + ",localVersion:" + localVersion);
+					Log.d(TAG, "isVersionEqual:" + isVersionEqual);
 					
 					String localPath = sp.getString(appInfo.getPackageName(), null);
 					
 					if (isInstalled ) {
 						if (!isVersionEqual) {
 							appInfo.setStatus(Conf.NEED_UDPATE);
+						} else {
+							appInfo.setStatus(Conf.INSTALLED);
 						}
-						appInfo.setStatus(Conf.INSTALLED);
 					} else if (localPath != null) {
 						appInfo.setStatus(Conf.DOWNLOADED);
 						appInfo.setAppLocalPath(localPath);
@@ -314,6 +328,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 				Log.d(TAG,"Local File:"+ newTargetName +",Clound File:"+source);
 //				showInstallDialog();
 				appInfo.setStatus(Conf.DOWNLOADED);
+				appInfo.setAppLocalPath(newTargetName);
 				mAdapter.notifyDataSetChanged();
 				Editor editor = sp.edit();
 				editor.putString(appInfo.getPackageName(), newTargetName);
