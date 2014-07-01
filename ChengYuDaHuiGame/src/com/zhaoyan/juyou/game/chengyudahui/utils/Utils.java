@@ -8,8 +8,12 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.StatFs;
+import android.preference.PreferenceManager;
 import android.view.Window;
 import android.view.WindowManager;
 
