@@ -100,7 +100,7 @@ public class FindPassword {
 			if (mListener == null) {
 				return;
 			}
-
+			mRespondMessage = getRespondMessage(mRespondMessage);
 			if (result) {
 				mListener.findPasswordSuccess("找回成功：" + mRespondMessage);
 			} else {
@@ -112,12 +112,18 @@ public class FindPassword {
 	private String getRespondMessage(String respondMessage) {
 		String message = respondMessage;
 		if (respondMessage.startsWith("User not exist.")) {
-			message = "账号不存在，请先注册。";
-		} else if ("Password dismatch.".equals(respondMessage)) {
-			message = "密码错误";
+			message = "账号不存在。";
+		} else if ("Email not exist.".equals(respondMessage)) {
+			message = "账号未绑定邮箱。";
+		} else if ("Send email success.".equals(respondMessage)) {
+			message = "已发送到账号绑定邮箱。";
+		} else if ("Send email fail".equals(respondMessage)
+				|| "Send email again error.".equals(respondMessage)) {
+			message = "发送邮件失败。";
+		} else if ("Server error.".equals(respondMessage)) {
+			message = "服务器错误。";
 		}
 
 		return message;
 	}
-
 }
