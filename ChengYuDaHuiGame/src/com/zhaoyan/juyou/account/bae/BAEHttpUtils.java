@@ -10,9 +10,12 @@ public class BAEHttpUtils {
 	public static String getLoginURL() {
 		return URL_SEVLET_PATH + "LoginAction";
 	}
-	
+
 	public static String getGetUserInfoURL() {
 		return URL_SEVLET_PATH + "GetUserInfoAction";
 	}
 
+	public static String getGetPasswordURL() {
+		return URL_SEVLET_PATH + "GetPasswordAction";
+	}
 }

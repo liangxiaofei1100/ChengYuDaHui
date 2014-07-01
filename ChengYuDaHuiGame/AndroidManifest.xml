@@ -54,6 +54,10 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ForgetPasswordActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.UserInfoSettingActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >

@@ -44,6 +44,9 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 
 		TextView registerTextView = (TextView) findViewById(R.id.tv_register);
 		registerTextView.setOnClickListener(this);
+
+		TextView forgetPasswordTextView = (TextView) findViewById(R.id.tv_forget_password);
+		forgetPasswordTextView.setOnClickListener(this);
 	}
 
 	@Override
@@ -57,10 +60,23 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 			setResult(RESULT_CANCELED);
 			finish();
 			break;
+		case R.id.tv_forget_password:
+			forgetPasssword();
+			setResult(RESULT_CANCELED);
+			finish();
+			break;
 
 		default:
 			break;
 		}
+	}
+
+	private void forgetPasssword() {
+		Intent intent = new Intent(mContext, ForgetPasswordActivity.class);
+		intent.putExtra(ForgetPasswordActivity.EXTRA_USERNAME, mAccountEditText
+				.getText().toString());
+		startActivity(intent);
+		finish();
 	}
 
 	private void login() {
