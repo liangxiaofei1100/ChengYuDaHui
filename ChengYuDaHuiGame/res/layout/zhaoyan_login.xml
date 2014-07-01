@@ -8,14 +8,14 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" >
+            android:orientation="horizontal" >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -36,8 +36,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:paddingTop="5dp" >
 
             <TextView
@@ -61,8 +59,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:paddingTop="10dp" >
 
             <Button
@@ -71,6 +67,15 @@
                 android:layout_height="wrap_content"
                 android:text="登录" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_forget_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:text="忘记密码？" />
     </LinearLayout>
 
     <TextView

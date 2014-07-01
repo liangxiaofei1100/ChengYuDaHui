@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.zhaoyan.juyou.account.bae.FindPassword;
 import com.zhaoyan.juyou.account.bae.GetUserInfo;
 import com.zhaoyan.juyou.account.bae.Login;
 import com.zhaoyan.juyou.account.bae.RegisterUser;
@@ -73,8 +74,9 @@ public class ZhaoYanAccountManager {
 	 * 
 	 * @param account
 	 */
-	public static void registerCheckZhaoYanAccount(String userName, CheckUserNameResultListener listener) {
-		RegisterUserCheckUserName checkUserName =new RegisterUserCheckUserName();
+	public static void registerCheckZhaoYanAccount(String userName,
+			CheckUserNameResultListener listener) {
+		RegisterUserCheckUserName checkUserName = new RegisterUserCheckUserName();
 		checkUserName.setCheckResultListener(listener);
 		checkUserName.checkUserName(userName);
 	}
@@ -118,5 +120,12 @@ public class ZhaoYanAccountManager {
 		GetUserInfo getUserInfo = new GetUserInfo();
 		getUserInfo.setGetUserInfoResultListener(listener);
 		getUserInfo.getUserInfo(userName);
+	}
+
+	public static void findPassword(String userNameOrEmail,
+			FindPasswordResultListener listener) {
+		FindPassword findPassword = new FindPassword();
+		findPassword.setFindPasswordResultListener(listener);
+		findPassword.findPassword(userNameOrEmail);
 	}
 }
