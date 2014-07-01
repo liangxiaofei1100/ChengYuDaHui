@@ -6,6 +6,7 @@ import android.content.SharedPreferences.Editor;
 
 import com.zhaoyan.juyou.account.bae.FindPassword;
 import com.zhaoyan.juyou.account.bae.GetUserInfo;
+import com.zhaoyan.juyou.account.bae.GoldOperation;
 import com.zhaoyan.juyou.account.bae.Login;
 import com.zhaoyan.juyou.account.bae.RegisterUser;
 import com.zhaoyan.juyou.account.bae.RegisterUserCheckUserName;
@@ -127,5 +128,19 @@ public class ZhaoYanAccountManager {
 		FindPassword findPassword = new FindPassword();
 		findPassword.setFindPasswordResultListener(listener);
 		findPassword.findPassword(userNameOrEmail);
+	}
+
+	public static void addGold(String usernameOrEmail, int gold,
+			GoldOperationResultListener listener) {
+		GoldOperation operation = new GoldOperation();
+		operation.setGetUserInfoResultListener(listener);
+		operation.addGold(usernameOrEmail, gold);
+	}
+
+	public static void subGold(String usernameOrEmail, int gold,
+			GoldOperationResultListener listener) {
+		GoldOperation operation = new GoldOperation();
+		operation.setGetUserInfoResultListener(listener);
+		operation.subGold(usernameOrEmail, gold);
 	}
 }

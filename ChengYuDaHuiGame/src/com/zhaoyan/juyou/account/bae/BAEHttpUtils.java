@@ -18,4 +18,8 @@ public class BAEHttpUtils {
 	public static String getGetPasswordURL() {
 		return URL_SEVLET_PATH + "GetPasswordAction";
 	}
+	
+	public static String getGetGoldOperationURL() {
+		return URL_SEVLET_PATH + "GoldAction";
+	}
 }
