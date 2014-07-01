@@ -64,6 +64,10 @@ public class ZhaoYanAccountManager {
 	public static void updateLocalAccountWithServerAccountInfo(Context context,
 			ZhaoYanAccount accountServer) {
 		ZhaoYanAccount accountLocal = getAccountFromLocal(context);
+		if (accountLocal == null) {
+			accountLocal = new ZhaoYanAccount();
+			return;
+		}
 		accountLocal.userName = accountServer.userName;
 		accountLocal.email = accountServer.email;
 		accountLocal.phone = accountServer.phone;
