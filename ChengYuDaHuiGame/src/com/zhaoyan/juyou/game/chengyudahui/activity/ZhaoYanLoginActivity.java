@@ -63,7 +63,6 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 		case R.id.tv_forget_password:
 			forgetPasssword();
 			setResult(RESULT_CANCELED);
-			finish();
 			break;
 
 		default:
@@ -76,7 +75,6 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 		intent.putExtra(ForgetPasswordActivity.EXTRA_USERNAME, mAccountEditText
 				.getText().toString());
 		startActivity(intent);
-		finish();
 	}
 
 	private void login() {

@@ -59,6 +59,12 @@ public class GetGoldActivity extends Activity implements OnClickListener {
 		mUserNameTextView = (TextView) findViewById(R.id.tv_username);
 		mGoldTextView = (TextView) findViewById(R.id.tv_gold);
 
+		View accountView = findViewById(R.id.ll_acount_info);
+		accountView.setOnClickListener(this);
+		
+		View downloadAppView = findViewById(R.id.tv_download_app);
+		downloadAppView.setOnClickListener(this);
+
 		Button downloadAppButton = (Button) findViewById(R.id.btn_download_app);
 		downloadAppButton.setOnClickListener(this);
 
@@ -137,15 +143,25 @@ public class GetGoldActivity extends Activity implements OnClickListener {
 	public void onClick(View view) {
 		switch (view.getId()) {
 		case R.id.btn_download_app:
+		case R.id.tv_download_app:
 			launchGetApp();
 			break;
 		case R.id.btn_logout:
 			logout();
 			break;
-
+		case R.id.ll_acount_info:
+			launchAccountSetting();
+			break;
 		default:
 			break;
 		}
+	}
+
+	private void launchAccountSetting() {
+		Intent intent = new Intent(mContext,
+				ZhaoYanAccountSettingActivity.class);
+		startActivity(intent);
+		overridePendingTransition(R.anim.activity_right_in, 0);
 	}
 
 	private void logout() {

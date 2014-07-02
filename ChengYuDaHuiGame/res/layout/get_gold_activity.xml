@@ -1,41 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp" >
+    android:background="#faf3f3"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="账户信息:"
+        android:textSize="12sp" />
+
+    <include layout="@layout/splitline" />
 
     <LinearLayout
+        android:id="@+id/ll_acount_info"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="金币信息：" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_white_bg"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:padding="10dp" >
 
         <TextView
             android:id="@+id/tv_username"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_gold"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/btn_download_app"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="下载应用得金币" />
+            android:layout_marginTop="5dp"
+            android:textSize="14sp"
+            android:color="@color/gray" />
     </LinearLayout>
+
+    <include layout="@layout/splitline" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="轻松拿金币"
+        android:textSize="12sp" />
+
+    <include layout="@layout/splitline" />
+
+    <TextView
+        android:id="@+id/tv_download_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_white_bg"
+        android:clickable="true"
+        android:padding="10dp"
+        android:text="下载应用得金币"
+        android:textSize="16sp" />
+
+    <include layout="@layout/splitline" />
+
+    <TextView
+        android:id="@+id/tv_daily_gold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_white_bg"
+        android:clickable="true"
+        android:padding="10dp"
+        android:text="每日签到得金币"
+        android:textSize="16sp" />
+
+    <include layout="@layout/splitline" />
+
+    <Button
+        android:id="@+id/btn_download_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="下载应用得金币"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="登出" />
+        android:text="登出"
+        android:visibility="gone" />
 
-</RelativeLayout>
+</LinearLayout>
