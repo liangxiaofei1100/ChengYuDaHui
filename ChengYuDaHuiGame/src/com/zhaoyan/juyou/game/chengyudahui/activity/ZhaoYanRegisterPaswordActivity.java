@@ -20,6 +20,8 @@ import android.widget.Toast;
 public class ZhaoYanRegisterPaswordActivity extends Activity implements
 		OnClickListener {
 	public static final String EXTRA_USER_NAME = "user_name";
+
+	public static final String ACTION_REGISTER_LOGIN = "com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanRegisterPaswordActivity.ACTION_REGISTER_LOGIN";
 	private Context mContext;
 	private EditText mPassword1;
 	private EditText mPassword2;
@@ -95,7 +97,12 @@ public class ZhaoYanRegisterPaswordActivity extends Activity implements
 						account.password = password;
 						ZhaoYanAccountManager.saveAccountToLocal(mContext,
 								account);
+						// Notify ZhaoYanRegisterActivity
+						Intent intent = new Intent(ACTION_REGISTER_LOGIN);
+						sendBroadcast(intent);
+
 						launchAccountInfoModify(userName);
+						finish();
 					}
 
 					@Override
@@ -111,7 +118,6 @@ public class ZhaoYanRegisterPaswordActivity extends Activity implements
 		intent.putExtra(ZhaoYanRegisterAccoutInfoActivity.EXTRA_USER_NAME,
 				userName);
 		startActivity(intent);
-		finish();
 	}
 
 	private void toast(String message) {

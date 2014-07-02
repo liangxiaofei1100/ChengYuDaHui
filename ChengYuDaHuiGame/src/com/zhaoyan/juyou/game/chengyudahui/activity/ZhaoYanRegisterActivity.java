@@ -7,8 +7,10 @@ import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,6 +22,7 @@ public class ZhaoYanRegisterActivity extends Activity implements
 		OnClickListener {
 	private Context mContext;
 	private EditText mAccountNameEditText;
+	private BroadcastReceiver mLoginReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,21 @@ public class ZhaoYanRegisterActivity extends Activity implements
 		setTitle("账号注册");
 		setContentView(R.layout.zhaoyan_register_account);
 		initView();
+
+		IntentFilter intentFilter = new IntentFilter(
+				ZhaoYanRegisterPaswordActivity.ACTION_REGISTER_LOGIN);
+		mLoginReceiver = new LoginReceiver();
+		registerReceiver(mLoginReceiver, intentFilter);
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		try {
+			unregisterReceiver(mLoginReceiver);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initView() {
@@ -81,11 +99,18 @@ public class ZhaoYanRegisterActivity extends Activity implements
 		intent.putExtra(ZhaoYanRegisterPaswordActivity.EXTRA_USER_NAME,
 				userName);
 		startActivity(intent);
-		finish();
 	}
 
 	private void toast(String message) {
 		Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+	}
+
+	class LoginReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			finish();
+		}
 	}
 
 }

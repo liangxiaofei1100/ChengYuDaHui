@@ -1,17 +1,17 @@
 package com.zhaoyan.juyou.game.chengyudahui.activity;
 
 import com.zhaoyan.juyou.account.GetUserInfoResultListener;
-import com.zhaoyan.juyou.account.LoginResultListener;
 import com.zhaoyan.juyou.account.ZhaoYanAccount;
-import com.zhaoyan.juyou.account.ZhaoYanAccountChecker;
 import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.BaiduFrontiaUser;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,8 +23,6 @@ import android.widget.Toast;
 public class GetGoldActivity extends Activity implements OnClickListener {
 	private static final String TAG = GetGoldActivity.class.getSimpleName();
 
-	private static final int REQUEST_LOGIN = 1;
-
 	private Context mContext;
 	private ZhaoYanAccountManager mZhaoYanAccountManager;
 
@@ -32,6 +30,8 @@ public class GetGoldActivity extends Activity implements OnClickListener {
 	private TextView mGoldTextView;
 
 	private ZhaoYanAccount mCurrentAccount;
+
+	private BroadcastReceiver mLogoutReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,16 @@ public class GetGoldActivity extends Activity implements OnClickListener {
 		mZhaoYanAccountManager = new ZhaoYanAccountManager();
 
 		initView();
+
+		IntentFilter intentFilter = new IntentFilter(
+				ZhaoYanAccountSettingActivity.ACTION_ACCOUNT_LOGOUT);
+		mLogoutReceiver = new LogoutReceiver();
+		registerReceiver(mLogoutReceiver, intentFilter);
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
 		initAccount();
 	}
 
@@ -55,13 +65,23 @@ public class GetGoldActivity extends Activity implements OnClickListener {
 		}
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		try {
+			unregisterReceiver(mLogoutReceiver);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void initView() {
 		mUserNameTextView = (TextView) findViewById(R.id.tv_username);
 		mGoldTextView = (TextView) findViewById(R.id.tv_gold);
 
 		View accountView = findViewById(R.id.ll_acount_info);
 		accountView.setOnClickListener(this);
-		
+
 		View downloadAppView = findViewById(R.id.tv_download_app);
 		downloadAppView.setOnClickListener(this);
 
@@ -77,7 +97,9 @@ public class GetGoldActivity extends Activity implements OnClickListener {
 				.getAccountFromLocal(mContext);
 		if (account == null) {
 			// User have not login before.
+			toast("请先登录");
 			launchLogin();
+			finish();
 		}
 	}
 
@@ -131,7 +153,7 @@ public class GetGoldActivity extends Activity implements OnClickListener {
 
 	private void launchLogin() {
 		Intent intent = new Intent(mContext, ZhaoYanLoginActivity.class);
-		startActivityForResult(intent, REQUEST_LOGIN);
+		startActivity(intent);
 	}
 
 	private void toast(String message) {
@@ -145,9 +167,6 @@ public class GetGoldActivity extends Activity implements OnClickListener {
 		case R.id.btn_download_app:
 		case R.id.tv_download_app:
 			launchGetApp();
-			break;
-		case R.id.btn_logout:
-			logout();
 			break;
 		case R.id.ll_acount_info:
 			launchAccountSetting();
@@ -164,23 +183,11 @@ public class GetGoldActivity extends Activity implements OnClickListener {
 		overridePendingTransition(R.anim.activity_right_in, 0);
 	}
 
-	private void logout() {
-		ZhaoYanAccountManager.deleteLocalAccount(mContext);
-		launchLogin();
-	}
+	class LogoutReceiver extends BroadcastReceiver {
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		switch (requestCode) {
-		case REQUEST_LOGIN:
-			if (resultCode != RESULT_OK) {
-				finish();
-			}
-			break;
-
-		default:
-			break;
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			finish();
 		}
 	}
 }

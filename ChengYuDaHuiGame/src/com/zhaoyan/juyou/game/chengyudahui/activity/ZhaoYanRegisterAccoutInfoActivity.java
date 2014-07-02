@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -77,12 +78,22 @@ public class ZhaoYanRegisterAccoutInfoActivity extends Activity implements
 		// }
 		// });
 		launchGetGoldActivity();
+		finish();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			launchGetGoldActivity();
+			finish();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	private void launchGetGoldActivity() {
 		Intent intent = new Intent(mContext, GetGoldActivity.class);
 		startActivity(intent);
-		finish();
 	}
 
 	private void toast(String message) {

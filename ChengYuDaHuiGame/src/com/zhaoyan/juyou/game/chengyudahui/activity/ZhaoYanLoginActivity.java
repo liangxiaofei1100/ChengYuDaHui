@@ -6,10 +6,13 @@ import com.zhaoyan.juyou.account.ZhaoYanAccount;
 import com.zhaoyan.juyou.account.ZhaoYanAccountChecker;
 import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanRegisterActivity.LoginReceiver;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +29,8 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 	private EditText mAccountEditText;
 	private EditText mPasswordEditText;
 
+	private BroadcastReceiver mLoginReceiver;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,6 +39,29 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.zhaoyan_login);
 
 		initView();
+		IntentFilter intentFilter = new IntentFilter(
+				ZhaoYanRegisterPaswordActivity.ACTION_REGISTER_LOGIN);
+		mLoginReceiver = new LoginReceiver();
+		registerReceiver(mLoginReceiver, intentFilter);
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		try {
+			unregisterReceiver(mLoginReceiver);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		if (ZhaoYanAccountManager.getAccountFromLocal(mContext) != null) {
+			// Already login.
+			finish();
+		}
 	}
 
 	private void initView() {
@@ -57,12 +85,9 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.tv_register:
 			launchZhaoAccountRegister();
-			setResult(RESULT_CANCELED);
-			finish();
 			break;
 		case R.id.tv_forget_password:
 			forgetPasssword();
-			setResult(RESULT_CANCELED);
 			break;
 
 		default:
@@ -104,7 +129,6 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 					@Override
 					public void onLoginFail(String message) {
 						toast("登录失败：" + message);
-						setResult(RESULT_CANCELED);
 					}
 
 					@Override
@@ -114,16 +138,20 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 						account.password = password;
 						ZhaoYanAccountManager.saveAccountToLocal(mContext,
 								account);
-						setResult(RESULT_OK);
+						launchGetGoldActivity();
 						finish();
 					}
 
 					@Override
 					public void onNetworkError(String message) {
 						toast("登录失败：" + "无法连接到服务器");
-						setResult(RESULT_CANCELED);
 					}
 				});
+	}
+
+	private void launchGetGoldActivity() {
+		Intent intent = new Intent(mContext, GetGoldActivity.class);
+		startActivity(intent);
 	}
 
 	private void launchZhaoAccountRegister() {
@@ -135,4 +163,13 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 		Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
 		toast.show();
 	}
+
+	class LoginReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			finish();
+		}
+	}
+
 }
