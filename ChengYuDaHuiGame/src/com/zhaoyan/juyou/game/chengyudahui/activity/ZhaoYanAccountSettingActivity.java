@@ -52,7 +52,6 @@ public class ZhaoYanAccountSettingActivity extends Activity implements
 		}
 
 		mUsernameTextView.setText("账号：" + account.userName);
-		mUsernameTextView.setOnClickListener(this);
 		mGoldTextView.setText("金币：" + account.gold);
 		mEmailTextView.setText("邮箱：" + account.email);
 		mPhoneTextView.setText("电话：" + account.phone);
@@ -60,8 +59,12 @@ public class ZhaoYanAccountSettingActivity extends Activity implements
 
 	private void initView() {
 		mUsernameTextView = (TextView) findViewById(R.id.tv_username);
+		mUsernameTextView.setOnClickListener(this);
+
 		mGoldTextView = (TextView) findViewById(R.id.tv_gold);
 		mEmailTextView = (TextView) findViewById(R.id.tv_email);
+		mEmailTextView.setOnClickListener(this);
+
 		mPhoneTextView = (TextView) findViewById(R.id.tv_phone);
 
 		Button logoutButton = (Button) findViewById(R.id.btn_logout);
@@ -78,15 +81,25 @@ public class ZhaoYanAccountSettingActivity extends Activity implements
 		case R.id.tv_username:
 			launchModifyPassword();
 			break;
+		case R.id.tv_email:
+			launchModifyEmail();
+			break;
 
 		default:
 			break;
 		}
 	}
 
+	private void launchModifyEmail() {
+		Intent intent = new Intent(mContext, ZhaoYanModifyEmailActivity.class);
+		startActivity(intent);
+		overridePendingTransition(R.anim.activity_right_in, 0);
+	}
+
 	private void launchModifyPassword() {
 		Intent intent = new Intent(mContext, ZhaoYanModifyPaswordActivity.class);
 		startActivity(intent);
+		overridePendingTransition(R.anim.activity_right_in, 0);
 	}
 
 	private void logout() {
