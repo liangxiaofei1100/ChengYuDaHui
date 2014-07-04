@@ -83,16 +83,16 @@ public class GoldOperation {
 						+ mRespondMessage);
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
-				Log.e(TAG, "Login error", e);
+				Log.e(TAG, "error. ", e);
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
-				Log.e(TAG, "Login error", e);
+				Log.e(TAG, "error. ", e);
 			} catch (IOException e) {
 				e.printStackTrace();
-				Log.e(TAG, "Login error", e);
+				Log.e(TAG, "error. ", e);
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
-				Log.e(TAG, "Login error", e);
+				Log.e(TAG, "error. ", e);
 			}
 			return result;
 		}

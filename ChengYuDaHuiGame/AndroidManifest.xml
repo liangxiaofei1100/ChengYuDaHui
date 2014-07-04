@@ -42,6 +42,10 @@
             android:theme="@style/Theme.Translucent" >
         </activity>
         <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanModifyPaswordActivity"
+            android:theme="@style/Theme.Translucent" >
+        </activity>
+        <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanLoginActivity"
             android:screenOrientation="portrait" >
         </activity>

@@ -8,6 +8,7 @@ import com.zhaoyan.juyou.account.bae.FindPassword;
 import com.zhaoyan.juyou.account.bae.GetUserInfo;
 import com.zhaoyan.juyou.account.bae.GoldOperation;
 import com.zhaoyan.juyou.account.bae.Login;
+import com.zhaoyan.juyou.account.bae.ModifyAccountInfo;
 import com.zhaoyan.juyou.account.bae.RegisterUser;
 import com.zhaoyan.juyou.account.bae.RegisterUserCheckUserName;
 
@@ -147,4 +148,26 @@ public class ZhaoYanAccountManager {
 		operation.setGetUserInfoResultListener(listener);
 		operation.subGold(usernameOrEmail, gold);
 	}
+
+	public static void modifyEmail(String username, String password,
+			String email, ModifyAccountInfoResultListener listener) {
+		ModifyAccountInfo modifyAccountInfo = new ModifyAccountInfo();
+		modifyAccountInfo.setModiyAccountInfoResultListener(listener);
+		modifyAccountInfo.modifyEmail(username, password, email);
+	}
+
+	public static void modifyPhone(String username, String password,
+			String phone, ModifyAccountInfoResultListener listener) {
+		ModifyAccountInfo modifyAccountInfo = new ModifyAccountInfo();
+		modifyAccountInfo.setModiyAccountInfoResultListener(listener);
+		modifyAccountInfo.modifyPhone(username, password, phone);
+	}
+
+	public static void modifyPassword(String username, String password,
+			String newPassword, ModifyAccountInfoResultListener listener) {
+		ModifyAccountInfo modifyAccountInfo = new ModifyAccountInfo();
+		modifyAccountInfo.setModiyAccountInfoResultListener(listener);
+		modifyAccountInfo.modifyPassword(username, password, newPassword);
+	}
+
 }

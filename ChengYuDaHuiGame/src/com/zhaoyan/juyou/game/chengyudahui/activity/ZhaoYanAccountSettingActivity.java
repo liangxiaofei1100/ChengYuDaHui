@@ -52,6 +52,7 @@ public class ZhaoYanAccountSettingActivity extends Activity implements
 		}
 
 		mUsernameTextView.setText("账号：" + account.userName);
+		mUsernameTextView.setOnClickListener(this);
 		mGoldTextView.setText("金币：" + account.gold);
 		mEmailTextView.setText("邮箱：" + account.email);
 		mPhoneTextView.setText("电话：" + account.phone);
@@ -74,10 +75,18 @@ public class ZhaoYanAccountSettingActivity extends Activity implements
 			logout();
 			finish();
 			break;
+		case R.id.tv_username:
+			launchModifyPassword();
+			break;
 
 		default:
 			break;
 		}
+	}
+
+	private void launchModifyPassword() {
+		Intent intent = new Intent(mContext, ZhaoYanModifyPaswordActivity.class);
+		startActivity(intent);
 	}
 
 	private void logout() {

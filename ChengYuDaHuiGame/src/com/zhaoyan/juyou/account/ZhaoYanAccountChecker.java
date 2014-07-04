@@ -5,6 +5,7 @@ import android.text.TextUtils;
 public class ZhaoYanAccountChecker {
 	public static final int ACCOUNT_MAX_LENGTH = 30;
 	public static final int PASSWORD_MAX_LENGTH = 30;
+	public static final int EMAIL_MAX_LENGTH = 50;
 
 	public static CheckResult checkPassword(String password) {
 		CheckResult result = new CheckResult();
@@ -28,6 +29,20 @@ public class ZhaoYanAccountChecker {
 			result.checkOK = false;
 		} else if (userName.length() > ACCOUNT_MAX_LENGTH) {
 			result.message = "账号长度过长";
+			result.checkOK = false;
+		}
+		return result;
+	}
+
+	public static CheckResult checkEmail(String email) {
+		CheckResult result = new CheckResult();
+
+		result.checkOK = true;
+		if (TextUtils.isEmpty(email)) {
+			result.message = "请输入邮箱";
+			result.checkOK = false;
+		} else if (email.length() > EMAIL_MAX_LENGTH) {
+			result.message = "邮箱长度过长";
 			result.checkOK = false;
 		}
 		return result;

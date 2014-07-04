@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="输入邮箱和手机号码可用于找回密码，若不需要则直接“下一步”即可。" />
+        android:text="绑定邮箱可用于密码找回，若以后绑定则直接“下一步”即可。" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -36,30 +36,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="请输入邮箱地址"
-                android:inputType="textPassword"
-                android:singleLine="true"
-                android:textSize="16dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="手机："
-                android:textSize="20dp" />
-
-            <EditText
-                android:id="@+id/et_phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="请输入手机号码"
                 android:inputType="textPassword"
                 android:singleLine="true"
                 android:textSize="16dp" />
