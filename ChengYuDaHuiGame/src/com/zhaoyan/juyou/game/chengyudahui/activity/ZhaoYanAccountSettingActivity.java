@@ -66,6 +66,7 @@ public class ZhaoYanAccountSettingActivity extends Activity implements
 		mEmailTextView.setOnClickListener(this);
 
 		mPhoneTextView = (TextView) findViewById(R.id.tv_phone);
+		mPhoneTextView.setOnClickListener(this);
 
 		Button logoutButton = (Button) findViewById(R.id.btn_logout);
 		logoutButton.setOnClickListener(this);
@@ -84,10 +85,19 @@ public class ZhaoYanAccountSettingActivity extends Activity implements
 		case R.id.tv_email:
 			launchModifyEmail();
 			break;
+		case R.id.tv_phone:
+			launchModifyPhone();
+			break;
 
 		default:
 			break;
 		}
+	}
+
+	private void launchModifyPhone() {
+		Intent intent = new Intent(mContext, ZhaoYanModifyPhoneActivity.class);
+		startActivity(intent);
+		overridePendingTransition(R.anim.activity_right_in, 0);
 	}
 
 	private void launchModifyEmail() {

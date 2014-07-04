@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:text="账户信息:"
+        android:text="金币信息："
         android:textSize="12sp" />
 
     <include layout="@layout/splitline" />
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:text="轻松拿金币"
+        android:text="轻松拿金币："
         android:textSize="12sp" />
 
     <include layout="@layout/splitline" />
