@@ -29,6 +29,17 @@ public class ZhaoYanModifyPhoneActivity extends Activity implements
 		setTitle("修改电话号码");
 		setContentView(R.layout.zhaoyan_modify_phone);
 		initView();
+		checkQuickRegisterAccount();
+	}
+
+	private void checkQuickRegisterAccount() {
+		ZhaoYanAccount account = ZhaoYanAccountManager
+				.getAccountFromLocal(mContext);
+		if (ZhaoYanAccountManager.isQuickRegisterAccount(mContext, account)) {
+			View view = findViewById(R.id.ll_password);
+			view.setVisibility(View.GONE);
+			mPasswordEditText.setText(account.password);
+		}
 	}
 
 	private void initView() {

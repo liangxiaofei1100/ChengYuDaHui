@@ -9,10 +9,23 @@ import com.zhaoyan.juyou.account.bae.GetUserInfo;
 import com.zhaoyan.juyou.account.bae.GoldOperation;
 import com.zhaoyan.juyou.account.bae.Login;
 import com.zhaoyan.juyou.account.bae.ModifyAccountInfo;
+import com.zhaoyan.juyou.account.bae.QuickRegisterUser;
 import com.zhaoyan.juyou.account.bae.RegisterUser;
 import com.zhaoyan.juyou.account.bae.RegisterUserCheckUserName;
+import com.zhaoyan.juyou.game.chengyudahui.utils.DeviceInfoUtil;
 
 public class ZhaoYanAccountManager {
+
+	public static boolean isQuickRegisterAccount(Context context,
+			ZhaoYanAccount account) {
+		if (account.password.equals(DeviceInfoUtil.getIMEI(context))
+				|| account.password
+						.equals(DeviceInfoUtil.getAndroidID(context))) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public static void saveAccountToLocal(Context context,
 			ZhaoYanAccount account) {
@@ -99,6 +112,20 @@ public class ZhaoYanAccountManager {
 		RegisterUser registerUser = new RegisterUser();
 		registerUser.setRegisterResultListener(listener);
 		registerUser.registerUser(userName, password);
+	}
+
+	/**
+	 * Quick register a ZhaoYan account to web server.
+	 * 
+	 * @param userName
+	 * @param password
+	 * @param listener
+	 */
+	public static void quickRegisterZhaoYanAccount(String password,
+			QuickRegisterUserResultListener listener) {
+		QuickRegisterUser quickRegisterUser = new QuickRegisterUser();
+		quickRegisterUser.setRegisterResultListener(listener);
+		quickRegisterUser.quickRegisterUser(password);
 	}
 
 	/**

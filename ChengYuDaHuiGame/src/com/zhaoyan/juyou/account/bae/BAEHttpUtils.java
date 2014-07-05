@@ -7,6 +7,10 @@ public class BAEHttpUtils {
 		return URL_SEVLET_PATH + "RegisterAction";
 	}
 
+	public static String getQuickRegisterURL() {
+		return URL_SEVLET_PATH + "QuickRegisterAction";
+	}
+
 	public static String getLoginURL() {
 		return URL_SEVLET_PATH + "LoginAction";
 	}

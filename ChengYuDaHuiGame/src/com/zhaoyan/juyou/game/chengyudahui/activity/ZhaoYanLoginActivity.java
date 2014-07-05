@@ -2,11 +2,12 @@ package com.zhaoyan.juyou.game.chengyudahui.activity;
 
 import com.zhaoyan.common.net.NetWorkUtil;
 import com.zhaoyan.juyou.account.LoginResultListener;
+import com.zhaoyan.juyou.account.QuickRegisterUserResultListener;
 import com.zhaoyan.juyou.account.ZhaoYanAccount;
 import com.zhaoyan.juyou.account.ZhaoYanAccountChecker;
 import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanRegisterActivity.LoginReceiver;
+import com.zhaoyan.juyou.game.chengyudahui.utils.DeviceInfoUtil;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -75,6 +76,9 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 
 		TextView forgetPasswordTextView = (TextView) findViewById(R.id.tv_forget_password);
 		forgetPasswordTextView.setOnClickListener(this);
+
+		TextView quickRegisterTextView = (TextView) findViewById(R.id.tv_quick_register);
+		quickRegisterTextView.setOnClickListener(this);
 	}
 
 	@Override
@@ -89,10 +93,48 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 		case R.id.tv_forget_password:
 			forgetPasssword();
 			break;
+		case R.id.tv_quick_register:
+			quickRegister();
+			break;
 
 		default:
 			break;
 		}
+	}
+
+	private void quickRegister() {
+		if (!NetWorkUtil.isNetworkConnected(mContext)) {
+			toast("无网络连接");
+			return;
+		}
+		final String password;
+		String imei = DeviceInfoUtil.getIMEI(mContext);
+		if (!"".equals(imei)) {
+			password = imei;
+		} else {
+			password = DeviceInfoUtil.getAndroidID(mContext);
+		}
+		ZhaoYanAccountManager.quickRegisterZhaoYanAccount(password,
+				new QuickRegisterUserResultListener() {
+
+					@Override
+					public void onSuccess(String username) {
+						ZhaoYanAccount account = new ZhaoYanAccount();
+						account.userName = username;
+						account.password = password;
+						ZhaoYanAccountManager.saveAccountToLocal(mContext,
+								account);
+						toast("快速注册成功，欢迎：" + username);
+
+						launchGetGoldActivity();
+						finish();
+					}
+
+					@Override
+					public void onFail(String message) {
+						toast(message);
+					}
+				});
 	}
 
 	private void forgetPasssword() {

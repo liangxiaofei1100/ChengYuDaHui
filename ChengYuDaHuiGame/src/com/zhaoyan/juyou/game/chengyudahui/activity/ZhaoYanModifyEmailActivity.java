@@ -29,6 +29,18 @@ public class ZhaoYanModifyEmailActivity extends Activity implements
 		setTitle("修改邮箱");
 		setContentView(R.layout.zhaoyan_modify_email);
 		initView();
+
+		checkQuickRegisterAccount();
+	}
+
+	private void checkQuickRegisterAccount() {
+		ZhaoYanAccount account = ZhaoYanAccountManager
+				.getAccountFromLocal(mContext);
+		if (ZhaoYanAccountManager.isQuickRegisterAccount(mContext, account)) {
+			View view = findViewById(R.id.ll_password);
+			view.setVisibility(View.GONE);
+			mPasswordEditText.setText(account.password);
+		}
 	}
 
 	private void initView() {

@@ -68,14 +68,29 @@
                 android:text="登录" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_forget_password"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginTop="10dp"
-            android:clickable="true"
-            android:text="忘记密码？" />
+            android:layout_marginTop="10dp" >
+
+            <TextView
+                android:id="@+id/tv_quick_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:clickable="true"
+                android:padding="10dp"
+                android:text="快速注册" />
+
+            <TextView
+                android:id="@+id/tv_forget_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:padding="10dp"
+                android:text="忘记密码？" />
+        </RelativeLayout>
     </LinearLayout>
 
     <TextView
@@ -85,6 +100,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:clickable="true"
+        android:padding="10dp"
         android:text="新用户注册"
         android:textSize="18sp" />
 

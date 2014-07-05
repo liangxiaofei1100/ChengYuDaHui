@@ -30,6 +30,17 @@ public class ZhaoYanModifyPaswordActivity extends Activity implements
 		setTitle("修改密码");
 		setContentView(R.layout.zhaoyan_modify_password);
 		initView();
+		checkQuickRegisterAccount();
+	}
+
+	private void checkQuickRegisterAccount() {
+		ZhaoYanAccount account = ZhaoYanAccountManager
+				.getAccountFromLocal(mContext);
+		if (ZhaoYanAccountManager.isQuickRegisterAccount(mContext, account)) {
+			View view = findViewById(R.id.ll_password);
+			view.setVisibility(View.GONE);
+			mOriginPassword.setText(account.password);
+		}
 	}
 
 	private void initView() {
