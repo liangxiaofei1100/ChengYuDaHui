@@ -133,7 +133,7 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 						account.password = password;
 						ZhaoYanAccountManager.saveAccountToLocal(mContext,
 								account);
-						toast("快速注册成功，欢迎：" + username);
+						toast("快速注册成功，欢迎：" + username+"。为了您账号的安全，请设置密码并完善账户资料。");
 
 						launchGetGoldActivity();
 						finish();
@@ -219,7 +219,7 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 	}
 
 	private void toast(String message) {
-		Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+		Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
 		toast.show();
 	}
 
