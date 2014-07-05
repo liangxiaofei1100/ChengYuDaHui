@@ -10,6 +10,7 @@ import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.utils.DeviceInfoUtil;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +32,8 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 	private EditText mPasswordEditText;
 
 	private BroadcastReceiver mLoginReceiver;
+
+	private ProgressDialog mProgressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +82,11 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 
 		TextView quickRegisterTextView = (TextView) findViewById(R.id.tv_quick_register);
 		quickRegisterTextView.setOnClickListener(this);
+
+		mProgressDialog = new ProgressDialog(mContext);
+		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		mProgressDialog.setCancelable(false);
 	}
 
 	@Override
@@ -119,6 +127,7 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 
 					@Override
 					public void onSuccess(String username) {
+						mProgressDialog.dismiss();
 						ZhaoYanAccount account = new ZhaoYanAccount();
 						account.userName = username;
 						account.password = password;
@@ -132,9 +141,12 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 
 					@Override
 					public void onFail(String message) {
+						mProgressDialog.dismiss();
 						toast(message);
 					}
 				});
+		mProgressDialog.setMessage("正在注册···");
+		mProgressDialog.show();
 	}
 
 	private void forgetPasssword() {
@@ -170,12 +182,14 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 
 					@Override
 					public void onLoginFail(String message) {
+						mProgressDialog.dismiss();
 						toast("登录失败：" + message);
 					}
 
 					@Override
 					public void onLoginSuccess(String message,
 							ZhaoYanAccount account) {
+						mProgressDialog.dismiss();
 						toast("登录成功：" + message);
 						account.password = password;
 						ZhaoYanAccountManager.saveAccountToLocal(mContext,
@@ -186,9 +200,12 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 
 					@Override
 					public void onNetworkError(String message) {
+						mProgressDialog.dismiss();
 						toast("登录失败：" + "无法连接到服务器");
 					}
 				});
+		mProgressDialog.setMessage("正在登陆···");
+		mProgressDialog.show();
 	}
 
 	private void launchGetGoldActivity() {

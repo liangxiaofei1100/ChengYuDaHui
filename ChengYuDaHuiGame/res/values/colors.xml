@@ -11,5 +11,8 @@
     <color name="splitline">#e6e6e6</color>
     
     <color name="translucent_background">#80000000</color>
+    
+    <color name="bg_text_normal">#00000000</color>
+    <color name="bg_text_pressed">#e6e6e6</color>
 
 </resources>
