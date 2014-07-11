@@ -25,10 +25,21 @@
         android:padding="10dp"
         android:text="@string/search_connect" />
 
+    <Button
+        android:id="@+id/btn_search_init_scanqrcode"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btn_search_init_search"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/btn_selector"
+        android:padding="10dp"
+        android:text="扫描二维码" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/btn_search_init_search"
+        android:layout_above="@id/btn_search_init_scanqrcode"
         android:layout_gravity="center"
         android:orientation="vertical"
         android:padding="15dp" >

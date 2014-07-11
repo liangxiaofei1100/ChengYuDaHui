@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.zxing.client.android.CaptureActivity;
 import com.zhaoyan.communication.SocketServer;
 import com.zhaoyan.communication.UserInfo;
 import com.zhaoyan.communication.UserManager;
@@ -45,10 +46,16 @@ public abstract class SearchConnectBaseFragment extends ListFragment implements
 	protected ServerConnector mServerConnector;
 	protected ServerSearcher mServerSearcher;
 
-	protected static final String[] PROJECTION = { ZhaoYanCommunicationData.User._ID,
-			ZhaoYanCommunicationData.User.USER_NAME, ZhaoYanCommunicationData.User.USER_ID,
-			ZhaoYanCommunicationData.User.HEAD_ID, ZhaoYanCommunicationData.User.THIRD_LOGIN, ZhaoYanCommunicationData.User.HEAD_DATA,
-			ZhaoYanCommunicationData.User.IP_ADDR, ZhaoYanCommunicationData.User.STATUS, ZhaoYanCommunicationData.User.TYPE,
+	protected static final String[] PROJECTION = {
+			ZhaoYanCommunicationData.User._ID,
+			ZhaoYanCommunicationData.User.USER_NAME,
+			ZhaoYanCommunicationData.User.USER_ID,
+			ZhaoYanCommunicationData.User.HEAD_ID,
+			ZhaoYanCommunicationData.User.THIRD_LOGIN,
+			ZhaoYanCommunicationData.User.HEAD_DATA,
+			ZhaoYanCommunicationData.User.IP_ADDR,
+			ZhaoYanCommunicationData.User.STATUS,
+			ZhaoYanCommunicationData.User.TYPE,
 			ZhaoYanCommunicationData.User.SSID };
 
 	protected static final int MSG_SEARCH_SUCCESS = 1;
@@ -176,6 +183,10 @@ public abstract class SearchConnectBaseFragment extends ListFragment implements
 
 		mCreatingServerView = rootView
 				.findViewById(R.id.search_creating_server);
+
+		Button scanQRCodeButton = (Button) rootView
+				.findViewById(R.id.btn_search_init_scanqrcode);
+		scanQRCodeButton.setOnClickListener(this);
 	}
 
 	@Override
@@ -198,9 +209,17 @@ public abstract class SearchConnectBaseFragment extends ListFragment implements
 		case R.id.btn_search_init_create_server:
 			preCreateServer();
 			break;
+		case R.id.btn_search_init_scanqrcode:
+			launchQRCodeScan();
+			break;
 		default:
 			break;
 		}
+	}
+
+	private void launchQRCodeScan() {
+		Intent intent = new Intent(mContext, CaptureActivity.class);
+		startActivity(intent);
 	}
 
 	private void preStartSearch() {
@@ -288,7 +307,8 @@ public abstract class SearchConnectBaseFragment extends ListFragment implements
 				.getColumnIndex(ZhaoYanCommunicationData.User.USER_NAME));
 		String ip = cursor.getString(cursor
 				.getColumnIndex(ZhaoYanCommunicationData.User.IP_ADDR));
-		int type = cursor.getInt(cursor.getColumnIndex(ZhaoYanCommunicationData.User.TYPE));
+		int type = cursor.getInt(cursor
+				.getColumnIndex(ZhaoYanCommunicationData.User.TYPE));
 		String ssid = cursor.getString(cursor
 				.getColumnIndex(ZhaoYanCommunicationData.User.SSID));
 
@@ -401,9 +421,12 @@ public abstract class SearchConnectBaseFragment extends ListFragment implements
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-		String selection = ZhaoYanCommunicationData.User.TYPE + "=" + getServerUserType();
-		return new CursorLoader(mContext, ZhaoYanCommunicationData.User.CONTENT_URI,
-				PROJECTION, selection, null, ZhaoYanCommunicationData.User.SORT_ORDER_DEFAULT);
+		String selection = ZhaoYanCommunicationData.User.TYPE + "="
+				+ getServerUserType();
+		return new CursorLoader(mContext,
+				ZhaoYanCommunicationData.User.CONTENT_URI, PROJECTION,
+				selection, null,
+				ZhaoYanCommunicationData.User.SORT_ORDER_DEFAULT);
 	}
 
 	@Override
