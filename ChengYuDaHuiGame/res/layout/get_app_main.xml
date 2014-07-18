@@ -5,7 +5,7 @@
     android:background="#faf3f3"
     android:orientation="vertical" 
     >
-    
+
     <ListView
         android:id="@android:id/list" 
         android:layout_width="match_parent"

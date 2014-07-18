@@ -3,7 +3,7 @@ package com.zhaoyan.juyou.game.chengyudahui.frontia;
 
 public class Conf {
 	
-	public final static String APIKEY = "OBjmNPu782fC7TmQxXHwj0dh";
+	public final static String APIKEY = "cd1EyW7zKA7ZmYuDunUnkBfG";
     public final static String CLOUD_APP_LOCATION = "apps/";
     public final static String CLOUD_ICON_LOCATION = "icons/";
     public final static String CLOUD_INFO_LOCATION = "infos/";

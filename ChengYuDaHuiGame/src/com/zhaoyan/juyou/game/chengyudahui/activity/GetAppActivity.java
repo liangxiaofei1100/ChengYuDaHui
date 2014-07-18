@@ -13,11 +13,9 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.SharedPreferences.Editor;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,10 +34,10 @@ import com.baidu.frontia.FrontiaFile;
 import com.baidu.frontia.FrontiaQuery;
 import com.baidu.frontia.api.FrontiaStorage;
 import com.baidu.frontia.api.FrontiaStorageListener.DataInfoListener;
-import com.baidu.frontia.api.FrontiaStorageListener.DataOperationListener;
 import com.baidu.frontia.api.FrontiaStorageListener.FileProgressListener;
 import com.baidu.frontia.api.FrontiaStorageListener.FileTransferListener;
 import com.zhaoyan.common.file.APKUtil;
+import com.zhaoyan.common.util.PreferencesUtils;
 import com.zhaoyan.common.util.SharedPreferenceUtil;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.account.GoldOperationResultListener;
@@ -48,7 +46,6 @@ import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.adapter.GetAppAdapter;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.AppInfo;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.BaiduFrontiaUser;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.GetAppListener;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
@@ -61,9 +58,6 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 	private GetAppAdapter mAdapter;
 	private FrontiaStorage mCloudStorage;
 	private String lastDownloadApk;
-	private BaiduFrontiaUser user;
-
-	private SharedPreferences sp = null;
 
 	private AppReceiver mAppReceiver = null;
 
@@ -83,13 +77,14 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 
 	private Handler mHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
+			Log.d(TAG, "msg.what=" + msg.what);
 			Bundle bundle = null;
 			bundle = msg.getData();
 			AppInfo appInfo = null;
 			if (bundle != null) {
 				int position = bundle.getInt(GetAppListener.KEY_ITEM_POSITION);
 				Log.d(TAG, "handlerMessage.position=" + position);
-				appInfo = appList.get(position);
+				appInfo = mAppList.get(position);
 			} else {
 				Log.v(TAG, "handlerMessage appinfo is null");
 			}
@@ -168,7 +163,6 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 								Toast.LENGTH_SHORT).show();
 					}
 				});
-		
 	}
 
 	@Override
@@ -193,22 +187,14 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 		progressDialog.setMessage("正在读取云盘数据，请稍后!");
 		progressDialog.setCancelable(false);
 
-		// 获取传递过来的用户数据
-		Intent intent = getIntent();
-		Bundle bundle = intent.getExtras();
-		user = (BaiduFrontiaUser) bundle.get("USER");
-
 		listView = getListView();
 
-		mAdapter = new GetAppAdapter(appList, getApplicationContext());
+		mAdapter = new GetAppAdapter(mAppList, getApplicationContext());
 		listView.setAdapter(mAdapter);
 		mAdapter.registerKeyListener(getAppListener);
 		queryAppInfos();
 
 		listView.setOnItemClickListener(this);
-
-		sp = SharedPreferenceUtil.getSharedPreference(getApplicationContext(),
-				Conf.SHARED_PREFS_NAME);
 	}
 
 	public void startDownload(AppInfo appInfo) {
@@ -268,7 +254,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 		mCloudStorage.stopTransferring(file);
 	}
 
-	private List<AppInfo> appList = new ArrayList<AppInfo>();
+	private List<AppInfo> mAppList = new ArrayList<AppInfo>();
 
 	public void queryAppInfos() {
 		progressDialog.show();
@@ -292,13 +278,13 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 					AppInfo appInfo = AppInfo.parseJson(jsonObject);
 					
 					boolean isInstalled = APKUtil.isAppInstalled(getApplicationContext(), appInfo.getPackageName());
-					String serverVersion = appInfo.getAppVersion();
+					String serverVersion = appInfo.getVersion();
 					String localVersion = APKUtil.getInstalledAppVersion(getApplicationContext(), appInfo.getPackageName());
 					boolean isVersionEqual =serverVersion.equals(localVersion);
 					Log.d(TAG, "serverVersion:" + serverVersion + ",localVersion:" + localVersion);
 					Log.d(TAG, "isVersionEqual:" + isVersionEqual);
 					
-					String localPath = sp.getString(appInfo.getPackageName(), null);
+					String localPath = PreferencesUtils.getString(getApplicationContext(), appInfo.getPackageName(), null);
 					
 					if (isInstalled ) {
 						if (!isVersionEqual) {
@@ -312,7 +298,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 					} else {
 						appInfo.setStatus(Conf.NOT_DOWNLOAD);
 					}
-					appList.add(appInfo);
+					mAppList.add(appInfo);
 				}
 
 				mAdapter.notifyDataSetChanged();
@@ -339,10 +325,10 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 		mCloudStorage.downloadFile(mFile, new FileProgressListener() {
 			@Override
 			public void onProgress(String source, long bytes, long total) {
-				Log.d(TAG, "downloading..." + bytes);
+//				Log.d(TAG, "downloading..." + bytes);
 				// String dlMsg = "正在下载:" + source;
 				int percent = (int) (bytes * 100 / total);
-				Log.d(TAG, "prev=" + prev + ",percent=" + percent);
+//				Log.d(TAG, "prev=" + prev + ",percent=" + percent);
 				if (prev != percent) {
 					appInfo.setProgressBytes(bytes);
 					appInfo.setPercent(percent);
@@ -371,19 +357,9 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 				appInfo.setStatus(Conf.DOWNLOADED);
 				appInfo.setAppLocalPath(newTargetName);
 				mAdapter.notifyDataSetChanged();
-				Editor editor = sp.edit();
-				editor.putString(appInfo.getPackageName(), newTargetName);
-				editor.commit();
+				PreferencesUtils.putString(getApplicationContext(), appInfo.getPackageName(), newTargetName);
 				// key:app package name,value:app local file path
-
 				APKUtil.installApp(getApplicationContext(), newTargetName);
-				// start a thread to update cloud data
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						// updateDownloadCountData();
-					}
-				}).start();
 			}
 
 			@Override
@@ -395,49 +371,6 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 						Toast.LENGTH_LONG).show();
 			}
 
-		});
-	}
-
-	//
-
-	protected void updateDownloadCountData() {
-		// 更新用户上传应用次数数据
-		Log.d(TAG, "updateDownloadCountData");
-		FrontiaQuery query = new FrontiaQuery();
-		query.equals("IMEI", user.imei);
-
-		FrontiaData newData = new FrontiaData();
-		newData.put("IMEI", user.imei);
-		newData.put("DEVICE", user.device);
-		newData.put("OS", user.os);
-		newData.put("PHONE", user.phone);
-		newData.put("MAIL", user.mail);
-		newData.put("NAME", user.name);
-		newData.put("PASSWORD", user.password);
-		user.downloadAppCount = String.valueOf(Integer
-				.valueOf(user.downloadAppCount) + 1);
-		newData.put("DOWNLOAD_COUNT", user.downloadAppCount);
-		newData.put("START_COUNT", user.startAppCount);
-		newData.put("UPLOAD_COUNT", user.uploadAppCount);
-		mCloudStorage.updateData(query, newData, new DataOperationListener() {
-			@Override
-			public void onSuccess(long count) {
-				Intent intent = new Intent();
-				Bundle bundle = new Bundle();
-				bundle.putSerializable("USER", user);
-				intent.putExtras(bundle);
-				// intent.putExtra("PHONE", et_phone.getText().toString());
-				// intent.putExtra("MAIL", et_mail.getText().toString());
-				setResult(Conf.RESULT_CODE3, intent);
-			}
-
-			@Override
-			public void onFailure(int errCode, String errMsg) {
-				Log.e(TAG, "update cloud user info fail:errCode:" + errCode
-						+ ",errMsg:" + errMsg);
-				Toast.makeText(GetAppActivity.this, "账户信息更新失败！",
-						Toast.LENGTH_LONG).show();
-			}
 		});
 	}
 
@@ -488,8 +421,12 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		// TODO Auto-generated method stub
-
+		AppInfo appInfo = mAppList.get(position);
+		Log.d(TAG, "onItemClick:" + appInfo.getLabel());
+		Intent intent = new Intent();
+		intent.setClass(GetAppActivity.this, AppInfoActicity.class);
+		intent.putExtra("appinfo", appInfo);
+		startActivity(intent);
 	}
 
 	class AppReceiver extends BroadcastReceiver {
@@ -499,7 +436,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 			Log.d(TAG, "action:" + action);
 			if (action.equals(Intent.ACTION_PACKAGE_ADDED)) {
 				String packageName = intent.getData().getSchemeSpecificPart();
-				for (AppInfo appInfo : appList) {
+				for (AppInfo appInfo : mAppList) {
 					if (packageName.equals(appInfo.getPackageName())) {
 						appInfo.setStatus(Conf.INSTALLED);
 						mAdapter.notifyDataSetChanged();
@@ -508,7 +445,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 			} else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)) {
 				String packageName = intent.getData().getSchemeSpecificPart();
 				Log.d(TAG, "action removed :" + packageName);
-				for (AppInfo appInfo : appList) {
+				for (AppInfo appInfo : mAppList) {
 					if (packageName.equals(appInfo.getPackageName())) {
 						appInfo.setStatus(Conf.DOWNLOADED);
 						mAdapter.notifyDataSetChanged();

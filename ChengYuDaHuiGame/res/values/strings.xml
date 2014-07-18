@@ -36,5 +36,9 @@
     <string name="referee">裁判员</string>
     <string name="actor">表演者</string>
     <string name="observer">观察者</string>
+    
+    <string name="app_version">版本：%1$s</string>
+    <string name="app_size">大小：%1$s</string>
+    <string name="app_author">%1$s出品</string>
 
 </resources>

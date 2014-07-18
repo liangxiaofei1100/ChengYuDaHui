@@ -2,209 +2,219 @@ package com.zhaoyan.juyou.game.chengyudahui.frontia;
 
 import org.json.JSONObject;
 
-public class AppInfo {
-    private int app_id;//标记该应用的唯一标识符
-    private String app_label;//应用名称
-    private String author_id;//作者id，暂时不知道怎么用
-    private String author;//应用作者
-    private String update_time;//应用上传或者更新时间
-    private String app_language;//应用语言
-    private String app_version;//应用版本号
-    private String introduce ;//详细介绍
-    private String title;//简介
-    private String sizeStr;//应用大小
-    private long size;
-    
-    private String app_url; //app云端下载地址
-    private String icon_url;// app icon 云端地址
-    //暂定显示两张app界面截图介绍
-    private String jiemian_url1;//app 界面截图介绍地址1
-    private String jiemian_url2;//app 界面截图介绍地址2
-    
-    private String app_type;//应用分类：如社交，游戏（卡牌，回合等等），购物等等
-    
-    private String packageName;//应用包名
-    
-    private int status;
-    
-    private long progressBytes;
-    private int percent;
-    
-    private String app_local_path;
-    
-    public AppInfo(){
-    	
-    }
-    
-    public AppInfo(int app_id,String app_label,
-    		String author_id,String update_time,
-    		String app_language,String app_version,
-    		String introduce,String title,
-    		long size,String author,
-    		String app_url, String icon_url,
-    		String jiemian_url1, String jiemian_url2,
-    		String app_type, String packageName
-    		){
-    	this.app_id = app_id ;
-    	this.app_label = app_label;
-    	this.author_id = author_id;
-    	this.author = author;
-    	this.introduce = introduce;
-    	this.title = title;
-    	this.size = size;
-    	this.app_version = app_version;
-    	this.app_language = app_language;
-    	this.update_time = update_time;
-    	
-    	this.app_url = app_url;
-    	this.icon_url = icon_url;
-    	this.jiemian_url1 = jiemian_url1;
-    	this.jiemian_url2 = jiemian_url2;
-    	
-    	this.app_type = app_type;
-    	this.packageName = packageName;
-    }
-    
-    public void setAppId(int appId){
-    	this.app_id = appId;
-    }
-    
-    public int getAppId(){
-    	return app_id;
-    }
-    
-    public void setSize(String size){
-    	this.sizeStr = size;
-    }
-    
-    public String getSize(){
-    	return sizeStr;
-    }
-    
-    public void setAppSize(long size){
-    	this.size = size;
-    }
-    
-    public long getAppSize(){
-    	return size;
-    }
-    
-    public void setAppLabel(String label){
-    	this.app_label = label;
-    }
-    
-    public String getAppLabel(){
-    	return app_label;
-    }
-    
-    public void setAuthorId(String authorId){
-    	this.author_id = authorId;
-    }
-    
-    public String getAuthorId(){
-    	return author_id;
-    }
-    
-    public void setUpdateTime(String updateTime){
-    	this.update_time = updateTime;
-    }
-    
-    public String getUpdateTime(){
-    	return update_time;
-    }
-    
-    public void setAppLanguage(String language){
-    	this.app_language = language;
-    }
-    
-    public String getAppLanguage(){
-    	return app_language;
-    }
-    
-    public void setAppVersion(String version){
-    	this.app_version = version;
-    }
-    
-    public String getAppVersion(){
-    	return app_version;
-    }
-    
-    public void setIntroduce(String introduce){
-    	this.introduce = introduce;
-    }
-    
-    public String getIntroduce(){
-    	return introduce;
-    }
-    
-    public void setAuthor(String author){
-    	this.author = author;
-    }
-    
-    public String getAuthor(){
-    	return author;
-    }
-    
-    public String get_who(){
-    	return "Software";
-    }
-    
-    public void setTitle(String title){
-    	this.title = title;
-    }
-    
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class AppInfo implements Parcelable {
+	private int appId;// 标记该应用的唯一标识符
+	private String label;// 应用名称
+	private String authorId;// 作者id，暂时不知道怎么用
+	private String author;// 应用作者
+	private String date;// 应用上传或者更新时间
+	private String appLanguage;// 应用语言
+	private String version;// 应用版本号
+	private String introduce;// 详细介绍
+	private String title;// 简介
+	private String goldInfos;//获取金币相关介绍
+	private String sizeStr;// 应用大小
+	private long size;
+
+	private String appUrl; // app云端下载地址
+	private String iconUrl;// app icon 云端地址
+	// 暂定显示两张app界面截图介绍
+	private String jiemian_url1;// app 界面截图介绍地址1
+	private String jiemian_url2;// app 界面截图介绍地址2
+
+	private String appType;// 应用分类：如社交，游戏（卡牌，回合等等），购物等等
+
+	private String packageName;// 应用包名
+
+	private int status;
+
+	private long progressBytes;
+	private int percent;
+
+	private String localPath;
+
+	public AppInfo() {
+	}
+
+	public AppInfo(int app_id, String label, String authorId, String date,
+			String appLanguage, String version, String introduce, String title,
+			String goldInfos,
+			long size, String author, String app_url, String icon_url,
+			String jiemian_url1, String jiemian_url2, String appType,
+			String packageName) {
+		super();
+		this.appId = app_id;
+		this.label = label;
+		this.authorId = authorId;
+		this.author = author;
+		this.introduce = introduce;
+		this.title = title;
+		this.goldInfos = goldInfos;
+		this.size = size;
+		this.version = version;
+		this.appLanguage = appLanguage;
+		this.date = date;
+
+		this.appUrl = app_url;
+		this.iconUrl = icon_url;
+		this.jiemian_url1 = jiemian_url1;
+		this.jiemian_url2 = jiemian_url2;
+
+		this.appType = appType;
+		this.packageName = packageName;
+	}
+
+	public void setAppId(int appId) {
+		this.appId = appId;
+	}
+
+	public int getAppId() {
+		return appId;
+	}
+
+	// public void setSize(String size){
+	// this.sizeStr = size;
+	// }
+	//
+	// public String getSize(){
+	// return sizeStr;
+	// }
+
+	public void setAppSize(long size) {
+		this.size = size;
+	}
+
+	public long getAppSize() {
+		return size;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setAuthorId(String authorId) {
+		this.authorId = authorId;
+	}
+
+	public String getAuthorId() {
+		return authorId;
+	}
+
+	public void setDate(String updateTime) {
+		this.date = updateTime;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setAppLanguage(String language) {
+		this.appLanguage = language;
+	}
+
+	public String getAppLanguage() {
+		return appLanguage;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setIntroduce(String introduce) {
+		this.introduce = introduce;
+	}
+
+	public String getIntroduce() {
+		return introduce;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	// public String get_who(){
+	// return "Software";
+	// }
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public String getTitle() {
 		return title;
 	}
 	
-	public void setAppUrl(String appUrl){
-		this.app_url = appUrl;
+	public void setGoldInfos(String goldInfos){
+		this.goldInfos = goldInfos;
 	}
 	
+	public String getGoldInfos(){
+		return goldInfos;
+	}
+
+	public void setAppUrl(String appUrl) {
+		this.appUrl = appUrl;
+	}
+
 	public String getAppUrl() {
-		return app_url;
+		return appUrl;
 	}
-	
-	public void setIconUrl(String iconUrl){
-		this.icon_url = iconUrl;
+
+	public void setIconUrl(String iconUrl) {
+		this.iconUrl = iconUrl;
 	}
-	
+
 	public String getIconUrl() {
-		return icon_url;
+		return iconUrl;
 	}
-	
-	public void setJiemianUrl1(String jiemianUrl1){
+
+	public void setJiemianUrl1(String jiemianUrl1) {
 		this.jiemian_url1 = jiemianUrl1;
 	}
-	
+
 	public String getJiemianUrl1() {
 		return jiemian_url1;
 	}
-	
-	public void setJiemianUrl2(String jiemianUrl2){
+
+	public void setJiemianUrl2(String jiemianUrl2) {
 		this.jiemian_url2 = jiemianUrl2;
 	}
-	
+
 	public String getJiemianUrl2() {
 		return jiemian_url2;
 	}
-	
-	public void setAppType(String appType){
-		this.app_type = appType;
+
+	public void setAppType(String appType) {
+		this.appType = appType;
 	}
-	
+
 	public String getAppType() {
-		return app_type;
+		return appType;
 	}
-	
-	public void setPackageName(String packageName){
+
+	public void setPackageName(String packageName) {
 		this.packageName = packageName;
 	}
-	
-	public String getPackageName(){
+
+	public String getPackageName() {
 		return packageName;
 	}
-	
+
 	public int getStatus() {
 		return status;
 	}
@@ -213,32 +223,31 @@ public class AppInfo {
 		this.status = status;
 	}
 
-	public void setProgressBytes(long bytes){
+	public void setProgressBytes(long bytes) {
 		this.progressBytes = bytes;
 	}
-	
-	public long getProgressBytes(){
+
+	public long getProgressBytes() {
 		return progressBytes;
 	}
-	
-	public void setPercent(int percent){
+
+	public void setPercent(int percent) {
 		this.percent = percent;
 	}
-	
-	public int getPercent(){
+
+	public int getPercent() {
 		return percent;
 	}
-	
-	public void setAppLocalPath(String localPath){
-		this.app_local_path = localPath;
+
+	public void setAppLocalPath(String localPath) {
+		this.localPath = localPath;
 	}
-	
-	public String getAppLocalPath(){
-		return app_local_path;
+
+	public String getAppLocalPath() {
+		return localPath;
 	}
-	
-	
-	public static AppInfo parseJson(JSONObject jsonObject){
+
+	public static AppInfo parseJson(JSONObject jsonObject) {
 		AppInfo appInfo = null;
 		int app_id = 0;
 		String app_label = "";
@@ -249,6 +258,7 @@ public class AppInfo {
 		String app_version = "";
 		String introduce = "";
 		String title = "";
+		String goldInfos = "";
 		long size = 0;
 
 		String app_url = "";
@@ -270,7 +280,9 @@ public class AppInfo {
 			app_version = jsonObject.getString(AppJSON.APP_VERSION);
 			introduce = jsonObject.getString(AppJSON.INTRODUCE);
 			title = jsonObject.getString(AppJSON.TITLE);
+			goldInfos = jsonObject.getString(AppJSON.GOLD_INFOS);
 			size = jsonObject.getLong(AppJSON.SIZE);
+			
 			app_url = jsonObject.getString(AppJSON.APP_URL);
 			icon_url = jsonObject.getString(AppJSON.ICON_URL);
 			jiemian_url1 = jsonObject.getString(AppJSON.JIEMIAN_URL1);
@@ -280,22 +292,100 @@ public class AppInfo {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		appInfo = new AppInfo(app_id, app_label, author_id, update_time, app_language, 
-				app_version, 
-				introduce, title, size, author, app_url, icon_url, jiemian_url1, 
-				jiemian_url2, app_type, packageName);
-		
+		appInfo = new AppInfo(app_id, app_label, author_id, update_time,
+				app_language, app_version, introduce, title, goldInfos, size, author,
+				app_url, icon_url, jiemian_url1, jiemian_url2, app_type,
+				packageName);
+
 		return appInfo;
 	}
-    
-	public String toString(){
-		String info = "appid=" + app_id + ",app_label=" + app_label + ",author_id=" + author_id
-				+ ",author=" + author+ ",update_time=" + update_time + ",app_language=" + app_language
-				+ ",app_version=" + app_version
-				+ ",introduce=" + introduce + ",title=" + title + ",size=" + sizeStr
-				+ ",app_url=" + app_url+ ",icon_url=" + icon_url + ",jiemian_url1" + jiemian_url1
-				+",jiemian_url2=" + jiemian_url2 + ",app_type=" + app_type + ",packageName=" + packageName;
-		
+
+	public String toString() {
+		String info = "appid=" + appId + ",app_label=" + label + ",author_id="
+				+ authorId + ",author=" + author + ",update_time=" + date
+				+ ",app_language=" + appLanguage + ",app_version=" + version
+				+ ",introduce=" + introduce + ",title=" + title
+				+ ",goldInfos:" + goldInfos + ",size="
+				+ size + ",app_url=" + appUrl + ",icon_url=" + iconUrl
+				+ ",jiemian_url1" + jiemian_url1 + ",jiemian_url2="
+				+ jiemian_url2 + ",app_type=" + appType + ",packageName="
+				+ packageName;
+
 		return info;
 	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	private AppInfo(Parcel in) {
+		readFromParcel(in);
+	}
+
+	public static final Parcelable.Creator<AppInfo> CREATOR = new Parcelable.Creator<AppInfo>() {
+
+		@Override
+		public AppInfo createFromParcel(Parcel source) {
+			return new AppInfo(source);
+		}
+
+		@Override
+		public AppInfo[] newArray(int size) {
+			return new AppInfo[size];
+		}
+	};
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(appId);
+		dest.writeString(label);
+		dest.writeString(authorId);
+		dest.writeString(author);
+		dest.writeString(date);
+		dest.writeString(appLanguage);
+		dest.writeString(version);
+		dest.writeString(introduce);
+		dest.writeString(title);
+		dest.writeString(goldInfos);
+		dest.writeString(sizeStr);
+		dest.writeLong(size);
+		dest.writeString(appUrl);
+		dest.writeString(iconUrl);
+		dest.writeString(jiemian_url1);
+		dest.writeString(jiemian_url2);
+		dest.writeString(appType);
+		dest.writeString(packageName);
+		dest.writeInt(status);
+		dest.writeLong(progressBytes);
+		dest.writeInt(percent);
+		dest.writeString(localPath);
+	}
+
+	public void readFromParcel(Parcel in) {
+		appId = in.readInt();
+		label = in.readString();
+		authorId = in.readString();
+		author = in.readString();
+		date = in.readString();
+		appLanguage = in.readString();
+		version = in.readString();
+		introduce = in.readString();
+		title = in.readString();
+		goldInfos = in.readString();
+		sizeStr = in.readString();
+		size = in.readLong();
+		appUrl = in.readString();
+		iconUrl = in.readString();
+		jiemian_url1 = in.readString();
+		jiemian_url2 = in.readString();
+		appType = in.readString();
+		packageName = in.readString();
+		status = in.readInt();
+		progressBytes = in.readLong();
+		percent = in.readInt();
+		localPath = in.readString();
+	}
+
 }

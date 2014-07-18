@@ -13,6 +13,7 @@ public class AppJSON {
     public static final String APP_VERSION = "app_version";//应用版本号
     public static final String INTRODUCE = "introduce" ;//详细介绍
     public static final String TITLE = "title";//简介
+    public static final String GOLD_INFOS = "gold_infos";//获取金币相关介绍
     public static final String SIZE_STR = "size_str";//应用大小MB
     public static final String SIZE = "size";//Bytes
     
