@@ -57,6 +57,8 @@ import java.util.Map;
 public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
 
   private static final String TAG = CaptureActivity.class.getSimpleName();
+  
+  public static final String EXTRA_RESULT = "result";
 
   private CameraManager cameraManager;
   private CaptureActivityHandler handler;
@@ -276,7 +278,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     
     String result = rawResult.getText();
     Intent data = new Intent();
-    data.putExtra("result", result);
+    data.putExtra(EXTRA_RESULT, result);
     setResult(RESULT_OK, data);
     finish();
   }

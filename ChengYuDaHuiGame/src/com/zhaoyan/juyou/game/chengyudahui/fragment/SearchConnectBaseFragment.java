@@ -3,6 +3,7 @@ package com.zhaoyan.juyou.game.chengyudahui.fragment;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.client.android.CaptureActivity;
 import com.zhaoyan.communication.SocketServer;
@@ -32,6 +34,7 @@ import com.zhaoyan.communication.connect.ServerConnector;
 import com.zhaoyan.communication.connect.ServerCreator;
 import com.zhaoyan.communication.ipc.aidl.User;
 import com.zhaoyan.communication.provider.ZhaoYanCommunicationData;
+import com.zhaoyan.communication.qrcode.ServerInfoMessage;
 import com.zhaoyan.communication.search.SearchUtil;
 import com.zhaoyan.communication.search.ServerSearcher;
 import com.zhaoyan.communication.util.Log;
@@ -219,7 +222,48 @@ public abstract class SearchConnectBaseFragment extends ListFragment implements
 
 	private void launchQRCodeScan() {
 		Intent intent = new Intent(mContext, CaptureActivity.class);
-		startActivity(intent);
+		startActivityForResult(intent, 1);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
+			String qrcode = data.getStringExtra(CaptureActivity.EXTRA_RESULT);
+			ServerInfoMessage serverInfoMessage = new ServerInfoMessage();
+
+			mServerConnector
+					.connectServer(getUserInfoFromServerInfoMessage(serverInfoMessage
+							.getQRCodeMessage(qrcode)));
+			updateUI(STATUS_CONNECTING);
+		}
+	}
+
+	private UserInfo getUserInfoFromServerInfoMessage(
+			ServerInfoMessage serverInfoMessage) {
+		String name = "";
+		String ip = serverInfoMessage.ip;
+		int type = serverInfoMessage.networkType;
+		String ssid = serverInfoMessage.ssid;
+
+		UserInfo userInfo = new UserInfo();
+		User user = new User();
+		user.setUserName(name);
+		userInfo.setUser(user);
+		switch (type) {
+		case ZhaoYanCommunicationData.User.NETWORK_AP:
+			userInfo.setType(ZhaoYanCommunicationData.User.TYPE_REMOTE_SEARCH_AP);
+			break;
+		case ZhaoYanCommunicationData.User.NETWORK_WIFI:
+			userInfo.setType(ZhaoYanCommunicationData.User.TYPE_REMOTE_SEARCH_LAN);
+			break;
+
+		default:
+			break;
+		}
+		userInfo.setIpAddress(ip);
+		userInfo.setSsid(ssid);
+		return userInfo;
 	}
 
 	private void preStartSearch() {

@@ -1,7 +1,7 @@
 package com.zhaoyan.juyou.account.bae;
 
 public class BAEHttpUtils {
-	public static final String URL_SEVLET_PATH = "http://test20140527.duapp.com/servlet/";
+	public static final String URL_SEVLET_PATH = "http://zhaoyantech.duapp.com/servlet/";
 
 	public static String getRegisterURL() {
 		return URL_SEVLET_PATH + "RegisterAction";

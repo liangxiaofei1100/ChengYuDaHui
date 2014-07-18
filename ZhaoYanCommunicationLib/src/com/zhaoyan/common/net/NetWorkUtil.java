@@ -38,7 +38,7 @@ public class NetWorkUtil {
 		}
 		if (networkInfo.isConnected()) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}
@@ -232,6 +232,24 @@ public class NetWorkUtil {
 		}
 	}
 
+	public static String getWifiAPSSID(Context context) {
+		String ssid = "";
+		WifiManager wifiManager = (WifiManager) context.getApplicationContext()
+				.getSystemService(Context.WIFI_SERVICE);
+
+		WifiConfiguration configuration = null;
+		try {
+			Method method = wifiManager.getClass().getMethod(
+					"getWifiApConfiguration");
+			configuration = (WifiConfiguration) method.invoke(wifiManager);
+			ssid = configuration.SSID;
+		} catch (Exception e) {
+			Log.e(TAG, "Can not get WiFi AP configuration, " + e);
+		}
+		
+		return ssid;
+	}
+
 	/**
 	 * Enable WiFi AP without password or close.
 	 * 
@@ -257,5 +275,16 @@ public class NetWorkUtil {
 			result = false;
 		}
 		return result;
+	}
+
+	public static String getConnectedWifiSSID(Context context) {
+		String ssid = "";
+		WifiManager wifiManager = (WifiManager) context
+				.getSystemService(Context.WIFI_SERVICE);
+		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+		if (wifiInfo != null) {
+			ssid = wifiInfo.getSSID();
+		}
+		return ssid;
 	}
 }

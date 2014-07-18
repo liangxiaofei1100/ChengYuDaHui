@@ -7,10 +7,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import android.content.Context;
 
+import com.zhaoyan.common.net.NetWorkUtil;
 import com.zhaoyan.communication.ipc.aidl.User;
 import com.zhaoyan.communication.provider.ZhaoYanCommunicationData;
 import com.zhaoyan.communication.util.Log;
-
 
 /**
  * Management user and user's communication.
@@ -264,6 +264,20 @@ public class UserManager {
 		mUsers.put(mLocalUser.getUserID(), mLocalUser);
 		UserInfo userInfo = UserHelper.loadLocalUser(mContext);
 		userInfo.getUser().setUserID(SERVER_USER_ID);
+
+		switch (networkType) {
+		case ZhaoYanCommunicationData.User.NETWORK_AP:
+			userInfo.setSsid(NetWorkUtil.getWifiAPSSID(mContext));
+			break;
+		case ZhaoYanCommunicationData.User.NETWORK_WIFI:
+			userInfo.setSsid(NetWorkUtil.getConnectedWifiSSID(mContext));
+			break;
+
+		default:
+			break;
+		}
+		
+		userInfo.setIpAddress(NetWorkUtil.getLocalIpAddress());
 		userInfo.setStatus(ZhaoYanCommunicationData.User.STATUS_SERVER_CREATED);
 		userInfo.setNetworkType(networkType);
 		UserHelper.saveLocalUser(mContext, userInfo);
