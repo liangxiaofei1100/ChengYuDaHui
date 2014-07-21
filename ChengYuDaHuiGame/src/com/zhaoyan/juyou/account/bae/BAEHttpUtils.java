@@ -30,4 +30,8 @@ public class BAEHttpUtils {
 	public static String getModifyAccountInfoURL() {
 		return URL_SEVLET_PATH + "ModifyUserInfoAction";
 	}
+	
+	public static String getGetAppInfoURL() {
+		return URL_SEVLET_PATH + "Get3rdAppInfoAction";
+	}
 }
