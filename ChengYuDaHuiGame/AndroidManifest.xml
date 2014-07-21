@@ -171,6 +171,7 @@
         </service>
         <!-- push结束 -->
         <!-- baidu push end -->
+        <service android:name="com.zhaoyan.juyou.game.chengyudahui.JuYouService"/>
     </application>
 
     <!-- Frontia permission start -->
