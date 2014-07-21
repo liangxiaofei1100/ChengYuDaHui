@@ -1,6 +1,7 @@
 package com.zhaoyan.juyou.game.chengyu;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -30,12 +31,12 @@ public class MainClass {
 		log("Read end. total: " + chengyuList.size() + ", cost time: "
 				+ (readEnd - readStart) + " ms");
 		// Check Similar and Opposite.
-		log("Check Similar and Opposite start ");
-		long checkStart = System.currentTimeMillis();
-		boolean checkResult = ChengYuFile.checkSimilarAndOpposite(chengyuList);
-		long checkEnd = System.currentTimeMillis();
-		log("Check Similar and Opposite end. checkResult " + checkResult
-				+ ", cost time: " + (checkEnd - checkStart) + "ms.");
+//		log("Check Similar and Opposite start ");
+//		long checkStart = System.currentTimeMillis();
+//		boolean checkResult = ChengYuFile.checkSimilarAndOpposite(chengyuList);
+//		long checkEnd = System.currentTimeMillis();
+//		log("Check Similar and Opposite end. checkResult " + checkResult
+//				+ ", cost time: " + (checkEnd - checkStart) + "ms.");
 		return chengyuList;
 	}
 
@@ -62,6 +63,12 @@ public class MainClass {
 			log("Read from database start...");
 			ArrayList<ChengYu> chengYu = database.readFromDataBase();
 			log("Read from database end. total " + chengYu.size());
+			ChengYuExcelFile chengYuExcelFile = new ChengYuExcelFile();
+			try {
+				chengYuExcelFile.writeIntoExcel(Config.OUT_EXCEL_FILE_PATH, chengYu);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		} finally {
