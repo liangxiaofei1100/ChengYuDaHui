@@ -10,7 +10,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.net.Uri;
@@ -242,10 +241,6 @@ public class AppInfoActicity extends Activity implements OnClickListener {
         //下载完毕后，保留通知栏信息
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         request.setVisibleInDownloadsUi(false);
-        // request.allowScanningByMediaScanner();
-        // request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
-        // request.setShowRunningNotification(false);
-        // request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
         request.setMimeType("application/com.chenyu.download.file");
         mDownloadId = mDownloadManager.enqueue(request);
         /** save download id to preferences **/

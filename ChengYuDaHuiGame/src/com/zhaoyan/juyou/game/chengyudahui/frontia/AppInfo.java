@@ -1,5 +1,6 @@
 package com.zhaoyan.juyou.game.chengyudahui.frontia;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.os.Parcel;
@@ -270,6 +271,7 @@ public class AppInfo implements Parcelable {
 		String app_type = "";
 
 		String packageName = "";
+		
 		try {
 			app_id = jsonObject.getInt(AppJSON.APP_ID);
 			app_label = jsonObject.getString(AppJSON.APP_LABEL);

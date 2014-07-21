@@ -32,6 +32,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		JuYouApplication.initApplication(getApplicationContext());
 		setContentView(R.layout.activity_main);
 
 		if (savedInstanceState == null) {
@@ -158,5 +159,4 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		}.start();
 
 	}
-
 }

@@ -15,6 +15,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,14 +26,19 @@ import android.widget.ListView;
 import com.zhaoyan.common.net.NetWorkUtil;
 import com.zhaoyan.communication.ProtocolCommunication;
 import com.zhaoyan.communication.SocketCommunicationManager;
+import com.zhaoyan.communication.SocketPort;
+import com.zhaoyan.communication.UserHelper;
+import com.zhaoyan.communication.UserInfo;
 import com.zhaoyan.communication.connect.ServerCreator;
 import com.zhaoyan.communication.ipc.CommunicationManager;
 import com.zhaoyan.communication.ipc.aidl.OnCommunicationListenerExternal;
 import com.zhaoyan.communication.ipc.aidl.User;
 import com.zhaoyan.communication.provider.ZhaoYanCommunicationData;
+import com.zhaoyan.communication.qrcode.ServerInfoMessage;
 import com.zhaoyan.communication.search.SearchUtil;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.QRCodeDisplayActivity;
 import com.zhaoyan.juyou.game.chengyudahui.adapter.ConnectedUserAdapter;
 import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGameMsg;
 import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGameMsg.Command;
@@ -152,9 +158,28 @@ public class ConnectedInfoFragment extends ListFragment implements
 			}
 			getActivity().startActivity(intent);
 			break;
+		case R.id.btn_ci_qrcode:
+			launchQRCodeDisplay();
+			break;
 		default:
 			break;
 		}
+	}
+
+	private void launchQRCodeDisplay() {
+		Intent intent = new Intent();
+		intent.setClass(mContext, QRCodeDisplayActivity.class);
+
+		UserInfo userInfo = UserHelper.getServerUserInfo(mContext);
+		String ip = userInfo.getIpAddress();
+		String ssid = userInfo.getSsid();
+
+		ServerInfoMessage serverInfoMessage = new ServerInfoMessage(ssid, ip,
+				SocketPort.COMMUNICATION_SERVER_PORT,userInfo.getNetworkType());
+		String qrcode = serverInfoMessage.getQRCodeString();
+
+		intent.putExtra(QRCodeDisplayActivity.EXTRA_CONTENT, qrcode);
+		startActivity(intent);
 	}
 
 	private void initView(View rootView) {
@@ -163,6 +188,10 @@ public class ConnectedInfoFragment extends ListFragment implements
 		mStartGame = (Button) rootView.findViewById(R.id.btn_ci_start);
 		mDisconnectButton.setOnClickListener(this);
 		mStartGame.setOnClickListener(this);
+
+		Button qrcodeButton = (Button) rootView
+				.findViewById(R.id.btn_ci_qrcode);
+		qrcodeButton.setOnClickListener(this);
 	}
 
 	private void disconnect() {

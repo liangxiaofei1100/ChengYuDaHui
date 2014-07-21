@@ -21,12 +21,19 @@ public class UserHelper {
 			R.drawable.head5, R.drawable.head6, R.drawable.head7,
 			R.drawable.head8, R.drawable.head9 };
 
-	private static final String[] PROJECTION = { ZhaoYanCommunicationData.User._ID,
-			ZhaoYanCommunicationData.User.USER_NAME, ZhaoYanCommunicationData.User.USER_ID,
-			ZhaoYanCommunicationData.User.HEAD_ID, ZhaoYanCommunicationData.User.THIRD_LOGIN,
-			ZhaoYanCommunicationData.User.HEAD_DATA, ZhaoYanCommunicationData.User.IP_ADDR,
-			ZhaoYanCommunicationData.User.STATUS, ZhaoYanCommunicationData.User.TYPE, ZhaoYanCommunicationData.User.SSID,
-			ZhaoYanCommunicationData.User.NETWORK, ZhaoYanCommunicationData.User.SIGNATURE };
+	private static final String[] PROJECTION = {
+			ZhaoYanCommunicationData.User._ID,
+			ZhaoYanCommunicationData.User.USER_NAME,
+			ZhaoYanCommunicationData.User.USER_ID,
+			ZhaoYanCommunicationData.User.HEAD_ID,
+			ZhaoYanCommunicationData.User.THIRD_LOGIN,
+			ZhaoYanCommunicationData.User.HEAD_DATA,
+			ZhaoYanCommunicationData.User.IP_ADDR,
+			ZhaoYanCommunicationData.User.STATUS,
+			ZhaoYanCommunicationData.User.TYPE,
+			ZhaoYanCommunicationData.User.SSID,
+			ZhaoYanCommunicationData.User.NETWORK,
+			ZhaoYanCommunicationData.User.SIGNATURE };
 
 	public static final int getHeadImageResource(int headId) {
 		return HEAD_IMAGES[headId];
@@ -50,7 +57,8 @@ public class UserHelper {
 	private static UserInfo getUserFromCursor(Cursor cursor) {
 		// get user.
 		User user = new User();
-		int id = cursor.getInt(cursor.getColumnIndex(ZhaoYanCommunicationData.User.USER_ID));
+		int id = cursor.getInt(cursor
+				.getColumnIndex(ZhaoYanCommunicationData.User.USER_ID));
 		String name = cursor.getString(cursor
 				.getColumnIndex(ZhaoYanCommunicationData.User.USER_NAME));
 		user.setUserID(id);
@@ -66,13 +74,14 @@ public class UserHelper {
 				.getColumnIndex(ZhaoYanCommunicationData.User.THIRD_LOGIN));
 		byte[] headData = cursor.getBlob(cursor
 				.getColumnIndex(ZhaoYanCommunicationData.User.HEAD_DATA));
-		int type = cursor.getInt(cursor.getColumnIndex(ZhaoYanCommunicationData.User.TYPE));
+		int type = cursor.getInt(cursor
+				.getColumnIndex(ZhaoYanCommunicationData.User.TYPE));
 		String ipAddress = cursor.getString(cursor
 				.getColumnIndex(ZhaoYanCommunicationData.User.IP_ADDR));
 		String ssid = cursor.getString(cursor
 				.getColumnIndex(ZhaoYanCommunicationData.User.SSID));
-		int status = cursor
-				.getInt(cursor.getColumnIndex(ZhaoYanCommunicationData.User.STATUS));
+		int status = cursor.getInt(cursor
+				.getColumnIndex(ZhaoYanCommunicationData.User.STATUS));
 		int networkType = cursor.getInt(cursor
 				.getColumnIndex(ZhaoYanCommunicationData.User.NETWORK));
 		String signature = cursor.getString(cursor
@@ -102,8 +111,10 @@ public class UserHelper {
 		ContentResolver contentResolver = context.getContentResolver();
 		String selection = ZhaoYanCommunicationData.User.TYPE + "="
 				+ ZhaoYanCommunicationData.User.TYPE_LOCAL;
-		Cursor cursor = contentResolver.query(ZhaoYanCommunicationData.User.CONTENT_URI,
-				PROJECTION, selection, null, ZhaoYanCommunicationData.User.SORT_ORDER_DEFAULT);
+		Cursor cursor = contentResolver.query(
+				ZhaoYanCommunicationData.User.CONTENT_URI, PROJECTION,
+				selection, null,
+				ZhaoYanCommunicationData.User.SORT_ORDER_DEFAULT);
 		if (cursor != null) {
 			try {
 				int count = cursor.getCount();
@@ -141,29 +152,35 @@ public class UserHelper {
 		ContentResolver contentResolver = context.getContentResolver();
 		String selection = ZhaoYanCommunicationData.User.TYPE + "="
 				+ ZhaoYanCommunicationData.User.TYPE_LOCAL;
-		Cursor cursor = contentResolver.query(ZhaoYanCommunicationData.User.CONTENT_URI,
-				PROJECTION, selection, null, ZhaoYanCommunicationData.User.SORT_ORDER_DEFAULT);
+		Cursor cursor = contentResolver.query(
+				ZhaoYanCommunicationData.User.CONTENT_URI, PROJECTION,
+				selection, null,
+				ZhaoYanCommunicationData.User.SORT_ORDER_DEFAULT);
 		if (cursor != null) {
 			try {
 				int count = cursor.getCount();
 				if (count == 0) {
 					Log.d(TAG, "No Local user. Add local user.");
-					contentResolver.insert(ZhaoYanCommunicationData.User.CONTENT_URI,
+					contentResolver.insert(
+							ZhaoYanCommunicationData.User.CONTENT_URI,
 							getContentValuesFromUserInfo(userInfo));
 				} else if (count == 1) {
 					Log.d(TAG, "Local user exist. Update local user.");
 					if (cursor.moveToFirst()) {
-						int id = cursor.getInt(cursor
-								.getColumnIndex(ZhaoYanCommunicationData.User._ID));
+						int id = cursor
+								.getInt(cursor
+										.getColumnIndex(ZhaoYanCommunicationData.User._ID));
 						updateUserToDatabase(context, userInfo, id);
 					} else {
 						Log.e(TAG, "saveUser moveToFirst() error.");
 					}
 				} else {
 					Log.e(TAG, "saveUser There must be one local user at most!");
-					contentResolver.delete(ZhaoYanCommunicationData.User.CONTENT_URI,
+					contentResolver.delete(
+							ZhaoYanCommunicationData.User.CONTENT_URI,
 							selection, null);
-					contentResolver.insert(ZhaoYanCommunicationData.User.CONTENT_URI,
+					contentResolver.insert(
+							ZhaoYanCommunicationData.User.CONTENT_URI,
 							getContentValuesFromUserInfo(userInfo));
 				}
 			} catch (Exception e) {
@@ -218,10 +235,13 @@ public class UserHelper {
 
 	private static ContentValues getContentValuesFromUserInfo(UserInfo userInfo) {
 		ContentValues values = new ContentValues();
-		values.put(ZhaoYanCommunicationData.User.USER_ID, userInfo.getUser().getUserID());
-		values.put(ZhaoYanCommunicationData.User.USER_NAME, userInfo.getUser().getUserName());
+		values.put(ZhaoYanCommunicationData.User.USER_ID, userInfo.getUser()
+				.getUserID());
+		values.put(ZhaoYanCommunicationData.User.USER_NAME, userInfo.getUser()
+				.getUserName());
 		values.put(ZhaoYanCommunicationData.User.HEAD_ID, userInfo.getHeadId());
-		values.put(ZhaoYanCommunicationData.User.THIRD_LOGIN, userInfo.getThirdLogin());
+		values.put(ZhaoYanCommunicationData.User.THIRD_LOGIN,
+				userInfo.getThirdLogin());
 
 		byte[] headBitmapData = userInfo.getHeadBitmapData();
 		if (headBitmapData == null) {
@@ -231,11 +251,14 @@ public class UserHelper {
 		}
 
 		values.put(ZhaoYanCommunicationData.User.TYPE, userInfo.getType());
-		values.put(ZhaoYanCommunicationData.User.IP_ADDR, userInfo.getIpAddress());
+		values.put(ZhaoYanCommunicationData.User.IP_ADDR,
+				userInfo.getIpAddress());
 		values.put(ZhaoYanCommunicationData.User.SSID, userInfo.getSsid());
 		values.put(ZhaoYanCommunicationData.User.STATUS, userInfo.getStatus());
-		values.put(ZhaoYanCommunicationData.User.NETWORK, userInfo.getNetworkType());
-		values.put(ZhaoYanCommunicationData.User.SIGNATURE, userInfo.getSignature());
+		values.put(ZhaoYanCommunicationData.User.NETWORK,
+				userInfo.getNetworkType());
+		values.put(ZhaoYanCommunicationData.User.SIGNATURE,
+				userInfo.getSignature());
 		return values;
 	}
 
@@ -249,9 +272,12 @@ public class UserHelper {
 	public static UserInfo getUserInfo(Context context, User user) {
 		UserInfo userInfo = null;
 		ContentResolver contentResolver = context.getContentResolver();
-		String selection = ZhaoYanCommunicationData.User.USER_ID + "=" + user.getUserID();
-		Cursor cursor = contentResolver.query(ZhaoYanCommunicationData.User.CONTENT_URI,
-				PROJECTION, selection, null, ZhaoYanCommunicationData.User.SORT_ORDER_DEFAULT);
+		String selection = ZhaoYanCommunicationData.User.USER_ID + "="
+				+ user.getUserID();
+		Cursor cursor = contentResolver.query(
+				ZhaoYanCommunicationData.User.CONTENT_URI, PROJECTION,
+				selection, null,
+				ZhaoYanCommunicationData.User.SORT_ORDER_DEFAULT);
 		if (cursor != null) {
 			try {
 				if (cursor.getCount() > 0 && cursor.moveToFirst()) {
@@ -269,7 +295,8 @@ public class UserHelper {
 		ContentResolver contentResolver = context.getContentResolver();
 		String selection = ZhaoYanCommunicationData.User.TYPE + " != "
 				+ ZhaoYanCommunicationData.User.TYPE_LOCAL;
-		contentResolver.delete(ZhaoYanCommunicationData.User.CONTENT_URI, selection, null);
+		contentResolver.delete(ZhaoYanCommunicationData.User.CONTENT_URI,
+				selection, null);
 	}
 
 	/**
@@ -281,9 +308,10 @@ public class UserHelper {
 	public static void removeRemoteConnectedUser(Context context, int userId) {
 		ContentResolver contentResolver = context.getContentResolver();
 		String selection = ZhaoYanCommunicationData.User.TYPE + "!="
-				+ ZhaoYanCommunicationData.User.TYPE_LOCAL + " and " + ZhaoYanCommunicationData.User.USER_ID
-				+ "=" + userId;
-		contentResolver.delete(ZhaoYanCommunicationData.User.CONTENT_URI, selection, null);
+				+ ZhaoYanCommunicationData.User.TYPE_LOCAL + " and "
+				+ ZhaoYanCommunicationData.User.USER_ID + "=" + userId;
+		contentResolver.delete(ZhaoYanCommunicationData.User.CONTENT_URI,
+				selection, null);
 	}
 
 	public static User[] sortUsersById(Map<Integer, User> users) {
@@ -319,7 +347,8 @@ public class UserHelper {
 	public static UserInfo getUserInfo(Context context, String selection) {
 		UserInfo userInfo = null;
 		Cursor cursor = context.getContentResolver().query(
-				ZhaoYanCommunicationData.User.CONTENT_URI, PROJECTION, selection, null,
+				ZhaoYanCommunicationData.User.CONTENT_URI, PROJECTION,
+				selection, null,
 				ZhaoYanCommunicationData.User.SORT_ORDER_DEFAULT);
 		if (cursor != null) {
 			if (cursor.getCount() > 0 && cursor.moveToFirst()) {
@@ -327,6 +356,26 @@ public class UserHelper {
 			}
 			cursor.close();
 		}
+		return userInfo;
+	}
+
+	public static UserInfo getServerUserInfo(Context context) {
+		UserInfo userInfo = null;
+
+		String selection = ZhaoYanCommunicationData.User.USER_ID + "="
+				+ UserManager.SERVER_USER_ID;
+
+		Cursor cursor = context.getContentResolver().query(
+				ZhaoYanCommunicationData.User.CONTENT_URI, PROJECTION,
+				selection, null,
+				ZhaoYanCommunicationData.User.SORT_ORDER_DEFAULT);
+		if (cursor != null) {
+			if (cursor.getCount() > 0 && cursor.moveToFirst()) {
+				userInfo = getUserFromCursor(cursor);
+			}
+			cursor.close();
+		}
+
 		return userInfo;
 	}
 }

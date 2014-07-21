@@ -3,6 +3,7 @@ package com.zhaoyan.juyou.game.chengyudahui.fragment;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,7 +23,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.zxing.client.android.CaptureActivity;
 import com.zhaoyan.communication.SocketServer;
 import com.zhaoyan.communication.UserInfo;
 import com.zhaoyan.communication.UserManager;
@@ -31,6 +34,7 @@ import com.zhaoyan.communication.connect.ServerConnector;
 import com.zhaoyan.communication.connect.ServerCreator;
 import com.zhaoyan.communication.ipc.aidl.User;
 import com.zhaoyan.communication.provider.ZhaoYanCommunicationData;
+import com.zhaoyan.communication.qrcode.ServerInfoMessage;
 import com.zhaoyan.communication.search.SearchUtil;
 import com.zhaoyan.communication.search.ServerSearcher;
 import com.zhaoyan.communication.util.Log;
@@ -45,10 +49,16 @@ public abstract class SearchConnectBaseFragment extends ListFragment implements
 	protected ServerConnector mServerConnector;
 	protected ServerSearcher mServerSearcher;
 
-	protected static final String[] PROJECTION = { ZhaoYanCommunicationData.User._ID,
-			ZhaoYanCommunicationData.User.USER_NAME, ZhaoYanCommunicationData.User.USER_ID,
-			ZhaoYanCommunicationData.User.HEAD_ID, ZhaoYanCommunicationData.User.THIRD_LOGIN, ZhaoYanCommunicationData.User.HEAD_DATA,
-			ZhaoYanCommunicationData.User.IP_ADDR, ZhaoYanCommunicationData.User.STATUS, ZhaoYanCommunicationData.User.TYPE,
+	protected static final String[] PROJECTION = {
+			ZhaoYanCommunicationData.User._ID,
+			ZhaoYanCommunicationData.User.USER_NAME,
+			ZhaoYanCommunicationData.User.USER_ID,
+			ZhaoYanCommunicationData.User.HEAD_ID,
+			ZhaoYanCommunicationData.User.THIRD_LOGIN,
+			ZhaoYanCommunicationData.User.HEAD_DATA,
+			ZhaoYanCommunicationData.User.IP_ADDR,
+			ZhaoYanCommunicationData.User.STATUS,
+			ZhaoYanCommunicationData.User.TYPE,
 			ZhaoYanCommunicationData.User.SSID };
 
 	protected static final int MSG_SEARCH_SUCCESS = 1;
@@ -176,6 +186,10 @@ public abstract class SearchConnectBaseFragment extends ListFragment implements
 
 		mCreatingServerView = rootView
 				.findViewById(R.id.search_creating_server);
+
+		Button scanQRCodeButton = (Button) rootView
+				.findViewById(R.id.btn_search_init_scanqrcode);
+		scanQRCodeButton.setOnClickListener(this);
 	}
 
 	@Override
@@ -198,9 +212,58 @@ public abstract class SearchConnectBaseFragment extends ListFragment implements
 		case R.id.btn_search_init_create_server:
 			preCreateServer();
 			break;
+		case R.id.btn_search_init_scanqrcode:
+			launchQRCodeScan();
+			break;
 		default:
 			break;
 		}
+	}
+
+	private void launchQRCodeScan() {
+		Intent intent = new Intent(mContext, CaptureActivity.class);
+		startActivityForResult(intent, 1);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
+			String qrcode = data.getStringExtra(CaptureActivity.EXTRA_RESULT);
+			ServerInfoMessage serverInfoMessage = new ServerInfoMessage();
+
+			mServerConnector
+					.connectServer(getUserInfoFromServerInfoMessage(serverInfoMessage
+							.getQRCodeMessage(qrcode)));
+			updateUI(STATUS_CONNECTING);
+		}
+	}
+
+	private UserInfo getUserInfoFromServerInfoMessage(
+			ServerInfoMessage serverInfoMessage) {
+		String name = "";
+		String ip = serverInfoMessage.ip;
+		int type = serverInfoMessage.networkType;
+		String ssid = serverInfoMessage.ssid;
+
+		UserInfo userInfo = new UserInfo();
+		User user = new User();
+		user.setUserName(name);
+		userInfo.setUser(user);
+		switch (type) {
+		case ZhaoYanCommunicationData.User.NETWORK_AP:
+			userInfo.setType(ZhaoYanCommunicationData.User.TYPE_REMOTE_SEARCH_AP);
+			break;
+		case ZhaoYanCommunicationData.User.NETWORK_WIFI:
+			userInfo.setType(ZhaoYanCommunicationData.User.TYPE_REMOTE_SEARCH_LAN);
+			break;
+
+		default:
+			break;
+		}
+		userInfo.setIpAddress(ip);
+		userInfo.setSsid(ssid);
+		return userInfo;
 	}
 
 	private void preStartSearch() {
@@ -288,7 +351,8 @@ public abstract class SearchConnectBaseFragment extends ListFragment implements
 				.getColumnIndex(ZhaoYanCommunicationData.User.USER_NAME));
 		String ip = cursor.getString(cursor
 				.getColumnIndex(ZhaoYanCommunicationData.User.IP_ADDR));
-		int type = cursor.getInt(cursor.getColumnIndex(ZhaoYanCommunicationData.User.TYPE));
+		int type = cursor.getInt(cursor
+				.getColumnIndex(ZhaoYanCommunicationData.User.TYPE));
 		String ssid = cursor.getString(cursor
 				.getColumnIndex(ZhaoYanCommunicationData.User.SSID));
 
@@ -401,9 +465,12 @@ public abstract class SearchConnectBaseFragment extends ListFragment implements
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-		String selection = ZhaoYanCommunicationData.User.TYPE + "=" + getServerUserType();
-		return new CursorLoader(mContext, ZhaoYanCommunicationData.User.CONTENT_URI,
-				PROJECTION, selection, null, ZhaoYanCommunicationData.User.SORT_ORDER_DEFAULT);
+		String selection = ZhaoYanCommunicationData.User.TYPE + "="
+				+ getServerUserType();
+		return new CursorLoader(mContext,
+				ZhaoYanCommunicationData.User.CONTENT_URI, PROJECTION,
+				selection, null,
+				ZhaoYanCommunicationData.User.SORT_ORDER_DEFAULT);
 	}
 
 	@Override

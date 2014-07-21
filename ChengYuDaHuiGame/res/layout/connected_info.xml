@@ -24,11 +24,20 @@
         android:text="@string/start_game"
         
         />
+    <Button 
+        android:id="@+id/btn_ci_qrcode"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/btn_ci_start"
+        android:background="@drawable/btn_selector"
+        android:padding="10dp"
+        android:text="二维码" />
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btn_ci_start" />
+        android:layout_above="@+id/btn_ci_qrcode" />
 
 </RelativeLayout>

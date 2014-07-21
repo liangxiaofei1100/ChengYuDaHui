@@ -69,6 +69,7 @@ public class UserUpdateProtocol implements IProtocol {
 	 */
 	private void decodeUpdateUserInfo(byte[] msgData,
 			SocketCommunication communication) {
+		Log.d(TAG, "decodeUpdateUserInfo");
 		UserManager userManager = UserManager.getInstance();
 		PBUpdateUserInfo pbUpdateUserInfo = null;
 		try {
@@ -92,6 +93,7 @@ public class UserUpdateProtocol implements IProtocol {
 	 */
 	private void decodeUpdateUserId(byte[] msgData,
 			SocketCommunication communication) {
+		Log.d(TAG, "decodeUpdateUserId");
 		PBUpdateUserId updateUserId = null;
 		try {
 			updateUserId = PBUpdateUserId.parseFrom(msgData);
@@ -125,6 +127,7 @@ public class UserUpdateProtocol implements IProtocol {
 	 * @see PBUserInfo
 	 */
 	public static void encodeUpdateAllUser(Context context) {
+		Log.d(TAG, "encodeUpdateAllUser");
 		encodeUpdateUserId(context);
 		encodeUpdateUserInfo(context);
 	}
