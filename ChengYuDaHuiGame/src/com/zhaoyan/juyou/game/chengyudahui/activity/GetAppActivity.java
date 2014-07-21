@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
@@ -26,23 +28,22 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.baidu.frontia.Frontia;
-import com.baidu.frontia.FrontiaData;
 import com.baidu.frontia.FrontiaFile;
-import com.baidu.frontia.FrontiaQuery;
 import com.baidu.frontia.api.FrontiaStorage;
-import com.baidu.frontia.api.FrontiaStorageListener.DataInfoListener;
 import com.baidu.frontia.api.FrontiaStorageListener.FileProgressListener;
 import com.baidu.frontia.api.FrontiaStorageListener.FileTransferListener;
 import com.zhaoyan.common.file.APKUtil;
 import com.zhaoyan.common.util.PreferencesUtils;
-import com.zhaoyan.common.util.SharedPreferenceUtil;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.account.GoldOperationResultListener;
 import com.zhaoyan.juyou.account.ZhaoYanAccount;
 import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
+import com.zhaoyan.juyou.bae.GetAppInfoBae;
+import com.zhaoyan.juyou.bae.GetAppInfoResultListener;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.adapter.GetAppAdapter;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.AppInfo;
@@ -52,8 +53,7 @@ import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
 public class GetAppActivity extends ListActivity implements OnItemClickListener {
 	private static final String TAG = "GetAppActivity";
-	private ListView listView;
-	private ProgressDialog progressDialog;
+	private ListView mListView;
 
 	private GetAppAdapter mAdapter;
 	private FrontiaStorage mCloudStorage;
@@ -181,20 +181,16 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 		filter.addDataScheme("package");
 		registerReceiver(mAppReceiver, filter);
 
-		progressDialog = new ProgressDialog(GetAppActivity.this);
-		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		progressDialog.setMessage("正在读取云盘数据，请稍后!");
-		progressDialog.setCancelable(false);
-
-		listView = getListView();
+		mListView = getListView();
+		ProgressBar loadingBar = (ProgressBar) findViewById(R.id.bar_info_loading);
+		mListView.setEmptyView(loadingBar);
 
 		mAdapter = new GetAppAdapter(mAppList, getApplicationContext());
-		listView.setAdapter(mAdapter);
+		mListView.setAdapter(mAdapter);
 		mAdapter.registerKeyListener(getAppListener);
 		queryAppInfos();
 
-		listView.setOnItemClickListener(this);
+		mListView.setOnItemClickListener(this);
 	}
 
 	public void startDownload(AppInfo appInfo) {
@@ -256,61 +252,64 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 
 	private List<AppInfo> mAppList = new ArrayList<AppInfo>();
 
+	/**
+	 * query appinfos from cloud
+	 */
 	public void queryAppInfos() {
-		progressDialog.show();
-		FrontiaQuery query = new FrontiaQuery();
-		query.equals("AppInfo", "AppInfo");
-
-		mCloudStorage.findData(query, new DataInfoListener() {
-
+		GetAppInfoBae getAppInfoBae = new GetAppInfoBae();
+		getAppInfoBae.getAppInfos(new GetAppInfoResultListener() {
 			@Override
-			public void onSuccess(List<FrontiaData> arg0) {
-				progressDialog.dismiss();
-				if (arg0 == null || arg0.size() == 0) {
+			public void onSuccesss(String appInfoJson) {
+				Log.d(TAG, "query.onSuccess");
+				if (appInfoJson == null || appInfoJson.isEmpty()) {
 					Toast.makeText(getApplicationContext(),
 							"onSuccess.Data is null", Toast.LENGTH_SHORT)
 							.show();
 				}
-
-				JSONObject jsonObject;
-				for (int i = 0; i < arg0.size(); i++) {
-					jsonObject = arg0.get(i).toJSON();
-					AppInfo appInfo = AppInfo.parseJson(jsonObject);
-					
-					boolean isInstalled = APKUtil.isAppInstalled(getApplicationContext(), appInfo.getPackageName());
-					String serverVersion = appInfo.getVersion();
-					String localVersion = APKUtil.getInstalledAppVersion(getApplicationContext(), appInfo.getPackageName());
-					boolean isVersionEqual =serverVersion.equals(localVersion);
-					Log.d(TAG, "serverVersion:" + serverVersion + ",localVersion:" + localVersion);
-					Log.d(TAG, "isVersionEqual:" + isVersionEqual);
-					
-					String localPath = PreferencesUtils.getString(getApplicationContext(), appInfo.getPackageName(), null);
-					
-					if (isInstalled ) {
-						if (!isVersionEqual) {
-							appInfo.setStatus(Conf.NEED_UDPATE);
+				try {
+					JSONArray array = new JSONArray(appInfoJson);
+					JSONObject jsonObject = null;
+					AppInfo appInfo = null;
+					for (int i = 0; i < array.length(); i++) {
+						jsonObject = array.getJSONObject(i);
+						appInfo = AppInfo.parseJson(jsonObject);
+						
+						String packagename = appInfo.getPackageName();
+						boolean isInstalled = APKUtil.isAppInstalled(getApplicationContext(), packagename);
+						String serverVersion = appInfo.getVersion();
+						String localVersion = APKUtil.getInstalledAppVersion(getApplicationContext(), packagename);
+						boolean isVersionEqual =serverVersion.equals(localVersion);
+						Log.d(TAG, "serverVersion:" + serverVersion + ",localVersion:" + localVersion);
+						Log.d(TAG, "isVersionEqual:" + isVersionEqual);
+						
+						String localPath = PreferencesUtils.getString(getApplicationContext(), packagename, null);
+						
+						if (isInstalled ) {
+							if (!isVersionEqual) {
+								appInfo.setStatus(Conf.NEED_UDPATE);
+							} else {
+								appInfo.setStatus(Conf.INSTALLED);
+							}
+						} else if (localPath != null) {
+							appInfo.setStatus(Conf.DOWNLOADED);
+							appInfo.setAppLocalPath(localPath);
 						} else {
-							appInfo.setStatus(Conf.INSTALLED);
+							appInfo.setStatus(Conf.NOT_DOWNLOAD);
 						}
-					} else if (localPath != null) {
-						appInfo.setStatus(Conf.DOWNLOADED);
-						appInfo.setAppLocalPath(localPath);
-					} else {
-						appInfo.setStatus(Conf.NOT_DOWNLOAD);
+						mAppList.add(appInfo);
 					}
-					mAppList.add(appInfo);
+				} catch (JSONException e) {
+					Log.e(TAG, "Json error:" + e.toString());
+					e.printStackTrace();
 				}
-
 				mAdapter.notifyDataSetChanged();
 			}
 
 			@Override
-			public void onFailure(int arg0, String arg1) {
-				Log.e(TAG, "query apps.onFailure.error code:" + arg0
-						+ ".errorMsg:" + arg1);
-				Toast.makeText(GetAppActivity.this, "查询失败.errMsg:" + arg1,
+			public void onFail(String message) {
+				Log.e(TAG, "query.onFail:" + message);
+				Toast.makeText(GetAppActivity.this, "查询失败.errMsg:" + message,
 						Toast.LENGTH_LONG).show();
-				progressDialog.dismiss();
 			}
 		});
 	}
@@ -336,14 +335,6 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 							.obtainMessage(GetAppListener.MSG_UPDATE_UI));
 					prev = percent;
 				}
-				// String totalSize = Utils.getFormatSize(total);
-				// String dlSized = Utils.getFormatSize(bytes);
-				// String dlPercent = bytes * 100 / total + "%";
-				// progressDialog.setMessage(dlMsg + "\n"
-				// + "文件大小:" + totalSize + "\n"
-				// + "已下载:" + dlSized + "\n"
-				// + "下载进度:" + dlPercent );
-
 			}
 
 		}, new FileTransferListener() {
@@ -364,7 +355,6 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 
 			@Override
 			public void onFailure(String source, int errCode, String errMsg) {
-				progressDialog.dismiss();
 				Log.e(TAG, "onFailure.Error:" + source + ",errCode:" + errCode
 						+ "errMsg:" + errMsg);
 				Toast.makeText(GetAppActivity.this, "应用下载失败！",
@@ -372,36 +362,6 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 			}
 
 		});
-	}
-
-	protected void showInstallDialog() {
-		AlertDialog.Builder builder = new Builder(GetAppActivity.this);
-		builder.setMessage("应用已经下载完成，是否安装？");
-		builder.setTitle("提示");
-		builder.setPositiveButton("安装", new OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				if (lastDownloadApk != null) {
-					arg0.dismiss();
-					Intent intent = new Intent();
-					// intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					intent.setAction(Intent.ACTION_INSTALL_PACKAGE);
-					File mFile = new File(lastDownloadApk);
-					intent.setData(Uri.fromFile(mFile));
-					startActivity(intent);
-				}
-			}
-		});
-		builder.setNegativeButton("取消", new OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
-				// TODO Auto-generated method stub
-				arg0.dismiss();
-			}
-		});
-		builder.create().show();
 	}
 
 	protected void showCancelDownloadDialog(final FrontiaFile file) {

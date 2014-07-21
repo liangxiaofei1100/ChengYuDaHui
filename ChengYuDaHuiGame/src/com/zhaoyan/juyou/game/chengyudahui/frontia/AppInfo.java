@@ -1,6 +1,5 @@
 package com.zhaoyan.juyou.game.chengyudahui.frontia;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.os.Parcel;
@@ -16,8 +15,7 @@ public class AppInfo implements Parcelable {
 	private String version;// 应用版本号
 	private String introduce;// 详细介绍
 	private String title;// 简介
-	private String goldInfos;//获取金币相关介绍
-	private String sizeStr;// 应用大小
+	private String notes;//获取金币等相关介绍
 	private long size;
 
 	private String appUrl; // app云端下载地址
@@ -53,7 +51,7 @@ public class AppInfo implements Parcelable {
 		this.author = author;
 		this.introduce = introduce;
 		this.title = title;
-		this.goldInfos = goldInfos;
+		this.notes = goldInfos;
 		this.size = size;
 		this.version = version;
 		this.appLanguage = appLanguage;
@@ -161,11 +159,11 @@ public class AppInfo implements Parcelable {
 	}
 	
 	public void setGoldInfos(String goldInfos){
-		this.goldInfos = goldInfos;
+		this.notes = goldInfos;
 	}
 	
 	public String getGoldInfos(){
-		return goldInfos;
+		return notes;
 	}
 
 	public void setAppUrl(String appUrl) {
@@ -254,7 +252,7 @@ public class AppInfo implements Parcelable {
 		String app_label = "";
 		String author_id = "";
 		String author = "";
-		String update_time = "";
+		String date = "";
 		String app_language = "";
 		String app_version = "";
 		String introduce = "";
@@ -273,28 +271,28 @@ public class AppInfo implements Parcelable {
 		String packageName = "";
 		
 		try {
-			app_id = jsonObject.getInt(AppJSON.APP_ID);
-			app_label = jsonObject.getString(AppJSON.APP_LABEL);
-			author_id = jsonObject.getString(AppJSON.AUTHOR_ID);
-			author = jsonObject.getString(AppJSON.AUTHOR);
-			update_time = jsonObject.getString(AppJSON.UPDATE_TIME);
-			app_language = jsonObject.getString(AppJSON.APP_LANGUAGE);
-			app_version = jsonObject.getString(AppJSON.APP_VERSION);
-			introduce = jsonObject.getString(AppJSON.INTRODUCE);
-			title = jsonObject.getString(AppJSON.TITLE);
-			goldInfos = jsonObject.getString(AppJSON.GOLD_INFOS);
-			size = jsonObject.getLong(AppJSON.SIZE);
+			app_id = jsonObject.getInt(AppInfoTable.APP_ID);
+			app_label = jsonObject.getString(AppInfoTable.APP_LABEL);
+			author_id = jsonObject.getString(AppInfoTable.AUTHOR_ID);
+			author = jsonObject.getString(AppInfoTable.AUTHOR);
+			date = jsonObject.getString(AppInfoTable.DATE);
+			app_language = jsonObject.getString(AppInfoTable.APP_LANGUAGE);
+			app_version = jsonObject.getString(AppInfoTable.APP_VERSION);
+			introduce = jsonObject.getString(AppInfoTable.INTRODUCE);
+			title = jsonObject.getString(AppInfoTable.TITLE);
+			goldInfos = jsonObject.getString(AppInfoTable.NOTES);
+			size = jsonObject.getLong(AppInfoTable.SIZE);
 			
-			app_url = jsonObject.getString(AppJSON.APP_URL);
-			icon_url = jsonObject.getString(AppJSON.ICON_URL);
-			jiemian_url1 = jsonObject.getString(AppJSON.JIEMIAN_URL1);
-			jiemian_url2 = jsonObject.getString(AppJSON.JIEMIAN_URL2);
-			app_type = jsonObject.getString(AppJSON.APP_TYPE);
-			packageName = jsonObject.getString(AppJSON.PACKAGE_NAME);
+			app_url = jsonObject.getString(AppInfoTable.APP_URL);
+			icon_url = jsonObject.getString(AppInfoTable.ICON_URL);
+			jiemian_url1 = jsonObject.getString(AppInfoTable.JIEMIAN_URL1);
+			jiemian_url2 = jsonObject.getString(AppInfoTable.JIEMIAN_URL2);
+			app_type = jsonObject.getString(AppInfoTable.APP_TYPE);
+			packageName = jsonObject.getString(AppInfoTable.PACKAGE_NAME);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		appInfo = new AppInfo(app_id, app_label, author_id, update_time,
+		appInfo = new AppInfo(app_id, app_label, author_id, date,
 				app_language, app_version, introduce, title, goldInfos, size, author,
 				app_url, icon_url, jiemian_url1, jiemian_url2, app_type,
 				packageName);
@@ -307,7 +305,7 @@ public class AppInfo implements Parcelable {
 				+ authorId + ",author=" + author + ",update_time=" + date
 				+ ",app_language=" + appLanguage + ",app_version=" + version
 				+ ",introduce=" + introduce + ",title=" + title
-				+ ",goldInfos:" + goldInfos + ",size="
+				+ ",goldInfos:" + notes + ",size="
 				+ size + ",app_url=" + appUrl + ",icon_url=" + iconUrl
 				+ ",jiemian_url1" + jiemian_url1 + ",jiemian_url2="
 				+ jiemian_url2 + ",app_type=" + appType + ",packageName="
@@ -350,8 +348,7 @@ public class AppInfo implements Parcelable {
 		dest.writeString(version);
 		dest.writeString(introduce);
 		dest.writeString(title);
-		dest.writeString(goldInfos);
-		dest.writeString(sizeStr);
+		dest.writeString(notes);
 		dest.writeLong(size);
 		dest.writeString(appUrl);
 		dest.writeString(iconUrl);
@@ -375,8 +372,7 @@ public class AppInfo implements Parcelable {
 		version = in.readString();
 		introduce = in.readString();
 		title = in.readString();
-		goldInfos = in.readString();
-		sizeStr = in.readString();
+		notes = in.readString();
 		size = in.readLong();
 		appUrl = in.readString();
 		iconUrl = in.readString();
