@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.DownloadManager;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -19,6 +20,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -37,6 +39,7 @@ import com.baidu.frontia.api.FrontiaStorage;
 import com.baidu.frontia.api.FrontiaStorageListener.FileProgressListener;
 import com.baidu.frontia.api.FrontiaStorageListener.FileTransferListener;
 import com.zhaoyan.common.file.APKUtil;
+import com.zhaoyan.common.util.DownloadManagerPro;
 import com.zhaoyan.common.util.PreferencesUtils;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.account.GoldOperationResultListener;
@@ -45,9 +48,11 @@ import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.bae.GetAppInfoBae;
 import com.zhaoyan.juyou.bae.GetAppInfoResultListener;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.AppInfoActicity.DownloadChangeObserver;
 import com.zhaoyan.juyou.game.chengyudahui.adapter.GetAppAdapter;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.AppInfo;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
+import com.zhaoyan.juyou.game.chengyudahui.frontia.DownloadUtils;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.GetAppListener;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
@@ -60,6 +65,13 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 	private String lastDownloadApk;
 
 	private AppReceiver mAppReceiver = null;
+	
+	private DownloadManager mDownloadManager;
+	private DownloadManagerPro mDownloadManagerPro;
+	
+	private DownloadChangeObserver mDownloadChangeObserver;
+	
+	private long mDownloadId = 0;
 
 	private GetAppListener getAppListener = new GetAppListener() {
 
@@ -180,6 +192,16 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 		filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
 		filter.addDataScheme("package");
 		registerReceiver(mAppReceiver, filter);
+		
+		IntentFilter filter2 = new IntentFilter();
+		filter2.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+		filter2.addAction(DownloadManager.ACTION_NOTIFICATION_CLICKED);
+		registerReceiver(mAppReceiver, filter2);
+		
+		mDownloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
+		mDownloadManagerPro = new DownloadManagerPro(mDownloadManager);
+		
+		mDownloadChangeObserver = new DownloadChangeObserver();
 
 		mListView = getListView();
 		ProgressBar loadingBar = (ProgressBar) findViewById(R.id.bar_info_loading);
@@ -191,34 +213,27 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 		queryAppInfos();
 
 		mListView.setOnItemClickListener(this);
+		
+		getContentResolver().registerContentObserver(DownloadManagerPro.CONTENT_URI, 
+				true, mDownloadChangeObserver);
 	}
 
 	public void startDownload(AppInfo appInfo) {
-		String sdCardPathString = Environment.getExternalStorageDirectory()
-				.getPath();
-		if (!new File(sdCardPathString).exists()) {
-			new File(sdCardPathString).mkdirs();
-		}
-		long filesize = appInfo.getAppSize();
-		long aviable = Utils.getAvailableBlockSize(sdCardPathString);
-		if (aviable <= filesize) {
-			String fileSizeStr = Utils.getFormatSize(filesize);
-			String availableStr = Utils.getFormatSize(aviable);
-			Toast.makeText(
-					getApplicationContext(),
-					"可用空间不足" + "\n" + "文件大小:" + fileSizeStr + "\n" + "可用空间:"
-							+ availableStr, Toast.LENGTH_SHORT).show();
+		String localPath = DownloadUtils.getLocalFilePath(getApplicationContext(), appInfo.getAppSize(), appInfo.getAppUrl());
+		if (localPath == null) {
 			return;
 		}
+		
+		String sdCardPathString = Environment.getExternalStorageDirectory()
+				.getPath();
 
 		String remotePathString = appInfo.getAppUrl();
 		FrontiaFile file = new FrontiaFile();
 		Log.d(TAG, "remotePath:" + remotePathString);
 		file.setRemotePath(remotePathString);
 
-		// 首先获得要下载的APP的name,在转换成本地path作为下载后的保存位置
-		int index = remotePathString.lastIndexOf('/');// 从路径的末尾倒数第一个'/'作为文件名和路径的分隔符
-		String appName = remotePathString.substring(index + 1);// 获得从‘/’字符以后的字串，即文件名；
+		int index = remotePathString.lastIndexOf('/');
+		String appName = remotePathString.substring(index + 1);
 		
 		String localDir = sdCardPathString + Conf.LOCAL_APP_DOWNLOAD_PATH;
 		if (!new File(localDir).exists()) {
@@ -388,6 +403,25 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 		intent.putExtra("appinfo", appInfo);
 		startActivity(intent);
 	}
+	
+	class DownloadChangeObserver extends ContentObserver {
+
+        public DownloadChangeObserver() {
+            super(mHandler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateView();
+        }
+
+    }
+
+    public void updateView() {
+        int[] bytesAndStatus = mDownloadManagerPro.getBytesAndStatus(mDownloadId);
+        mHandler.sendMessage(mHandler.obtainMessage(GetAppListener.MSG_DOWNLOAD_COMPLETE, 
+        		bytesAndStatus[0], bytesAndStatus[1], bytesAndStatus[2]));
+    }
 
 	class AppReceiver extends BroadcastReceiver {
 		@Override
@@ -411,6 +445,25 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 						mAdapter.notifyDataSetChanged();
 					}
 				}
+			} else if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+        		long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+                String localFileName = mDownloadManagerPro.getFileName(mDownloadId);
+                Log.d(TAG, "localFileName:" + localFileName);
+                Log.d(TAG, "completeDownloadId:" + completeDownloadId + ",mDOwnloadId:" + mDownloadId);
+                if (completeDownloadId == mDownloadId) {
+//                    initData();
+                    updateView();
+                    // if download successful, install apk
+                    int status = mDownloadManagerPro.getStatusById(mDownloadId);
+                    Log.d(TAG, "status:" +  status);
+                    if ( status == DownloadManager.STATUS_SUCCESSFUL) {
+//                    	PreferencesUtils.putString(getApplicationContext(), mAppInfo.getPackageName(), localFileName);
+//                    	mAppInfo.setStatus(Conf.DOWNLOADED);
+                    	APKUtil.installApp(context, localFileName);
+                    }
+                }
+			} else if (DownloadManager.ACTION_NOTIFICATION_CLICKED.equals(action)) {
+				Log.d(TAG, "Notification clicked");
 			}
 		}
 	}

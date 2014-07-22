@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,15 +67,14 @@ public class GetAppAdapter extends BaseAdapter {
 			holder.appLabelView = (TextView) view.findViewById(R.id.tv_app_label);
 			holder.appInfoView = (TextView) view.findViewById(R.id.tv_app_info);
 			holder.infoView = (TextView) view.findViewById(R.id.tv_info);
-			holder.downloadBtn = (SubmitProcessButton) view.findViewById(R.id.btn_download);
+			holder.downloadBtn = (Button) view.findViewById(R.id.btn_download);
 			holder.downloadBtn.setOnClickListener(mClickListener);
-			holder.downloadBtn.setCompleteText("安装");
 			
-//			holder.downloadView = view.findViewById(R.id.rl_downloading);
-//			holder.progressView = (TextView) view.findViewById(R.id.tv_dl_progress);
+			holder.downloadView = view.findViewById(R.id.rl_downloading);
+			holder.progressView = (TextView) view.findViewById(R.id.tv_dl_progress);
 //			holder.percentView = (TextView) view.findViewById(R.id.tv_dl_percent);
-//			holder.barView = (ProgressBar) view.findViewById(R.id.bar_downloading);
-//			holder.barView.setMax(100);
+			holder.barView = (ProgressBar) view.findViewById(R.id.bar_downloading);
+			holder.barView.setMax(100);
 			
 			view.setTag(holder);
 		} else {
@@ -98,64 +99,48 @@ public class GetAppAdapter extends BaseAdapter {
 		
 		switch (status) {
 		case Conf.NOT_DOWNLOAD:
-//			holder.downloadView.setVisibility(View.GONE);
-//			holder.appInfoView.setVisibility(View.VISIBLE);
+			holder.downloadView.setVisibility(View.GONE);
+			holder.appInfoView.setVisibility(View.VISIBLE);
 			holder.downloadBtn.setText("下载");
-			holder.downloadBtn.setProgress(0);
-//			holder.appInfoView.setText(size);
+			holder.appInfoView.setText(size);
 			break;
 		case  Conf.DOWNLOADING:
-//			holder.downloadView.setVisibility(View.VISIBLE);
-//			holder.appInfoView.setVisibility(View.GONE);
-//			holder.downloadBtn.setText("取消");
+			holder.downloadView.setVisibility(View.VISIBLE);
+			holder.appInfoView.setVisibility(View.GONE);
+			holder.downloadBtn.setText("取消");
 			int percent = appInfo.getPercent();
 			Log.d(TAG, "percent:" + percent);
-			holder.downloadBtn.setProgress(percent);
-			holder.downloadBtn.setLoadingText(percent + "%");
+//			holder.downloadBtn.setProgress(percent);
+//			holder.downloadBtn.setLoadingText(percent + "%");
 			
-//			String progress = Utils.getFormatSize(appInfo.getProgressBytes());
-//			holder.progressView.setText(progress + "/" + size);
+			String progress = Utils.getFormatSize(appInfo.getProgressBytes());
+			holder.progressView.setText(progress);
 //			holder.percentView.setText(percent + "%");
-//			holder.barView.setProgress(percent);
+			holder.barView.setProgress(percent);
 			break;
 		case Conf.DOWNLOADED:
-//			holder.downloadView.setVisibility(View.GONE);
-//			holder.appInfoView.setVisibility(View.VISIBLE);
+			holder.downloadView.setVisibility(View.GONE);
+			holder.appInfoView.setVisibility(View.VISIBLE);
 //			holder.downloadBtn.setProgress(appInfo.getPercent());
 //			holder.downloadBtn.setCompleteText("安装");
 			holder.downloadBtn.setText("安装");
-//			holder.appInfoView.setText(size);
+			holder.appInfoView.setText(size);
 			break;
 		case Conf.INSTALLED:
-//			holder.downloadView.setVisibility(View.GONE);
-//			holder.appInfoView.setVisibility(View.VISIBLE);
+			holder.downloadView.setVisibility(View.GONE);
+			holder.appInfoView.setVisibility(View.VISIBLE);
 			holder.downloadBtn.setText("打开");
-//			holder.appInfoView.setText(size);
+			holder.appInfoView.setText(size);
 			break;
 		case Conf.NEED_UDPATE:
-//			holder.downloadView.setVisibility(View.GONE);
-//			holder.appInfoView.setVisibility(View.VISIBLE);
+			holder.downloadView.setVisibility(View.GONE);
+			holder.appInfoView.setVisibility(View.VISIBLE);
 			holder.downloadBtn.setText("更新");
-//			holder.appInfoView.setText(size);
+			holder.appInfoView.setText(size);
 			break;
 		default:
 			break;
 		}
-//		if (appInfo.isDownloading()) {
-//			holder.downloadView.setVisibility(View.VISIBLE);
-//			holder.appInfoView.setVisibility(View.GONE);
-//			holder.downloadBtn.setText("取消");
-//			
-//			String progress = Utils.getFormatSize(appInfo.getProgressBytes());
-//			holder.progressView.setText(progress + "/" + appInfo.getSize());
-//			holder.percentView.setText(appInfo.getPercent() + "%");
-//			holder.barView.setProgress(appInfo.getPercent());
-//		} else {
-//			holder.downloadView.setVisibility(View.GONE);
-//			holder.appInfoView.setVisibility(View.VISIBLE);
-//			holder.downloadBtn.setText("下载");
-//			holder.appInfoView.setText(appInfo.getSize());
-//		}
 		
 		return view;
 	}
@@ -165,12 +150,11 @@ public class GetAppAdapter extends BaseAdapter {
 		TextView appLabelView;
 		TextView appInfoView;
 		TextView infoView;
-		SubmitProcessButton downloadBtn;
-//		View downloadView;
-//		
-//		TextView progressView;
-//		TextView percentView;
-//		ProgressBar barView;
+		Button downloadBtn;
+		
+		View downloadView;
+		TextView progressView;
+		ProgressBar barView;
 	}
 	
 	class MsgData {

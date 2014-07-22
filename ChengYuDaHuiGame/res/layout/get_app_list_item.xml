@@ -20,23 +20,23 @@
             android:layout_height="48dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:src="@drawable/ic_launcher" />
 
-        <com.zhaoyan.common.progressbutton.SubmitProcessButton
+        <Button
             android:id="@+id/btn_download"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:minWidth="100dp"
+            android:layout_width="80.0dp"
+            android:layout_height="35.0dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:gravity="center"
-            android:textColor="@android:color/white"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ps__button_flat_dropbox"
             android:focusable="false"
-            android:textSize="12sp"
-             />
+            android:gravity="center"
+            android:minWidth="100dp"
+            android:textColor="@android:color/white"
+            />
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -53,6 +53,7 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="name"
+                android:textSize="16.0sp"
                 android:textColor="@android:color/black" />
 
             <TextView
@@ -60,49 +61,53 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
                 android:text="工具类"
                 android:textColor="#ff00deff" />
 
-            <TextView
-                android:id="@+id/tv_app_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="15.0dp"
                 android:layout_below="@+id/tv_app_label"
-                android:textColor="@android:color/black" />
-
-            <!-- no use -->
-            <RelativeLayout
-                android:id="@+id/rl_downloading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_app_label"
-                android:visibility="gone"
-                 >
+                android:gravity="center_vertical" >
 
                 <TextView
-                    android:id="@+id/tv_dl_progress"
+                    android:id="@+id/tv_app_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:textColor="@android:color/black" />
+                    android:textColor="#bdbdbd" />
 
-                <TextView
-                    android:id="@+id/tv_dl_percent"
+                <RelativeLayout
+                    android:id="@+id/rl_downloading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:textColor="@android:color/black" />
-                
-                <ProgressBar
-                    android:id="@+id/bar_downloading"
-                    style="@style/Custom.ProgressBar.Horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" 
-                    android:layout_below="@+id/tv_dl_progress"
-                    />
-                
-            </RelativeLayout>
-            <!-- no use -->
+                    android:visibility="gone" >
+
+                    <TextView
+                        android:id="@+id/tv_dl_percent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:textColor="@android:color/black"
+                        android:visibility="gone" />
+
+                    <ProgressBar
+                        android:id="@+id/bar_downloading"
+                        style="@style/Custom.ProgressBar.Horizontal"
+                        android:layout_width="100.0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="4.0dp"
+                        android:layout_alignParentLeft="true" />
+
+                    <TextView
+                        android:id="@+id/tv_dl_progress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/bar_downloading"
+                        android:textColor="@android:color/black" />
+                </RelativeLayout>
+            </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
 
@@ -115,8 +120,12 @@
         android:id="@+id/tv_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#d6d6d6"
-        android:text="This is a test text."
-        android:textColor="@android:color/black" />
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textSize="16.0sp"
+        android:textColor="@android:color/black" 
+        />
 
 </LinearLayout>

@@ -10,6 +10,9 @@ public class Conf {
     public final static String LOCAL_APP_DOWNLOAD_PATH = "/baiduApp";
     
     public final static String SHARED_PREFS_NAME = "dlapp";
+    public static final String KEY_NAME_DOWNLOAD_ID = "downloadId";
+    
+    public static final String URL_EX = "http://bcs.duapp.com/bccd1eyw7zka7zmyudununkbfgmbaas/";
     
     //request_code
     public final static int REQUEST_CODE1 = 2;

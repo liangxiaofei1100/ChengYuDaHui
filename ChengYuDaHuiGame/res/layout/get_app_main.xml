@@ -11,8 +11,8 @@
         android:layout_height="match_parent"
         android:focusable="false"
         android:divider="@null"
-        android:dividerHeight="10dp"
-        android:padding="10dp"
+        android:dividerHeight="8dp"
+        android:padding="8dp"
         android:listSelector="@android:color/transparent"
         ></ListView>
     

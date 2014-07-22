@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#faf3f3"
     >
     
     <ScrollView 
@@ -128,13 +129,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="#D5DAE0"
         >
+        
+        <Button 
+            android:id="@+id/ib_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="35.0dp"
+            android:background="@drawable/ps__button_digg"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
+            android:text="@android:string/cancel"
+            android:textSize="14.0sp"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            />
         
         <com.zhaoyan.common.progressbutton.SubmitProcessButton
             android:id="@+id/btn_d"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35.0dp"
             android:textColor="@android:color/white"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/ib_cancel"
+            android:layout_margin="5dp"
+            android:textSize="16.0sp"
+            android:gravity="center"
             />
         
     </RelativeLayout>

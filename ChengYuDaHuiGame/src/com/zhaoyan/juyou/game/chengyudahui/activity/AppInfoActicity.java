@@ -1,7 +1,6 @@
 package com.zhaoyan.juyou.game.chengyudahui.activity;
 
 import java.io.File;
-import java.text.DecimalFormat;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -12,14 +11,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,10 +30,11 @@ import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.AppInfo;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
+import com.zhaoyan.juyou.game.chengyudahui.frontia.DownloadUtils;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
 public class AppInfoActicity extends Activity implements OnClickListener {
-	private static final String TAG = "AppInfoActicity";
+	private static final String TAG = AppInfoActicity.class.getSimpleName();
 	
 	private AsyncImageView mAppIconView;
 	private TextView mAppNameView,mAppVersionView,mAppSizeView;
@@ -44,12 +43,12 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 	private TextView mAuthorView;
 	
 	private SubmitProcessButton mDLButton;
+	private Button mCancelBtn;
 	
 	private AppInfo mAppInfo;
 	
 	private DownloadManager mDownloadManager;
 	private DownloadManagerPro mDownloadManagerPro;
-	public static final String KEY_NAME_DOWNLOAD_ID = "downloadId";
 	
 	private DownloadChangeObserver mDownloadChangeObserver;
     private CompleteReceiver mCompleteReceiver;
@@ -57,8 +56,6 @@ public class AppInfoActicity extends Activity implements OnClickListener {
     private MyHandler myHandler;
     
     private long mDownloadId = 0;
-    
-    private static final String URL_EX = "http://bcs.duapp.com/bccd1eyw7zka7zmyudununkbfgmbaas/";
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +83,7 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 		mDownloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
 		mDownloadManagerPro = new DownloadManagerPro(mDownloadManager);
 		
-		mDownloadId = PreferencesUtils.getLong(getApplicationContext(), KEY_NAME_DOWNLOAD_ID);
+		mDownloadId = PreferencesUtils.getLong(getApplicationContext(), Conf.KEY_NAME_DOWNLOAD_ID);
 		
 		updateView();
 		
@@ -117,9 +114,12 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 		
 		mAppIconView.setDefaultImageResource(R.drawable.ic_launcher);
 		
+		mCancelBtn = (Button) findViewById(R.id.ib_cancel);
+		mCancelBtn.setOnClickListener(this);
+		
 		mDLButton = (SubmitProcessButton) findViewById(R.id.btn_d);
 		mDLButton.setOnClickListener(this);
-		mDLButton.setCompleteText("安装");
+		mDLButton.setCompleteText(getString(R.string.install));
 		
 		if (mAppInfo != null) {
 			mAppIconView.setPath(mAppInfo.getIconUrl());
@@ -139,16 +139,16 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 			
 			switch (mAppInfo.getStatus()) {
 			case Conf.DOWNLOADED:
-				mDLButton.setText("安装");
+				mDLButton.setText(R.string.install);
 				break;
 			case Conf.INSTALLED:
-				mDLButton.setText("打开");
+				mDLButton.setText(R.string.open);
 				break;
 			case Conf.NEED_UDPATE:
-				mDLButton.setText("更新");
+				mDLButton.setText(R.string.update);
 				break;
 			case Conf.NOT_DOWNLOAD:
-				mDLButton.setText("下载");
+				mDLButton.setText(R.string.download);
 				break;
 
 			default:
@@ -165,87 +165,62 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		int status = mAppInfo.getStatus();
-		switch (status) {
-		case Conf.DOWNLOADED:
-			String localPath = PreferencesUtils.getString(getApplicationContext(), mAppInfo.getPackageName(), null);
-			if (new File(localPath).exists()) {
-				APKUtil.installApp(getApplicationContext(), localPath);
-			} else {
-				preDownload(mAppInfo);
+		switch (v.getId()) {
+		case R.id.btn_d:
+			int status = mAppInfo.getStatus();
+			switch (status) {
+			case Conf.DOWNLOADED:
+				String localPath = PreferencesUtils.getString(getApplicationContext(), mAppInfo.getPackageName(), null);
+				if (new File(localPath).exists()) {
+					APKUtil.installApp(getApplicationContext(), localPath);
+				} else {
+					download();
+				}
+				break;
+			case Conf.INSTALLED:
+				String packagename = mAppInfo.getPackageName();
+				PackageManager pm = getPackageManager();
+				Intent intent = pm.getLaunchIntentForPackage(packagename);
+				if (null != intent) {
+					startActivity(intent);
+				} else {
+					Toast.makeText(getApplicationContext(),
+							"Cannot open this app", Toast.LENGTH_SHORT).show();
+				}
+				break;
+			case Conf.NEED_UDPATE:
+			case Conf.NOT_DOWNLOAD:
+				int progress = mDLButton.getProgress();
+				if (progress > 0 && progress < 100) {
+					mDLButton.setProgress(0);
+					mDLButton.setText("下载");
+					mDownloadManager.remove(mDownloadId);
+				} else {
+					download();
+				}
+				break;
+			default:
+				break;
 			}
 			break;
-		case Conf.INSTALLED:
-			String packagename = mAppInfo.getPackageName();
-			PackageManager pm = getPackageManager();
-			Intent intent = pm.getLaunchIntentForPackage(packagename);
-			if (null != intent) {
-				startActivity(intent);
-			} else {
-				Toast.makeText(getApplicationContext(),
-						"Cannot open this app", Toast.LENGTH_SHORT).show();
-			}
+		case R.id.ib_cancel:
+			mDLButton.setProgress(0);
+			mDLButton.setText("下载");
+			mDownloadManager.remove(mDownloadId);
+			
+			mCancelBtn.setVisibility(View.INVISIBLE);
 			break;
-		case Conf.NEED_UDPATE:
-		case Conf.NOT_DOWNLOAD:
-			int progress = mDLButton.getProgress();
-			if (progress > 0 && progress < 100) {
-				mDLButton.setProgress(0);
-				mDLButton.setText("下载");
-				mDownloadManager.remove(mDownloadId);
-			} else {
-				preDownload(mAppInfo);
-			}
-			break;
+
 		default:
 			break;
 		}
 	}
 	
-	public void preDownload(AppInfo appInfo){
-		String sdCardPathString = Environment.getExternalStorageDirectory().getPath();
-		if (!new File(sdCardPathString).exists()) {
-			new File(sdCardPathString).mkdirs();
-		}
-		long fileSize = appInfo.getAppSize();
-		long aviable = Utils.getAvailableBlockSize(sdCardPathString);
-		if (aviable <= fileSize) {
-			String fileSizeStr = Utils.getFormatSize(fileSize);
-			String availableStr = Utils.getFormatSize(aviable);
-			Toast.makeText(getApplicationContext(), "可用空间不足"
-					+ "\n" + "文件大小:" + fileSizeStr + "\n"
-					+ "可用空间:" + availableStr, Toast.LENGTH_SHORT).show();
-			return;
-		}
-		
-		String remotePathString = appInfo.getAppUrl();
-		Log.d(TAG, "remotePath:" + (URL_EX + remotePathString));
-		Uri downloadUri = Uri.parse(URL_EX + remotePathString);
-
-		int index = remotePathString.lastIndexOf('/');
-		String appName = remotePathString.substring(index + 1);
-		
-		String nativePath = sdCardPathString+Conf.LOCAL_APP_DOWNLOAD_PATH+"/" + appName;
-		Log.d(TAG, "nativePath:" + nativePath);
-		downloadFile(downloadUri, sdCardPathString + Conf.LOCAL_APP_DOWNLOAD_PATH, appName);
-	}
-
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	protected void downloadFile(Uri uri, String dir, String appName) {
-		Log.d(TAG, "ready to downloadFile,remote path:" + uri.getPath()
-				+ ",local path:" + (dir + "/" +  appName));
-		DownloadManager.Request request = new DownloadManager.Request(uri);
-        request.setDestinationInExternalPublicDir(Conf.LOCAL_APP_DOWNLOAD_PATH, appName);
-        request.setTitle("应用下载:" + appName);
-        request.setDescription("zhaoyan desc");
-        //下载完毕后，保留通知栏信息
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setVisibleInDownloadsUi(false);
-        request.setMimeType("application/com.chenyu.download.file");
-        mDownloadId = mDownloadManager.enqueue(request);
-        /** save download id to preferences **/
-        PreferencesUtils.putLong(getApplicationContext(), KEY_NAME_DOWNLOAD_ID, mDownloadId);
-        updateView();
+	private void download(){
+		mDLButton.setText(R.string.pre_download);
+		mCancelBtn.setVisibility(View.VISIBLE);
+		mDownloadId = DownloadUtils.downloadApp(getApplicationContext(), mDownloadManager, mAppInfo);
+		updateView();
 	}
 	
 	class DownloadChangeObserver extends ContentObserver {
@@ -324,34 +299,12 @@ public class AppInfoActicity extends Activity implements OnClickListener {
                         	Log.e(TAG, "download failed.reason:" + reason);
                         } else if (status == DownloadManager.STATUS_SUCCESSFUL) {
 //                        	ToastUtils.show(getApplicationContext(), "下载完成");
+                    		mCancelBtn.setVisibility(View.INVISIBLE);
                         } else {
                         }
                     }
                     break;
             }
-        }
-    }
-    
-    static final DecimalFormat DOUBLE_DECIMAL_FORMAT = new DecimalFormat("0.##");
-
-    public static final int    MB_2_BYTE             = 1024 * 1024;
-    public static final int    KB_2_BYTE             = 1024;
-
-    /**
-     * @param size
-     * @return
-     */
-    public static CharSequence getAppSize(long size) {
-        if (size <= 0) {
-            return "0M";
-        }
-
-        if (size >= MB_2_BYTE) {
-            return new StringBuilder(16).append(DOUBLE_DECIMAL_FORMAT.format((double)size / MB_2_BYTE)).append("M");
-        } else if (size >= KB_2_BYTE) {
-            return new StringBuilder(16).append(DOUBLE_DECIMAL_FORMAT.format((double)size / KB_2_BYTE)).append("K");
-        } else {
-            return size + "B";
         }
     }
 

@@ -2,8 +2,6 @@
 <resources>
 
     <string name="app_name">成语大会</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
     <string name="disconnect">断开连接</string>
     <string name="connect_friends">连朋友</string>
     <string name="search_ap_tips">在Wi-Fi热点创建的Wi-Fi局域网中与其他人互连。</string>
@@ -40,5 +38,10 @@
     <string name="app_version">版本：%1$s</string>
     <string name="app_size">大小：%1$s</string>
     <string name="app_author">%1$s出品</string>
+    <string name="download">下载</string>
+    <string name="install">安装</string>
+    <string name="update">更新</string>
+    <string name="open">打开</string>
+    <string name="pre_download">准备下载</string>
 
 </resources>
