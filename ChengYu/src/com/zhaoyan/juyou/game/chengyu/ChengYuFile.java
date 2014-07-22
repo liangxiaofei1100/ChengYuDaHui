@@ -86,7 +86,7 @@ public class ChengYuFile {
 					+ chengyu.comment + ChengYuFile.SEPERATOR_ORIGINAL
 					+ chengyu.original + ChengYuFile.SEPERATOR_EXAMPLE
 					+ chengyu.example + ChengYuFile.SEPERATOR_ENGLISH
-					+ chengyu.english + ChengYuFile.SEPERATOR_SIMILAR
+					+ chengyu.frequently + ChengYuFile.SEPERATOR_SIMILAR
 					+ chengyu.similar + ChengYuFile.SEPERATOR_OPPOSITE
 					+ chengyu.opposite + ChengYuFile.SEPERATOR_STORY
 					+ chengyu.story;
@@ -199,7 +199,7 @@ public class ChengYuFile {
 			}
 
 			if (subString.endsWith(SEPERATOR_ENGLISH)) {
-				chengyu.english = str;
+				chengyu.frequently = 0;
 			} else if (subString.endsWith(SEPERATOR_SIMILAR)) {
 				chengyu.similar = str;
 			} else if (subString.endsWith(SEPERATOR_OPPOSITE)) {

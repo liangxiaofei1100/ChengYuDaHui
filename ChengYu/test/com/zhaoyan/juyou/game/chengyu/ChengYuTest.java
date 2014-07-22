@@ -16,7 +16,7 @@ public class ChengYuTest {
 		assertEquals(chengYu.original,
 				"清·李汝珍《镜花缘》第九十回贫道今日幸把些尘垢全都拭净，此后是皓月当空，一无渣滓，诸位才女定是无往不利。");
 		assertEquals(chengYu.example, "无");
-		assertEquals(chengYu.english, "");
+		assertEquals(chengYu.frequently, "");
 		assertEquals(chengYu.similar, "");
 		assertEquals(chengYu.opposite, "");
 		assertEquals(chengYu.story, "");
@@ -35,7 +35,7 @@ public class ChengYuTest {
 		assertEquals(chengYu.comment, "多方面想了又想。");
 		assertEquals(chengYu.original, "明·冯梦龙《东周列国志》：“第八十八回左思右想，欲求自脱之计。”");
 		assertEquals(chengYu.example, "如此左思右想，一时五内沸然。出自：清·曹雪芹《红楼梦》第三十四回。");
-		assertEquals(chengYu.english, "think of this way and that");
+		assertEquals(chengYu.frequently, "think of this way and that");
 		assertEquals(chengYu.similar, "思前想后、冥思苦想、绞尽脑汁");
 		assertEquals(chengYu.opposite, "义无反顾、不假思索");
 		assertEquals(chengYu.story, "");

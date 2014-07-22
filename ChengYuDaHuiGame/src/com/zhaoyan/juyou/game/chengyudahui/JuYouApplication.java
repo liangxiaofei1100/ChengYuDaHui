@@ -1,31 +1,15 @@
 package com.zhaoyan.juyou.game.chengyudahui;
 
-import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 
-import com.baidu.android.pushservice.CustomPushNotificationBuilder;
-import com.baidu.android.pushservice.PushConstants;
-import com.baidu.android.pushservice.PushManager;
 import com.baidu.frontia.FrontiaApplication;
-import com.zhaoyan.common.net.NetWorkUtil;
-import com.zhaoyan.communication.FileTransferService;
-import com.zhaoyan.communication.ProtocolCommunication;
-import com.zhaoyan.communication.SocketCommunicationManager;
-import com.zhaoyan.communication.TrafficStatics;
-import com.zhaoyan.communication.UserManager;
-import com.zhaoyan.communication.connect.ServerConnector;
-import com.zhaoyan.communication.connect.ServerCreator;
-import com.zhaoyan.communication.search.SearchUtil;
-import com.zhaoyan.communication.search.ServerSearcher;
 import com.zhaoyan.communication.util.Log;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
 import com.zhaoyan.juyou.game.chengyudahui.push.PushUtils;
+import com.zhaoyan.juyou.game.chengyudahui.utils.ServiceUtil;
 
 public class JuYouApplication extends FrontiaApplication {
 	private static final String TAG = "JuYouApplication";
-	private static boolean mIsInit = false;
 
 	@Override
 	public void onCreate() {
@@ -43,85 +27,25 @@ public class JuYouApplication extends FrontiaApplication {
 	 * @param context
 	 */
 	public static synchronized void initApplication(Context context) {
-		if (mIsInit) {
-			return;
-		}
 		Log.d(TAG, "initApplication");
-		mIsInit = true;
 
-		// Start save log to file.
-		Log.startSaveToFile();
-		// Initialize TrafficStatics
-		TrafficStatics.getInstance().init(context);
-		// Initialize SocketCommunicationManager
-		SocketCommunicationManager.getInstance().init(context);
-		// Initialize ProtocolCommunication
-		ProtocolCommunication.getInstance().init(context);
-		//bind baidu push service
+		// bind baidu push service
 		PushUtils.startBind(context);
+
+		if (ServiceUtil.isServiceRunning(context, JuYouService.class.getName())) {
+			Log.d(TAG, "Service is already running.");
+		} else {
+			Log.d(TAG, "Service is not running.");
+			Intent intent = new Intent(JuYouService.ACTION_START_COMMUNICATION);
+			intent.setClass(context, JuYouService.class);
+			context.startService(intent);
+		}
 	}
 
 	public static synchronized void quitApplication(Context context) {
-		if (!mIsInit) {
-			return;
-		}
 		Log.d(TAG, "quitApplication");
-		mIsInit = false;
-		logout(context);
-		stopServerSearch(context);
-		stopServerCreator(context);
-		stopCommunication(context);
-		stopFileTransferService(context);
-		// Release ProtocolCommunication
-		ProtocolCommunication.getInstance().release();
-		// Release SocketCommunicationManager
-		SocketCommunicationManager.getInstance().release();
-		// Release TrafficStatics
-		TrafficStatics.getInstance().quit();
-		// Stop record log and close log file.
-		Log.stopAndSave();
-		releaseStaticInstance(context);
-	}
-
-	private static void logout(Context context) {
-		ProtocolCommunication protocolCommunication = ProtocolCommunication
-				.getInstance();
-		protocolCommunication.logout();
-	}
-
-	private static void releaseStaticInstance(Context context) {
-		ServerConnector serverConnector = ServerConnector.getInstance(context);
-		serverConnector.release();
-	}
-
-	private static void stopServerCreator(Context context) {
-		ServerCreator serverCreator = ServerCreator.getInstance(context);
-		serverCreator.stopServer();
-		serverCreator.release();
-	}
-
-	private static void stopServerSearch(Context context) {
-		ServerSearcher serverSearcher = ServerSearcher.getInstance(context);
-		serverSearcher.stopSearch(ServerSearcher.SERVER_TYPE_ALL);
-		serverSearcher.release();
-	}
-
-	private static void stopFileTransferService(Context context) {
-		Intent intent = new Intent();
-		intent.setClass(context, FileTransferService.class);
-		context.stopService(intent);
-	}
-
-	private static void stopCommunication(Context context) {
-		UserManager.getInstance().resetLocalUser();
-		SocketCommunicationManager manager = SocketCommunicationManager
-				.getInstance();
-		manager.closeAllCommunication();
-		manager.stopServer();
-
-		// Disable wifi AP.
-		NetWorkUtil.setWifiAPEnabled(context, null, false);
-		// Clear wifi connect history.
-		SearchUtil.clearWifiConnectHistory(context);
+		Intent intent = new Intent(JuYouService.ACTION_STOP_COMMUNICATION);
+		intent.setClass(context, JuYouService.class);
+		context.startService(intent);
 	}
 }

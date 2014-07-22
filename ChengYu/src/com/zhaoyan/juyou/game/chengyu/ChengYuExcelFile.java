@@ -35,8 +35,8 @@ public class ChengYuExcelFile {
 	private static final String COLUMN_EXAMPLE = "示例";
 	private static final int COLUMN_EXAMPLE_INDEX = 4;
 
-	private static final String COLUMN_ENGLISH = "英译";
-	private static final int COLUMN_ENGLISH_INDEX = 5;
+	private static final String COLUMN_FREQUENTLY = "百科链接";
+	private static final int COLUMN_FREQUENTLY_INDEX = 5;
 
 	private static final String COLUMN_SIMILAR = "近义词";
 	private static final int COLUMN_SIMILAR_INDEX = 6;
@@ -77,17 +77,33 @@ public class ChengYuExcelFile {
 				cell = row.getCell(COLUMN_COMMENT_INDEX);
 				chengYu.comment = cell.getStringCellValue();
 				cell = row.getCell(COLUMN_ORIGINAL_INDEX);
-				chengYu.original = cell.getStringCellValue();
+				if (cell != null) {
+					chengYu.original = cell.getStringCellValue();
+				}
 				cell = row.getCell(COLUMN_EXAMPLE_INDEX);
-				chengYu.example = cell.getStringCellValue();
-				cell = row.getCell(COLUMN_ENGLISH_INDEX);
-				chengYu.english = cell.getStringCellValue();
+				if (cell != null) {
+					chengYu.example = cell.getStringCellValue();
+				}
+				cell = row.getCell(COLUMN_FREQUENTLY_INDEX);
+				System.out.println("row: " + i + ", chengyu = " + chengYu.name);
+				if (cell == null
+						|| cell.getStringCellValue().trim().length() == 0) {
+					chengYu.frequently = 0;
+				} else {
+					chengYu.frequently = 1;
+				}
 				cell = row.getCell(COLUMN_SIMILAR_INDEX);
-				chengYu.similar = cell.getStringCellValue();
+				if (cell != null) {
+					chengYu.similar = cell.getStringCellValue();
+				}
 				cell = row.getCell(COLUMN_OPPOSITE_INDEX);
-				chengYu.opposite = cell.getStringCellValue();
+				if (cell != null) {
+					chengYu.opposite = cell.getStringCellValue();
+				}
 				cell = row.getCell(COLUMN_STORY_INDEX);
-				chengYu.story = cell.getStringCellValue();
+				if (cell != null) {
+					chengYu.story = cell.getStringCellValue();
+				}
 				chengYuList.add(chengYu);
 			}
 		} catch (IOException e) {
@@ -116,8 +132,8 @@ public class ChengYuExcelFile {
 		cell.setCellValue(COLUMN_ORIGINAL);
 		cell = row.createCell(COLUMN_EXAMPLE_INDEX);
 		cell.setCellValue(COLUMN_EXAMPLE);
-		cell = row.createCell(COLUMN_ENGLISH_INDEX);
-		cell.setCellValue(COLUMN_ENGLISH);
+		cell = row.createCell(COLUMN_FREQUENTLY_INDEX);
+		cell.setCellValue(COLUMN_FREQUENTLY);
 		cell = row.createCell(COLUMN_SIMILAR_INDEX);
 		cell.setCellValue(COLUMN_SIMILAR);
 		cell = row.createCell(COLUMN_OPPOSITE_INDEX);
@@ -138,8 +154,8 @@ public class ChengYuExcelFile {
 			cell.setCellValue(chengYu.original);
 			cell = row.createCell(COLUMN_EXAMPLE_INDEX);
 			cell.setCellValue(chengYu.example);
-			cell = row.createCell(COLUMN_ENGLISH_INDEX);
-			cell.setCellValue(chengYu.english);
+			cell = row.createCell(COLUMN_FREQUENTLY_INDEX);
+			cell.setCellValue(chengYu.frequently);
 			cell = row.createCell(COLUMN_SIMILAR_INDEX);
 			cell.setCellValue(chengYu.similar);
 			cell = row.createCell(COLUMN_OPPOSITE_INDEX);

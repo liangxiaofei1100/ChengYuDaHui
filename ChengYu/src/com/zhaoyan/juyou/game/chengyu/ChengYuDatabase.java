@@ -74,14 +74,11 @@ public class ChengYuDatabase {
 	private ChengYu readChengYu(ResultSet resultSet) throws SQLException {
 		ChengYu chengYu = new ChengYu();
 		chengYu.comment = resultSet.getString(ChengYuTable.INDEX_COMMENT);
-		chengYu.english = resultSet.getString(ChengYuTable.INDEX_ENGLISH);
+		chengYu.frequently = resultSet.getInt(ChengYuTable.INDEX_FREQUENTLY);
 		chengYu.example = resultSet.getString(ChengYuTable.INDEX_EXAMPLE);
 		chengYu.name = resultSet.getString(ChengYuTable.INDEX_NAME);
-		chengYu.opposite = resultSet.getString(ChengYuTable.INDEX_OPPOSITE);
 		chengYu.original = resultSet.getString(ChengYuTable.INDEX_ORIGINAL);
 		chengYu.pinyin = resultSet.getString(ChengYuTable.INDEX_PINYIN);
-		chengYu.similar = resultSet.getString(ChengYuTable.INDEX_SIMILAR);
-		chengYu.story = resultSet.getString(ChengYuTable.INDEX_STORY);
 		return chengYu;
 	}
 
@@ -92,10 +89,13 @@ public class ChengYuDatabase {
 		sql = "insert into " + ChengYuDatabase.ChengYuTable.TABLE_NAME
 				+ " values(" + id + ", '" + chengYu.name + "','"
 				+ chengYu.pinyin + "','" + chengYu.comment + "','"
-				+ chengYu.original + "','" + chengYu.example + "','"
-				+ chengYu.english + "','" + chengYu.similar + "','"
-				+ chengYu.opposite + "','" +chengYu.story +"');";
-		statement.execute(sql);
+				+ chengYu.original + "','" + chengYu.example + "',"
+				+ chengYu.frequently + ");";
+		try {
+			statement.execute(sql);
+		} catch (Exception e) {
+			System.err.println("error sql = " + sql);
+		}
 	}
 
 	public Connection getConnection() {
@@ -145,17 +145,8 @@ public class ChengYuDatabase {
 		public static final String EXAMPLE = "example";
 		public static final int INDEX_EXAMPLE = 6;
 
-		public static final String ENGLISH = "english";
-		public static final int INDEX_ENGLISH = 7;
-
-		public static final String SIMILAR = "similar";
-		public static final int INDEX_SIMILAR = 8;
-
-		public static final String OPPOSITE = "opposite";
-		public static final int INDEX_OPPOSITE = 9;
-		
-		public static final String STORY = "story";
-		public static final int INDEX_STORY = 10;
+		public static final String FREQUENTLY = "frequently";
+		public static final int INDEX_FREQUENTLY = 7;
 
 		/**
 		 * create table SQL.
@@ -166,8 +157,8 @@ public class ChengYuDatabase {
 			return "create table " + TABLE_NAME
 					+ " ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME
 					+ " TEXT, " + PINYIN + " TEXT, " + COMMENT + " TEXT, "
-					+ ORIGINAL + " TEXT, " + EXAMPLE + " TEXT, " + ENGLISH
-					+ " TEXT, " + SIMILAR + " TEXT, " + OPPOSITE + " TEXT, " + STORY + " TEXT);";
+					+ ORIGINAL + " TEXT, " + EXAMPLE + " TEXT, " + FREQUENTLY
+					+ " INTEGER);";
 		}
 
 	}
