@@ -79,6 +79,7 @@ public class ChengYuDatabase {
 		chengYu.name = resultSet.getString(ChengYuTable.INDEX_NAME);
 		chengYu.original = resultSet.getString(ChengYuTable.INDEX_ORIGINAL);
 		chengYu.pinyin = resultSet.getString(ChengYuTable.INDEX_PINYIN);
+		chengYu.caici = resultSet.getInt(ChengYuTable.INDEX_CAICI);
 		return chengYu;
 	}
 
@@ -90,7 +91,7 @@ public class ChengYuDatabase {
 				+ " values(" + id + ", '" + chengYu.name + "','"
 				+ chengYu.pinyin + "','" + chengYu.comment + "','"
 				+ chengYu.original + "','" + chengYu.example + "',"
-				+ chengYu.frequently + ");";
+				+ chengYu.frequently + "," + chengYu.caici + ");";
 		try {
 			statement.execute(sql);
 		} catch (Exception e) {
@@ -148,6 +149,9 @@ public class ChengYuDatabase {
 		public static final String FREQUENTLY = "frequently";
 		public static final int INDEX_FREQUENTLY = 7;
 
+		public static final String CAICI = "caici";
+		public static final int INDEX_CAICI = 8;
+
 		/**
 		 * create table SQL.
 		 * 
@@ -158,7 +162,7 @@ public class ChengYuDatabase {
 					+ " ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME
 					+ " TEXT, " + PINYIN + " TEXT, " + COMMENT + " TEXT, "
 					+ ORIGINAL + " TEXT, " + EXAMPLE + " TEXT, " + FREQUENTLY
-					+ " INTEGER);";
+					+ " INTEGER, " + CAICI + " INTEGER);";
 		}
 
 	}
