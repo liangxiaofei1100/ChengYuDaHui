@@ -25,6 +25,8 @@ public class ChengyuData {
 		public static final String SIMILAR = "similar";
 
 		public static final String OPPOSITE = "opposite";
+		public static final String FREQUENTLY = "frequently";
+		public static final String CAICI = "caici";
 
 		public static final String STORY = "story";
 		public static final Uri CONTENT_URI = Uri.parse("content://"

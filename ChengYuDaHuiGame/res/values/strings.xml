@@ -36,5 +36,11 @@
     <string name="referee">裁判员</string>
     <string name="actor">表演者</string>
     <string name="observer">观察者</string>
+    <string name="speak_game_time">游戏时间</string>
+    <string name="speak_right_number">正确个数</string>
+    <string name="speak_wrong_number">错误个数</string>
+    <string name="speak_pass_number">略过个数</string>
+    <string name="speak_game_rule_setting">游戏规则设定</string>
+    <string name="speak_game_number_unit">个</string>
 
 </resources>

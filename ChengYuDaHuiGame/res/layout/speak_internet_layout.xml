@@ -10,6 +10,7 @@
         android:layout_height="match_parent" >
 
         <TextView
+            android:id="@+id/loading_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -17,6 +18,115 @@
             android:layout_marginBottom="30dip"
             android:text="@string/game_loading"
             android:textSize="40sp" />
+
+        <LinearLayout
+            android:id="@+id/setting_rule_speak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dip"
+                android:text="@string/speak_game_rule_setting"
+                android:textSize="25sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/speak_right_number"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/speak_right_number_edit"
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="@string/speak_game_number_unit"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/speak_pass_number"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/speak_pass_number_edit"
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="@string/speak_game_number_unit"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/speak_wrong_number"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/speak_wrong_number_edit"
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="@string/speak_game_number_unit"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/speak_game_time"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/speak_time_setting_edit"
+                    android:layout_width="100dip"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="@string/setting_time_unit"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/rule_start"
+                android:layout_width="150dip"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dip"
+                android:gravity="center"
+                android:text="@string/start_game" />
+        </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout
@@ -26,12 +136,12 @@
         android:visibility="gone" >
 
         <TextView
-            android:visibility="gone"
-            android:textSize="25sp"
-            android:layout_centerInParent="true"
             android:id="@+id/info"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="25sp"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/referee_internet_game"

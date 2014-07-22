@@ -61,7 +61,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 	private List<Point> tempList;
 	private boolean isMain = true, drawLine = true;
 	private Path mPath;
-	private final int BACKGROUND_COLOR=Color.GRAY;
+	private final int BACKGROUND_COLOR = Color.GRAY;
 
 	private class Operator {
 		private List<Point> pointLists;
@@ -231,9 +231,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 				ChengyuColums.CONTENT_URI,
 				new String[] { ChengyuColums.NAME, ChengyuColums.PINYIN,
 						ChengyuColums.COMMENT, ChengyuColums.ORIGINAL,
-						ChengyuColums.EXAMPLE, ChengyuColums.ENGLISH,
-						ChengyuColums.SIMILAR, ChengyuColums.OPPOSITE },
-				"_id = " + id, null, null);
+						ChengyuColums.EXAMPLE }, "_id = " + id, null, null);
 		if (cursor != null) {
 			if (cursor.moveToNext()) {
 				Map<String, String> map = new HashMap<String, String>();
@@ -242,9 +240,6 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 				map.put(ChengyuColums.COMMENT, cursor.getString(2));
 				map.put(ChengyuColums.ORIGINAL, cursor.getString(3));
 				map.put(ChengyuColums.EXAMPLE, cursor.getString(4));
-				map.put(ChengyuColums.ENGLISH, cursor.getString(5));
-				map.put(ChengyuColums.SIMILAR, cursor.getString(6));
-				map.put(ChengyuColums.OPPOSITE, cursor.getString(7));
 				cursor.close();
 				return map;
 			}
@@ -365,6 +360,11 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 			secondPoint = new Point();
 		secondPoint.x = event.getX();
 		secondPoint.y = event.getY();
+		float x = Math.abs(secondPoint.x - firstPoint.x);
+		float y = Math.abs(secondPoint.y - firstPoint.y);
+		if (x < 2 && y < 2) {
+			return;
+		}
 		mCanvas.drawLine(firstPoint.x, firstPoint.y, secondPoint.x,
 				secondPoint.y, mPaint);
 		// mCanvas.drawPath(mPath, mPaint);
@@ -392,7 +392,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 			firstPoint.y = secondPoint.y;
 			secondPoint.x = thirdPoint.x;
 			secondPoint.y = thirdPoint.y;
-//			mPath.reset();
+			// mPath.reset();
 			mPath.moveTo(firstPoint.x, firstPoint.y);
 			mPaintImage.setImageBitmap(mPaintBitmap);
 		}
