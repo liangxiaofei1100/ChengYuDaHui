@@ -37,8 +37,10 @@ public class JuYouService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.d(TAG, "onStartCommand action = " + intent.getAction());
-		handlerIntent(intent);
+		if (intent != null) {
+			Log.d(TAG, "onStartCommand action = " + intent.getAction());
+			handlerIntent(intent);
+		}
 		return super.onStartCommand(intent, flags, startId);
 	}
 
