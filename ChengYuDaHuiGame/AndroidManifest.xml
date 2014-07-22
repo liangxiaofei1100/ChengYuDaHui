@@ -27,11 +27,21 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.MainActivity"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.LauncherActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/LauncherTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityTheme" >
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.CommunicationTestActivity"
@@ -171,7 +181,7 @@
         </service>
         <!-- push结束 -->
         <!-- baidu push end -->
-        <service android:name="com.zhaoyan.juyou.game.chengyudahui.JuYouService"/>
+        <service android:name="com.zhaoyan.juyou.game.chengyudahui.JuYouService" />
     </application>
 
     <!-- Frontia permission start -->
