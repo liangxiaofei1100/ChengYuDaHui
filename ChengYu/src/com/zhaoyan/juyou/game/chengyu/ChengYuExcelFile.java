@@ -20,6 +20,8 @@ public class ChengYuExcelFile {
 	private XSSFWorkbook mWorkbook;
 	private static final String SHEET_CHENGYU = "成语";
 
+	private static final String SHEET_CAICI = "猜词";
+
 	private static final String COLUMN_NAME = "成语";
 	private static final int COLUMN_NAME_INDEX = 0;
 
@@ -49,6 +51,43 @@ public class ChengYuExcelFile {
 
 	public ChengYuExcelFile() {
 
+	}
+
+	public ArrayList<String> readAllCaiCi(String filePath) {
+		ArrayList<String> caiciList = new ArrayList<>();
+		FileInputStream inputStream;
+		try {
+			inputStream = new FileInputStream(new File(filePath));
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+			return null;
+		}
+
+		try {
+			mWorkbook = new XSSFWorkbook(inputStream);
+			XSSFSheet sheet = mWorkbook.getSheet(SHEET_CAICI);
+			XSSFRow row;
+			XSSFCell cell;
+			for (int i = sheet.getFirstRowNum() + 1; i < sheet
+					.getPhysicalNumberOfRows(); i++) {
+				row = sheet.getRow(i);
+				cell = row.getCell(0);
+				String chengyu = cell.getStringCellValue();
+				caiciList.add(chengyu);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return caiciList;
 	}
 
 	public ArrayList<ChengYu> readAll(String filePath) {
@@ -85,7 +124,6 @@ public class ChengYuExcelFile {
 					chengYu.example = cell.getStringCellValue();
 				}
 				cell = row.getCell(COLUMN_FREQUENTLY_INDEX);
-				System.out.println("row: " + i + ", chengyu = " + chengYu.name);
 				if (cell == null
 						|| cell.getStringCellValue().trim().length() == 0) {
 					chengYu.frequently = 0;
@@ -108,6 +146,14 @@ public class ChengYuExcelFile {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		return chengYuList;

@@ -10,10 +10,11 @@ public class ChengYu {
 	String opposite = "";
 	String similar = "";
 	String story = "";
+	int caici = 0;
 
 	public ChengYu(String name, String pinyin, String comment, String original,
 			String example, int frequently, String opposite, String similar,
-			String story) {
+			String story, int isCaici) {
 		this.name = name;
 		this.pinyin = pinyin;
 		this.comment = comment;
@@ -23,18 +24,11 @@ public class ChengYu {
 		this.opposite = opposite;
 		this.similar = similar;
 		this.story = story;
+		this.caici = isCaici;
 	}
 
 	public ChengYu() {
 
-	}
-
-	@Override
-	public String toString() {
-		return "ChengYu [name=" + name + ", pinyin=" + pinyin + ", comment="
-				+ comment + ", original=" + original + ", example=" + example
-				+ ", frequently=" + frequently + ", opposite=" + opposite
-				+ ", similar=" + similar + ", story=" + story + "]";
 	}
 
 }
