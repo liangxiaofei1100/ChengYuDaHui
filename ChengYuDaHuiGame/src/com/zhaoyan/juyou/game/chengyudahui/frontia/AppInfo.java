@@ -34,6 +34,8 @@ public class AppInfo implements Parcelable {
 	private int percent;
 
 	private String localPath;
+	
+	private long downloadId;
 
 	public AppInfo() {
 	}
@@ -245,6 +247,14 @@ public class AppInfo implements Parcelable {
 	public String getAppLocalPath() {
 		return localPath;
 	}
+	
+	public void setDownloadId(long downloadId){
+		this.downloadId = downloadId;
+	}
+	
+	public long getDownloadId(){
+		return downloadId;
+	}
 
 	public static AppInfo parseJson(JSONObject jsonObject) {
 		AppInfo appInfo = null;
@@ -360,6 +370,7 @@ public class AppInfo implements Parcelable {
 		dest.writeLong(progressBytes);
 		dest.writeInt(percent);
 		dest.writeString(localPath);
+		dest.writeLong(downloadId);
 	}
 
 	public void readFromParcel(Parcel in) {
@@ -384,6 +395,7 @@ public class AppInfo implements Parcelable {
 		progressBytes = in.readLong();
 		percent = in.readInt();
 		localPath = in.readString();
+		downloadId = in.readLong();
 	}
 
 }

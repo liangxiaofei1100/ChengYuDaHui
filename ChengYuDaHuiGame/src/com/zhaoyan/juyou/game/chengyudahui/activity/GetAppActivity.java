@@ -2,7 +2,10 @@ package com.zhaoyan.juyou.game.chengyudahui.activity;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,7 +15,6 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.DownloadManager;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,9 +23,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
@@ -33,11 +33,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.baidu.frontia.Frontia;
-import com.baidu.frontia.FrontiaFile;
-import com.baidu.frontia.api.FrontiaStorage;
-import com.baidu.frontia.api.FrontiaStorageListener.FileProgressListener;
-import com.baidu.frontia.api.FrontiaStorageListener.FileTransferListener;
 import com.zhaoyan.common.file.APKUtil;
 import com.zhaoyan.common.util.DownloadManagerPro;
 import com.zhaoyan.common.util.PreferencesUtils;
@@ -48,21 +43,17 @@ import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.bae.GetAppInfoBae;
 import com.zhaoyan.juyou.bae.GetAppInfoResultListener;
 import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.activity.AppInfoActicity.DownloadChangeObserver;
 import com.zhaoyan.juyou.game.chengyudahui.adapter.GetAppAdapter;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.AppInfo;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.DownloadUtils;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.GetAppListener;
-import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
 public class GetAppActivity extends ListActivity implements OnItemClickListener {
 	private static final String TAG = "GetAppActivity";
 	private ListView mListView;
 
 	private GetAppAdapter mAdapter;
-	private FrontiaStorage mCloudStorage;
-	private String lastDownloadApk;
 
 	private AppReceiver mAppReceiver = null;
 	
@@ -71,7 +62,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 	
 	private DownloadChangeObserver mDownloadChangeObserver;
 	
-	private long mDownloadId = 0;
+	private HashMap<Long, Integer> mIdMaps = new HashMap<Long, Integer>();
 
 	private GetAppListener getAppListener = new GetAppListener() {
 
@@ -93,8 +84,9 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 			Bundle bundle = null;
 			bundle = msg.getData();
 			AppInfo appInfo = null;
+			int position = -1;
 			if (bundle != null) {
-				int position = bundle.getInt(GetAppListener.KEY_ITEM_POSITION);
+				position = bundle.getInt(GetAppListener.KEY_ITEM_POSITION);
 				Log.d(TAG, "handlerMessage.position=" + position);
 				appInfo = mAppList.get(position);
 			} else {
@@ -103,10 +95,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 
 			switch (msg.what) {
 			case GetAppListener.MSG_STOP_DOWNLOAD:
-				stopDownload(appInfo);
-				appInfo.setStatus(Conf.NOT_DOWNLOAD);
-				appInfo.setProgressBytes(0);
-				appInfo.setPercent(0);
+				showCancelDownloadDialog(appInfo);
 				break;
 			case GetAppListener.MSG_START_DOWNLOAD:
 			case GetAppListener.MSG_UPDATE_APP:
@@ -116,7 +105,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 
 				mAdapter.notifyDataSetChanged();
 
-				startDownload(appInfo);
+				download(appInfo, position);
 				break;
 			case GetAppListener.MSG_UPDATE_UI:
 				mAdapter.notifyDataSetChanged();
@@ -133,7 +122,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 
 					mAdapter.notifyDataSetChanged();
 
-					startDownload(appInfo);
+					download(appInfo, position);
 				}
 				break;
 			case GetAppListener.MSG_OPEN_APP:
@@ -181,9 +170,6 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.get_app_main);
-		Frontia.init(this.getApplicationContext(), Conf.APIKEY);
-		mCloudStorage = Frontia.getStorage();
-
 		setTitle("应用下载");
 
 		mAppReceiver = new AppReceiver();
@@ -218,51 +204,9 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 				true, mDownloadChangeObserver);
 	}
 
-	public void startDownload(AppInfo appInfo) {
-		String localPath = DownloadUtils.getLocalFilePath(getApplicationContext(), appInfo.getAppSize(), appInfo.getAppUrl());
-		if (localPath == null) {
-			return;
-		}
-		
-		String sdCardPathString = Environment.getExternalStorageDirectory()
-				.getPath();
-
-		String remotePathString = appInfo.getAppUrl();
-		FrontiaFile file = new FrontiaFile();
-		Log.d(TAG, "remotePath:" + remotePathString);
-		file.setRemotePath(remotePathString);
-
-		int index = remotePathString.lastIndexOf('/');
-		String appName = remotePathString.substring(index + 1);
-		
-		String localDir = sdCardPathString + Conf.LOCAL_APP_DOWNLOAD_PATH;
-		if (!new File(localDir).exists()) {
-			new File(localDir).mkdirs();
-		}
-		
-		String nativePath = sdCardPathString+Conf.LOCAL_APP_DOWNLOAD_PATH+"/" + appName;
-		Log.d(TAG, "nativePath:" + nativePath);
-		file.setNativePath(nativePath);
-		downloadFile(appInfo, file);
-	}
-
 	public void stopDownload(AppInfo appInfo) {
-		String sdCardPathString = Environment.getExternalStorageDirectory()
-				.getPath();
-
-		String remotePathString = appInfo.getAppUrl();
-		FrontiaFile file = new FrontiaFile();
-		Log.d(TAG, "remotePath:" + remotePathString);
-		file.setRemotePath(remotePathString);
-
-		int index = remotePathString.lastIndexOf('/');
-		String appName = remotePathString.substring(index + 1);
-		String nativePath = sdCardPathString + Conf.LOCAL_APP_DOWNLOAD_PATH
-				+ "/" + appName;
-		Log.d(TAG, "nativePath:" + nativePath);
-		file.setNativePath(nativePath);
-
-		mCloudStorage.stopTransferring(file);
+		Log.d(TAG, "stopDownload.id:" + appInfo.getDownloadId());
+		mDownloadManager.remove(appInfo.getDownloadId());
 	}
 
 	private List<AppInfo> mAppList = new ArrayList<AppInfo>();
@@ -329,64 +273,26 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 		});
 	}
 
-	double prev = 0;
-
-	protected void downloadFile(final AppInfo appInfo, final FrontiaFile mFile) {
-
-		Log.d(TAG, "ready to downloadFile,remote path:" + mFile.getRemotePath()
-				+ ",local path:" + mFile.getNativePath());
-		prev = 0;
-		mCloudStorage.downloadFile(mFile, new FileProgressListener() {
-			@Override
-			public void onProgress(String source, long bytes, long total) {
-//				Log.d(TAG, "downloading..." + bytes);
-				// String dlMsg = "正在下载:" + source;
-				int percent = (int) (bytes * 100 / total);
-//				Log.d(TAG, "prev=" + prev + ",percent=" + percent);
-				if (prev != percent) {
-					appInfo.setProgressBytes(bytes);
-					appInfo.setPercent(percent);
-					mHandler.sendMessage(mHandler
-							.obtainMessage(GetAppListener.MSG_UPDATE_UI));
-					prev = percent;
-				}
-			}
-
-		}, new FileTransferListener() {
-			@Override
-			public void onSuccess(String source, String newTargetName) {
-				Log.d(TAG, "======onSuccess======");
-				lastDownloadApk = newTargetName;
-				Log.d(TAG, "Local File:" + newTargetName + ",Clound File:"
-						+ source);
-				// showInstallDialog();
-				appInfo.setStatus(Conf.DOWNLOADED);
-				appInfo.setAppLocalPath(newTargetName);
-				mAdapter.notifyDataSetChanged();
-				PreferencesUtils.putString(getApplicationContext(), appInfo.getPackageName(), newTargetName);
-				// key:app package name,value:app local file path
-				APKUtil.installApp(getApplicationContext(), newTargetName);
-			}
-
-			@Override
-			public void onFailure(String source, int errCode, String errMsg) {
-				Log.e(TAG, "onFailure.Error:" + source + ",errCode:" + errCode
-						+ "errMsg:" + errMsg);
-				Toast.makeText(GetAppActivity.this, "应用下载失败！",
-						Toast.LENGTH_LONG).show();
-			}
-
-		});
+	private void download(AppInfo appInfo, int position){
+		Log.d(TAG, "download.label:" + appInfo.getLabel() + ",position:" + position);
+		long downloadId = DownloadUtils.downloadApp(getApplicationContext(), mDownloadManager, appInfo);
+		appInfo.setDownloadId(downloadId);
+		mIdMaps.put(downloadId, position);
 	}
+	
 
-	protected void showCancelDownloadDialog(final FrontiaFile file) {
+	protected void showCancelDownloadDialog(final AppInfo appInfo) {
 		AlertDialog.Builder builder = new Builder(GetAppActivity.this);
-		builder.setMessage("确定取消下载:" + file.getRemotePath());
+		builder.setMessage("将取消下载:" + appInfo.getLabel());
 		builder.setTitle("停止下载");
 		builder.setPositiveButton("确定", new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
-				mCloudStorage.stopTransferring(file);
+				stopDownload(appInfo);
+				appInfo.setStatus(Conf.NOT_DOWNLOAD);
+				appInfo.setProgressBytes(0);
+				appInfo.setPercent(0);
+				mAdapter.notifyDataSetChanged();
 			}
 		});
 		builder.setNegativeButton("取消", null);
@@ -418,9 +324,42 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
     }
 
     public void updateView() {
-        int[] bytesAndStatus = mDownloadManagerPro.getBytesAndStatus(mDownloadId);
-        mHandler.sendMessage(mHandler.obtainMessage(GetAppListener.MSG_DOWNLOAD_COMPLETE, 
-        		bytesAndStatus[0], bytesAndStatus[1], bytesAndStatus[2]));
+    	int[] bytesAndStatus = null;
+    	int status = -1;
+    	long downloadId = -1;
+    	int position = -1;
+    	AppInfo appInfo = null;
+    	int percent = 0;
+    	long progressBytes = 0;
+    	Set<Long> keys = mIdMaps.keySet();
+    	Iterator<Long> iterator = keys.iterator();
+    	while (iterator.hasNext()) {
+			downloadId = iterator.next();
+			Log.d(TAG, "downloadid:"  + downloadId);
+			position = mIdMaps.get(downloadId);
+			Log.d(TAG, "position:" + position);
+			bytesAndStatus = mDownloadManagerPro.getBytesAndStatus(downloadId);
+			appInfo = mAppList.get(position);
+			
+			status = bytesAndStatus[2];
+			
+			if (AppInfoActicity.isDownloading(status)) {
+				progressBytes = bytesAndStatus[0];
+				percent = AppInfoActicity.getProgress(bytesAndStatus[0], bytesAndStatus[1]);
+				appInfo.setProgressBytes(progressBytes);
+				appInfo.setPercent(percent);
+				mHandler.sendMessage(mHandler.obtainMessage(GetAppListener.MSG_UPDATE_UI));
+			} else {
+				if (status == DownloadManager.STATUS_FAILED) {
+                	int reason = mDownloadManagerPro.getReason(downloadId);
+                	Log.e(TAG, "download failed.reason:" + reason);
+                } else if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                	Log.d(TAG, "Download Successful");
+                } else {
+                	Log.d(TAG, "Other status:" + status);
+                }
+			}
+		}
     }
 
 	class AppReceiver extends BroadcastReceiver {
@@ -447,25 +386,46 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 				}
 			} else if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
         		long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-                String localFileName = mDownloadManagerPro.getFileName(mDownloadId);
+        		if (!mIdMaps.containsKey(completeDownloadId)) {
+					//if the completeDownloadId is not my id,ignore
+        			return;
+				}
+        		AppInfo appInfo = mAppList.get(getPosition(completeDownloadId));
+        		Log.d(TAG, "complteteid" + completeDownloadId);
+                String localFileName = mDownloadManagerPro.getFileName(completeDownloadId);
+                appInfo.setAppLocalPath(localFileName);
                 Log.d(TAG, "localFileName:" + localFileName);
-                Log.d(TAG, "completeDownloadId:" + completeDownloadId + ",mDOwnloadId:" + mDownloadId);
-                if (completeDownloadId == mDownloadId) {
-//                    initData();
-                    updateView();
-                    // if download successful, install apk
-                    int status = mDownloadManagerPro.getStatusById(mDownloadId);
-                    Log.d(TAG, "status:" +  status);
-                    if ( status == DownloadManager.STATUS_SUCCESSFUL) {
-//                    	PreferencesUtils.putString(getApplicationContext(), mAppInfo.getPackageName(), localFileName);
-//                    	mAppInfo.setStatus(Conf.DOWNLOADED);
-                    	APKUtil.installApp(context, localFileName);
-                    }
-                }
+                updateView();
+                mIdMaps.remove(completeDownloadId);
+                
+             // if download successful, install apk
+                int status = mDownloadManagerPro.getStatusById(completeDownloadId);
+                
+                Log.d(TAG, "status:" +  status);
+                if ( status == DownloadManager.STATUS_SUCCESSFUL) {
+                	PreferencesUtils.putString(getApplicationContext(), appInfo.getPackageName(), localFileName);
+                	appInfo.setStatus(Conf.DOWNLOADED);
+                	appInfo.setProgressBytes(0);
+    				appInfo.setPercent(0);
+    				mHandler.sendMessage(mHandler.obtainMessage(GetAppListener.MSG_UPDATE_UI));
+    				APKUtil.installApp(context, localFileName);
+                } else {
+					Log.e(TAG, "download complete.status:" + status);
+				}
 			} else if (DownloadManager.ACTION_NOTIFICATION_CLICKED.equals(action)) {
 				Log.d(TAG, "Notification clicked");
 			}
 		}
+	}
+	
+	private int getPosition(long downloadId){
+		Log.d(TAG, "getPosition.id:" + downloadId);
+		int postion = -1;
+		if (mIdMaps.containsKey(downloadId)) {
+			postion = mIdMaps.get(downloadId);
+		}
+		Log.d(TAG, "getPosition.position:" + postion);
+		return postion;
 	}
 
 	@Override
