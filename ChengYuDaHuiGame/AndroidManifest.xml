@@ -97,10 +97,6 @@
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.GetAppActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.AppInfoActicity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -108,6 +104,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/com.chenyu.download.file" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.AppInfoActicity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameActivity"
