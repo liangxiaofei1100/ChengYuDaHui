@@ -4,6 +4,10 @@
     android:layout_height="match_parent"
     tools:context="com.zhaoyan.juyou.game.chengyudahui.activity.LauncherActivity" >
 
+    <com.zhaoyan.juyou.game.animation.petal.PetalView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
