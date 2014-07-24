@@ -14,10 +14,7 @@
         android:normalScreens="true"
         android:smallScreens="true"
         android:xlargeScreens="true" />
-
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" >
-    </uses-permission>
-
+    
     <application
         android:name="com.zhaoyan.juyou.game.chengyudahui.JuYouApplication"
         android:allowBackup="true"
@@ -100,6 +97,17 @@
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.GetAppActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/com.chenyu.download.file" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.AppInfoActicity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -199,5 +207,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- Frontia permission end -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
 </manifest>

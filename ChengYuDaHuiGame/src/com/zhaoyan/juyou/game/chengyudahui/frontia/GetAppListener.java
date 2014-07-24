@@ -10,6 +10,7 @@ public interface GetAppListener {
 	public static final int MSG_INSTALL_APP = 4;
 	public static final int MSG_OPEN_APP = 5;
 	public static final int MSG_UPDATE_APP = 6;
+	public static final int MSG_DOWNLOAD_COMPLETE = 7;
 	
 	public static final String CALLBACK_FLAG = "callback_flag";
 	public static final String KEY_ITEM_POSITION = "key_item_position";

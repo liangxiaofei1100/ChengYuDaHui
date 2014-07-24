@@ -3,13 +3,16 @@ package com.zhaoyan.juyou.game.chengyudahui.frontia;
 
 public class Conf {
 	
-	public final static String APIKEY = "OBjmNPu782fC7TmQxXHwj0dh";
+	public final static String APIKEY = "cd1EyW7zKA7ZmYuDunUnkBfG";
     public final static String CLOUD_APP_LOCATION = "apps/";
     public final static String CLOUD_ICON_LOCATION = "icons/";
     public final static String CLOUD_INFO_LOCATION = "infos/";
     public final static String LOCAL_APP_DOWNLOAD_PATH = "/baiduApp";
     
     public final static String SHARED_PREFS_NAME = "dlapp";
+    public static final String KEY_NAME_DOWNLOAD_ID = "downloadId";
+    
+    public static final String URL_EX = "http://bcs.duapp.com/bccd1eyw7zka7zmyudununkbfgmbaas/";
     
     //request_code
     public final static int REQUEST_CODE1 = 2;
