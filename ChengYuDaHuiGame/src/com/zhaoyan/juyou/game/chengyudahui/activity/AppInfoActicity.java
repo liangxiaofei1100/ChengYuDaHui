@@ -4,9 +4,12 @@ import java.io.File;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DownloadManager;
+import android.app.AlertDialog.Builder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -43,7 +46,7 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 	private TextView mAuthorView;
 	
 	private SubmitProcessButton mDLButton;
-	private Button mCancelBtn;
+//	private Button mCancelBtn;
 	
 	private AppInfo mAppInfo;
 	
@@ -57,6 +60,8 @@ public class AppInfoActicity extends Activity implements OnClickListener {
     
     private long mDownloadId = 0;
     
+    private int mItemPosition = -1;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,12 +71,16 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 		if (intent != null) {
 			Log.d(TAG, "intent is not null");
 			mAppInfo = intent.getParcelableExtra("appinfo");
+			mItemPosition = intent.getIntExtra(Conf.KEY_NAME_ITEM_POSITION, -1);
 		} else {
 			Log.e(TAG, "intent is null");
 		}
 		
 		if (mAppInfo != null) {
 			Log.d(TAG, mAppInfo.toString());
+			if (mAppInfo.getDownloadId() != -1) {
+				mDownloadId = mAppInfo.getDownloadId();
+			}
 		} else {
 			Log.e(TAG, "mAppInfo is null");
 		}
@@ -114,8 +123,8 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 		
 		mAppIconView.setDefaultImageResource(R.drawable.ic_launcher);
 		
-		mCancelBtn = (Button) findViewById(R.id.ib_cancel);
-		mCancelBtn.setOnClickListener(this);
+//		mCancelBtn = (Button) findViewById(R.id.ib_cancel);
+//		mCancelBtn.setOnClickListener(this);
 		
 		mDLButton = (SubmitProcessButton) findViewById(R.id.btn_d);
 		mDLButton.setOnClickListener(this);
@@ -190,26 +199,22 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 				break;
 			case Conf.NEED_UDPATE:
 			case Conf.NOT_DOWNLOAD:
-				int progress = mDLButton.getProgress();
-				if (progress > 0 && progress < 100) {
-					mDLButton.setProgress(0);
-					mDLButton.setText("下载");
-					mDownloadManager.remove(mDownloadId);
-				} else {
-					download();
-				}
+				download();
+				break;
+			case Conf.DOWNLOADING:
+				showCancelDownloadDialog(mAppInfo);
 				break;
 			default:
 				break;
 			}
 			break;
-		case R.id.ib_cancel:
-			mDLButton.setProgress(0);
-			mDLButton.setText("下载");
-			mDownloadManager.remove(mDownloadId);
-			
-			mCancelBtn.setVisibility(View.INVISIBLE);
-			break;
+//		case R.id.ib_cancel:
+//			mDLButton.setProgress(0);
+//			mDLButton.setText("下载");
+//			mDownloadManager.remove(mDownloadId);
+//			
+//			mCancelBtn.setVisibility(View.INVISIBLE);
+//			break;
 
 		default:
 			break;
@@ -218,9 +223,40 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 	
 	private void download(){
 		mDLButton.setText(R.string.pre_download);
-		mCancelBtn.setVisibility(View.VISIBLE);
+//		mCancelBtn.setVisibility(View.VISIBLE);
+		mAppInfo.setStatus(Conf.DOWNLOADING);
 		mDownloadId = DownloadUtils.downloadApp(getApplicationContext(), mDownloadManager, mAppInfo);
+		
+		Intent intent = new Intent(Conf.ACTION_START_DOWNLOAD);
+		intent.putExtra(Conf.KEY_NAME_DOWNLOAD_ID, mDownloadId);
+		intent.putExtra(Conf.KEY_NAME_ITEM_POSITION, mItemPosition);
+		sendBroadcast(intent);
+		
 		updateView();
+	}
+	
+	private void showCancelDownloadDialog(final AppInfo appInfo) {
+		AlertDialog.Builder builder = new Builder(AppInfoActicity.this);
+		builder.setMessage("将取消下载:" + appInfo.getLabel());
+		builder.setTitle("停止下载");
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				mDownloadManager.remove(appInfo.getDownloadId());
+				Intent intent = new Intent(Conf.ACTION_CANCEL_DOWNLOAD);
+				intent.putExtra(Conf.KEY_NAME_DOWNLOAD_ID, mDownloadId);
+				sendBroadcast(intent);
+				
+				appInfo.setStatus(Conf.NOT_DOWNLOAD);
+				appInfo.setDownloadId(-1);
+				appInfo.setProgressBytes(0);
+				appInfo.setPercent(0);
+				mDLButton.setText(R.string.download);
+				mDLButton.setProgress(0);
+			}
+		});
+		builder.setNegativeButton("取消", null);
+		builder.create().show();
 	}
 	
 	class DownloadChangeObserver extends ContentObserver {
@@ -299,7 +335,7 @@ public class AppInfoActicity extends Activity implements OnClickListener {
                         	Log.e(TAG, "download failed.reason:" + reason);
                         } else if (status == DownloadManager.STATUS_SUCCESSFUL) {
 //                        	ToastUtils.show(getApplicationContext(), "下载完成");
-                    		mCancelBtn.setVisibility(View.INVISIBLE);
+//                    		mCancelBtn.setVisibility(View.INVISIBLE);
                         } else {
                         }
                     }
@@ -337,6 +373,13 @@ public class AppInfoActicity extends Activity implements OnClickListener {
         return downloadManagerStatus == DownloadManager.STATUS_RUNNING
                 || downloadManagerStatus == DownloadManager.STATUS_PAUSED
                 || downloadManagerStatus == DownloadManager.STATUS_PENDING;
+    }
+    
+    @Override
+    public void onBackPressed() {
+    	// TODO Auto-generated method stub
+    	super.onBackPressed();
+    	
     }
 	
 }

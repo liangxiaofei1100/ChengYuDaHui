@@ -11,8 +11,12 @@ public class Conf {
     
     public final static String SHARED_PREFS_NAME = "dlapp";
     public static final String KEY_NAME_DOWNLOAD_ID = "downloadId";
+    public static final String KEY_NAME_ITEM_POSITION = "item_position";
     
     public static final String URL_EX = "http://bcs.duapp.com/bccd1eyw7zka7zmyudununkbfgmbaas/";
+    
+    public static final String ACTION_CANCEL_DOWNLOAD = "com.zhaoyan.cancel.download";
+    public static final String ACTION_START_DOWNLOAD = "com.zhaoyan.start.download";
     
     //request_code
     public final static int REQUEST_CODE1 = 2;
