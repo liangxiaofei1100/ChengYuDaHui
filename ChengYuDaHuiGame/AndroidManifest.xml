@@ -14,7 +14,7 @@
         android:normalScreens="true"
         android:smallScreens="true"
         android:xlargeScreens="true" />
-    
+
     <application
         android:name="com.zhaoyan.juyou.game.chengyudahui.JuYouApplication"
         android:allowBackup="true"
@@ -36,7 +36,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity"
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityTheme" >
+        </activity>
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.GuessGameOfPictureActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityTheme" >
+        </activity>
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ChengYuNewCommentActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" >
         </activity>
@@ -101,7 +112,9 @@
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="application/com.chenyu.download.file" />
             </intent-filter>
         </activity>
