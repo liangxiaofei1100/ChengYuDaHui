@@ -107,8 +107,7 @@ public class StudyActivity extends Activity {
 		mChengyuQuery.startQuery(QUERY_TOKEN, null, ChengyuColums.CONTENT_URI,
 				new String[] { ChengyuColums.NAME, ChengyuColums.PINYIN,
 						ChengyuColums.COMMENT, ChengyuColums.ORIGINAL,
-						ChengyuColums.EXAMPLE, ChengyuColums.ENGLISH,
-						ChengyuColums.SIMILAR, ChengyuColums.OPPOSITE },
+						ChengyuColums.EXAMPLE },
 				"_id in (" + s + ")", null, null);
 		ContentValues values=new ContentValues();
 		values.put(HistoryColums.KIND, 0);
@@ -126,8 +125,7 @@ public class StudyActivity extends Activity {
 					ChengyuColums.CONTENT_URI, new String[] {
 							ChengyuColums.NAME, ChengyuColums.PINYIN,
 							ChengyuColums.COMMENT, ChengyuColums.ORIGINAL,
-							ChengyuColums.EXAMPLE, ChengyuColums.ENGLISH,
-							ChengyuColums.SIMILAR, ChengyuColums.OPPOSITE },
+							ChengyuColums.EXAMPLE},
 					"name like '%" + string + "%'", null, null);
 		}
 	}
@@ -152,9 +150,6 @@ public class StudyActivity extends Activity {
 					map.put(ChengyuColums.COMMENT, cursor.getString(2));
 					map.put(ChengyuColums.ORIGINAL, cursor.getString(3));
 					map.put(ChengyuColums.EXAMPLE, cursor.getString(4));
-					map.put(ChengyuColums.ENGLISH, cursor.getString(5));
-					map.put(ChengyuColums.SIMILAR, cursor.getString(6));
-					map.put(ChengyuColums.OPPOSITE, cursor.getString(7));
 					tempList.add(map);
 				}
 				cursor.close();

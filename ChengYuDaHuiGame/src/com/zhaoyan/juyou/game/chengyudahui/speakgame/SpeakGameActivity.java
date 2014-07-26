@@ -26,6 +26,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -46,6 +47,8 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 	private int GAME_TIME = 300;
 	private AlertDialog mTimeSetting;
 	private List<String> chengyuList;
+	private Cursor cursor;
+	private final String TAG = "SpeakGameActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +169,7 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 	}
 
 	private void initGameWord() {
-		Map<String, String> map = getChengyuRandom();
+		Map<String, String> map = getChengyuRandomByLimit();
 		mLocalChengyuName.setTag(map);
 		mLocalChengyuName.setText(map.get(ChengyuColums.NAME));
 		if (mGameMode == 0)
@@ -176,7 +179,13 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 					+ map.get(ChengyuColums.ORIGINAL));
 	}
 
-	/** maybe return null ,please check the return value */
+	/**
+	 * maybe return null ,please check the return value
+	 * 
+	 * @deprecated @see {@link SpeakGameActivity#getChengyuRandomByLimit()}
+	 * 
+	 * */
+	@SuppressWarnings("unused")
 	private Map<String, String> getChengyuRandom() {
 		if (mRandom == null)
 			mRandom = new Random();
@@ -185,9 +194,7 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 				ChengyuColums.CONTENT_URI,
 				new String[] { ChengyuColums.NAME, ChengyuColums.PINYIN,
 						ChengyuColums.COMMENT, ChengyuColums.ORIGINAL,
-						ChengyuColums.EXAMPLE, ChengyuColums.ENGLISH,
-						ChengyuColums.SIMILAR, ChengyuColums.OPPOSITE },
-				"_id = " + id, null, null);
+						ChengyuColums.EXAMPLE }, "_id = " + id, null, null);
 		if (cursor != null) {
 			if (cursor.moveToNext()) {
 				Map<String, String> map = new HashMap<String, String>();
@@ -196,9 +203,6 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 				map.put(ChengyuColums.COMMENT, cursor.getString(2));
 				map.put(ChengyuColums.ORIGINAL, cursor.getString(3));
 				map.put(ChengyuColums.EXAMPLE, cursor.getString(4));
-				map.put(ChengyuColums.ENGLISH, cursor.getString(5));
-				map.put(ChengyuColums.SIMILAR, cursor.getString(6));
-				map.put(ChengyuColums.OPPOSITE, cursor.getString(7));
 				cursor.close();
 				return map;
 			}
@@ -260,4 +264,46 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 		}
 
 	};
+
+	private Map<String, String> getChengyuRandomByLimit() {
+		if (mRandom == null)
+			mRandom = new Random();
+		if (cursor == null) {
+			cursor = getContentResolver().query(
+					ChengyuColums.CONTENT_URI,
+					new String[] { ChengyuColums.NAME, ChengyuColums.PINYIN,
+							ChengyuColums.COMMENT, ChengyuColums.ORIGINAL,
+							ChengyuColums.EXAMPLE },
+					ChengyuColums.CAICI + " = 1", null, null);
+			if (cursor == null) {
+				Log.e(TAG, "can not find the caici word");
+				return null;
+			}
+		}
+		int id = Math.abs(mRandom.nextInt()) % (cursor.getCount());
+		cursor.move(id);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(ChengyuColums.NAME, cursor.getString(0));
+		map.put(ChengyuColums.PINYIN, cursor.getString(1));
+		map.put(ChengyuColums.COMMENT, cursor.getString(2));
+		map.put(ChengyuColums.ORIGINAL, cursor.getString(3));
+		map.put(ChengyuColums.EXAMPLE, cursor.getString(4));
+		cursor.close();
+		cursor = null;
+		return map;
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		if (cursor != null) {
+			cursor.close();
+			cursor = null;
+		}
+		if (mRandom != null) {
+			mRandom = null;
+		}
+	}
+
 }

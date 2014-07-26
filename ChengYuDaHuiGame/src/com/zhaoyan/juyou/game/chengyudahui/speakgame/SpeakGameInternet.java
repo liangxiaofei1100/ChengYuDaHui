@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,12 +38,14 @@ import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGame
 
 public class SpeakGameInternet extends Activity implements OnClickListener,
 		OnCommunicationListenerExternal {
-	private View mLoadingView, mSelectRoleView, mGameView;
+	private View mLoadingView, mSelectRoleView, mGameView, mRuleSettingView,
+			mLoadingText;
 	private TextView infoText, mCountDownText, mGameWordText, mGameWordInfo;
 	private Button mRefereeBtn, mActorBtn, mObserverBtn, mGameRightBtn,
-			mGameNextBtn;
+			mGameNextBtn, mRuleStartBtn;
+	private EditText mTimeEditText, mRightNumberEditText, mWrongNumberEditText,
+			mPassNumberEditText;
 	private ProtocolCommunication mProtocolCommunication;
-	private final int REFEREE_ID = 0, ACTOR_ID = 1, OBSERVER_ID = 2;
 	private int roleID = 2;// default role id is observer
 	private boolean readyFlag = false, processFlag = true, startFlag = false;;
 	private final int APP_ID = 100;
@@ -54,23 +58,29 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 	private Random mRandom;
 	private RoleType mRoleType;
 	private int GAME_TIME = 300, mRemainderTime, wordId;
-	private final int COUNT_DOWN = 5;
+	private final int COUNT_DOWN = 5, SELECT_ROLE = 0, ROLE_SELECTED = 1,
+			ROLE_CONFIRMED = 2, READY_START = 3, NEXT_VALUE = 4,
+			TIME_UDATE = 6, GAME_OVER = 7, RULE_INIT = 100;
 	private List<Map<String, Object>> msgInfo;
 	private ProcessThread mProcessThread;
 	private Map<String, String> mChengyuMap;
-	private int mGameScore;
+	private int mGameScore, mGamePass, mGameWrong;
 	private int hintNumber;
 	private int refereeUserId = -100;
+	private int mGameTime, mRightNumber, mWrongNumber, mPassNumber;
+	private Cursor chengyuCursor;
+
+	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
 			switch (msg.what) {
-			case 0:
+			case SELECT_ROLE:
 				showSelectRole();
 				break;
-			case 1:
+			case ROLE_SELECTED:
 				switch (roleID) {
 				case 0:
 					mRefereeBtn.setEnabled(false);
@@ -87,14 +97,14 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 				madeButtonCliclable(true);
 				showToast();
 				break;
-			case 2:
+			case ROLE_CONFIRMED:
 				mRefereeBtn.setVisibility(View.GONE);
 				mActorBtn.setVisibility(View.GONE);
 				mObserverBtn.setVisibility(View.GONE);
 				infoText.setText("请耐心等待其他人选择 \n 你是" + mRoleType.name());
 				infoText.setVisibility(View.VISIBLE);
 				break;
-			case 3:
+			case READY_START:
 				infoText.setText(getString(R.string.start_game));
 				infoText.setBackgroundColor(Color.BLUE);
 				infoText.setClickable(true);
@@ -109,8 +119,16 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 					}
 				});
 				break;
-			case 4:
-				showGameView(msg.arg1, msg.arg2);
+			case NEXT_VALUE:
+				if (mRoleType == RoleType.REFEREE) {
+					mGamePass++;
+					if (mPassNumber > 0 && mGamePass == mPassNumber) {
+						// TODO Game Over
+						gameOver();
+					} else
+						showGameView(0, -1);
+				} else
+					showGameView(msg.arg1, msg.arg2);
 				break;
 			case COUNT_DOWN:
 				mRemainderTime--;
@@ -126,18 +144,16 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 				} else {
 					mCountDownText.setText(mRemainderTime + "");
 				}
-				// else {
-				// SpeakGameInternet.this.sendMessage(Command.TIME, wordId,
-				// RoleType.UNKONWN, mRemainderTime, null);
-				// mCountDownText.setText(mRemainderTime + "");
-				// }
 				break;
-			case 6:
+			case TIME_UDATE:
 				mCountDownText.setText(msg.arg1 + "");
 				break;
-			case 7:
-				mCountDownText.setText("时间到！ 得分： " + mGameScore);
+			case GAME_OVER:
+				mCountDownText.setText("游戏结束： " + mGameScore);
 				resetGameView();
+				break;
+			case RULE_INIT:
+				ruleSetting();
 				break;
 			default:
 				break;
@@ -154,7 +170,7 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 
 	private void showGameView(int id, int time) {
 		hintNumber = 0;
-		mChengyuMap = getChengyuRandom(id);
+		mChengyuMap = getChengyuRandomByLimit(id);
 		if (id == 0) {
 			sendMessage(Command.NEXT, wordId, RoleType.UNKONWN, 0, null);
 		}
@@ -167,6 +183,10 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 					+ mChengyuMap.get(ChengyuColums.PINYIN) + "\n ※释义： "
 					+ mChengyuMap.get(ChengyuColums.COMMENT) + "\n ※出处： "
 					+ mChengyuMap.get(ChengyuColums.ORIGINAL));
+
+		}
+		if (mRoleType == RoleType.REFEREE) {
+			mGameNextBtn.setText("错误");
 		}
 		if (mRoleType == RoleType.OBSERVER) {
 			mGameNextBtn.setVisibility(View.GONE);
@@ -175,7 +195,8 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 			mGameWordInfo.setVisibility(View.INVISIBLE);
 		}
 		if (mRoleType == RoleType.ACTOR) {
-			mGameRightBtn.setVisibility(View.GONE);
+			mGameRightBtn.setText("略过");
+			mGameNextBtn.setVisibility(View.GONE);
 		}
 	}
 
@@ -229,6 +250,10 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 			msgInfo.clear();
 			msgInfo = null;
 		}
+		if (chengyuCursor != null) {
+			chengyuCursor.close();
+			chengyuCursor = null;
+		}
 	}
 
 	private void initView() {
@@ -244,11 +269,19 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 		mGameRightBtn = (Button) findViewById(R.id.internet_speak_game_right);
 		mGameWordText = (TextView) findViewById(R.id.internet_speak_chengyu_game_name);
 		mGameWordInfo = (TextView) findViewById(R.id.internet_info_for_chengyu);
+		mRuleSettingView = findViewById(R.id.setting_rule_speak);
+		mRuleStartBtn = (Button) findViewById(R.id.rule_start);
+		mTimeEditText = (EditText) findViewById(R.id.speak_time_setting_edit);
+		mRightNumberEditText = (EditText) findViewById(R.id.speak_right_number_edit);
+		mWrongNumberEditText = (EditText) findViewById(R.id.speak_wrong_number_edit);
+		mPassNumberEditText = (EditText) findViewById(R.id.speak_pass_number_edit);
+		mLoadingText = findViewById(R.id.loading_text);
 		mRefereeBtn.setOnClickListener(this);
 		mActorBtn.setOnClickListener(this);
 		mObserverBtn.setOnClickListener(this);
 		mGameNextBtn.setOnClickListener(this);
 		mGameRightBtn.setOnClickListener(this);
+		mRuleStartBtn.setOnClickListener(this);
 	}
 
 	private void showSelectRole() {
@@ -289,8 +322,14 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 			type = RoleType.OBSERVER;
 			break;
 		case R.id.internet_speak_game_next:
-			if (mRoleType != RoleType.OBSERVER) {
-				showGameView(0, -1);
+			if (mRoleType == RoleType.REFEREE) {
+				mGameWrong++;
+				if (mWrongNumber > 1 && mWrongNumber == mGameWrong) {
+					// TODO GAME OVER
+					gameOver();
+				} else {
+					showGameView(0, -1);
+				}
 			}
 			if (overFlag) {
 				finish();
@@ -299,7 +338,11 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 		case R.id.internet_speak_game_right:
 			if (mRoleType == RoleType.REFEREE) {
 				mGameScore++;
-				showGameView(0, -1);
+				if (mGameScore == mRightNumber) {
+					// TODO Game Over
+					gameOver();
+				} else
+					showGameView(0, -1);
 			} else if (mRoleType == RoleType.OBSERVER) {
 				mGameWordInfo.setVisibility(View.VISIBLE);
 				if (hintNumber == 0) {
@@ -314,10 +357,21 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 					mGameWordText.setVisibility(View.VISIBLE);
 				}
 				hintNumber++;
+			} else if (mRoleType == RoleType.ACTOR) {
+				sendMessage(Command.NEXT, -1, mRoleType, -1, null);
+				// mGamePass++;
+				// if (mPassNumber > 0 && mGamePass == mPassNumber) {
+				// // TODO Game Over
+				// gameOver();
+				// } else
+				// showGameView(0, -1);
 			}
 			if (overFlag) {
 				finish();
 			}
+			return;
+		case R.id.rule_start:
+			initRule();
 			return;
 		default:
 			type = RoleType.OBSERVER;
@@ -389,7 +443,6 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 
 	private void sendMessage(Command cmd, int word, RoleType type, int time,
 			User u) {
-		Log.e("ArbiterLiu", "" + cmd + "---------" + System.currentTimeMillis());
 		SpeakGameMsg.Builder builder = SpeakGameMsg.newBuilder();
 		builder.setGame(GameType.SPEAK);
 		builder.setCommand(cmd);
@@ -411,8 +464,6 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 		// TODO Auto-generated method stub
 		boolean flag = false;
 		SpeakGameMsg msg = SpeakMessageSend.getInstance().parseMsg(arg0);
-		Log.e("ArbiterLiu",
-				msg.getCommand() + "   " + System.currentTimeMillis());
 		if (gameUser != null) {
 			try {
 				for (User u : gameUser) {
@@ -463,20 +514,17 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 		Map<String, Object> map = msgInfo.remove(0);
 		SpeakGameMsg msg = (SpeakGameMsg) map.get("msg");
 		User arg1 = (User) map.get("user");
-		// Log.e("ArbiterLiu",
-		// msg.getCommand() + " msgInfo size   " + msgInfo.size());
 		if (GameType.SPEAK == msg.getGame()) {
 			switch (msg.getCommand().getNumber()) {
 			case SpeakGameMsg.Command.READY_VALUE:
 				if (isMainServer) {
 					readyAckNumber++;
 					if (readyAckNumber == (gamePeopleNumber - 1)) {
-						sendMessage(Command.READY, 0, RoleType.UNKONWN, 0, null);
-						mHandler.sendEmptyMessage(0);
+						mHandler.sendEmptyMessage(RULE_INIT);
 					}
 				} else if (com.zhaoyan.communication.UserManager
 						.isManagerServer(arg1)) {
-					mHandler.sendEmptyMessage(0);
+					mHandler.sendEmptyMessage(SELECT_ROLE);
 				}
 				break;
 			case Command.ROLE_VALUE:
@@ -491,7 +539,8 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 						}
 						if (roleList.size() == 0) {
 							if (mRoleType == RoleType.REFEREE) {
-								mHandler.obtainMessage(3).sendToTarget();
+								mHandler.obtainMessage(READY_START)
+										.sendToTarget();
 							} else {
 								sendMessage(Command.ROLYEREADY, 0,
 										RoleType.UNKONWN, 0, null);
@@ -501,19 +550,25 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 				} else {
 					RoleType te = msg.getType();
 					if (RoleType.UNKONWN == te) {
-						mHandler.sendEmptyMessage(1);
+						mHandler.sendEmptyMessage(ROLE_SELECTED);
 					} else {
 						mRoleType = te;
-						mHandler.sendEmptyMessage(2);
+						mHandler.sendEmptyMessage(ROLE_CONFIRMED);
 					}
 				}
 				break;
 			case Command.NEXT_VALUE:
-				mHandler.obtainMessage(4, msg.getWord(), msg.getTime())
-						.sendToTarget();
+				if (msg.getWord() == -1 && mRoleType == RoleType.REFEREE) {
+					mHandler.obtainMessage(NEXT_VALUE, msg.getWord(),
+							msg.getTime()).sendToTarget();
+				} else if (msg.getWord() > -1) {
+					mHandler.obtainMessage(NEXT_VALUE, msg.getWord(),
+							msg.getTime()).sendToTarget();
+				}
 				break;
 			case Command.TIME_VALUE:
-				mHandler.obtainMessage(6, msg.getTime(), 0).sendToTarget();
+				mHandler.obtainMessage(TIME_UDATE, msg.getTime(), 0)
+						.sendToTarget();
 				break;
 			case Command.GAMESTART_VALUE:
 				if (refereeUserId == -100)
@@ -529,7 +584,7 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 				break;
 			case Command.SCORE_VALUE:
 				mGameScore = msg.getTime();
-				mHandler.sendEmptyMessage(7);
+				mHandler.sendEmptyMessage(GAME_OVER);
 				break;
 			default:
 				break;
@@ -556,7 +611,9 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 		Toast.makeText(this, temp + "", Toast.LENGTH_SHORT).show();
 	}
 
-	/** maybe return null ,please check the return value */
+	/**
+	 * maybe return null ,please check the return value
+	 * */
 	private Map<String, String> getChengyuRandom(int id) {
 		Log.e("ArbiterLiu", "id                " + id);
 		if (id < 1) {
@@ -579,9 +636,6 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 				map.put(ChengyuColums.COMMENT, cursor.getString(2));
 				map.put(ChengyuColums.ORIGINAL, cursor.getString(3));
 				map.put(ChengyuColums.EXAMPLE, cursor.getString(4));
-				map.put(ChengyuColums.ENGLISH, cursor.getString(5));
-				map.put(ChengyuColums.SIMILAR, cursor.getString(6));
-				map.put(ChengyuColums.OPPOSITE, cursor.getString(7));
 				cursor.close();
 				wordId = id;
 				return map;
@@ -592,12 +646,50 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 
 	}
 
+	private Map<String, String> getChengyuRandomByLimit(int id) {
+		if (mRandom == null)
+			mRandom = new Random();
+		if (id < 1) {
+			if (chengyuCursor == null) {
+				chengyuCursor = getContentResolver()
+						.query(ChengyuColums.CONTENT_URI,
+								new String[] { ChengyuColums.NAME,
+										ChengyuColums.PINYIN,
+										ChengyuColums.COMMENT,
+										ChengyuColums.ORIGINAL,
+										ChengyuColums.EXAMPLE },
+								ChengyuColums.CAICI + " = 1", null, null);
+				if (chengyuCursor == null) {
+					Log.e(SpeakGameInternet.class.getSimpleName(),
+							"can not find the caici word");
+					return null;
+				}
+			}
+			int num = Math.abs(mRandom.nextInt()) % (chengyuCursor.getCount());
+			chengyuCursor.move(num);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put(ChengyuColums.NAME, chengyuCursor.getString(0));
+			map.put(ChengyuColums.PINYIN, chengyuCursor.getString(1));
+			map.put(ChengyuColums.COMMENT, chengyuCursor.getString(2));
+			map.put(ChengyuColums.ORIGINAL, chengyuCursor.getString(3));
+			map.put(ChengyuColums.EXAMPLE, chengyuCursor.getString(4));
+			chengyuCursor.close();
+			chengyuCursor = null;
+			return map;
+		} else {
+			return getChengyuRandom(id);
+		}
+	}
+
 	private void countDown() {
 		if (mCountDownTimer != null) {
 			mCountDownTimer.cancel();
 			mCountDownTimer = null;
 		}
-		mRemainderTime = GAME_TIME;
+		if (mGameTime > 1) {
+			mRemainderTime = mGameTime;
+		} else
+			mRemainderTime = GAME_TIME;
 		mCountDownTimer = new Timer();
 		mCountDownTimer.schedule(new TimerTask() {
 			@Override
@@ -627,5 +719,43 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 		mGameNextBtn.setText("结束");
 		mGameNextBtn.setVisibility(View.VISIBLE);
 		mGameRightBtn.setVisibility(View.VISIBLE);
+	}
+
+	private void ruleSetting() {
+		mLoadingText.setVisibility(View.GONE);
+		mRuleSettingView.setVisibility(View.VISIBLE);
+	}
+
+	private void initRule() {
+		mGameTime = getNumber(mTimeEditText);
+		mRightNumber = getNumber(mRightNumberEditText);
+		mWrongNumber = getNumber(mWrongNumberEditText);
+		mPassNumber = getNumber(mPassNumberEditText);
+		sendMessage(Command.READY, 0, RoleType.UNKONWN, 0, null);
+		mHandler.sendEmptyMessage(SELECT_ROLE);
+	}
+
+	private int getNumber(final EditText s) {
+		if (s != null) {
+			String temp = s.getText().toString();
+			if (temp != null)
+				try {
+					int n = Integer.valueOf(temp);
+					return n;
+				} catch (NumberFormatException e) {
+					Log.e("ArbiterLiu", "It is not number " + s);
+				}
+		}
+		return -1;
+
+	}
+
+	private void gameOver() {
+		if (mCountDownTimer != null)
+			mCountDownTimer.cancel();
+		resetGameView();
+		startFlag = false;
+		SpeakGameInternet.this.sendMessage(Command.SCORE, wordId,
+				RoleType.UNKONWN, mGameScore, null);
 	}
 }
