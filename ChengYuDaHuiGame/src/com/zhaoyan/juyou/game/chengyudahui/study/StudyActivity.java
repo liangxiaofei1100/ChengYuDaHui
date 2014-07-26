@@ -94,6 +94,17 @@ public class StudyActivity extends Activity {
 
 	private void randomQuery() {
 		Random random = new Random();
+		if (MainActivity.DB_NUMBER == -1) {
+			Cursor cursor = getContentResolver().query(
+					ChengyuColums.CONTENT_URI, new String[] {"_id"}, null,
+					null, null);
+			if (cursor != null) {
+				MainActivity.DB_NUMBER = cursor.getCount();
+				cursor.close();
+			} else {
+				MainActivity.DB_NUMBER = 30000;
+			}
+		}
 		String s = "";
 		for (int i = 0; i < 15; i++) {
 			s = s + "'" + Math.abs(random.nextInt()) % MainActivity.DB_NUMBER
@@ -107,13 +118,13 @@ public class StudyActivity extends Activity {
 		mChengyuQuery.startQuery(QUERY_TOKEN, null, ChengyuColums.CONTENT_URI,
 				new String[] { ChengyuColums.NAME, ChengyuColums.PINYIN,
 						ChengyuColums.COMMENT, ChengyuColums.ORIGINAL,
-						ChengyuColums.EXAMPLE },
-				"_id in (" + s + ")", null, null);
-		ContentValues values=new ContentValues();
+						ChengyuColums.EXAMPLE }, "_id in (" + s + ")", null,
+				null);
+		ContentValues values = new ContentValues();
 		values.put(HistoryColums.KIND, 0);
 		values.put(HistoryColums.NAME, s);
 		values.put(HistoryColums.TIME, MainActivity.getDate());
-		
+
 	}
 
 	private void queryChengyu(final String string) {
@@ -125,8 +136,8 @@ public class StudyActivity extends Activity {
 					ChengyuColums.CONTENT_URI, new String[] {
 							ChengyuColums.NAME, ChengyuColums.PINYIN,
 							ChengyuColums.COMMENT, ChengyuColums.ORIGINAL,
-							ChengyuColums.EXAMPLE},
-					"name like '%" + string + "%'", null, null);
+							ChengyuColums.EXAMPLE }, "name like '%" + string
+							+ "%'", null, null);
 		}
 	}
 
