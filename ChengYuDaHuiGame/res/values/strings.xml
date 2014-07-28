@@ -43,5 +43,11 @@
     <string name="update">更新</string>
     <string name="open">打开</string>
     <string name="pre_download">准备下载</string>
+    <string name="speak_game_time">游戏时间</string>
+    <string name="speak_right_number">正确个数</string>
+    <string name="speak_wrong_number">错误个数</string>
+    <string name="speak_pass_number">略过个数</string>
+    <string name="speak_game_rule_setting">游戏规则设定</string>
+    <string name="speak_game_number_unit">个</string>
 
 </resources>
