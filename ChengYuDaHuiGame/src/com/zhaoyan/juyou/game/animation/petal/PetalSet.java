@@ -15,12 +15,12 @@ public class PetalSet {
 	ArrayList<Petal> petalSet;
 	private Random mRandom;
 	private static final int START_X = -15;
-	private static final float START_Y = 0.5f;
+	private static final float START_Y = 0.8f;
 	// petal acceleration.
-	private static final float ACCELERATION_X_BASE = 0.003f;
+	private static final float ACCELERATION_X_BASE = 0.008f;
 	private static final float ACCELERATION_X = 0.008f;
-	private static final float ACCELERATION_Y_BASE = 0.003f;
-	private static final float ACCELERATION_Y = 0.005f;
+	private static final float ACCELERATION_Y_BASE = 0.001f;
+	private static final float ACCELERATION_Y = 0.002f;
 
 	private Bitmap mPetalBitmap;
 	private Paint mPaint;
@@ -38,9 +38,9 @@ public class PetalSet {
 			Bitmap bitmap = getRandomPetalBitmap();
 
 			int x = START_X;
-			int a = mRandom.nextBoolean() ? 1 : -1;
-			// y in random rang (-1 * START_Y * maxY, START_Y * maxY)
-			int y = (int) (maxY * mRandom.nextFloat() * START_Y) * a;
+			// int a = mRandom.nextBoolean() ? 1 : -1;
+			// y in random rang (0, START_Y * maxY)
+			int y = (int) (maxY * mRandom.nextFloat() * START_Y);
 			int acceleration_x = (int) (maxX * ACCELERATION_X_BASE)
 					+ mRandom.nextInt((int) (maxX * ACCELERATION_X));
 			int acceleration_y = (int) (maxY * ACCELERATION_Y_BASE)
