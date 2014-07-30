@@ -2,6 +2,7 @@ package com.zhaoyan.juyou.game.chengyudahui.frontia;
 
 import org.json.JSONObject;
 
+import android.R.integer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -28,7 +29,8 @@ public class AppInfo implements Parcelable {
 
 	private String packageName;// 应用包名
 
-	private int status;
+	private int status;//当前应用状态：未下载，正在下载，已下载等等
+	private int lastStatus;//上一个应用状态，一般用于点击取消下载后，返回上一个应用状态
 
 	private long progressBytes;
 	private int percent;
@@ -223,6 +225,14 @@ public class AppInfo implements Parcelable {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+	
+	public int getLastStatus(){
+		return lastStatus;
+	}
+	
+	public void setLastStatus(int status){
+		this.lastStatus = status;
+	}
 
 	public void setProgressBytes(long bytes) {
 		this.progressBytes = bytes;
@@ -367,6 +377,7 @@ public class AppInfo implements Parcelable {
 		dest.writeString(appType);
 		dest.writeString(packageName);
 		dest.writeInt(status);
+		dest.writeInt(lastStatus);
 		dest.writeLong(progressBytes);
 		dest.writeInt(percent);
 		dest.writeString(localPath);
@@ -392,6 +403,7 @@ public class AppInfo implements Parcelable {
 		appType = in.readString();
 		packageName = in.readString();
 		status = in.readInt();
+		lastStatus = in.readInt();
 		progressBytes = in.readLong();
 		percent = in.readInt();
 		localPath = in.readString();

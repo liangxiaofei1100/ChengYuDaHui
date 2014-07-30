@@ -12,6 +12,7 @@ public class Conf {
     public final static String SHARED_PREFS_NAME = "dlapp";
     public static final String KEY_NAME_DOWNLOAD_ID = "downloadId";
     public static final String KEY_NAME_ITEM_POSITION = "item_position";
+    public static final String KEY_NAME_LAST_STATUS = "last_status";
     
     public static final String URL_EX = "http://bcs.duapp.com/bccd1eyw7zka7zmyudununkbfgmbaas/";
     
@@ -30,10 +31,10 @@ public class Conf {
     public final static int RESULT_CODE4 = 13;
     
     //app status
-    public static final int NOT_DOWNLOAD = 0;
-    public static final int DOWNLOADING = 1;
-    public static final int DOWNLOADED = 2;
-    public static final int INSTALLED = 3;
-    public static final int NEED_UDPATE = 4;
+    public static final int NOT_DOWNLOAD = 1;
+    public static final int DOWNLOADING = 2;
+    public static final int DOWNLOADED = 3;
+    public static final int INSTALLED = 4;
+    public static final int NEED_UDPATE = 5;
     
 }

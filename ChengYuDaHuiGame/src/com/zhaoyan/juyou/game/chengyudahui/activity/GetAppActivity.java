@@ -100,6 +100,11 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 				break;
 			case GetAppListener.MSG_START_DOWNLOAD:
 			case GetAppListener.MSG_UPDATE_APP:
+				if (msg.what == GetAppListener.MSG_UPDATE_APP) {
+					appInfo.setLastStatus(Conf.NEED_UDPATE);
+				} else {
+					appInfo.setLastStatus(Conf.NOT_DOWNLOAD);
+				}
 				appInfo.setStatus(Conf.DOWNLOADING);
 				appInfo.setProgressBytes(0);
 				appInfo.setPercent(0);
@@ -117,6 +122,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 				if (new File(localPath).exists()) {
 					APKUtil.installApp(getApplicationContext(), localPath);
 				} else {
+					appInfo.setLastStatus(Conf.NOT_DOWNLOAD);
 					appInfo.setStatus(Conf.DOWNLOADING);
 					appInfo.setProgressBytes(0);
 					appInfo.setPercent(0);
@@ -292,7 +298,12 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
 				stopDownload(appInfo);
-				appInfo.setStatus(Conf.NOT_DOWNLOAD);
+				int lastStatus = appInfo.getLastStatus();
+				if (lastStatus == 0) {
+					appInfo.setStatus(Conf.NOT_DOWNLOAD);
+				} else {
+					appInfo.setStatus(lastStatus);
+				}
 				appInfo.setDownloadId(-1);
 				appInfo.setProgressBytes(0);
 				appInfo.setPercent(0);
@@ -424,10 +435,11 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 			} else if (Conf.ACTION_CANCEL_DOWNLOAD.equals(action)) {
 				long downloadId = intent.getLongExtra(Conf.KEY_NAME_DOWNLOAD_ID, -1);
 				Log.d(TAG, "ACTION_CANCEL_DOWNLOAD:" + downloadId);
+				int lastStatus = intent.getIntExtra(Conf.KEY_NAME_LAST_STATUS, 1);
 				if (downloadId != -1) {
 					int position = getPosition(downloadId);
 					AppInfo appInfo = mAppList.get(position);
-					appInfo.setStatus(Conf.NOT_DOWNLOAD);
+					appInfo.setStatus(lastStatus);
 					appInfo.setDownloadId(-1);
 					appInfo.setProgressBytes(0);
 					appInfo.setPercent(0);
@@ -438,8 +450,10 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 				long downloadId = intent.getLongExtra(Conf.KEY_NAME_DOWNLOAD_ID, -1);
 				int position = intent.getIntExtra(Conf.KEY_NAME_ITEM_POSITION, -1);
 				Log.d(TAG, "ACTION_START_DOWNLOAD:" + downloadId + "," + position);
+				int lastStatus = intent.getIntExtra(Conf.KEY_NAME_LAST_STATUS, 1);
 				if (downloadId != -1 && position != -1) {
 					AppInfo appInfo = mAppList.get(position);
+					appInfo.setLastStatus(lastStatus);
 					appInfo.setStatus(Conf.DOWNLOADING);
 					appInfo.setDownloadId(downloadId);
 					mIdMaps.put(downloadId, position);

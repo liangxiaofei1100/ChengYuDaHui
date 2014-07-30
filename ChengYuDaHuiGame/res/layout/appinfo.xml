@@ -145,18 +145,53 @@
 <!--             android:textColor="@android:color/black" -->
 <!--             android:gravity="center" -->
 <!--             /> -->
+
+		<LinearLayout 
+		    android:id="@+id/ll_info_dl"
+		    android:layout_width="match_parent"
+		    android:layout_height="35.0dp"
+		    android:orientation="horizontal"
+		    android:layout_margin="10dp"
+		    android:background="@drawable/ps__button_flat_dropbox"
+		    android:gravity="center"
+		    >
+		    
+		    <ProgressBar 
+		        android:id="@+id/bar_info_loading"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginRight="8dp"
+		        style="@android:style/Widget.ProgressBar.Small.Inverse"
+		        />
+		    
+		    <TextView 
+		        android:id="@+id/tv_info_dl"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textColor="@android:color/white"
+		        android:text="正在下载: 45%"
+		        />
+		    
+		    <TextView 
+		        android:id="@+id/tv_info_d_tip"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textColor="@android:color/white"
+		        android:text="（点击取消下载）"
+		        />
+		</LinearLayout>
         
-        <com.zhaoyan.common.progressbutton.SubmitProcessButton
-            android:id="@+id/btn_d"
-            android:layout_width="match_parent"
-            android:layout_height="35.0dp"
-            android:textColor="@android:color/white"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/ib_cancel"
-            android:layout_margin="5dp"
-            android:textSize="16.0sp"
-            android:gravity="center"
-            />
+<!--         <com.zhaoyan.common.progressbutton.SubmitProcessButton -->
+<!--             android:id="@+id/btn_d" -->
+<!--             android:layout_width="match_parent" -->
+<!--             android:layout_height="35.0dp" -->
+<!--             android:textColor="@android:color/white" -->
+<!--             android:layout_centerVertical="true" -->
+<!--             android:layout_toLeftOf="@+id/ib_cancel" -->
+<!--             android:layout_margin="5dp" -->
+<!--             android:textSize="16.0sp" -->
+<!--             android:gravity="center" -->
+<!--             /> -->
         
     </RelativeLayout>
 </RelativeLayout>
