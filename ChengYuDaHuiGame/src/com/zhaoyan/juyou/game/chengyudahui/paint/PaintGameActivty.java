@@ -10,30 +10,23 @@ import com.zhaoyan.juyou.game.chengyudahui.MainActivity;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
-import android.os.Build;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
@@ -41,7 +34,6 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class PaintGameActivty extends Activity implements OnClickListener {
 	private ImageView mPaintImage;
@@ -62,6 +54,8 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 	private boolean isMain = true, drawLine = true;
 	private Path mPath;
 	private final int BACKGROUND_COLOR = Color.GRAY;
+	private Drawable mDrawable;
+	private int index = -1;
 
 	private class Operator {
 		private List<Point> pointLists;
@@ -89,6 +83,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.paint_surface);
+		index = getIntent().getIntExtra("index", -1);
 		mPaintChengyuName = (TextView) findViewById(R.id.paint_chengyu_name);
 		mPaintImage = (ImageView) findViewById(R.id.paint_image_view);
 		mPaintChengyuName.setText("");
@@ -122,15 +117,25 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 	}
 
 	private void init() {
-		showWord();
+		// showWord();
 		mPaintBitmap = Bitmap.createBitmap(mWidth, mHeight,
 				Bitmap.Config.ARGB_8888);
+		// BitmapFactory.Options opt = new BitmapFactory.Options();
+		// opt.inPreferredConfig = Bitmap.Config.RGB_565;
+		// opt.inPurgeable = true;
+		// opt.inInputShareable = true;
+		// mPaintBitmap = BitmapFactory.decodeResource(getResources(),
+		// R.drawable.mizige1).copy(Bitmap.Config.ARGB_8888, true);
+		mDrawable = getResources().getDrawable(R.drawable.mizige_new256);
+		mDrawable.setBounds(0, 0, mWidth, mHeight);
 		mCanvas = new Canvas(mPaintBitmap);
-		mCanvas.drawColor(BACKGROUND_COLOR);
+		// mCanvas.drawColor(BACKGROUND_COLOR);
 		mPaint = new Paint();
-		mPaint.setColor(Color.RED);
-		mPaint.setStrokeWidth(5);
-		mCanvas.drawBitmap(mPaintBitmap, new Matrix(), mPaint);
+		mPaint.setColor(Color.BLACK);
+		mPaint.setStrokeWidth(10);
+		// mCanvas.drawBitmap(mPaintBitmap, new Matrix(), mPaint);
+		mDrawable.draw(mCanvas);
+		// mPaintBitmap =setAlpha(mPaintBitmap, 0x1a);
 		mPaintImage.setImageBitmap(mPaintBitmap);
 		if (isMain)
 			mPaintImage.setOnTouchListener(new OnTouchListener() {
@@ -199,7 +204,8 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		switch (arg0.getId()) {
 		case R.id.paint_chengyu_right:
-			mPaintScore++;
+			setResult();
+			break;
 		case R.id.paint_change_word_btn:
 			showWord();
 		case R.id.paint_clean_btn:
@@ -214,7 +220,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 	private void cleanPaint() {
 		if (mPrepareFlag) {
 
-			mCanvas.drawColor(BACKGROUND_COLOR);
+			mDrawable.draw(mCanvas);
 			mPaintImage.setImageBitmap(mPaintBitmap);
 			if (cancelOperator != null)
 				cancelOperator.clear();
@@ -397,5 +403,27 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 			mPaintImage.setImageBitmap(mPaintBitmap);
 		}
 
+	}
+
+	private void setResult() {
+		Intent intent = new Intent();
+		intent.putExtra("index", index);
+		intent.putExtra("data", mPaintBitmap);
+		setResult(20, intent);
+		finish();
+	}
+
+	public static Bitmap setAlpha(Bitmap sourceImg, int number) {
+		int[] argb = new int[sourceImg.getWidth() * sourceImg.getHeight()];
+		sourceImg.getPixels(argb, 0, sourceImg.getWidth(), 0, 0,
+				sourceImg.getWidth(), sourceImg.getHeight());// 获得图片的ARGB值
+		number = number * 255 / 100;
+		for (int i = 0; i < argb.length; i++) {
+			argb[0] = (number << 24) | (argb[0] & 0x00FFFFFF);// 修改最高2位的值
+		}
+		sourceImg = Bitmap.createBitmap(argb, sourceImg.getWidth(),
+				sourceImg.getHeight(), Config.ARGB_8888);
+
+		return sourceImg;
 	}
 }

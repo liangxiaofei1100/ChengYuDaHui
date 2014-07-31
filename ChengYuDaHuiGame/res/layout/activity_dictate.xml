@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_activity"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/dictate_pinyin"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/dictate_word_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dictate_pinyin"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/first_layout"
+            android:layout_width="75dip"
+            android:layout_height="95dip"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/first_pinyin"
+                android:layout_width="75dip"
+                android:layout_height="20dip"
+                android:gravity="center" />
+
+            <FrameLayout
+                android:layout_width="75dip"
+                android:layout_height="75dip" >
+
+                <TextView
+                    android:id="@+id/dictate_first_word"
+                    android:layout_width="75dip"
+                    android:layout_height="75dip"
+                    android:background="@drawable/mizige1"
+                    android:gravity="center"
+                    android:tag="1"
+                    android:textSize="45sp" />
+
+                <ImageView
+                    android:id="@+id/dictate_first_word_img"
+                    android:layout_width="75dip"
+                    android:layout_height="75dip"
+                    android:gravity="center"
+                    android:src="@drawable/mizige1"
+                    android:tag="1"
+                    android:visibility="gone" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/second_layout"
+            android:layout_width="75dip"
+            android:layout_height="95dip"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/second_pinyin"
+                android:layout_width="75dip"
+                android:layout_height="20dip"
+                android:gravity="center" />
+
+            <FrameLayout
+                android:layout_width="75dip"
+                android:layout_height="75dip" >
+
+                <TextView
+                    android:id="@+id/dictate_second_word"
+                    android:layout_width="75dip"
+                    android:layout_height="75dip"
+                    android:background="@drawable/mizige1"
+                    android:gravity="center"
+                    android:tag="2"
+                    android:textSize="45sp" />
+
+                <ImageView
+                    android:id="@+id/dictate_second_word_img"
+                    android:layout_width="75dip"
+                    android:layout_height="75dip"
+                    android:gravity="center"
+                    android:src="@drawable/mizige1"
+                    android:tag="2"
+                    android:visibility="gone" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/third_layout"
+            android:layout_width="75dip"
+            android:layout_height="95dip"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/third_pinyin"
+                android:layout_width="75dip"
+                android:layout_height="20dip"
+                android:gravity="center" />
+
+            <FrameLayout
+                android:layout_width="75dip"
+                android:layout_height="75dip" >
+
+                <TextView
+                    android:id="@+id/dictate_third_word"
+                    android:layout_width="75dip"
+                    android:layout_height="75dip"
+                    android:background="@drawable/mizige1"
+                    android:gravity="center"
+                    android:tag="3"
+                    android:textSize="45sp" />
+
+                <ImageView
+                    android:id="@+id/dictate_third_word_img"
+                    android:layout_width="75dip"
+                    android:layout_height="75dip"
+                    android:gravity="center"
+                    android:src="@drawable/mizige1"
+                    android:tag="3"
+                    android:visibility="gone" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/fourth_layout"
+            android:layout_width="75dip"
+            android:layout_height="95dip"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/fourth_pinyin"
+                android:layout_width="75dip"
+                android:layout_height="20dip"
+                android:gravity="center" />
+
+            <FrameLayout
+                android:layout_width="75dip"
+                android:layout_height="75dip" >
+
+                <TextView
+                    android:id="@+id/dictate_fourth_word"
+                    android:layout_width="75dip"
+                    android:layout_height="75dip"
+                    android:background="@drawable/mizige1"
+                    android:gravity="center"
+                    android:tag="4"
+                    android:textSize="45sp" />
+
+                <ImageView
+                    android:id="@+id/dictate_fourth_word_img"
+                    android:layout_width="75dip"
+                    android:layout_height="75dip"
+                    android:gravity="center"
+                    android:src="@drawable/mizige1"
+                    android:tag="4"
+                    android:visibility="gone" />
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/dictate_word_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/dictate_word_comment"
+        android:layout_below="@+id/dictate_word_layout"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/dictate_word_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/dictate_show_result" />
+
+    <Button
+        android:id="@+id/dictate_show_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/show_result" />
+
+</RelativeLayout>
