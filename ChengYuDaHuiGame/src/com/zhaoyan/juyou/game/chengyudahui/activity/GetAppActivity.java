@@ -33,6 +33,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.baidu.a.a.a.a.a;
 import com.zhaoyan.common.file.APKUtil;
 import com.zhaoyan.common.util.DownloadManagerPro;
 import com.zhaoyan.common.util.PreferencesUtils;
@@ -99,6 +100,11 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 				break;
 			case GetAppListener.MSG_START_DOWNLOAD:
 			case GetAppListener.MSG_UPDATE_APP:
+				if (msg.what == GetAppListener.MSG_UPDATE_APP) {
+					appInfo.setLastStatus(Conf.NEED_UDPATE);
+				} else {
+					appInfo.setLastStatus(Conf.NOT_DOWNLOAD);
+				}
 				appInfo.setStatus(Conf.DOWNLOADING);
 				appInfo.setProgressBytes(0);
 				appInfo.setPercent(0);
@@ -116,6 +122,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 				if (new File(localPath).exists()) {
 					APKUtil.installApp(getApplicationContext(), localPath);
 				} else {
+					appInfo.setLastStatus(Conf.NOT_DOWNLOAD);
 					appInfo.setStatus(Conf.DOWNLOADING);
 					appInfo.setProgressBytes(0);
 					appInfo.setPercent(0);
@@ -182,6 +189,8 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 		IntentFilter filter2 = new IntentFilter();
 		filter2.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
 		filter2.addAction(DownloadManager.ACTION_NOTIFICATION_CLICKED);
+		filter2.addAction(Conf.ACTION_CANCEL_DOWNLOAD);
+		filter2.addAction(Conf.ACTION_START_DOWNLOAD);
 		registerReceiver(mAppReceiver, filter2);
 		
 		mDownloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
@@ -289,7 +298,13 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
 				stopDownload(appInfo);
-				appInfo.setStatus(Conf.NOT_DOWNLOAD);
+				int lastStatus = appInfo.getLastStatus();
+				if (lastStatus == 0) {
+					appInfo.setStatus(Conf.NOT_DOWNLOAD);
+				} else {
+					appInfo.setStatus(lastStatus);
+				}
+				appInfo.setDownloadId(-1);
 				appInfo.setProgressBytes(0);
 				appInfo.setPercent(0);
 				mAdapter.notifyDataSetChanged();
@@ -307,6 +322,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 		Intent intent = new Intent();
 		intent.setClass(GetAppActivity.this, AppInfoActicity.class);
 		intent.putExtra("appinfo", appInfo);
+		intent.putExtra(Conf.KEY_NAME_ITEM_POSITION, position);
 		startActivity(intent);
 	}
 	
@@ -318,6 +334,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 
         @Override
         public void onChange(boolean selfChange) {
+        	Log.d(TAG, "onChange");
             updateView();
         }
 
@@ -396,7 +413,8 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
                 appInfo.setAppLocalPath(localFileName);
                 Log.d(TAG, "localFileName:" + localFileName);
                 updateView();
-                mIdMaps.remove(completeDownloadId);
+                appInfo.setDownloadId(-1);
+                removeDownloadId(completeDownloadId);
                 
              // if download successful, install apk
                 int status = mDownloadManagerPro.getStatusById(completeDownloadId);
@@ -414,6 +432,34 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 				}
 			} else if (DownloadManager.ACTION_NOTIFICATION_CLICKED.equals(action)) {
 				Log.d(TAG, "Notification clicked");
+			} else if (Conf.ACTION_CANCEL_DOWNLOAD.equals(action)) {
+				long downloadId = intent.getLongExtra(Conf.KEY_NAME_DOWNLOAD_ID, -1);
+				Log.d(TAG, "ACTION_CANCEL_DOWNLOAD:" + downloadId);
+				int lastStatus = intent.getIntExtra(Conf.KEY_NAME_LAST_STATUS, 1);
+				if (downloadId != -1) {
+					int position = getPosition(downloadId);
+					AppInfo appInfo = mAppList.get(position);
+					appInfo.setStatus(lastStatus);
+					appInfo.setDownloadId(-1);
+					appInfo.setProgressBytes(0);
+					appInfo.setPercent(0);
+					removeDownloadId(downloadId);
+					mAdapter.notifyDataSetChanged();
+				}
+			} else if (Conf.ACTION_START_DOWNLOAD.equals(action)) {
+				long downloadId = intent.getLongExtra(Conf.KEY_NAME_DOWNLOAD_ID, -1);
+				int position = intent.getIntExtra(Conf.KEY_NAME_ITEM_POSITION, -1);
+				Log.d(TAG, "ACTION_START_DOWNLOAD:" + downloadId + "," + position);
+				int lastStatus = intent.getIntExtra(Conf.KEY_NAME_LAST_STATUS, 1);
+				if (downloadId != -1 && position != -1) {
+					AppInfo appInfo = mAppList.get(position);
+					appInfo.setLastStatus(lastStatus);
+					appInfo.setStatus(Conf.DOWNLOADING);
+					appInfo.setDownloadId(downloadId);
+					mIdMaps.put(downloadId, position);
+					
+					updateView();
+				}
 			}
 		}
 	}
@@ -426,6 +472,12 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 		}
 		Log.d(TAG, "getPosition.position:" + postion);
 		return postion;
+	}
+	
+	private void removeDownloadId(long id){
+		if (mIdMaps.containsKey(id)) {
+			mIdMaps.remove(id);
+		}
 	}
 
 	@Override

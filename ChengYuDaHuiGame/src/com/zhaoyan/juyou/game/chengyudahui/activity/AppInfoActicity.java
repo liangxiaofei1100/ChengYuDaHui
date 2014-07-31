@@ -4,9 +4,12 @@ import java.io.File;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DownloadManager;
+import android.app.AlertDialog.Builder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -18,6 +21,8 @@ import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +48,10 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 	private TextView mAuthorView;
 	
 	private SubmitProcessButton mDLButton;
-	private Button mCancelBtn;
+//	private Button mCancelBtn;
+	private LinearLayout mDownloadLL;
+	private ProgressBar mDLBar;
+	private TextView mInfoTV, mInfoTipTV;
 	
 	private AppInfo mAppInfo;
 	
@@ -57,6 +65,8 @@ public class AppInfoActicity extends Activity implements OnClickListener {
     
     private long mDownloadId = 0;
     
+    private int mItemPosition = -1;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,12 +76,16 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 		if (intent != null) {
 			Log.d(TAG, "intent is not null");
 			mAppInfo = intent.getParcelableExtra("appinfo");
+			mItemPosition = intent.getIntExtra(Conf.KEY_NAME_ITEM_POSITION, -1);
 		} else {
 			Log.e(TAG, "intent is null");
 		}
 		
 		if (mAppInfo != null) {
 			Log.d(TAG, mAppInfo.toString());
+			if (mAppInfo.getDownloadId() != -1) {
+				mDownloadId = mAppInfo.getDownloadId();
+			}
 		} else {
 			Log.e(TAG, "mAppInfo is null");
 		}
@@ -114,12 +128,20 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 		
 		mAppIconView.setDefaultImageResource(R.drawable.ic_launcher);
 		
-		mCancelBtn = (Button) findViewById(R.id.ib_cancel);
-		mCancelBtn.setOnClickListener(this);
+//		mCancelBtn = (Button) findViewById(R.id.ib_cancel);
+//		mCancelBtn.setOnClickListener(this);
 		
-		mDLButton = (SubmitProcessButton) findViewById(R.id.btn_d);
-		mDLButton.setOnClickListener(this);
-		mDLButton.setCompleteText(getString(R.string.install));
+//		mDLButton = (SubmitProcessButton) findViewById(R.id.btn_d);
+//		mDLButton.setOnClickListener(this);
+//		mDLButton.setCompleteText(getString(R.string.install));
+		
+		mDownloadLL = (LinearLayout) findViewById(R.id.ll_info_dl);
+		mDownloadLL.setOnClickListener(this);
+		mDLBar = (ProgressBar) findViewById(R.id.bar_info_loading);
+		mDLBar.setVisibility(View.GONE);
+		mInfoTV = (TextView) findViewById(R.id.tv_info_dl);
+		mInfoTipTV = (TextView) findViewById(R.id.tv_info_d_tip);
+		mInfoTipTV.setVisibility(View.GONE);
 		
 		if (mAppInfo != null) {
 			mAppIconView.setPath(mAppInfo.getIconUrl());
@@ -136,19 +158,25 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 			
 			mJieMianView1.setPath(mAppInfo.getJiemianUrl1());
 			mJieMianView2.setPath(mAppInfo.getJiemianUrl2());
+			mJieMianView1.setDefaultImageResource(R.drawable.sw_downloading_bg);
+			mJieMianView2.setDefaultImageResource(R.drawable.sw_downloading_bg);
 			
 			switch (mAppInfo.getStatus()) {
 			case Conf.DOWNLOADED:
-				mDLButton.setText(R.string.install);
+//				mDLButton.setText(R.string.install);
+				mInfoTV.setText(R.string.install);
 				break;
 			case Conf.INSTALLED:
-				mDLButton.setText(R.string.open);
+//				mDLButton.setText(R.string.open);
+				mInfoTV.setText(R.string.open);
 				break;
 			case Conf.NEED_UDPATE:
-				mDLButton.setText(R.string.update);
+//				mDLButton.setText(R.string.update);
+				mInfoTV.setText(R.string.update);
 				break;
 			case Conf.NOT_DOWNLOAD:
-				mDLButton.setText(R.string.download);
+//				mDLButton.setText(R.string.download);
+				mInfoTV.setText(R.string.download);
 				break;
 
 			default:
@@ -166,7 +194,8 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btn_d:
+//		case R.id.btn_d:
+		case R.id.ll_info_dl:
 			int status = mAppInfo.getStatus();
 			switch (status) {
 			case Conf.DOWNLOADED:
@@ -174,7 +203,8 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 				if (new File(localPath).exists()) {
 					APKUtil.installApp(getApplicationContext(), localPath);
 				} else {
-					download();
+					mAppInfo.setLastStatus(Conf.NOT_DOWNLOAD);
+					download(Conf.NOT_DOWNLOAD);
 				}
 				break;
 			case Conf.INSTALLED:
@@ -190,37 +220,81 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 				break;
 			case Conf.NEED_UDPATE:
 			case Conf.NOT_DOWNLOAD:
-				int progress = mDLButton.getProgress();
-				if (progress > 0 && progress < 100) {
-					mDLButton.setProgress(0);
-					mDLButton.setText("下载");
-					mDownloadManager.remove(mDownloadId);
-				} else {
-					download();
-				}
+				mAppInfo.setLastStatus(status);
+				download(status);
+				break;
+			case Conf.DOWNLOADING:
+				showCancelDownloadDialog(mAppInfo);
 				break;
 			default:
 				break;
 			}
 			break;
-		case R.id.ib_cancel:
-			mDLButton.setProgress(0);
-			mDLButton.setText("下载");
-			mDownloadManager.remove(mDownloadId);
-			
-			mCancelBtn.setVisibility(View.INVISIBLE);
-			break;
+//		case R.id.ib_cancel:
+//			mDLButton.setProgress(0);
+//			mDLButton.setText("下载");
+//			mDownloadManager.remove(mDownloadId);
+//			
+//			mCancelBtn.setVisibility(View.INVISIBLE);
+//			break;
 
 		default:
 			break;
 		}
 	}
 	
-	private void download(){
-		mDLButton.setText(R.string.pre_download);
-		mCancelBtn.setVisibility(View.VISIBLE);
+	private void download(int lastStatus){
+//		mDLButton.setText(R.string.pre_download);
+		mInfoTV.setText(R.string.pre_download);
+		mDLBar.setVisibility(View.VISIBLE);
+//		mCancelBtn.setVisibility(View.VISIBLE);
+		mAppInfo.setStatus(Conf.DOWNLOADING);
 		mDownloadId = DownloadUtils.downloadApp(getApplicationContext(), mDownloadManager, mAppInfo);
+		mAppInfo.setDownloadId(mDownloadId);
+		
+		Intent intent = new Intent(Conf.ACTION_START_DOWNLOAD);
+		intent.putExtra(Conf.KEY_NAME_DOWNLOAD_ID, mDownloadId);
+		intent.putExtra(Conf.KEY_NAME_ITEM_POSITION, mItemPosition);
+		intent.putExtra(Conf.KEY_NAME_LAST_STATUS, lastStatus);
+		sendBroadcast(intent);
+		
 		updateView();
+	}
+	
+	private void showCancelDownloadDialog(final AppInfo appInfo) {
+		AlertDialog.Builder builder = new Builder(AppInfoActicity.this);
+		builder.setMessage("将取消下载:" + appInfo.getLabel());
+		builder.setTitle("停止下载");
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				mDownloadManager.remove(appInfo.getDownloadId());
+				Intent intent = new Intent(Conf.ACTION_CANCEL_DOWNLOAD);
+				intent.putExtra(Conf.KEY_NAME_DOWNLOAD_ID, mDownloadId);
+				if (0 == mAppInfo.getLastStatus()) {
+					intent.putExtra(Conf.KEY_NAME_LAST_STATUS, Conf.NOT_DOWNLOAD);
+				} else {
+					intent.putExtra(Conf.KEY_NAME_LAST_STATUS, mAppInfo.getLastStatus());
+				}
+				sendBroadcast(intent);
+				int lastStatus = appInfo.getLastStatus();
+				if (lastStatus == Conf.NEED_UDPATE) {
+					mInfoTV.setText(R.string.update);
+				} else {
+					mInfoTV.setText(R.string.download);
+				}
+				mDLBar.setVisibility(View.GONE);
+				mInfoTipTV.setVisibility(View.GONE);
+				
+				appInfo.setDownloadId(-1);
+				appInfo.setProgressBytes(0);
+				appInfo.setPercent(0);
+//				mDLButton.setText(R.string.download);
+//				mDLButton.setProgress(0);
+			}
+		});
+		builder.setNegativeButton("取消", null);
+		builder.create().show();
 	}
 	
 	class DownloadChangeObserver extends ContentObserver {
@@ -253,6 +327,10 @@ public class AppInfoActicity extends Activity implements OnClickListener {
                     Log.d(TAG, "status:" +  status);
                     if ( status == DownloadManager.STATUS_SUCCESSFUL) {
                     	PreferencesUtils.putString(getApplicationContext(), mAppInfo.getPackageName(), localFileName);
+                    	mInfoTV.setText("点击安装");
+                    	mDLBar.setVisibility(View.GONE);
+                    	mInfoTipTV.setVisibility(View.GONE);
+                    	
                     	mAppInfo.setStatus(Conf.DOWNLOADED);
                     	APKUtil.installApp(context, localFileName);
                     }
@@ -281,25 +359,33 @@ public class AppInfoActicity extends Activity implements OnClickListener {
                 case 0:
                     int status = (Integer)msg.obj;
                     if (isDownloading(status)) {
-                        mDLButton.setLoadingText("0%");
+//                        mDLButton.setLoadingText("0%");
+                    	mInfoTV.setText("正在下载:0%");
+                    	mInfoTipTV.setVisibility(View.VISIBLE);
+                    	mInfoTipTV.setText("(点击取消下载)");
                         if (msg.arg2 < 0) {
-                        	mDLButton.setProgress(0);
+//                        	mDLButton.setProgress(0);
                         } else {
 //                        	String percent = getNotiPercent(msg.arg1, msg.arg2);
                         	int progress = getProgress(msg.arg1, msg.arg2);
                         	Log.d(TAG, "progress:" + progress);
-                        	mDLButton.setLoadingText(progress + "%");
-                        	mDLButton.setProgress(progress);
+//                        	mDLButton.setLoadingText(progress + "%");
+//                        	mDLButton.setProgress(progress);
+                        	mInfoTV.setText("正在下载:" + progress + "%");
                         }
                     } else {
                         if (status == DownloadManager.STATUS_FAILED) {
                         	int reason = mDownloadManagerPro.getReason(mDownloadId);
-                        	mDLButton.setErrorText("下载失败");
-                        	mDLButton.setError("fail code:" + reason);
+//                        	mDLButton.setErrorText("下载失败");
+//                        	mDLButton.setError("fail code:" + reason);
+                        	Toast.makeText(getApplicationContext(), "下载失败", Toast.LENGTH_SHORT).show();
+                        	mInfoTV.setText("重新下载");
+                        	mDLBar.setVisibility(View.GONE);
+                        	mInfoTipTV.setVisibility(View.GONE);
                         	Log.e(TAG, "download failed.reason:" + reason);
                         } else if (status == DownloadManager.STATUS_SUCCESSFUL) {
 //                        	ToastUtils.show(getApplicationContext(), "下载完成");
-                    		mCancelBtn.setVisibility(View.INVISIBLE);
+//                    		mCancelBtn.setVisibility(View.INVISIBLE);
                         } else {
                         }
                     }
@@ -337,6 +423,13 @@ public class AppInfoActicity extends Activity implements OnClickListener {
         return downloadManagerStatus == DownloadManager.STATUS_RUNNING
                 || downloadManagerStatus == DownloadManager.STATUS_PAUSED
                 || downloadManagerStatus == DownloadManager.STATUS_PENDING;
+    }
+    
+    @Override
+    public void onBackPressed() {
+    	// TODO Auto-generated method stub
+    	super.onBackPressed();
+    	
     }
 	
 }
