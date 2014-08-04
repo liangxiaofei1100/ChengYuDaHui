@@ -12,4 +12,6 @@ public class ZhaoYanAccount {
 	public String phone = "";
 	/** gold coin */
 	public int gold = 0;
+	/** jifen */
+	public int jifen = 0;
 }

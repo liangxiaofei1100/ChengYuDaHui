@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.account.bae.FindPassword;
 import com.zhaoyan.juyou.account.bae.GetUserInfo;
 import com.zhaoyan.juyou.account.bae.GoldOperation;
@@ -15,6 +16,7 @@ import com.zhaoyan.juyou.account.bae.RegisterUserCheckUserName;
 import com.zhaoyan.juyou.game.chengyudahui.utils.DeviceInfoUtil;
 
 public class ZhaoYanAccountManager {
+	private static final String TAG = ZhaoYanAccountManager.class.getSimpleName();
 
 	public static boolean isQuickRegisterAccount(Context context,
 			ZhaoYanAccount account) {
@@ -38,6 +40,7 @@ public class ZhaoYanAccountManager {
 		editor.putString("email", account.email);
 		editor.putString("phone", account.phone);
 		editor.putInt("gold", account.gold);
+		editor.putInt("jifen", account.jifen);
 		editor.commit();
 	}
 
@@ -51,6 +54,7 @@ public class ZhaoYanAccountManager {
 		editor.remove("email");
 		editor.remove("phone");
 		editor.remove("gold");
+		editor.remove("jifen");
 		editor.commit();
 	}
 
@@ -64,6 +68,8 @@ public class ZhaoYanAccountManager {
 		String email = sharedPreferences.getString("email", "");
 		String phone = sharedPreferences.getString("phone", "");
 		int gold = sharedPreferences.getInt("gold", 0);
+		int jifen = sharedPreferences.getInt("jifen", 0);
+		
 		if (!username.equals("")) {
 			account = new ZhaoYanAccount();
 			account.userName = username;
@@ -71,6 +77,7 @@ public class ZhaoYanAccountManager {
 			account.email = email;
 			account.phone = phone;
 			account.gold = gold;
+			account.jifen = jifen;
 		}
 		return account;
 	}
@@ -80,12 +87,12 @@ public class ZhaoYanAccountManager {
 		ZhaoYanAccount accountLocal = getAccountFromLocal(context);
 		if (accountLocal == null) {
 			accountLocal = new ZhaoYanAccount();
-			return;
 		}
 		accountLocal.userName = accountServer.userName;
 		accountLocal.email = accountServer.email;
 		accountLocal.phone = accountServer.phone;
 		accountLocal.gold = accountServer.gold;
+		accountLocal.jifen	= accountServer.jifen;
 		saveAccountToLocal(context, accountLocal);
 	}
 

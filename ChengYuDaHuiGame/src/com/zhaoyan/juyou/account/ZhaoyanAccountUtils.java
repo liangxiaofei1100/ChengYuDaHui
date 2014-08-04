@@ -4,7 +4,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import com.zhaoyan.communication.util.Log;
+
 public class ZhaoyanAccountUtils {
+	private static final String TAG = ZhaoyanAccountUtils.class.getSimpleName();
 
 	/**
 	 * Parse ZhaoYanUser from json string.
@@ -23,9 +26,10 @@ public class ZhaoyanAccountUtils {
 			user.userName = userJsonObject.getString("userName");
 			user.email = userJsonObject.getString("email");
 			user.phone = userJsonObject.getString("phone");
-			user.gold = userJsonObject.getInt("gold");
+			user.jifen = userJsonObject.getInt("jifen");
 		} catch (JSONException e) {
 			e.printStackTrace();
+			Log.e(TAG, "parseUserInfo error" + e);
 		}
 
 		return user;

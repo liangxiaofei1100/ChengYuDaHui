@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:text="金币信息："
+        android:text="账户信息："
         android:textSize="12sp" />
 
     <include layout="@layout/splitline" />
@@ -32,6 +32,14 @@
 
         <TextView
             android:id="@+id/tv_gold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="14sp"
+            android:color="@color/gray" />
+
+        <TextView
+            android:id="@+id/tv_jifen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"

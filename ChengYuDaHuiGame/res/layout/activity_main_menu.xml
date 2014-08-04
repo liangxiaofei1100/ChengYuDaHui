@@ -10,6 +10,26 @@
         android:layout_height="30dp"
         android:layout_alignParentTop="true"
         android:background="@drawable/title_top_bg" >
+
+        <TextView
+            android:id="@+id/tv_jifen"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@drawable/ic_jifen"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="0" />
+
+        <TextView
+            android:id="@+id/tv_gold"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/tv_jifen"
+            android:drawableLeft="@drawable/ic_gold"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="0" />
     </RelativeLayout>
 
     <RelativeLayout
