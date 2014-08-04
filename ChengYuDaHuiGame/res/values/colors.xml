@@ -14,5 +14,9 @@
     
     <color name="bg_text_normal">#00000000</color>
     <color name="bg_text_pressed">#e6e6e6</color>
+    
+    <color name="titlebar_bg">#ffc6bc</color>
+    <color name="actionbar_button_normal">#00000000</color>
+    <color name="actionbar_button_pressed">#e0a0a0</color>
 
 </resources>

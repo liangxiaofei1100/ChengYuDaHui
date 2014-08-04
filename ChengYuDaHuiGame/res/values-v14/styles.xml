@@ -9,4 +9,27 @@
         <!-- API 14 theme customizations can go here. -->
     </style>
 
+    <style name="CustomActionBarStyle" parent="android:Widget.ActionBar">
+        <item name="android:background">@color/titlebar_bg</item>
+    </style>
+
+    <style name="CustomActionButtonStyle" parent="@android:style/Widget.ActionButton">
+
+        <!-- Change action button background color -->
+        <item name="android:background">@drawable/action_button_bg</item>
+    </style>
+
+    <style name="CustomActionOverflowButtonStyle" parent="@android:style/Widget.Holo.Light.ActionButton.Overflow">
+
+        <!-- Change overflow button background color -->
+        <item name="android:background">@drawable/action_button_bg</item>
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <item name="android:actionBarStyle">@style/CustomActionBarStyle</item>
+        <item name="android:actionButtonStyle">@style/CustomActionButtonStyle</item>
+        <item name="android:actionOverflowButtonStyle">@style/CustomActionOverflowButtonStyle</item>
+    </style>
+
 </resources>
