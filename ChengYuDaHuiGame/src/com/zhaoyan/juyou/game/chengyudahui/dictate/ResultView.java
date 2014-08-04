@@ -98,12 +98,16 @@ public class ResultView {
 			}
 		} else {
 			im = (ImageView) mView.findViewById(R.id.result_first_img);
+			im.setImageResource(R.drawable.mizige1);
 			im.setVisibility(View.INVISIBLE);
 			im = (ImageView) mView.findViewById(R.id.result_second_img);
+			im.setImageResource(R.drawable.mizige1);
 			im.setVisibility(View.INVISIBLE);
 			im = (ImageView) mView.findViewById(R.id.result_fourth_img);
+			im.setImageResource(R.drawable.mizige1);
 			im.setVisibility(View.INVISIBLE);
 			im = (ImageView) mView.findViewById(R.id.result_third_img);
+			im.setImageResource(R.drawable.mizige1);
 			im.setVisibility(View.INVISIBLE);
 		}
 

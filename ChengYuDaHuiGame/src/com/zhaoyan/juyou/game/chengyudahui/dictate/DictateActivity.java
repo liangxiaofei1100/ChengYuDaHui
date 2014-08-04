@@ -3,23 +3,26 @@ package com.zhaoyan.juyou.game.chengyudahui.dictate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.db.HistoryData;
+import com.zhaoyan.juyou.game.chengyudahui.db.HistoryData.HistoryColums;
 import com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.text.style.BulletSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+@SuppressLint("UseSparseArrays")
 public class DictateActivity extends Activity implements OnClickListener {
 	private TextView mDictateWordPinyin, mFirstPinyin, mSecondPinyin,
 			mThirdPinyin, mFourthPinyin, mDictateWordFirst, mDictateWordFourth,
@@ -157,25 +160,32 @@ public class DictateActivity extends Activity implements OnClickListener {
 		if (data != null) {
 			if (mPaintMap == null)
 				mPaintMap = new HashMap<Integer, Bitmap>();
-			Bitmap b = data.getParcelableExtra("data");
+			Bitmap temp = PaintGameActivty.mPaintBitmap.copy(
+					Bitmap.Config.ARGB_8888, false);
+			PaintGameActivty.mPaintBitmap.recycle();
 			int i = data.getIntExtra("index", -1);
 			switch (i) {
 			case 1:
-				mFirstPaintImg.setImageBitmap(b);
+				mFirstPaintImg.setImageBitmap(temp);
 				break;
 			case 2:
-				mSecondPaintImg.setImageBitmap(b);
+				mSecondPaintImg.setImageBitmap(temp);
 				break;
 			case 3:
-				mThirdPaintImg.setImageBitmap(b);
+				mThirdPaintImg.setImageBitmap(temp);
 				break;
 			case 4:
-				mFourthPaintImg.setImageBitmap(b);
+				mFourthPaintImg.setImageBitmap(temp);
 				break;
 			default:
 				return;
 			}
-			mPaintMap.put(i, b);
+			Bitmap t = mPaintMap.get(i);
+			if (t != null) {
+				t.recycle();
+				t = null;
+			}
+			mPaintMap.put(i, temp);
 		}
 	}
 
@@ -236,16 +246,23 @@ public class DictateActivity extends Activity implements OnClickListener {
 			int id = v.getId();
 			switch (id) {
 			case R.id.dictate_right:
-				//TODO right
+				// TODO right
 				break;
 			case R.id.dictate_wrong:
-				//TODO wrong
+				// TODO wrong
+				if (false) {
+					ContentValues values = new ContentValues();
+					getContentResolver()
+							.insert(HistoryColums.CONTENT_URI, null);
+				} else {
+
+				}
 				break;
 			default:
 				break;
 			}
-			mResultView.setImage(null);
 			resultDialog.dismiss();
+			mResultView.setImage(null);
 		}
 	}
 

@@ -39,7 +39,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 	private ImageView mPaintImage;
 	private TextView mPaintChengyuName;
 	private Button mChangeWordBtn, mPaintCleanBtn, mPaintRightBtn;
-	private Bitmap mPaintBitmap;
+	public static Bitmap mPaintBitmap;
 	private Point firstPoint, secondPoint, thirdPoint;
 	private Paint mPaint;
 	private Canvas mCanvas;
@@ -54,8 +54,8 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 	private boolean isMain = true, drawLine = true;
 	private Path mPath;
 	private final int BACKGROUND_COLOR = Color.GRAY;
-	private Drawable mDrawable;
 	private int index = -1;
+	private Drawable mDrawable;
 
 	private class Operator {
 		private List<Point> pointLists;
@@ -117,24 +117,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 	}
 
 	private void init() {
-		// showWord();
-		mPaintBitmap = Bitmap.createBitmap(mWidth, mHeight,
-				Bitmap.Config.ARGB_8888);
-		// BitmapFactory.Options opt = new BitmapFactory.Options();
-		// opt.inPreferredConfig = Bitmap.Config.RGB_565;
-		// opt.inPurgeable = true;
-		// opt.inInputShareable = true;
-		// mPaintBitmap = BitmapFactory.decodeResource(getResources(),
-		// R.drawable.mizige1).copy(Bitmap.Config.ARGB_8888, true);
-		mDrawable = getResources().getDrawable(R.drawable.mizige_new256);
-		mDrawable.setBounds(0, 0, mWidth, mHeight);
-		mCanvas = new Canvas(mPaintBitmap);
-		// mCanvas.drawColor(BACKGROUND_COLOR);
-		mPaint = new Paint();
-		mPaint.setColor(Color.BLACK);
-		mPaint.setStrokeWidth(10);
-		// mCanvas.drawBitmap(mPaintBitmap, new Matrix(), mPaint);
-		mDrawable.draw(mCanvas);
+		createBitmap();
 		// mPaintBitmap =setAlpha(mPaintBitmap, 0x1a);
 		mPaintImage.setImageBitmap(mPaintBitmap);
 		if (isMain)
@@ -220,8 +203,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 	private void cleanPaint() {
 		if (mPrepareFlag) {
 
-			mDrawable.draw(mCanvas);
-			mPaintImage.setImageBitmap(mPaintBitmap);
+			createBitmap();
 			if (cancelOperator != null)
 				cancelOperator.clear();
 			if (resumeOperator != null)
@@ -405,11 +387,12 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 
 	}
 
+	
 	private void setResult() {
 		Intent intent = new Intent();
 		intent.putExtra("index", index);
-		intent.putExtra("data", mPaintBitmap);
 		setResult(20, intent);
+		// mPaintBitmap.recycle();
 		finish();
 	}
 
@@ -425,5 +408,31 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 				sourceImg.getHeight(), Config.ARGB_8888);
 
 		return sourceImg;
+	}
+
+	private void createBitmap() {
+		if (mPaintBitmap != null) {
+			mPaintBitmap.recycle();
+		}
+		mPaintBitmap = Bitmap.createBitmap(mWidth, mHeight,
+				Bitmap.Config.ARGB_8888);
+		// BitmapFactory.Options opt = new BitmapFactory.Options();
+		// opt.inPreferredConfig = Bitmap.Config.RGB_565;
+		// opt.inPurgeable = true;
+		// opt.inInputShareable = true;
+		// mPaintBitmap = BitmapFactory.decodeResource(getResources(),
+		// R.drawable.mizige1).copy(Bitmap.Config.ARGB_8888, true);
+		if (mDrawable == null) {
+			mDrawable = getResources().getDrawable(R.drawable.mizige_new256);
+			mDrawable.setBounds(0, 0, mWidth, mHeight);
+		}
+		mCanvas = new Canvas(mPaintBitmap);
+		mPaint = new Paint();
+		mPaint.setColor(Color.BLACK);
+		mPaint.setStrokeWidth(15);
+		// mCanvas.drawBitmap(mPaintBitmap, new Matrix(), mPaint);
+		mDrawable.draw(mCanvas);
+		// mPaintBitmap =setAlpha(mPaintBitmap, 0x1a);
+		mPaintImage.setImageBitmap(mPaintBitmap);
 	}
 }
