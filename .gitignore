@@ -23,8 +23,8 @@ ZhaoYanCommunicationLib/.settings
 
 
 # Local configuration file (sdk path, etc)
-ChengYuDaHuiGame/local.properties
-ZhaoYanCommunicationLib/local.properties
+ChengYuDaHuiGame/project.properties
+ZhaoYanCommunicationLib/project.properties
 
 # Eclipse project files
 ChengYuDaHuiGame/.classpath
