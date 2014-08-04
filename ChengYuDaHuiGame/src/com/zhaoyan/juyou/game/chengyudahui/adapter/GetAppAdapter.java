@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.angel.devil.view.AsyncImageView;
-import com.zhaoyan.common.progressbutton.SubmitProcessButton;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.AppInfo;
