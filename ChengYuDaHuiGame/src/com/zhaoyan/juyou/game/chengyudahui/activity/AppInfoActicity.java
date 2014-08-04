@@ -28,7 +28,6 @@ import android.widget.Toast;
 
 import com.angel.devil.view.AsyncImageView;
 import com.zhaoyan.common.file.APKUtil;
-import com.zhaoyan.common.progressbutton.SubmitProcessButton;
 import com.zhaoyan.common.util.DownloadManagerPro;
 import com.zhaoyan.common.util.PreferencesUtils;
 import com.zhaoyan.communication.util.Log;
@@ -47,7 +46,6 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 	private AsyncImageView mJieMianView1,mJieMianView2;
 	private TextView mAuthorView;
 	
-	private SubmitProcessButton mDLButton;
 //	private Button mCancelBtn;
 	private LinearLayout mDownloadLL;
 	private ProgressBar mDLBar;
@@ -131,10 +129,6 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 //		mCancelBtn = (Button) findViewById(R.id.ib_cancel);
 //		mCancelBtn.setOnClickListener(this);
 		
-//		mDLButton = (SubmitProcessButton) findViewById(R.id.btn_d);
-//		mDLButton.setOnClickListener(this);
-//		mDLButton.setCompleteText(getString(R.string.install));
-		
 		mDownloadLL = (LinearLayout) findViewById(R.id.ll_info_dl);
 		mDownloadLL.setOnClickListener(this);
 		mDLBar = (ProgressBar) findViewById(R.id.bar_info_loading);
@@ -163,19 +157,15 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 			
 			switch (mAppInfo.getStatus()) {
 			case Conf.DOWNLOADED:
-//				mDLButton.setText(R.string.install);
 				mInfoTV.setText(R.string.install);
 				break;
 			case Conf.INSTALLED:
-//				mDLButton.setText(R.string.open);
 				mInfoTV.setText(R.string.open);
 				break;
 			case Conf.NEED_UDPATE:
-//				mDLButton.setText(R.string.update);
 				mInfoTV.setText(R.string.update);
 				break;
 			case Conf.NOT_DOWNLOAD:
-//				mDLButton.setText(R.string.download);
 				mInfoTV.setText(R.string.download);
 				break;
 
@@ -230,13 +220,6 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 				break;
 			}
 			break;
-//		case R.id.ib_cancel:
-//			mDLButton.setProgress(0);
-//			mDLButton.setText("下载");
-//			mDownloadManager.remove(mDownloadId);
-//			
-//			mCancelBtn.setVisibility(View.INVISIBLE);
-//			break;
 
 		default:
 			break;
@@ -244,7 +227,6 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 	}
 	
 	private void download(int lastStatus){
-//		mDLButton.setText(R.string.pre_download);
 		mInfoTV.setText(R.string.pre_download);
 		mDLBar.setVisibility(View.VISIBLE);
 //		mCancelBtn.setVisibility(View.VISIBLE);
@@ -289,8 +271,6 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 				appInfo.setDownloadId(-1);
 				appInfo.setProgressBytes(0);
 				appInfo.setPercent(0);
-//				mDLButton.setText(R.string.download);
-//				mDLButton.setProgress(0);
 			}
 		});
 		builder.setNegativeButton("取消", null);
@@ -359,25 +339,18 @@ public class AppInfoActicity extends Activity implements OnClickListener {
                 case 0:
                     int status = (Integer)msg.obj;
                     if (isDownloading(status)) {
-//                        mDLButton.setLoadingText("0%");
                     	mInfoTV.setText("正在下载:0%");
                     	mInfoTipTV.setVisibility(View.VISIBLE);
                     	mInfoTipTV.setText("(点击取消下载)");
                         if (msg.arg2 < 0) {
-//                        	mDLButton.setProgress(0);
                         } else {
-//                        	String percent = getNotiPercent(msg.arg1, msg.arg2);
                         	int progress = getProgress(msg.arg1, msg.arg2);
                         	Log.d(TAG, "progress:" + progress);
-//                        	mDLButton.setLoadingText(progress + "%");
-//                        	mDLButton.setProgress(progress);
                         	mInfoTV.setText("正在下载:" + progress + "%");
                         }
                     } else {
                         if (status == DownloadManager.STATUS_FAILED) {
                         	int reason = mDownloadManagerPro.getReason(mDownloadId);
-//                        	mDLButton.setErrorText("下载失败");
-//                        	mDLButton.setError("fail code:" + reason);
                         	Toast.makeText(getApplicationContext(), "下载失败", Toast.LENGTH_SHORT).show();
                         	mInfoTV.setText("重新下载");
                         	mDLBar.setVisibility(View.GONE);
