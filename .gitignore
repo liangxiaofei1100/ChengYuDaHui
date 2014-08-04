@@ -46,3 +46,6 @@ ZhaoYanCommunicationLib/proguard/
 *.ipr
 *.iws
 .idea
+
+.gitignore
+project.properties
