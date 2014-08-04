@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.zhaoyan.juyou.common.pinyin.PinYinUtil;
+
 /**
  * Convert ChengYu from chengyu.txt to chengyu.db.
  * 
@@ -18,7 +20,6 @@ public class MainClass {
 		ArrayList<ChengYu> chengyuList = readFromExcelFile();
 		// Get all caici chengyu.
 		ArrayList<String> caiciChengYuList = getCaiCiChengYuFromExcelFile();
-
 		log("CaiCi ChengYu start...");
 		boolean isChengYuExist = false;
 		for (String caiciChengYu : caiciChengYuList) {
