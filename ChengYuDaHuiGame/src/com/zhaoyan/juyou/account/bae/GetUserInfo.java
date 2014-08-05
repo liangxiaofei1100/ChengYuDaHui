@@ -20,8 +20,8 @@ import org.apache.http.util.EntityUtils;
 
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
 
+import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.account.GetUserInfoResultListener;
 import com.zhaoyan.juyou.account.ZhaoYanAccount;
 import com.zhaoyan.juyou.account.ZhaoyanAccountUtils;
@@ -82,16 +82,16 @@ public class GetUserInfo {
 						+ mRespondMessage);
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
-				Log.e(TAG, "error. ", e);
+				Log.e(TAG, "error. " + e);
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
-				Log.e(TAG, "error. ", e);
+				Log.e(TAG, "error. " + e);
 			} catch (IOException e) {
 				e.printStackTrace();
-				Log.e(TAG, "error. ", e);
+				Log.e(TAG, "error. " + e);
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
-				Log.e(TAG, "error. ", e);
+				Log.e(TAG, "error. " + e);
 			}
 			return result;
 		}

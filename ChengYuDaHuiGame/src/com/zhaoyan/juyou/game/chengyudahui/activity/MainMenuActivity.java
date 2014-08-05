@@ -1,7 +1,10 @@
 package com.zhaoyan.juyou.game.chengyudahui.activity;
 
 import com.zhaoyan.communication.util.Log;
+import com.zhaoyan.juyou.account.ZhaoYanAccount;
+import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.dictate.DictateActivity;
 import com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameActivity;
 import com.zhaoyan.juyou.game.chengyudahui.spy.SpyMainActivity;
 import com.zhaoyan.juyou.game.chengyudahui.study.StudyActivity;
@@ -11,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 /**
  * Main menu of the App.
@@ -20,11 +24,32 @@ public class MainMenuActivity extends Activity {
 	private static final String TAG = MainMenuActivity.class.getSimpleName();
 	private Context mContext;
 
+	private TextView mGoldTextView;
+	private TextView mJifenTextView;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_menu);
 		mContext = this;
+
+		initView();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		ZhaoYanAccount account = ZhaoYanAccountManager
+				.getAccountFromLocal(mContext);
+		if (account != null) {
+			mGoldTextView.setText(String.valueOf(account.gold));
+			mJifenTextView.setText(String.valueOf(account.jifen));	
+		}
+	}
+
+	private void initView() {
+		mGoldTextView = (TextView) findViewById(R.id.tv_gold);
+		mJifenTextView = (TextView) findViewById(R.id.tv_jifen);
 	}
 
 	public void launchChengYuStudy(View view) {
@@ -43,7 +68,7 @@ public class MainMenuActivity extends Activity {
 
 	public void launchPictureGuessGame(View view) {
 		Log.d(TAG, "launchPictureGuessGame");
-		Intent intent = new Intent(mContext, GuessGameOfPictureActivity.class);
+		Intent intent = new Intent(mContext, DictateActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 		startActivity(intent);
 	}

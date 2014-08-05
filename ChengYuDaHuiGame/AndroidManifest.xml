@@ -134,8 +134,8 @@
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@style/dialog_style"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameInternet"
             android:screenOrientation="portrait"
@@ -151,6 +151,9 @@
                 android:name="app_id"
                 android:value="333" />
         </activity>
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.DictateActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="com.zhaoyan.juyou.game.chengyudahui.db.ChengyuProvider"

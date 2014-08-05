@@ -25,6 +25,8 @@
     <string name="search_chengyu">输入搜索成语</string>
     <string name="start_game">开始游戏</string>
     <string name="game_right">正确</string>
+    <string name="game_wrong">错误</string>
+    <string name="game_confirm">确认</string>
     <string name="game_next">换词</string>
     <string name="paint_clean">清除</string>
     <string name="speak_time_setting">时间设定</string>
@@ -34,7 +36,6 @@
     <string name="referee">裁判员</string>
     <string name="actor">表演者</string>
     <string name="observer">观察者</string>
-    
     <string name="app_version">版本：%1$s</string>
     <string name="app_size">大小：%1$s</string>
     <string name="app_author">%1$s出品</string>
@@ -42,6 +43,7 @@
     <string name="install">安装</string>
     <string name="update">更新</string>
     <string name="open">打开</string>
+    <string name="show_result">显示结果</string>
     <string name="pre_download">准备下载</string>
     <string name="speak_game_time">游戏时间</string>
     <string name="speak_right_number">正确个数</string>

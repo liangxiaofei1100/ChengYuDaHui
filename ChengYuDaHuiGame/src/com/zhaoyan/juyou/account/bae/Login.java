@@ -19,8 +19,8 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
+import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.account.LoginResultListener;
 import com.zhaoyan.juyou.account.ZhaoYanAccount;
 import com.zhaoyan.juyou.account.ZhaoyanAccountUtils;

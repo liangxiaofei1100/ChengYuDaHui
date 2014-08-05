@@ -1,24 +1,24 @@
 package com.zhaoyan.juyou.game.chengyudahui.activity;
 
-import com.zhaoyan.juyou.account.GetUserInfoResultListener;
-import com.zhaoyan.juyou.account.ZhaoYanAccount;
-import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
-import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.BaiduFrontiaUser;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.zhaoyan.communication.util.Log;
+import com.zhaoyan.juyou.account.GetUserInfoResultListener;
+import com.zhaoyan.juyou.account.ZhaoYanAccount;
+import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
+import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.frontia.BaiduFrontiaUser;
+import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
 
 public class GetGoldActivity extends Activity implements OnClickListener {
 	private static final String TAG = GetGoldActivity.class.getSimpleName();
@@ -28,6 +28,7 @@ public class GetGoldActivity extends Activity implements OnClickListener {
 
 	private TextView mUserNameTextView;
 	private TextView mGoldTextView;
+	private TextView mJifenTextView;
 
 	private ZhaoYanAccount mCurrentAccount;
 
@@ -37,7 +38,7 @@ public class GetGoldActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
-		setTitle("轻松拿金币");
+		setTitle("领取俸禄");
 		setContentView(R.layout.get_gold_activity);
 		mZhaoYanAccountManager = new ZhaoYanAccountManager();
 
@@ -78,6 +79,7 @@ public class GetGoldActivity extends Activity implements OnClickListener {
 	private void initView() {
 		mUserNameTextView = (TextView) findViewById(R.id.tv_username);
 		mGoldTextView = (TextView) findViewById(R.id.tv_gold);
+		mJifenTextView = (TextView) findViewById(R.id.tv_jifen);
 
 		View accountView = findViewById(R.id.ll_acount_info);
 		accountView.setOnClickListener(this);
@@ -134,7 +136,8 @@ public class GetGoldActivity extends Activity implements OnClickListener {
 			return;
 		}
 		mUserNameTextView.setText("账户：" + account.userName);
-		mGoldTextView.setText("金币：" + account.gold);
+		mGoldTextView.setText("功名：" + account.gold);
+		mJifenTextView.setText("俸禄：" + account.jifen);
 	}
 
 	private void updateLocalAccountInfo(ZhaoYanAccount accountServer) {
