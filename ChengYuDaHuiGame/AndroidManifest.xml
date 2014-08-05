@@ -143,6 +143,14 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.QRCodeDisplayActivity"
             android:screenOrientation="portrait" />
+        <activity 
+            android:name="com.zhaoyan.juyou.game.chengyudahui.spy.SpyMainActivity"
+            android:screenOrientation="portrait"
+            >
+            <meta-data
+                android:name="app_id"
+                android:value="333" />
+        </activity>
 
         <provider
             android:name="com.zhaoyan.juyou.game.chengyudahui.db.ChengyuProvider"
@@ -203,6 +211,7 @@
         <!-- push结束 -->
         <!-- baidu push end -->
         <service android:name="com.zhaoyan.juyou.game.chengyudahui.JuYouService" />
+        <service android:name="com.zhaoyan.juyou.game.chengyudahui.spy.SpyService"></service>
     </application>
 
     <!-- Frontia permission start -->

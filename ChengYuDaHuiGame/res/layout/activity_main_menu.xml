@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:onClick="launchChengYuStudy"
+                android:onClick="launchSpyGame"
                 android:src="@drawable/main_menu_shuishiwodi_selector" />
 
             <ImageView

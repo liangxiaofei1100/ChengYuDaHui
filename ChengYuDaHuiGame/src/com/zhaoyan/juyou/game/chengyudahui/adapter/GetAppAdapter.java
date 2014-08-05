@@ -109,19 +109,14 @@ public class GetAppAdapter extends BaseAdapter {
 			holder.downloadBtn.setText("取消");
 			int percent = appInfo.getPercent();
 			Log.d(TAG, "percent:" + percent);
-//			holder.downloadBtn.setProgress(percent);
-//			holder.downloadBtn.setLoadingText(percent + "%");
 			
 			String progress = Utils.getFormatSize(appInfo.getProgressBytes());
 			holder.progressView.setText(progress);
-//			holder.percentView.setText(percent + "%");
 			holder.barView.setProgress(percent);
 			break;
 		case Conf.DOWNLOADED:
 			holder.downloadView.setVisibility(View.GONE);
 			holder.appInfoView.setVisibility(View.VISIBLE);
-//			holder.downloadBtn.setProgress(appInfo.getPercent());
-//			holder.downloadBtn.setCompleteText("安装");
 			holder.downloadBtn.setText("安装");
 			holder.appInfoView.setText(size);
 			break;

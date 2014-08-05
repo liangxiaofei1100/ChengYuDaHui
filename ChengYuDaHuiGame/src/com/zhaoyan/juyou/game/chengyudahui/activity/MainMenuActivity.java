@@ -3,6 +3,7 @@ package com.zhaoyan.juyou.game.chengyudahui.activity;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameActivity;
+import com.zhaoyan.juyou.game.chengyudahui.spy.SpyMainActivity;
 import com.zhaoyan.juyou.game.chengyudahui.study.StudyActivity;
 
 import android.app.Activity;
@@ -50,6 +51,13 @@ public class MainMenuActivity extends Activity {
 	public void launchChengYuNewComment(View view) {
 		Log.d(TAG, "launchChengYuNewComment");
 		Intent intent = new Intent(mContext, ChengYuNewCommentActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+		startActivity(intent);
+	}
+	
+	public void launchSpyGame(View view){
+		Log.d(TAG, "launchSpyGame");
+		Intent intent = new Intent(mContext, SpyMainActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 		startActivity(intent);
 	}
