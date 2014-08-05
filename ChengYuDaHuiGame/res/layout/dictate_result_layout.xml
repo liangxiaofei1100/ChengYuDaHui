@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/dictate_result_show_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/dictate_result_first_layout"
+            android:layout_width="75dip"
+            android:layout_height="150dip"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/result_first_word"
+                android:layout_width="75dip"
+                android:layout_height="75dip"
+                android:background="@drawable/mizige1"
+                android:gravity="center"
+                android:textSize="45sp" />
+
+            <ImageView
+                android:id="@+id/result_first_img"
+                android:layout_width="75dip"
+                android:layout_height="75dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dictate_result_second_layout"
+            android:layout_width="75dip"
+            android:layout_height="150dip"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/result_second_word"
+                android:layout_width="75dip"
+                android:layout_height="75dip"
+                android:background="@drawable/mizige1"
+                android:gravity="center"
+                android:textSize="45sp" />
+
+            <ImageView
+                android:id="@+id/result_second_img"
+                android:layout_width="75dip"
+                android:layout_height="75dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dictate_result_third_layout"
+            android:layout_width="75dip"
+            android:layout_height="150dip"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/result_third_word"
+                android:layout_width="75dip"
+                android:layout_height="75dip"
+                android:background="@drawable/mizige1"
+                android:gravity="center"
+                android:textSize="45sp" />
+
+            <ImageView
+                android:id="@+id/result_third_img"
+                android:layout_width="75dip"
+                android:layout_height="75dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dictate_result_fourth_layout"
+            android:layout_width="75dip"
+            android:layout_height="150dip"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/result_fourth_word"
+                android:layout_width="75dip"
+                android:layout_height="75dip"
+                android:background="@drawable/mizige1"
+                android:gravity="center"
+                android:textSize="45sp" />
+
+            <ImageView
+                android:id="@+id/result_fourth_img"
+                android:layout_width="75dip"
+                android:layout_height="75dip" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dictate_result_show_layout"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/dictate_right"
+            android:layout_width="100dip"
+            android:layout_height="75dip"
+            android:text="@string/game_right"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/dictate_wrong"
+            android:layout_width="100dip"
+            android:layout_height="75dip"
+            android:text="@string/game_wrong"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+</RelativeLayout>
