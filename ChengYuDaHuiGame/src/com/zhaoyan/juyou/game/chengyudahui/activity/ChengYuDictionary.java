@@ -6,7 +6,10 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +23,9 @@ public class ChengYuDictionary extends Activity {
 	private static final int CHENGYU_TOTAL_NUMBER = 20000;
 
 	private Context mContext;
+	private EditText mSearchEditText;
+	private View mClearTextView;
+
 	private TextView mChengYuNameTextView;
 	private TextView mChengYuPinYinTextView;
 	private TextView mChengYuCommentTextView;
@@ -58,6 +64,11 @@ public class ChengYuDictionary extends Activity {
 	}
 
 	private void initView() {
+		mSearchEditText = (EditText) findViewById(R.id.et_search);
+		mSearchEditText.addTextChangedListener(new SearchTextWatcher());
+
+		mClearTextView = findViewById(R.id.iv_clear_text);
+
 		mChengYuNameTextView = (TextView) findViewById(R.id.tv_chengyu_name);
 		mChengYuPinYinTextView = (TextView) findViewById(R.id.tv_chengyu_pinyin);
 		mChengYuCommentTextView = (TextView) findViewById(R.id.tv_chengyu_comment);
@@ -106,6 +117,48 @@ public class ChengYuDictionary extends Activity {
 		queryChengYu(mCurrentChengYuId);
 
 		updatePrievousAndNextButton();
+	}
+
+	public void back(View view) {
+		finish();
+	}
+
+	/**
+	 * feed back ChengYu errors.
+	 * 
+	 * @param view
+	 */
+	public void feedback(View view) {
+		// TODO
+	}
+
+	public void clearText(View view) {
+		mSearchEditText.setText("");
+	}
+
+	private class SearchTextWatcher implements TextWatcher {
+
+		@Override
+		public void afterTextChanged(Editable s) {
+			if (s.length() == 0) {
+				mClearTextView.setVisibility(View.GONE);
+			} else {
+				mClearTextView.setVisibility(View.VISIBLE);
+			}
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+
+		}
+
 	}
 
 	private class ChengyuQuery extends AsyncQueryHandler {

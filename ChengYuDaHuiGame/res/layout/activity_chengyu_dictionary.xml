@@ -16,9 +16,11 @@
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
+            android:background="@drawable/action_button_bg"
             android:clickable="true"
+            android:onClick="back"
             android:padding="10dp"
-            android:src="@drawable/ic_back_selector" />
+            android:src="@drawable/ic_back_normal" />
 
         <ImageView
             android:id="@+id/iv_feedback"
@@ -26,18 +28,53 @@
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
+            android:background="@drawable/action_button_bg"
             android:clickable="true"
+            android:onClick="feedback"
             android:padding="10dp"
-            android:src="@drawable/ic_feedback_selector" />
+            android:src="@drawable/ic_feedback" />
 
-        <EditText
-            android:id="@+id/search_edit"
+        <RelativeLayout
+            android:id="@+id/rlSearchFrameDelete"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
             android:layout_toLeftOf="@id/iv_feedback"
             android:layout_toRightOf="@id/iv_back"
-            android:hint="@string/search_chengyu"
-            android:singleLine="true" />
+            android:gravity="center_vertical" >
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/text_box_bg"
+                android:paddingLeft="32dp"
+                android:paddingRight="40dp"
+                android:singleLine="true"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:paddingLeft="5dp"
+                android:src="@drawable/ic_search" />
+
+            <ImageView
+                android:id="@+id/iv_clear_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:clickable="true"
+                android:onClick="clearText"
+                android:paddingRight="10dp"
+                android:src="@drawable/delete_selector"
+                android:visibility="gone" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <LinearLayout
@@ -49,8 +86,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp" >
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp" >
 
             <ImageView
                 android:id="@+id/iv_previous"
@@ -173,8 +210,36 @@
                     android:background="@drawable/text_box_bg"
                     android:gravity="center_vertical"
                     android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:text="【更多】"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_chengyu_more"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/text_box_bg"
+                    android:gravity="center_vertical"
+                    android:text="点击查看近义词、反义词、典故、英文等更多内容"
+                    android:textSize="14sp" />
             </LinearLayout>
         </ScrollView>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/list_click_item_selector"
+            android:layout_margin="10dp"
+            android:textSize="14sp"
+            android:text="查看近义词、反义词等更多内容" />
     </LinearLayout>
 
 </RelativeLayout>
