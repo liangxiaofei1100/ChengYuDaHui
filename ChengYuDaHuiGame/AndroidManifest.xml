@@ -44,7 +44,8 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ChengYuDictionary"
             android:screenOrientation="portrait"
-            android:theme="@style/ActivityTheme" >
+            android:theme="@style/ActivityTheme2"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.GuessGameOfPictureActivity"
@@ -139,8 +140,8 @@
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty"
-            android:theme="@style/dialog_style"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/dialog_style" />
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameInternet"
             android:screenOrientation="portrait"
@@ -148,10 +149,9 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.QRCodeDisplayActivity"
             android:screenOrientation="portrait" />
-        <activity 
+        <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.spy.SpyMainActivity"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="app_id"
                 android:value="333" />
@@ -219,7 +219,8 @@
         <!-- push结束 -->
         <!-- baidu push end -->
         <service android:name="com.zhaoyan.juyou.game.chengyudahui.JuYouService" />
-        <service android:name="com.zhaoyan.juyou.game.chengyudahui.spy.SpyService"></service>
+        <service android:name="com.zhaoyan.juyou.game.chengyudahui.spy.SpyService" >
+        </service>
     </application>
 
     <!-- Frontia permission start -->

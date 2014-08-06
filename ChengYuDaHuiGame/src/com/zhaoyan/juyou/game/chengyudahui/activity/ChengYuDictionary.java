@@ -1,10 +1,5 @@
 package com.zhaoyan.juyou.game.chengyudahui.activity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.app.Activity;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
@@ -12,6 +7,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,12 +17,17 @@ import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
 
 public class ChengYuDictionary extends Activity {
 	private static final String TAG = ChengYuDictionary.class.getSimpleName();
+	private static final int CHENGYU_TOTAL_NUMBER = 20000;
+
 	private Context mContext;
 	private TextView mChengYuNameTextView;
 	private TextView mChengYuPinYinTextView;
 	private TextView mChengYuCommentTextView;
 	private TextView mChengYuOriginalTextView;
 	private TextView mChengYuExampleTextView;
+
+	private ImageView mPreviousImageView;
+	private ImageView mNextImageView;
 
 	private ChengyuQuery mChengyuQuery;
 	private static final int TOKEN_SINGLE_QUERY = 1;
@@ -43,6 +44,7 @@ public class ChengYuDictionary extends Activity {
 		mContext = this;
 
 		initView();
+		updatePrievousAndNextButton();
 
 		mChengyuQuery = new ChengyuQuery(getContentResolver());
 		queryChengYu(mCurrentChengYuId);
@@ -61,15 +63,34 @@ public class ChengYuDictionary extends Activity {
 		mChengYuCommentTextView = (TextView) findViewById(R.id.tv_chengyu_comment);
 		mChengYuOriginalTextView = (TextView) findViewById(R.id.tv_chengyu_original);
 		mChengYuExampleTextView = (TextView) findViewById(R.id.tv_chengyu_example);
+
+		mPreviousImageView = (ImageView) findViewById(R.id.iv_previous);
+		mNextImageView = (ImageView) findViewById(R.id.iv_next);
+	}
+
+	private void updatePrievousAndNextButton() {
+		if (mCurrentChengYuId <= 1) {
+			mPreviousImageView.setVisibility(View.INVISIBLE);
+		} else {
+			mPreviousImageView.setVisibility(View.VISIBLE);
+		}
+
+		if (mCurrentChengYuId >= CHENGYU_TOTAL_NUMBER) {
+			mNextImageView.setVisibility(View.INVISIBLE);
+		} else {
+			mNextImageView.setVisibility(View.VISIBLE);
+		}
 	}
 
 	public void nextChengYu(View view) {
-		if (mCurrentChengYuId == 28000) {
-			Toast.makeText(mContext, "已经是最后一个成语", Toast.LENGTH_SHORT).show();
+		if (mCurrentChengYuId >= CHENGYU_TOTAL_NUMBER) {
 			return;
 		}
+
 		mCurrentChengYuId++;
 		queryChengYu(mCurrentChengYuId);
+
+		updatePrievousAndNextButton();
 	}
 
 	/**
@@ -78,12 +99,13 @@ public class ChengYuDictionary extends Activity {
 	 * @param view
 	 */
 	public void previousChengYu(View view) {
-		if (mCurrentChengYuId == 1) {
-			Toast.makeText(mContext, "已经是第一个成语", Toast.LENGTH_SHORT).show();
+		if (mCurrentChengYuId <= 1) {
 			return;
 		}
 		mCurrentChengYuId--;
 		queryChengYu(mCurrentChengYuId);
+
+		updatePrievousAndNextButton();
 	}
 
 	private class ChengyuQuery extends AsyncQueryHandler {
@@ -117,10 +139,10 @@ public class ChengYuDictionary extends Activity {
 							.getColumnIndex(ChengyuColums.EXAMPLE));
 
 					mChengYuNameTextView.setText(name);
-					mChengYuPinYinTextView.setText("※拼音 ： " + pinyin);
-					mChengYuCommentTextView.setText("※释义： " + comment);
-					mChengYuOriginalTextView.setText("※出处： " + original);
-					mChengYuExampleTextView.setText("※示例： " + example);
+					mChengYuPinYinTextView.setText(pinyin);
+					mChengYuCommentTextView.setText(comment);
+					mChengYuOriginalTextView.setText(original);
+					mChengYuExampleTextView.setText(example);
 				} catch (Exception e) {
 					Log.e(TAG, "updateChengYu " + e);
 				} finally {
