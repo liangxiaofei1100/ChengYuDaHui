@@ -93,9 +93,9 @@ public class DictateActivity extends Activity implements OnClickListener {
 		if (mIndexRandom == null) {
 			mIndexRandom = new Random();
 		}
-		mWord = "ÎÍÖĞ×½±î";
+		mWord = "ç“®ä¸­æ‰é³–";
 		mDictateWordComment
-				.setText("¡¾ÊÍÒå¡¿´Ó´óÌ³×ÓÀï×½Íõ°Ë¡£±ÈÓ÷ÏëÒª²¶×½µÄ¶ÔÏóÒÑÔÚÕÆÎÕÖ®ÖĞ¡£ĞÎÈİÊÖµ½ÇÜÀ´£¬ÇáÒ×¶øÓĞ°ÑÎÕ¡£\n¡¾³ö´¦¡¿Ôª¡¤¿µ½øÖ®¡¶ÀîåÓ¸º¾£¡·µÚËÄÕÛ£º¡°ÕâÊÇÈà×ÅÎÒÉ½¶ùµÄÑ÷´¦£¬¹Ü½ĞËûÎÍÖĞ×½±î£¬ÊÖµ½ÄÃÀ´¡£");
+				.setText("ã€é‡Šä¹‰ã€‘ä»å¤§å›å­é‡Œæ‰ç‹å…«ã€‚æ¯”å–»æƒ³è¦æ•æ‰çš„å¯¹è±¡å·²åœ¨æŒæ¡ä¹‹ä¸­ã€‚å½¢å®¹æ‰‹åˆ°æ“’æ¥ï¼Œè½»æ˜“è€Œæœ‰æŠŠæ¡ã€‚\nã€å‡ºå¤„ã€‘å…ƒÂ·åº·è¿›ä¹‹ã€Šæé€µè´Ÿè†ã€‹ç¬¬å››æŠ˜ï¼šâ€œè¿™æ˜¯æ‰ç€æˆ‘å±±å„¿çš„ç—’å¤„ï¼Œç®¡å«ä»–ç“®ä¸­æ‰é³–ï¼Œæ‰‹åˆ°æ‹¿æ¥ã€‚");
 		// String temp = mWord;
 		int i = 0;
 		try {
@@ -121,7 +121,7 @@ public class DictateActivity extends Activity implements OnClickListener {
 				break;
 			}
 		}
-		setPinyin("w¨¨ng zh¨­ng zhu¨­ bi¨¥");
+		setPinyin("wÃ¨ng zhÅng zhuÅ biÄ“");
 
 		switch (Math.abs(mIndexRandom.nextInt()) % mWord.length()) {
 		case 0:
@@ -263,6 +263,19 @@ public class DictateActivity extends Activity implements OnClickListener {
 			}
 			resultDialog.dismiss();
 			mResultView.setImage(null);
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		if (mPaintMap != null) {
+			for (java.util.Map.Entry<Integer, Bitmap> entry : mPaintMap
+					.entrySet()) {
+				entry.getValue().recycle();
+			}
+			mPaintMap.clear();
 		}
 	}
 
