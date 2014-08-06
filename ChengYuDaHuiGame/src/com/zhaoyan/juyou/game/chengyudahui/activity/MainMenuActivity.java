@@ -71,6 +71,12 @@ public class MainMenuActivity extends Activity {
 		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 		startActivity(intent);
 	}
+	public void launchChengyuDictatet(View view){
+		Log.d(TAG, "launchChengyuDictatet");
+		Intent intent = new Intent(mContext, DictateActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+		startActivity(intent);
+	}
 
 	public void launchChengYuNewComment(View view) {
 		Log.d(TAG, "launchChengYuNewComment");

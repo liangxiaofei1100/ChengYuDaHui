@@ -1,8 +1,6 @@
 package com.zhaoyan.juyou.game.chengyudahui.paint;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -40,43 +38,20 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 	private TextView mPaintChengyuName;
 	private Button mChangeWordBtn, mPaintCleanBtn, mPaintRightBtn;
 	public static Bitmap mPaintBitmap;
-	private Point firstPoint, secondPoint, thirdPoint;
 	private Paint mPaint;
 	private Canvas mCanvas;
 	private int mWidth, mHeight;
 	private boolean mPrepareFlag;
 	private Random mRandom;
-	private int mPaintScore = 0;
-	private List<Operator> cancelOperator, resumeOperator;
-	private String[] mPaintColor = new String[] { "红色", "绿色", "蓝色", "黑色", "黄色" };
-	private AlertDialog selectColor;
-	private List<Point> tempList;
-	private boolean isMain = true, drawLine = true;
+	private String[] mPaintColor = new String[] { "红色", "绿色", "蓝色", "黑色", "黄色" },
+			mPaintStyle = new String[] { "钢笔", "铅笔", "毛笔" };
+	private AlertDialog selectColor, selectStyle;
 	private Path mPath;
-	private final int BACKGROUND_COLOR = Color.GRAY;
 	private int index = -1;
 	private Drawable mDrawable;
-
-	private class Operator {
-		private List<Point> pointLists;
-
-		public Operator() {
-			pointLists = new ArrayList<PaintGameActivty.Point>();
-		}
-	}
-
-	private class Point {
-		public Point(float x, float y) {
-			this.x = x;
-			this.y = y;
-		}
-
-		public Point() {
-		};
-
-		float x;
-		float y;
-	}
+	private float mX, mY;
+	private final float TOUCH_TOLERANCE = 4;
+	public static int mPaintWidth = 20, mCurrentColor = Color.BLACK;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +68,6 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 		mPaintCleanBtn.setOnClickListener(this);
 		mChangeWordBtn.setOnClickListener(this);
 		mPaintRightBtn.setOnClickListener(this);
-		cancelOperator = new ArrayList<PaintGameActivty.Operator>();
-		resumeOperator = new ArrayList<PaintGameActivty.Operator>();
 		ViewTreeObserver vto = mPaintImage.getViewTreeObserver();
 		vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
 			public boolean onPreDraw() {
@@ -118,60 +91,30 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 
 	private void init() {
 		createBitmap();
-		// mPaintBitmap =setAlpha(mPaintBitmap, 0x1a);
 		mPaintImage.setImageBitmap(mPaintBitmap);
-		if (isMain)
-			mPaintImage.setOnTouchListener(new OnTouchListener() {
+		mPaintImage.setOnTouchListener(new OnTouchListener() {
 
-				@Override
-				public boolean onTouch(View arg0, MotionEvent arg1) {
-					// TODO Auto-generated method stub
-
-					switch (arg1.getAction()) {
-					case MotionEvent.ACTION_DOWN:
-						if (tempList == null) {
-							tempList = new ArrayList<PaintGameActivty.Point>();
-						} else {
-							tempList.clear();
-						}
-						if (firstPoint == null) {
-							firstPoint = new Point();
-						}
-						firstPoint.x = arg1.getX();
-						firstPoint.y = arg1.getY();
-						tempList.add(new Point(firstPoint.x, firstPoint.y));
-						if (mPath == null) {
-							mPath = new Path();
-						}
-						mPath.reset();
-						mPath.moveTo(firstPoint.x, firstPoint.y);
-						break;
-					case MotionEvent.ACTION_MOVE:
-						if (drawLine) {
-							drawLine(arg1);
-						} else {
-							drawQuad(arg1);
-						}
-						break;
-					case MotionEvent.ACTION_UP:
-						if (cancelOperator == null) {
-							cancelOperator = new ArrayList<PaintGameActivty.Operator>();
-						}
-						Operator op = new Operator();
-						op.pointLists.addAll(tempList);
-						cancelOperator.add(op);
-						if (cancelOperator.size() > 10) {
-							cancelOperator.remove(0);
-						}
-						tempList.clear();
-						break;
-
-					default:
-						break;
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				switch (arg1.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					if (mPath == null) {
+						mPath = new Path();
 					}
-					return true;
+					touch_start(arg1.getX(), arg1.getY());
+					break;
+				case MotionEvent.ACTION_MOVE:
+					touch_move(arg1.getX(), arg1.getY());
+					break;
+				case MotionEvent.ACTION_UP:
+					touch_up();
+					break;
+				default:
+					break;
 				}
-			});
+				return true;
+			}
+		});
 	}
 
 	private void showWord() {
@@ -202,12 +145,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 
 	private void cleanPaint() {
 		if (mPrepareFlag) {
-
 			createBitmap();
-			if (cancelOperator != null)
-				cancelOperator.clear();
-			if (resumeOperator != null)
-				resumeOperator.clear();
 		}
 	}
 
@@ -241,14 +179,8 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// TODO Auto-generated method stub
 		menu.add("设置画笔颜色");
-		menu.add("撤销");
-		menu.add("恢复 ");
+		menu.add("设置画笔风格");
 		return super.onCreateOptionsMenu(menu);
-	}
-
-	/** sync to paint picture */
-	private void sendPaintPic() {
-
 	}
 
 	@Override
@@ -260,7 +192,8 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 				if (selectColor == null) {
 					AlertDialog.Builder builder = new AlertDialog.Builder(this);
 					builder.setTitle("设置画笔颜色");
-					builder.setSingleChoiceItems(mPaintColor, 0,
+					builder.setSingleChoiceItems(mPaintColor,
+							getColorIndex(mCurrentColor),
 							new DialogInterface.OnClickListener() {
 
 								@Override
@@ -269,125 +202,98 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 									// TODO Auto-generated method stub
 									switch (arg1) {
 									case 0:
-										mPaint.setColor(Color.RED);
+										mCurrentColor = Color.RED;
 										break;
 									case 1:
-										mPaint.setColor(Color.GREEN);
+										mCurrentColor = Color.GREEN;
 										break;
 									case 2:
-										mPaint.setColor(Color.BLUE);
+										mCurrentColor = Color.BLUE;
 										break;
 									case 3:
-										mPaint.setColor(Color.BLACK);
+										mCurrentColor = Color.BLACK;
 										break;
 									case 4:
-										mPaint.setColor(Color.YELLOW);
+										mCurrentColor = Color.YELLOW;
 										break;
 									default:
 										break;
 									}
+									mPaint.setColor(mCurrentColor);
 									selectColor.dismiss();
+									selectColor = null;
 								}
 							});
 					selectColor = builder.create();
 				}
 				selectColor.show();
-			} else if ("撤销".equals(name)) {
-				cancelOperator();
-			} else {
-				resumeOperator();
+			} else if ("设置画笔风格".equals(name)) {
+				if (selectStyle == null) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					builder.setTitle("设置画笔颜色");
+					builder.setSingleChoiceItems(mPaintStyle,
+							getStyleIndex(mPaintWidth),
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface arg0,
+										int arg1) {
+									// TODO Auto-generated method stub
+									switch (arg1) {
+									case 0:
+										mPaintWidth = 10;
+										break;
+									case 1:
+										mPaintWidth = 15;
+										break;
+									case 2:
+										mPaintWidth = 20;
+										break;
+									default:
+										break;
+									}
+									mPaint.setStrokeWidth(mPaintWidth);
+									selectStyle.dismiss();
+									selectStyle = null;
+								}
+							});
+					selectStyle = builder.create();
+				}
+				selectStyle.show();
 			}
 		}
 
 		return super.onMenuItemSelected(featureId, item);
 	}
 
-	private void cancelOperator() {
-		if (cancelOperator != null && cancelOperator.size() > 0) {
-			Operator op = cancelOperator.remove(cancelOperator.size() - 1);
-			Point fp = null;
-			Paint cancelPaint = new Paint();
-			cancelPaint.setColor(Color.GRAY);
-			cancelPaint.setStrokeWidth(5);
-			for (Point p : op.pointLists) {
-				if (fp != null) {
-					mCanvas.drawLine(fp.x, fp.y, p.x, p.y, cancelPaint);
-				}
-				if (fp == null)
-					fp = new Point();
-				fp.x = p.x;
-				fp.y = p.y;
-			}
-			if (resumeOperator == null) {
-				resumeOperator = new ArrayList<PaintGameActivty.Operator>();
-			}
-			resumeOperator.add(op);
-		}
+	private void touch_start(float x, float y) {
+		mPath.reset();
+		mPath.moveTo(x, y);
+		mX = x;
+		mY = y;
 	}
 
-	private void resumeOperator() {
-		if (resumeOperator != null && resumeOperator.size() > 0) {
-			Operator op = resumeOperator.remove(resumeOperator.size() - 1);
-			Point fp = null;
-			for (Point p : op.pointLists) {
-				if (fp != null) {
-					mCanvas.drawLine(fp.x, fp.y, p.x, p.y, mPaint);
-				}
-				if (fp == null)
-					fp = new Point();
-				fp.x = p.x;
-				fp.y = p.y;
-			}
-			cancelOperator.add(op);
+	private void touch_move(float x, float y) {
+		float dx = Math.abs(x - mX);
+		float dy = Math.abs(y - mY);
+		if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+			mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
+			mX = x;
+			mY = y;
 		}
-
-	}
-
-	private void drawLine(MotionEvent event) {
-		if (secondPoint == null)
-			secondPoint = new Point();
-		secondPoint.x = event.getX();
-		secondPoint.y = event.getY();
-		float x = Math.abs(secondPoint.x - firstPoint.x);
-		float y = Math.abs(secondPoint.y - firstPoint.y);
-		if (x < 2 && y < 2) {
-			return;
-		}
-		mCanvas.drawLine(firstPoint.x, firstPoint.y, secondPoint.x,
-				secondPoint.y, mPaint);
-		// mCanvas.drawPath(mPath, mPaint);
-		firstPoint.x = secondPoint.x;
-		firstPoint.y = secondPoint.y;
-		tempList.add(new Point(secondPoint.x, secondPoint.y));
+		mCanvas.drawPath(mPath, mPaint);
 		mPaintImage.setImageBitmap(mPaintBitmap);
 	}
 
-	private void drawQuad(MotionEvent event) {
-		if (secondPoint == null) {
-			secondPoint = new Point();
-			secondPoint.x = event.getX();
-			secondPoint.y = event.getY();
-		} else {
-			if (thirdPoint == null) {
-				thirdPoint = new Point();
-			}
-			thirdPoint.x = event.getX();
-			thirdPoint.y = event.getY();
-			mPath.quadTo(secondPoint.x, secondPoint.y, thirdPoint.x,
-					thirdPoint.y);
-			mCanvas.drawPath(mPath, mPaint);
-			firstPoint.x = secondPoint.x;
-			firstPoint.y = secondPoint.y;
-			secondPoint.x = thirdPoint.x;
-			secondPoint.y = thirdPoint.y;
-			// mPath.reset();
-			mPath.moveTo(firstPoint.x, firstPoint.y);
-			mPaintImage.setImageBitmap(mPaintBitmap);
-		}
-
+	private void touch_up() {
+		mPath.lineTo(mX, mY);
+		// commit the path to our offscreen
+		mCanvas.drawPath(mPath, mPaint);
+		// kill this so we don't double draw
+		mPath.reset();
+		mPaintImage.setImageBitmap(mPaintBitmap);
 	}
 
-	
 	private void setResult() {
 		Intent intent = new Intent();
 		intent.putExtra("index", index);
@@ -416,23 +322,52 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 		}
 		mPaintBitmap = Bitmap.createBitmap(mWidth, mHeight,
 				Bitmap.Config.ARGB_8888);
-		// BitmapFactory.Options opt = new BitmapFactory.Options();
-		// opt.inPreferredConfig = Bitmap.Config.RGB_565;
-		// opt.inPurgeable = true;
-		// opt.inInputShareable = true;
-		// mPaintBitmap = BitmapFactory.decodeResource(getResources(),
-		// R.drawable.mizige1).copy(Bitmap.Config.ARGB_8888, true);
 		if (mDrawable == null) {
 			mDrawable = getResources().getDrawable(R.drawable.mizige_new256);
 			mDrawable.setBounds(0, 0, mWidth, mHeight);
 		}
 		mCanvas = new Canvas(mPaintBitmap);
 		mPaint = new Paint();
-		mPaint.setColor(Color.BLACK);
-		mPaint.setStrokeWidth(15);
-		// mCanvas.drawBitmap(mPaintBitmap, new Matrix(), mPaint);
+		mPaint.setStrokeWidth(mPaintWidth);
+		mPaint.setAntiAlias(true);
+		mPaint.setDither(true);
+		mPaint.setColor(mCurrentColor);
+		mPaint.setStyle(Paint.Style.STROKE);
+		mPaint.setStrokeJoin(Paint.Join.ROUND);
+		mPaint.setStrokeCap(Paint.Cap.ROUND);
 		mDrawable.draw(mCanvas);
-		// mPaintBitmap =setAlpha(mPaintBitmap, 0x1a);
 		mPaintImage.setImageBitmap(mPaintBitmap);
+	}
+
+	private int getStyleIndex(int width) {
+		switch (width) {
+		case 15:
+			return 1;
+		case 20:
+			return 2;
+
+		default:
+			break;
+		}
+		return 0;
+	}
+
+	// { "红色", "绿色", "蓝色", "黑色", "黄色" }
+	private int getColorIndex(int color) {
+		switch (color) {
+		case Color.BLACK:
+			return 3;
+		case Color.RED:
+			return 0;
+		case Color.YELLOW:
+			return 4;
+		case Color.GREEN:
+			return 1;
+		case Color.BLUE:
+			return 3;
+		default:
+			break;
+		}
+		return 0;
 	}
 }
