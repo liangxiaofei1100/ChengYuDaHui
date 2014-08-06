@@ -1,11 +1,15 @@
 package com.zhaoyan.juyou.game.chengyudahui.knowledge;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.zhaoyan.communication.util.Log;
+import com.zhaoyan.juyou.game.chengyudahui.MainActivity;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,6 +109,16 @@ public class KnowledgeMainActivity extends Activity implements OnClickListener, 
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		// TODO Auto-generated method stub
-		
+		//每一回的配置文件以固定格式命名：knowledge1.xml,1表示第一回
+		String path = MainActivity.FILES_DIR + "/knowledge" + (position + 1) + ".xml";
+		File file = new File(path);
+		if (!file.exists()) {
+			return;
+		}
+		Intent intent = new Intent();
+		intent.setClass(KnowledgeMainActivity.this, GuessGameOfPictureActivity.class);
+		intent.putExtra("path", path);
+		startActivity(intent);
+		Log.d(TAG, "filepath:" + file.getAbsolutePath());
 	}
 }
