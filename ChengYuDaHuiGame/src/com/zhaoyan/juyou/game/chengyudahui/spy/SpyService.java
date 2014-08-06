@@ -13,12 +13,13 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.RemoteException;
 
-import com.dreamlink.communication.aidl.HostInfo;
-import com.dreamlink.communication.aidl.User;
-import com.dreamlink.communication.lib.CommunicationManager;
-import com.dreamlink.communication.lib.CommunicationManager.OnConnectionChangeListener;
-import com.dreamlink.communication.lib.CommunicationManager.PlatformCallback;
+import com.zhaoyan.communication.ipc.CommunicationManager;
+import com.zhaoyan.communication.ipc.CommunicationManager.OnConnectionChangeListener;
+import com.zhaoyan.communication.ipc.CommunicationManager.PlatformCallback;
+import com.zhaoyan.communication.ipc.aidl.HostInfo;
+import com.zhaoyan.communication.ipc.aidl.User;
 import com.zhaoyan.communication.util.Log;
 
 public class SpyService extends Service implements OnConnectionChangeListener, PlatformCallback {
@@ -144,7 +145,7 @@ public class SpyService extends Service implements OnConnectionChangeListener, P
 	
 	public void connect(){
 		boolean ret = mCommunicationManager.connectCommunicatonService(this, mAppId);
-		Log.d(TAG, "onCreate.ret=" + ret);
+		Log.d(TAG, "connect().ret=" + ret);
 	}
 	
 	/**
@@ -152,7 +153,8 @@ public class SpyService extends Service implements OnConnectionChangeListener, P
 	 */
 	public void createHost(){
 		Log.d(TAG, "createHost");
-		mCommunicationManager.createHost("Spy", "com.zhaoyan.game.spy", 16, mAppId);
+		mCommunicationManager.createHost("Spy",
+				"com.zhaoyan.juyou.game.chengyudahui", 16, mAppId);
 	}
 	
 	/**

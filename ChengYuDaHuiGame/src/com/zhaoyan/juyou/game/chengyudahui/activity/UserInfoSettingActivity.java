@@ -25,7 +25,7 @@ public class UserInfoSettingActivity extends Activity {
 		Intent intent = new Intent();
 		intent.setClass(this, ConnectFriendsActivity.class);
 		intent.putExtra("Game", getIntent().getStringExtra("Game"));
-		startActivity(intent);
+		startActivityForResult(intent, 0);
 
 		finish();
 	}
@@ -46,5 +46,16 @@ public class UserInfoSettingActivity extends Activity {
 		}
 		UserHelper.saveLocalUser(mContext, userInfo);
 		return true;
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
+			setResult(RESULT_OK, data);
+		} else {
+			setResult(RESULT_CANCELED);
+		}
 	}
 }

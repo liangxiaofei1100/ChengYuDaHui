@@ -153,10 +153,12 @@ public class ConnectedInfoFragment extends ListFragment implements
 			intent.putExtra("number", temp.size());
 			if (mode != null && "speak".equals(mode)) {
 				intent.setClass(getActivity(), SpeakGameInternet.class);
+				getActivity().startActivity(intent);
+			} else if (mode != null && "Spy".equals(mode)) {
+				getActivity().finish();
 			} else {
-
+				
 			}
-			getActivity().startActivity(intent);
 			break;
 		case R.id.btn_ci_qrcode:
 			launchQRCodeDisplay();

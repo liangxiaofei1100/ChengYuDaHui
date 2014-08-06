@@ -3,6 +3,7 @@ package com.zhaoyan.juyou.game.chengyudahui.spy;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -23,12 +24,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.dreamlink.communication.aidl.HostInfo;
-import com.dreamlink.communication.aidl.User;
-import com.dreamlink.communication.lib.CommunicationManager;
-import com.dreamlink.communication.lib.util.AppUtil;
+import com.zhaoyan.communication.SocketCommunicationManager;
+import com.zhaoyan.communication.ipc.CommunicationManager;
+import com.zhaoyan.communication.ipc.aidl.HostInfo;
+import com.zhaoyan.communication.ipc.aidl.User;
+import com.zhaoyan.communication.util.AppUtil;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.UserInfoSettingActivity;
 
 public class SpyMainActivity extends Activity implements OnItemClickListener, OnClickListener {
 
@@ -52,6 +55,8 @@ public class SpyMainActivity extends Activity implements OnItemClickListener, On
 	
 	private List<User> mUserList = new ArrayList<User>();
 	private List<HostInfo> mHostList = new ArrayList<HostInfo>();
+	
+	private SocketCommunicationManager mSocketComManager = null;
 	
 	private SpyListener mSpyListener = new SpyListener() {
 		@Override
@@ -98,16 +103,6 @@ public class SpyMainActivity extends Activity implements OnItemClickListener, On
 		
 		mCommunicationManager = new CommunicationManager(getApplicationContext());
 		
-		//bind service
-		Intent intent = new Intent(SpyMainActivity.this, SpyService.class);
-		intent.putExtra(SpyListener.KEY_APPID, mAppId);
-		mIsServiceBinder = bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
-		if (!mIsServiceBinder) {
-			Log.e(TAG, "Error:cannot bind SpyService");
-			finish();
-			return;
-		}
-		
 		mCreateGameBtn = (Button) findViewById(R.id.btn_create_game);
 		mSearchGameBtn = (Button) findViewById(R.id.btn_search_game);
 		mCancelGameBtn = (Button) findViewById(R.id.btn_cancel_game);
@@ -129,6 +124,14 @@ public class SpyMainActivity extends Activity implements OnItemClickListener, On
 		mUserListView.setOnItemClickListener(this);
 		
 		mUserAdapter = new UserAdapter(SpyMainActivity.this, mUserList);
+		
+		mSocketComManager = SocketCommunicationManager.getInstance();
+		if (!mSocketComManager.isConnected()) {
+			Intent intent1 = new Intent();
+			intent1.setClass(this, UserInfoSettingActivity.class);
+			intent1.putExtra("Game", "Spy");
+			startActivityForResult(intent1, 0);
+		}
 	}
 
 	@Override
@@ -249,6 +252,37 @@ public class SpyMainActivity extends Activity implements OnItemClickListener, On
 				break;
 			}
 		};
+	};
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		Log.d(TAG, "onActivityResult.resultCode:"  + resultCode);
+		//bind service
+		Intent intent = new Intent(SpyMainActivity.this, SpyService.class);
+		intent.putExtra(SpyListener.KEY_APPID, mAppId);
+		mIsServiceBinder = bindService(intent, mServiceConnection,
+				Context.BIND_AUTO_CREATE);
+		if (!mIsServiceBinder) {
+			Log.e(TAG, "Error:cannot bind SpyService");
+			finish();
+			return;
+		}
+		
+		if (resultCode == RESULT_OK) {
+			int result = data.getIntExtra("result", -1);
+			if (result == 0) {
+				//start game
+				Log.d(TAG, "create game");
+				//创建游戏主机
+				mService.createHost();
+			} else if (result == 1) {
+				//search game
+				Log.d(TAG, "search game");
+				mService.searchHost();
+			} else {
+				//do nothing
+			}
+		}
 	};
 	
 	@Override

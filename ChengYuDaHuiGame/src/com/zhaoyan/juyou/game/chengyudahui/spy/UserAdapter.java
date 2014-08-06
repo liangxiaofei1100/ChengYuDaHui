@@ -18,7 +18,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dreamlink.communication.aidl.User;
+import com.zhaoyan.communication.ipc.aidl.User;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 
