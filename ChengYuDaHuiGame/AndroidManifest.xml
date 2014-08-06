@@ -42,6 +42,11 @@
             android:theme="@style/ActivityTheme" >
         </activity>
         <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ChengYuDictionary"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityTheme" >
+        </activity>
+        <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.GuessGameOfPictureActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" >

@@ -54,7 +54,7 @@ public class MainMenuActivity extends Activity {
 
 	public void launchChengYuStudy(View view) {
 		Log.d(TAG, "launchChengYuStudy");
-		Intent intent = new Intent(mContext, StudyActivity.class);
+		Intent intent = new Intent(mContext, ChengYuDictionary.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 		startActivity(intent);
 	}
