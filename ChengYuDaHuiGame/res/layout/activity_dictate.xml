@@ -52,8 +52,8 @@
                     android:id="@+id/dictate_first_word_img"
                     android:layout_width="75dip"
                     android:layout_height="75dip"
+                    android:background="@drawable/mizige1"
                     android:gravity="center"
-                    android:src="@drawable/mizige1"
                     android:tag="1"
                     android:visibility="gone" />
             </FrameLayout>
@@ -90,8 +90,8 @@
                     android:id="@+id/dictate_second_word_img"
                     android:layout_width="75dip"
                     android:layout_height="75dip"
+                    android:background="@drawable/mizige1"
                     android:gravity="center"
-                    android:src="@drawable/mizige1"
                     android:tag="2"
                     android:visibility="gone" />
             </FrameLayout>
@@ -128,8 +128,8 @@
                     android:id="@+id/dictate_third_word_img"
                     android:layout_width="75dip"
                     android:layout_height="75dip"
+                    android:background="@drawable/mizige1"
                     android:gravity="center"
-                    android:src="@drawable/mizige1"
                     android:tag="3"
                     android:visibility="gone" />
             </FrameLayout>
@@ -178,7 +178,7 @@
         android:layout_height="fill_parent"
         android:layout_above="@+id/dictate_show_result"
         android:layout_below="@+id/dictate_word_layout"
-        android:layout_marginTop="20dip"
+        android:layout_marginTop="15dip"
         android:scrollbars="vertical" >
 
         <LinearLayout
@@ -208,7 +208,15 @@
         android:id="@+id/dictate_show_result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/advert_layout"
+        android:layout_marginTop="15dip"
         android:text="@string/show_result" />
+
+    <TextView
+        android:id="@+id/advert_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true" >
+    </TextView>
 
 </RelativeLayout>
