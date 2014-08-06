@@ -24,9 +24,14 @@ public class LauncherActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_launcher);
 		mContext = this;
-		MainActivity.DB_DIR = this.getFilesDir().getAbsolutePath() + "/database";
+		MainActivity.FILES_DIR = this.getFilesDir().getAbsolutePath();
+		MainActivity.DB_DIR = MainActivity.FILES_DIR + "/database";
 		MainActivity.DB_PATH = MainActivity.DB_DIR + "/chengyu.db";
+		MainActivity.GUOXUE_DB_PATH = MainActivity.DB_DIR + "/guoxue.db";
+		MainActivity.KNOWLEDGE_FILES = MainActivity.FILES_DIR + "/knowledge1.xml";//第一回的所有题目
 		new CopyDBFile().copyDB(this);
+		new CopyDBFile().copyGuoXueDB(this);
+		new CopyDBFile().copyKnowledgeFile(this);
 	}
 
 	public void launchMainMenu(View view) {

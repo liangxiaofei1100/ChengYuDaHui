@@ -1,4 +1,4 @@
-package com.zhaoyan.juyou.game.chengyudahui.activity;
+package com.zhaoyan.juyou.game.chengyudahui.knowledge;
 
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
