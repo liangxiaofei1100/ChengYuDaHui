@@ -26,7 +26,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 public class MainActivity extends ActionBarActivity implements OnClickListener {
-	public static String DB_PATH = "", DB_DIR;
+	public static String DB_PATH = "", DB_DIR, FILES_DIR;
+	public static String GUOXUE_DB_PATH = "";
+	public static String KNOWLEDGE_FILES = "";
 	public static Button mStudyBtn, mSpeakBtn, mPaintBtn, mScoreBtn;
 	public static int DB_NUMBER = -1;
 	@Override

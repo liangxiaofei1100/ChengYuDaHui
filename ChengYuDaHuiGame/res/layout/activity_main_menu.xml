@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:onClick="launchPictureGuessGame"
+                android:onClick="launchKnowledgeGame"
                 android:src="@drawable/main_menu_zhishichuangguan_selector" />
 
             <ImageView
@@ -98,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:onClick="launchChengYuStudy"
+                android:onClick="launchChengyuDictatet"
                 android:src="@drawable/main_menu_hanzitingxie_selector" />
         </LinearLayout>
 

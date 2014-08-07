@@ -1,0 +1,87 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" >
+
+    <RelativeLayout
+        android:id="@+id/title_top"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/title_top_bg" >
+
+        <TextView
+            android:id="@+id/tv_jifen"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@drawable/ic_jifen"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="0" />
+
+        <TextView
+            android:id="@+id/tv_gold"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/tv_jifen"
+            android:drawableLeft="@drawable/ic_gold"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="0" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/title_top"
+        android:background="@drawable/title_chengyu_bg" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="知识闯关"
+            android:textSize="25sp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:clickable="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_back_selector" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/title"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/activity_middle"
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" >
+
+        <ListView 
+            android:id="@+id/lv_knowledge"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="4dp"
+			android:listSelector="@android:color/transparent"
+			android:padding="16dp"
+            android:scrollbarStyle="outsideInset"
+            android:cacheColorHint="#ff0000"
+            android:fadingEdge="none"
+            ></ListView>
+
+    </LinearLayout>
+
+</RelativeLayout>
