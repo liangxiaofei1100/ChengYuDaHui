@@ -1,47 +1,64 @@
 package com.zhaoyan.juyou.game.chengyudahui.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zhaoyan.communication.util.Log;
+import com.zhaoyan.juyou.game.chengyudahui.ChengYu;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
 
 public class ChengYuDictionary extends Activity {
 	private static final String TAG = ChengYuDictionary.class.getSimpleName();
-	private static final int CHENGYU_TOTAL_NUMBER = 20000;
+	private static final int CHENGYU_TOTAL_NUMBER = 29349;
 
 	private Context mContext;
 	private EditText mSearchEditText;
 	private View mClearTextView;
 
+	private ViewPager mViewPager;
+	private PagerAdapter mPagerAdapter;
+	private List<ChengYu> mChengYus;
+	private int mCurrentViewPageIndex = 0;
+
 	private TextView mChengYuNameTextView;
-	private TextView mChengYuPinYinTextView;
-	private TextView mChengYuCommentTextView;
-	private TextView mChengYuOriginalTextView;
-	private TextView mChengYuExampleTextView;
+	private TextView mChengYuIndexTextView;
 
 	private ImageView mPreviousImageView;
 	private ImageView mNextImageView;
 
 	private ChengyuQuery mChengyuQuery;
-	private static final int TOKEN_SINGLE_QUERY = 1;
+	private static final int TOKEN_INIT_QUERY = 1;
+	private static final int TOKEN_HEAD_QUERY = 2;
+	private static final int TOKEN_TAIL_QUERY = 3;
+
 	private static final String[] PROJECTION = { ChengyuColums._ID,
 			ChengyuColums.NAME, ChengyuColums.PINYIN, ChengyuColums.COMMENT,
 			ChengyuColums.ORIGINAL, ChengyuColums.EXAMPLE };
 
-	private int mCurrentChengYuId = 1;
+	private int mCurrentChengYuId = 100;
+	private int mPageHeadChengYuId = mCurrentChengYuId;
+	private int mPageTailChengYuId = mCurrentChengYuId;
+	private static final int PRELOAD_NUMBER_HEAD = 10;
+	private static final int PRELOAD_NUMBER_TAIL = 10;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +66,25 @@ public class ChengYuDictionary extends Activity {
 		setContentView(R.layout.activity_chengyu_dictionary);
 		mContext = this;
 
+		mChengyuQuery = new ChengyuQuery(getContentResolver());
+
 		initView();
 		updatePrievousAndNextButton();
 
-		mChengyuQuery = new ChengyuQuery(getContentResolver());
-		queryChengYu(mCurrentChengYuId);
+		mChengYus = new ArrayList<ChengYu>();
+		mPagerAdapter = new ChengYuViewPagerAdapter();
+		mViewPager.setAdapter(mPagerAdapter);
+		mViewPager.setOnPageChangeListener(new ChengYuPagerChangeListener());
+
+		initChengYu(mCurrentChengYuId);
 	}
 
-	private void queryChengYu(int id) {
-		Log.d(TAG, "queryChengYu id = " + id);
-		String selection = ChengyuColums._ID + "=" + id;
-		mChengyuQuery.startQuery(TOKEN_SINGLE_QUERY, null,
+	private void initChengYu(int id) {
+		Log.d(TAG, "initChengYu id = " + id);
+		String selection = ChengyuColums._ID + ">="
+				+ (id - PRELOAD_NUMBER_TAIL) + " and " + ChengyuColums._ID
+				+ "<=" + (id + PRELOAD_NUMBER_HEAD);
+		mChengyuQuery.startQuery(TOKEN_INIT_QUERY, null,
 				ChengyuColums.CONTENT_URI, PROJECTION, selection, null, null);
 	}
 
@@ -70,13 +95,12 @@ public class ChengYuDictionary extends Activity {
 		mClearTextView = findViewById(R.id.iv_clear_text);
 
 		mChengYuNameTextView = (TextView) findViewById(R.id.tv_chengyu_name);
-		mChengYuPinYinTextView = (TextView) findViewById(R.id.tv_chengyu_pinyin);
-		mChengYuCommentTextView = (TextView) findViewById(R.id.tv_chengyu_comment);
-		mChengYuOriginalTextView = (TextView) findViewById(R.id.tv_chengyu_original);
-		mChengYuExampleTextView = (TextView) findViewById(R.id.tv_chengyu_example);
+		mChengYuIndexTextView = (TextView) findViewById(R.id.tv_chengyu_index);
 
 		mPreviousImageView = (ImageView) findViewById(R.id.iv_previous);
 		mNextImageView = (ImageView) findViewById(R.id.iv_next);
+
+		mViewPager = (ViewPager) findViewById(R.id.vp_chengyu);
 	}
 
 	private void updatePrievousAndNextButton() {
@@ -98,10 +122,8 @@ public class ChengYuDictionary extends Activity {
 			return;
 		}
 
-		mCurrentChengYuId++;
-		queryChengYu(mCurrentChengYuId);
-
-		updatePrievousAndNextButton();
+		mCurrentViewPageIndex++;
+		mViewPager.setCurrentItem(mCurrentViewPageIndex, false);
 	}
 
 	/**
@@ -113,10 +135,9 @@ public class ChengYuDictionary extends Activity {
 		if (mCurrentChengYuId <= 1) {
 			return;
 		}
-		mCurrentChengYuId--;
-		queryChengYu(mCurrentChengYuId);
 
-		updatePrievousAndNextButton();
+		mCurrentViewPageIndex--;
+		mViewPager.setCurrentItem(mCurrentViewPageIndex, false);
 	}
 
 	public void back(View view) {
@@ -134,6 +155,42 @@ public class ChengYuDictionary extends Activity {
 
 	public void clearText(View view) {
 		mSearchEditText.setText("");
+	}
+
+	private void loadNextPage() {
+		if (mCurrentViewPageIndex == mChengYus.size() - 2) {
+			Log.d(TAG, "loadNextPage");
+			if (mPageHeadChengYuId >= CHENGYU_TOTAL_NUMBER) {
+				// The last data.
+				return;
+			}
+
+			// Load next data;
+			String selection = ChengyuColums._ID + ">" + mPageHeadChengYuId
+					+ " and " + ChengyuColums._ID + "<="
+					+ (mPageHeadChengYuId + PRELOAD_NUMBER_HEAD);
+			mChengyuQuery.startQuery(TOKEN_HEAD_QUERY, null,
+					ChengyuColums.CONTENT_URI, PROJECTION, selection, null,
+					null);
+		}
+	}
+
+	private void loadPrePage() {
+		if (mCurrentViewPageIndex == 1) {
+			Log.d(TAG, "loadPrePage");
+			if (mPageTailChengYuId <= 1) {
+				// The first data.
+				return;
+			}
+
+			// load previous data
+			String selection = ChengyuColums._ID + "<" + mPageTailChengYuId
+					+ " and " + ChengyuColums._ID + ">="
+					+ (mPageTailChengYuId - PRELOAD_NUMBER_TAIL);
+			mChengyuQuery.startQuery(TOKEN_TAIL_QUERY, null,
+					ChengyuColums.CONTENT_URI, PROJECTION, selection, null,
+					null);
+		}
 	}
 
 	private class SearchTextWatcher implements TextWatcher {
@@ -161,6 +218,75 @@ public class ChengYuDictionary extends Activity {
 
 	}
 
+	class ChengYuViewPagerAdapter extends PagerAdapter {
+
+		@Override
+		public int getCount() {
+			return mChengYus.size();
+		}
+
+		@Override
+		public boolean isViewFromObject(View arg0, Object arg1) {
+			return arg0 == arg1;
+		}
+
+		@Override
+		public Object instantiateItem(ViewGroup container, int position) {
+			ChengYu chengYu = mChengYus.get(position);
+
+			View view = LayoutInflater.from(mContext).inflate(
+					R.layout.chengyu_content, null);
+			TextView pinyin = (TextView) view
+					.findViewById(R.id.tv_chengyu_pinyin);
+			TextView comment = (TextView) view
+					.findViewById(R.id.tv_chengyu_comment);
+			TextView original = (TextView) view
+					.findViewById(R.id.tv_chengyu_original);
+			TextView example = (TextView) view
+					.findViewById(R.id.tv_chengyu_example);
+
+			pinyin.setText(chengYu.pinyin);
+			comment.setText(chengYu.comment);
+			original.setText(chengYu.original);
+			example.setText(chengYu.example);
+
+			container.addView(view);
+			return view;
+		}
+
+		@Override
+		public void destroyItem(ViewGroup container, int position, Object object) {
+			container.removeView((View) object);
+		}
+	}
+
+	class ChengYuPagerChangeListener implements OnPageChangeListener {
+
+		@Override
+		public void onPageScrollStateChanged(int arg0) {
+
+		}
+
+		@Override
+		public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+		}
+
+		@Override
+		public void onPageSelected(int position) {
+			mCurrentViewPageIndex = position;
+			mCurrentChengYuId = mChengYus.get(position).id;
+			mChengYuNameTextView.setText(mChengYus.get(position).name);
+			mChengYuIndexTextView.setText("第" + mCurrentChengYuId + "个，共"
+					+ CHENGYU_TOTAL_NUMBER + "个");
+			updatePrievousAndNextButton();
+
+			loadNextPage();
+			loadPrePage();
+		}
+
+	}
+
 	private class ChengyuQuery extends AsyncQueryHandler {
 
 		public ChengyuQuery(ContentResolver cr) {
@@ -170,39 +296,130 @@ public class ChengYuDictionary extends Activity {
 		@Override
 		protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
 			super.onQueryComplete(token, cookie, cursor);
-			if (TOKEN_SINGLE_QUERY == token) {
-				updateChengYu(cursor);
+			Log.d(TAG, "onQueryComplete token = " + token);
+			switch (token) {
+			case TOKEN_INIT_QUERY:
+				initQuery(cursor);
+				break;
+			case TOKEN_HEAD_QUERY:
+				headQuery(cursor);
+				break;
+			case TOKEN_TAIL_QUERY:
+				tailQuery(cursor);
+				break;
+			default:
+				break;
 			}
 
 		}
 
-		private void updateChengYu(Cursor cursor) {
+		private void tailQuery(Cursor cursor) {
 			if (cursor != null) {
 				try {
-					cursor.moveToFirst();
-					String name = cursor.getString(cursor
-							.getColumnIndex(ChengyuColums.NAME));
-					String pinyin = cursor.getString(cursor
-							.getColumnIndex(ChengyuColums.PINYIN));
-					String comment = cursor.getString(cursor
-							.getColumnIndex(ChengyuColums.COMMENT));
-					String original = cursor.getString(cursor
-							.getColumnIndex(ChengyuColums.ORIGINAL));
-					String example = cursor.getString(cursor
-							.getColumnIndex(ChengyuColums.EXAMPLE));
+					if (cursor.moveToLast()) {
+						do {
+							ChengYu chengYu = getChengYu(cursor);
+							addChengYuIntoViewPager(chengYu, 0);
+							mPageTailChengYuId--;
+						} while (cursor.moveToPrevious());
 
-					mChengYuNameTextView.setText(name);
-					mChengYuPinYinTextView.setText(pinyin);
-					mChengYuCommentTextView.setText(comment);
-					mChengYuOriginalTextView.setText(original);
-					mChengYuExampleTextView.setText(example);
+						mPagerAdapter.notifyDataSetChanged();
+						if (mCurrentChengYuId != mPageTailChengYuId) {
+							mCurrentViewPageIndex = mCurrentChengYuId
+									- mPageTailChengYuId;
+							mViewPager.setCurrentItem(mCurrentViewPageIndex,
+									false);
+						}
+					}
 				} catch (Exception e) {
-					Log.e(TAG, "updateChengYu " + e);
+					Log.e(TAG, "tailQuery " + e);
 				} finally {
 					cursor.close();
 				}
 			}
 		}
 
+		private void headQuery(Cursor cursor) {
+			if (cursor != null) {
+				try {
+					while (cursor.moveToNext()) {
+						ChengYu chengYu = getChengYu(cursor);
+						addChengYuIntoViewPager(chengYu);
+						mPageHeadChengYuId++;
+					}
+					mPagerAdapter.notifyDataSetChanged();
+				} catch (Exception e) {
+					Log.e(TAG, "headQuery " + e);
+				} finally {
+					cursor.close();
+				}
+			}
+		}
+
+		private void initQuery(Cursor cursor) {
+			if (cursor != null) {
+				try {
+					while (cursor.moveToNext()) {
+						ChengYu chengYu = getChengYu(cursor);
+
+						int id = cursor.getInt(cursor
+								.getColumnIndex(ChengyuColums._ID));
+
+						if (id == mCurrentChengYuId) {
+							mChengYuNameTextView.setText(chengYu.name);
+						} else if (id < mCurrentChengYuId - 1) {
+							if (id < mPageTailChengYuId) {
+								mPageTailChengYuId = id;
+							}
+						} else if (id > mCurrentChengYuId) {
+							if (id > mPageHeadChengYuId) {
+								mPageHeadChengYuId = id;
+							}
+						}
+						addChengYuIntoViewPager(chengYu);
+					}
+					mPagerAdapter.notifyDataSetChanged();
+					if (mCurrentChengYuId != mPageTailChengYuId) {
+						mCurrentViewPageIndex = mCurrentChengYuId
+								- mPageTailChengYuId;
+						mViewPager.setCurrentItem(mCurrentViewPageIndex, false);
+					}
+				} catch (Exception e) {
+					Log.e(TAG, "initQuery " + e);
+				} finally {
+					cursor.close();
+				}
+			}
+		}
+
+		private ChengYu getChengYu(Cursor cursor) {
+			ChengYu chengYu = new ChengYu();
+			chengYu.id = cursor
+					.getInt(cursor.getColumnIndex(ChengyuColums._ID));
+			chengYu.name = cursor.getString(cursor
+					.getColumnIndex(ChengyuColums.NAME));
+			chengYu.pinyin = cursor.getString(cursor
+					.getColumnIndex(ChengyuColums.PINYIN));
+			chengYu.comment = cursor.getString(cursor
+					.getColumnIndex(ChengyuColums.COMMENT));
+			chengYu.original = cursor.getString(cursor
+					.getColumnIndex(ChengyuColums.ORIGINAL));
+			chengYu.example = cursor.getString(cursor
+					.getColumnIndex(ChengyuColums.EXAMPLE));
+			return chengYu;
+		}
+
+		private void addChengYuIntoViewPager(ChengYu chengYu) {
+			// Add into last.
+			addChengYuIntoViewPager(chengYu, -1);
+		}
+
+		private void addChengYuIntoViewPager(ChengYu chengYu, int position) {
+			if (position == -1) {
+				mChengYus.add(chengYu);
+			} else {
+				mChengYus.add(position, chengYu);
+			}
+		}
 	}
 }
