@@ -1,8 +1,5 @@
 package com.zhaoyan.juyou.game.chengyudahui.db;
 
-import com.zhaoyan.communication.MainActivity;
-import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
-
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -10,7 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.util.Log;
+
+import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
+import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.WordColums;
 
 /**
  * need to more,just modify for query
@@ -24,6 +23,7 @@ public class ChengyuProvider extends ContentProvider {
 	static {
 		mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		mUriMatcher.addURI(ChengyuData.AUTHORITY, ChengyuColums.TableName, 0);
+		mUriMatcher.addURI(ChengyuData.AUTHORITY, WordColums.TableName, 1);
 	}
 
 	@Override
@@ -59,13 +59,20 @@ public class ChengyuProvider extends ContentProvider {
 		switch (mUriMatcher.match(arg0)) {
 		case 0:
 			builder.setTables(ChengyuColums.TableName);
+			if (mSqLiteDatabase == null) {
+				mSqLiteDatabase = mChengyuDbHelper
+						.getReadDb(com.zhaoyan.juyou.game.chengyudahui.MainActivity.DB_PATH);
+			}
+			break;
+		case 1:
+			builder.setTables(WordColums.TableName);
+			if (mSqLiteDatabase == null) {
+				mSqLiteDatabase = mChengyuDbHelper
+						.getReadDb(com.zhaoyan.juyou.game.chengyudahui.MainActivity.WORD_PATH);
+			}
 			break;
 		default:
 			throw new IllegalArgumentException("Unknow Uri : " + arg0);
-		}
-		if (mSqLiteDatabase == null) {
-			mSqLiteDatabase = mChengyuDbHelper
-					.getReadDb(com.zhaoyan.juyou.game.chengyudahui.MainActivity.DB_PATH);
 		}
 
 		return builder.query(mSqLiteDatabase, arg1, arg2, arg3, null, null,

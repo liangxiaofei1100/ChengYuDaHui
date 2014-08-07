@@ -33,5 +33,12 @@ public class ChengyuData {
 				+ AUTHORITY + "/" + TableName);
 		
 	}
+	
+	public static class WordColums implements BaseColumns {
+		public static final String TableName = "word";
+		public static final String WORD = "word";
+		public static final Uri CONTENT_URI = Uri.parse("content://"
+				+ AUTHORITY + "/" + TableName);
+	}
 
 }

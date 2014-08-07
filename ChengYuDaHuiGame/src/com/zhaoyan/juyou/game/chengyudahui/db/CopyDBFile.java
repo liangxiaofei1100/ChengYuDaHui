@@ -23,6 +23,11 @@ public class CopyDBFile {
 		doCopyDB(mContext, file, "guoxue.db");
 	}
 	
+	public void copyWordDB(Context context){
+		File file = new File(MainActivity.WORD_PATH);
+		doCopyDB(context, file, "word.db");
+	}
+	
 	public void copyKnowledgeFile(Context context){
 		File file = new File(MainActivity.KNOWLEDGE_FILES);
 		doCopyFiles(context, file, "knowledge1.xml");
