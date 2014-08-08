@@ -1,15 +1,17 @@
 package com.zhaoyan.juyou.game.chengyudahui.dictate;
 
+import java.util.List;
 import java.util.Map;
-
-import com.zhaoyan.juyou.game.chengyudahui.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.zhaoyan.juyou.game.chengyudahui.R;
 
 public class ResultView {
 	private LayoutInflater mLayoutInflater;
@@ -19,7 +21,7 @@ public class ResultView {
 		mLayoutInflater = LayoutInflater.from(context);
 	}
 
-	public View getView(String s) {
+	public View getView(String s, List<Integer> index) {
 		if (mView == null)
 			mView = mLayoutInflater.inflate(R.layout.dictate_result_layout,
 					null);
@@ -75,10 +77,35 @@ public class ResultView {
 				}
 			}
 		}
+		if (index != null && index.size() > 0) {
+			ImageView im = null;
+			for (int j : index) {
+				switch (j) {
+				case 0:
+					im = (ImageView) mView.findViewById(R.id.result_first_img);
+					break;
+				case 1:
+					im = (ImageView) mView.findViewById(R.id.result_second_img);
+					break;
+				case 2:
+					im = (ImageView) mView.findViewById(R.id.result_third_img);
+					break;
+				case 3:
+					im = (ImageView) mView.findViewById(R.id.result_fourth_img);
+					break;
+				default:
+					break;
+				}
+				if (im != null) {
+					im.setImageResource(R.drawable.mizige1);
+					im.setVisibility(View.VISIBLE);
+				}
+			}
+		}
 		return mView;
 	}
 
-	public void setImage(Map<Integer, Bitmap> map) {
+	public void setImage(Map<Integer, Bitmap> map, List<Integer> index) {
 		ImageView im = null;
 		if (map != null && map.size() > 0) {
 			for (java.util.Map.Entry<Integer, Bitmap> entry : map.entrySet()) {
@@ -119,6 +146,34 @@ public class ResultView {
 			im = (ImageView) mView.findViewById(R.id.result_third_img);
 			im.setImageResource(R.drawable.mizige1);
 			im.setVisibility(View.INVISIBLE);
+			if (index != null && index.size() > 0) {
+				for (int j : index) {
+					switch (j) {
+					case 0:
+						im = (ImageView) mView
+								.findViewById(R.id.result_first_img);
+						break;
+					case 1:
+						im = (ImageView) mView
+								.findViewById(R.id.result_second_img);
+						break;
+					case 2:
+						im = (ImageView) mView
+								.findViewById(R.id.result_third_img);
+						break;
+					case 3:
+						im = (ImageView) mView
+								.findViewById(R.id.result_fourth_img);
+						break;
+					default:
+						break;
+					}
+					if (im != null) {
+						im.setImageResource(R.drawable.mizige1);
+						im.setVisibility(View.VISIBLE);
+					}
+				}
+			}
 		}
 
 	}

@@ -1,6 +1,8 @@
 package com.zhaoyan.juyou.game.chengyudahui.dictate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -30,7 +32,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 @SuppressLint("UseSparseArrays")
-public class DictateActivity extends ActionBarActivity implements OnClickListener {
+public class DictateActivity extends ActionBarActivity implements
+		OnClickListener {
 	private TextView mDictateWordPinyin, mFirstPinyin, mSecondPinyin,
 			mThirdPinyin, mFourthPinyin, mDictateWordFirst, mDictateWordFourth,
 			mDictateWordSecond, mDictateWordThird, mDictateWordComment;
@@ -44,6 +47,7 @@ public class DictateActivity extends ActionBarActivity implements OnClickListene
 	private ResultListener mrListener;
 	private AlertDialog resultDialog;
 	private boolean testFlag = true;
+	private List<Integer> wordIndex;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +110,9 @@ public class DictateActivity extends ActionBarActivity implements OnClickListene
 	}
 
 	private void getWord() {
+		if (wordIndex == null)
+			wordIndex = new ArrayList<Integer>();
+		wordIndex.clear();
 		int id;
 		if (mIndexRandom == null) {
 			mIndexRandom = new Random();
@@ -153,6 +160,7 @@ public class DictateActivity extends ActionBarActivity implements OnClickListene
 	}
 
 	private void showPaint(int index) {
+		wordIndex.add(index);
 		switch (Math.abs(index) % mWord.length()) {
 		case 0:
 			mDictateWordFirst.setVisibility(View.GONE);
@@ -258,8 +266,8 @@ public class DictateActivity extends ActionBarActivity implements OnClickListene
 	private void showResult() {
 		if (mResultView == null)
 			mResultView = new ResultView(this);
-		View v = mResultView.getView(mWord);
-		mResultView.setImage(mPaintMap);
+		View v = mResultView.getView(mWord, wordIndex);
+		mResultView.setImage(mPaintMap, wordIndex);
 		if (mrListener == null)
 			mrListener = new ResultListener();
 		v.findViewById(R.id.dictate_right).setOnClickListener(mrListener);
@@ -296,7 +304,7 @@ public class DictateActivity extends ActionBarActivity implements OnClickListene
 				break;
 			}
 			resultDialog.dismiss();
-			mResultView.setImage(null);
+			mResultView.setImage(null, null);
 		}
 	}
 

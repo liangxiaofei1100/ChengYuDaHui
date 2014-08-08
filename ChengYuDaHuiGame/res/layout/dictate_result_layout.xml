@@ -107,21 +107,43 @@
         android:gravity="center"
         android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/dictate_right"
+        <RelativeLayout
             android:layout_width="100dip"
-            android:layout_height="75dip"
-            android:background="@drawable/cy_word"
-            android:text="@string/game_right"
-            android:textSize="20sp" />
+            android:layout_height="75dip" >
 
-        <Button
-            android:id="@+id/dictate_wrong"
+            <ImageView
+                android:id="@+id/dictate_right"
+                android:layout_width="100dip"
+                android:layout_height="75dip"
+                android:clickable="true"
+                android:src="@drawable/cy_word" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/game_right"
+                android:textSize="20sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="100dip"
-            android:layout_height="75dip"
-            android:background="@drawable/cy_word"
-            android:text="@string/game_wrong"
-            android:textSize="20sp" />
+            android:layout_height="75dip" >
+
+            <ImageView
+                android:id="@+id/dictate_wrong"
+                android:layout_width="100dip"
+                android:layout_height="75dip"
+                android:clickable="true"
+                android:src="@drawable/cy_word" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/game_wrong"
+                android:textSize="20sp" />
+        </RelativeLayout>
     </LinearLayout>
 
 </RelativeLayout>

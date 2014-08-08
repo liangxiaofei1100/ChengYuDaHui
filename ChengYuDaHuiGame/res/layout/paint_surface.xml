@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1affffff" >
+    android:background="#1affffff"
+     >
 
     <TextView
         android:id="@+id/paint_chengyu_name"
@@ -29,21 +30,43 @@
         android:gravity="center"
         android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/paint_clean_btn"
+        <RelativeLayout
             android:layout_width="100dip"
-            android:layout_height="75dip"
-            android:background="@drawable/cy_word"
-            android:text="@string/paint_clean"
-            android:textSize="30sp" />
+            android:layout_height="75dip" >
 
-        <Button
-            android:id="@+id/paint_chengyu_right"
+            <ImageView
+                android:id="@+id/paint_clean_btn"
+                android:layout_width="100dip"
+                android:layout_height="75dip"
+                android:clickable="true"
+                android:src="@drawable/cy_word" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/paint_clean"
+                android:textSize="20sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="100dip"
-            android:layout_height="75dip"
-            android:background="@drawable/cy_word"
-            android:text="@string/game_confirm"
-            android:textSize="30sp" />
+            android:layout_height="75dip" >
+
+            <ImageView
+                android:id="@+id/paint_chengyu_right"
+                android:layout_width="100dip"
+                android:layout_height="75dip"
+                android:clickable="true"
+                android:src="@drawable/cy_word" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/game_confirm"
+                android:textSize="20sp" />
+        </RelativeLayout>
 
         <Button
             android:id="@+id/paint_change_word_btn"
