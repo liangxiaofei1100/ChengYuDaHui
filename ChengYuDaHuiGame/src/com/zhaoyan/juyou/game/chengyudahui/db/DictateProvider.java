@@ -1,5 +1,6 @@
 package com.zhaoyan.juyou.game.chengyudahui.db;
 
+import com.zhaoyan.juyou.game.chengyudahui.DBConfig;
 import com.zhaoyan.juyou.game.chengyudahui.db.DictateData.DictateColums;
 
 import android.content.ContentProvider;
@@ -57,9 +58,7 @@ public class DictateProvider extends ContentProvider {
 			throw new IllegalArgumentException("Unknow Uri : " + uri);
 		}
 		if (mSqLiteDatabase == null) {
-			mSqLiteDatabase = mChengyuDbHelper
-					.getReadDb(com.zhaoyan.juyou.game.chengyudahui.MainActivity.DB_DIR
-							+ "/dictate.db");
+			mSqLiteDatabase = mChengyuDbHelper.getReadDb(DBConfig.DICTATE_DB_PATH);
 		}
 
 		return builder.query(mSqLiteDatabase, projection, selection,
