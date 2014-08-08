@@ -188,8 +188,9 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 			//四个答案格斗填满了，而且都是错的，那么再来的话 就重新开始吧
 			Word word = null;
 			for (int i = 0; i < 4; i++) {
-				word = mAnswerBtns[i].getWord();
-//				mAdapter.setVisibile(mAnswerBtns[i].getWord().getPosition(), true);
+//				word = mWordsList.get(mAnswerBtns[i].getWord().getPosition());
+//				word.setVisibile(true);
+				mAdapter.setVisibile(mAnswerBtns[i].getWord().getPosition(), true);
 				mAnswerArray.put(i, false);
 				mAnswerBtns[i].setWord(null);
 			}
