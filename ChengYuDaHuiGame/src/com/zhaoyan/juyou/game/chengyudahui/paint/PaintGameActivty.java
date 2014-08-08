@@ -36,7 +36,7 @@ import android.widget.TextView;
 public class PaintGameActivty extends Activity implements OnClickListener {
 	private ImageView mPaintImage;
 	private TextView mPaintChengyuName;
-	private Button mChangeWordBtn, mPaintCleanBtn, mPaintRightBtn;
+	private View mChangeWordBtn, mPaintCleanBtn, mPaintRightBtn;
 	public static Bitmap mPaintBitmap;
 	private Paint mPaint;
 	private Canvas mCanvas;
@@ -62,9 +62,9 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 		mPaintChengyuName = (TextView) findViewById(R.id.paint_chengyu_name);
 		mPaintImage = (ImageView) findViewById(R.id.paint_image_view);
 		mPaintChengyuName.setText("");
-		mPaintCleanBtn = (Button) findViewById(R.id.paint_clean_btn);
-		mChangeWordBtn = (Button) findViewById(R.id.paint_change_word_btn);
-		mPaintRightBtn = (Button) findViewById(R.id.paint_chengyu_right);
+		mPaintCleanBtn = (View) findViewById(R.id.paint_clean_btn);
+		mChangeWordBtn = (View) findViewById(R.id.paint_change_word_btn);
+		mPaintRightBtn = (View) findViewById(R.id.paint_chengyu_right);
 		mPaintCleanBtn.setOnClickListener(this);
 		mChangeWordBtn.setOnClickListener(this);
 		mPaintRightBtn.setOnClickListener(this);
@@ -143,7 +143,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 		}
 	}
 
-	private void cleanPaint() {
+	public void cleanPaint() {
 		if (mPrepareFlag) {
 			createBitmap();
 		}
@@ -294,7 +294,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 		mPaintImage.setImageBitmap(mPaintBitmap);
 	}
 
-	private void setResult() {
+	public void setResult() {
 		Intent intent = new Intent();
 		intent.putExtra("index", index);
 		setResult(20, intent);
