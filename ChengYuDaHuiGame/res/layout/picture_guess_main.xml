@@ -130,7 +130,7 @@
                     android:textColor="@android:color/black" />
             </RelativeLayout>
 
-            <Button
+            <com.zhaoyan.juyou.game.chengyudahui.knowledge.AnswerButton
                 android:id="@+id/btn_answer_01"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
@@ -140,7 +140,7 @@
                 android:padding="0dp"
                 android:textColor="@android:color/black" />
 
-            <Button
+            <com.zhaoyan.juyou.game.chengyudahui.knowledge.AnswerButton
                 android:id="@+id/btn_answer_02"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
@@ -150,7 +150,7 @@
                 android:padding="0dp"
                 android:textColor="@android:color/black" />
 
-            <Button
+            <com.zhaoyan.juyou.game.chengyudahui.knowledge.AnswerButton
                 android:id="@+id/btn_answer_03"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
@@ -160,7 +160,7 @@
                 android:padding="0dp"
                 android:textColor="@android:color/black" />
 
-            <Button
+            <com.zhaoyan.juyou.game.chengyudahui.knowledge.AnswerButton
                 android:id="@+id/btn_answer_04"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
