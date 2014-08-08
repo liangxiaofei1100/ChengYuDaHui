@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,7 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 @SuppressLint("UseSparseArrays")
-public class DictateActivity extends Activity implements OnClickListener {
+public class DictateActivity extends ActionBarActivity implements OnClickListener {
 	private TextView mDictateWordPinyin, mFirstPinyin, mSecondPinyin,
 			mThirdPinyin, mFourthPinyin, mDictateWordFirst, mDictateWordFourth,
 			mDictateWordSecond, mDictateWordThird, mDictateWordComment;
@@ -49,6 +50,7 @@ public class DictateActivity extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		initView(R.layout.activity_dictate);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		setTitle("汉字听写");
 		getWord();
 	}

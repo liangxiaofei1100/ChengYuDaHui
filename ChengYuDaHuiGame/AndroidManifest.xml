@@ -164,7 +164,11 @@
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.DictateActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" />
+        </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.knowledge.KnowledgeMainActivity"
             android:screenOrientation="portrait"
