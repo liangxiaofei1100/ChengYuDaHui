@@ -15,15 +15,20 @@ public class CopyDBFile {
 
 	public void copyDB(Context mContext, String name) {
 		File file = new File(MainActivity.DB_DIR + "/" + name);
-		doCopyDB(mContext, file, "chengyu.db");
+		doCopyDB(mContext, file, name);
 	}
 
 	public void copyGuoXueDB(Context mContext) {
 		File file = new File(MainActivity.GUOXUE_DB_PATH);
 		doCopyDB(mContext, file, "guoxue.db");
 	}
-
-	public void copyKnowledgeFile(Context context) {
+	
+	public void copyWordDB(Context context){
+		File file = new File(MainActivity.WORD_PATH);
+		doCopyDB(context, file, "word.db");
+	}
+	
+	public void copyKnowledgeFile(Context context){
 		File file = new File(MainActivity.KNOWLEDGE_FILES);
 		doCopyFiles(context, file, "knowledge1.xml");
 	}

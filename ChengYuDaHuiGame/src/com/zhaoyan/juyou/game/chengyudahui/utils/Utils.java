@@ -6,7 +6,13 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import android.content.DialogInterface;
 import android.os.StatFs;
@@ -101,6 +107,25 @@ public class Utils {
 		bb.flip();
 		CharBuffer cb = cs.decode(bb);
 		return cb.array();
+	}
+	
+	/**
+	 * get n int random nums from a number
+	 * (从指定范围内生成n个不重复的随机数)
+	 * @param n random count
+	 * @param totalNum  指定范围的最大数
+	 * @return 不重复的HashSet集合
+	 */
+	public static Set<Integer> getRandomNums(int n, int totalNum){
+		Set<Integer> set = new HashSet<Integer>();
+		Random random  = new Random();
+		for (int i = 0; i < n; i++) {
+			int num = random.nextInt(totalNum);
+			while (!set.add(num)) {
+				num = random.nextInt(totalNum);
+			}
+		}
+		return set;
 	}
 	
 }
