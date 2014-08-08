@@ -106,6 +106,7 @@
             android:text="点击查看近义词、反义词、典故、英文等更多内容"
             android:textSize="14sp" />
 
+        <!-- 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -113,6 +114,7 @@
             android:background="@drawable/list_click_item_selector"
             android:text="查看近义词、反义词等更多内容"
             android:textSize="14sp" />
+             -->
     </LinearLayout>
 
 </ScrollView>

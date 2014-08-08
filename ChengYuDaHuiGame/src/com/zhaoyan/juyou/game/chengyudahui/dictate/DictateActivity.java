@@ -3,19 +3,26 @@ package com.zhaoyan.juyou.game.chengyudahui.dictate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.db.CopyDBFile;
+import com.zhaoyan.juyou.game.chengyudahui.db.DictateData;
+import com.zhaoyan.juyou.game.chengyudahui.db.DictateData.DictateColums;
 import com.zhaoyan.juyou.game.chengyudahui.db.HistoryData;
 import com.zhaoyan.juyou.game.chengyudahui.db.HistoryData.HistoryColums;
 import com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,7 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 @SuppressLint("UseSparseArrays")
-public class DictateActivity extends Activity implements OnClickListener {
+public class DictateActivity extends ActionBarActivity implements OnClickListener {
 	private TextView mDictateWordPinyin, mFirstPinyin, mSecondPinyin,
 			mThirdPinyin, mFourthPinyin, mDictateWordFirst, mDictateWordFourth,
 			mDictateWordSecond, mDictateWordThird, mDictateWordComment;
@@ -36,13 +43,22 @@ public class DictateActivity extends Activity implements OnClickListener {
 	private ResultView mResultView;
 	private ResultListener mrListener;
 	private AlertDialog resultDialog;
+	private boolean testFlag = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		initView(R.layout.activity_dictate);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		setTitle("汉字听写");
 		getWord();
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
 	}
 
 	private void initView(int id) {
@@ -90,40 +106,54 @@ public class DictateActivity extends Activity implements OnClickListener {
 	}
 
 	private void getWord() {
+		int id;
 		if (mIndexRandom == null) {
 			mIndexRandom = new Random();
 		}
-		mWord = "瓮中捉鳖";
-		mDictateWordComment
-				.setText("【释义】从大坛子里捉王八。比喻想要捕捉的对象已在掌握之中。形容手到擒来，轻易而有把握。\n【出处】元·康进之《李逵负荆》第四折：“这是揉着我山儿的痒处，管叫他瓮中捉鳖，手到拿来。");
-		// String temp = mWord;
-		int i = 0;
-		try {
-			mDictateWordFirst.setText(mWord.charAt(i) + "");
-			i++;
-			mDictateWordSecond.setText(mWord.charAt(i) + "");
-			i++;
-			mDictateWordThird.setText(mWord.charAt(i) + "");
-			i++;
-			mDictateWordFourth.setText(mWord.charAt(i) + "");
-		} catch (Exception e) {
-			Log.e(DictateActivity.class.getName(), "" + e.toString());
-			switch (i) {
-			case 2:
-				mThirdLayout.setVisibility(View.GONE);
-				mFourthLayout.setVisibility(View.GONE);
-				break;
-			case 3:
-				mFourthLayout.setVisibility(View.GONE);
-				break;
-
-			default:
-				break;
+		Cursor c = getContentResolver().query(
+				DictateColums.CONTENT_URI,
+				new String[] { DictateColums.NAME, DictateColums.PINYIN,
+						DictateColums.COMMENT, DictateColums.DICTATE }, null,
+				null, null);
+		if (c != null && c.getCount() > 0 && !testFlag) {
+			id = Math.abs(mIndexRandom.nextInt()) % c.getCount();
+			c.close();
+			c = getContentResolver().query(
+					DictateColums.CONTENT_URI,
+					new String[] { DictateColums.NAME, DictateColums.PINYIN,
+							DictateColums.COMMENT, DictateColums.DICTATE },
+					"_id = " + id, null, null);
+			if (c != null && c.getCount() > 0) {
+				c.moveToNext();
+				mWord = c.getString(c
+						.getColumnIndex(DictateData.DictateColums.NAME));
+				setWord(mWord);
+				mDictateWordComment.setText(c.getString(c
+						.getColumnIndex(DictateData.DictateColums.COMMENT)));
+				setPinyin(c.getString(c
+						.getColumnIndex(DictateData.DictateColums.PINYIN)));
+				String s = c.getString(c
+						.getColumnIndex(DictateData.DictateColums.DICTATE));
+				int len = s.length();
+				for (int j = 0; j < len; j++) {
+					showPaint(mWord.indexOf(s.charAt(j) + ""));
+				}
+				c.close();
 			}
+		} else {
+			mWord = "沉鱼落雁";
+			mDictateWordComment.setText("鱼见之chén入水底，yàn见之降落沙洲，形容女子容貌的美丽");
+			// String temp = mWord;
+			setWord(mWord);
+			setPinyin("chén yú luò yàn");
+			showPaint(0);
+			showPaint(3);
 		}
-		setPinyin("wèng zhōng zhuō biē");
 
-		switch (Math.abs(mIndexRandom.nextInt()) % mWord.length()) {
+	}
+
+	private void showPaint(int index) {
+		switch (Math.abs(index) % mWord.length()) {
 		case 0:
 			mDictateWordFirst.setVisibility(View.GONE);
 			mFirstPaintImg.setVisibility(View.VISIBLE);
@@ -192,8 +222,12 @@ public class DictateActivity extends Activity implements OnClickListener {
 	private void nextWord() {
 		mFirstPaintImg.setVisibility(View.GONE);
 		mSecondPaintImg.setVisibility(View.GONE);
-		mSecondPaintImg.setVisibility(View.GONE);
+		mThirdPaintImg.setVisibility(View.GONE);
 		mFourthPaintImg.setVisibility(View.GONE);
+		mFirstPaintImg.setImageResource(R.drawable.mizige1);
+		mSecondPaintImg.setImageResource(R.drawable.mizige1);
+		mThirdPaintImg.setImageResource(R.drawable.mizige1);
+		mFourthPaintImg.setImageResource(R.drawable.mizige1);
 		if (mPaintMap != null) {
 			for (java.util.Map.Entry<Integer, Bitmap> entry : mPaintMap
 					.entrySet()) {
@@ -247,16 +281,16 @@ public class DictateActivity extends Activity implements OnClickListener {
 			switch (id) {
 			case R.id.dictate_right:
 				// TODO right
+				nextWord();
 				break;
 			case R.id.dictate_wrong:
 				// TODO wrong
-				if (false) {
+				if (!testFlag) {
 					ContentValues values = new ContentValues();
 					getContentResolver()
 							.insert(HistoryColums.CONTENT_URI, null);
-				} else {
-
 				}
+				nextWord();
 				break;
 			default:
 				break;
@@ -279,4 +313,38 @@ public class DictateActivity extends Activity implements OnClickListener {
 		}
 	}
 
+	private void setWord(String s) {
+		int i = 0;
+		try {
+			mDictateWordFirst.setText(s.charAt(i) + "");
+			mFirstLayout.setVisibility(View.VISIBLE);
+			mDictateWordFirst.setVisibility(View.VISIBLE);
+			i++;
+			mDictateWordSecond.setText(s.charAt(i) + "");
+			mSecondLayout.setVisibility(View.VISIBLE);
+			mDictateWordSecond.setVisibility(View.VISIBLE);
+			i++;
+			mDictateWordThird.setText(s.charAt(i) + "");
+			mThirdLayout.setVisibility(View.VISIBLE);
+			mDictateWordThird.setVisibility(View.VISIBLE);
+			i++;
+			mDictateWordFourth.setText(s.charAt(i) + "");
+			mFourthLayout.setVisibility(View.VISIBLE);
+			mDictateWordFourth.setVisibility(View.VISIBLE);
+		} catch (Exception e) {
+			Log.e(DictateActivity.class.getName(), "" + e.toString());
+			switch (i) {
+			case 2:
+				mThirdLayout.setVisibility(View.GONE);
+				mFourthLayout.setVisibility(View.GONE);
+				break;
+			case 3:
+				mFourthLayout.setVisibility(View.GONE);
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
 }

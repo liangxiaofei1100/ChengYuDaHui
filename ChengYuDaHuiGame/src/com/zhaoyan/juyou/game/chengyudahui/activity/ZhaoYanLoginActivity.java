@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -23,7 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
+public class ZhaoYanLoginActivity extends ActionBarActivity implements OnClickListener {
 	private static final String TAG = ZhaoYanLoginActivity.class
 			.getSimpleName();
 	private Context mContext;
@@ -41,6 +42,8 @@ public class ZhaoYanLoginActivity extends Activity implements OnClickListener {
 		mContext = this;
 		setTitle("登录");
 		setContentView(R.layout.zhaoyan_login);
+		
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		initView();
 		IntentFilter intentFilter = new IntentFilter(

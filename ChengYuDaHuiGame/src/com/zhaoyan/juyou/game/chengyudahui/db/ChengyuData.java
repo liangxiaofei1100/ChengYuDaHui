@@ -29,6 +29,7 @@ public class ChengyuData {
 		public static final String CAICI = "caici";
 
 		public static final String STORY = "story";
+
 		public static final Uri CONTENT_URI = Uri.parse("content://"
 				+ AUTHORITY + "/" + TableName);
 		

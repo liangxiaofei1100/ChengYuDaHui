@@ -118,7 +118,7 @@ public class ZhaoYanAccountSettingActivity extends Activity implements
 		Intent intent = new Intent(ACTION_ACCOUNT_LOGOUT);
 		sendBroadcast(intent);
 
-		launchLogin();
+//		launchLogin();
 	}
 
 	private void launchLogin() {
