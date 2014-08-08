@@ -29,15 +29,25 @@ public class ResultView {
 				TextView t = (TextView) mView
 						.findViewById(R.id.result_first_word);
 				t.setText(s.charAt(i) + "");
+				t.setVisibility(View.VISIBLE);
 				i++;
 				t = (TextView) mView.findViewById(R.id.result_second_word);
 				t.setText(s.charAt(i) + "");
+				t.setVisibility(View.VISIBLE);
+				mView.findViewById(R.id.dictate_result_second_layout)
+						.setVisibility(View.VISIBLE);
 				i++;
 				t = (TextView) mView.findViewById(R.id.result_third_word);
 				t.setText(s.charAt(i) + "");
+				t.setVisibility(View.VISIBLE);
+				mView.findViewById(R.id.dictate_result_third_layout)
+						.setVisibility(View.VISIBLE);
 				i++;
 				t = (TextView) mView.findViewById(R.id.result_fourth_word);
 				t.setText(s.charAt(i) + "");
+				t.setVisibility(View.VISIBLE);
+				mView.findViewById(R.id.dictate_result_fourth_layout)
+						.setVisibility(View.VISIBLE);
 			} catch (Exception e) {
 				switch (i) {
 				case 0:
