@@ -159,14 +159,19 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.DictateActivity"
             android:screenOrientation="portrait" />
-        <activity 
+        <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.knowledge.KnowledgeMainActivity"
-            android:theme="@style/ActivityTheme" 
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityTheme" />
 
         <provider
             android:name="com.zhaoyan.juyou.game.chengyudahui.db.ChengyuProvider"
             android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.chengyuprovider"
+            android:exported="false" >
+        </provider>
+        <provider
+            android:name="com.zhaoyan.juyou.game.chengyudahui.db.DictateProvider"
+            android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.dictateprovider"
             android:exported="false" >
         </provider>
         <provider
