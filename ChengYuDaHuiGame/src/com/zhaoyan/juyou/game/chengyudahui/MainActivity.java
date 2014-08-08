@@ -45,7 +45,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
 		DB_DIR = this.getFilesDir().getAbsolutePath() + "/database";
 		DB_PATH = DB_DIR + "/chengyu.db";
-		new CopyDBFile().copyDB(this);
+		new CopyDBFile().copyDB(this,"chengyu.db");
 	}
 
 	@Override

@@ -28,12 +28,13 @@ public class LauncherActivity extends Activity {
 		MainActivity.DB_DIR = MainActivity.FILES_DIR + "/database";
 		MainActivity.DB_PATH = MainActivity.DB_DIR + "/chengyu.db";
 		MainActivity.GUOXUE_DB_PATH = MainActivity.DB_DIR + "/guoxue.db";
+		new CopyDBFile().copyDB(this,"chengyu.db");
 		MainActivity.WORD_PATH = MainActivity.DB_DIR + "/word.db";
 		MainActivity.KNOWLEDGE_FILES = MainActivity.FILES_DIR + "/knowledge1.xml";//第一回的所有题目
-		new CopyDBFile().copyDB(this);
 		new CopyDBFile().copyGuoXueDB(this);
 		new CopyDBFile().copyWordDB(this);
 		new CopyDBFile().copyKnowledgeFile(this);
+		new CopyDBFile().copyDB(this, "dictate.db");
 	}
 
 	public void launchMainMenu(View view) {
