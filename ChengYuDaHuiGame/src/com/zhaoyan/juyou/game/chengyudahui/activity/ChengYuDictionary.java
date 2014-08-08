@@ -15,16 +15,19 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.ChengYu;
@@ -60,7 +63,7 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 			ChengyuColums.NAME, ChengyuColums.PINYIN, ChengyuColums.COMMENT,
 			ChengyuColums.ORIGINAL, ChengyuColums.EXAMPLE };
 
-	private int mInitChengYuId = 100;
+	private int mInitChengYuId = 1;
 	private int mCurrentChengYuId = mInitChengYuId;
 	private int mPageHeadChengYuId = mCurrentChengYuId;
 	private int mPageTailChengYuId = mCurrentChengYuId;
@@ -101,16 +104,27 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 		mSearchListAdapter = new SearchAdapter(mContext);
 		mSearchEditText.setAdapter(mSearchListAdapter);
 		mSearchEditText.setOnItemClickListener(this);
+		mSearchEditText.setOnEditorActionListener(new OnEditorActionListener() {
+
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+
+				if (actionId == EditorInfo.IME_ACTION_SEARCH
+						|| (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+					// search
+					searchChengYu();
+					return true;
+				}
+				return false;
+			}
+		});
 		mClearTextView = findViewById(R.id.iv_clear_text);
 		mSearchEditText.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				String selection = ChengyuColums.NAME + " like '"
-						+ mSearchEditText.getText().toString() + "%'";
-				mChengyuQuery.startQuery(TOKEN_SEARCHBOX_QUERY, null,
-						ChengyuColums.CONTENT_URI, PROJECTION, selection, null,
-						null);
+				searchChengYu();
 			}
 		});
 		// ChengYu views
@@ -231,6 +245,13 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 		}
 	}
 
+	private void searchChengYu() {
+		String selection = ChengyuColums.NAME + " like '"
+				+ mSearchEditText.getText().toString() + "%'";
+		mChengyuQuery.startQuery(TOKEN_SEARCHBOX_QUERY, null,
+				ChengyuColums.CONTENT_URI, PROJECTION, selection, null, null);
+	}
+
 	private class SearchTextWatcher implements TextWatcher {
 
 		@Override
@@ -240,11 +261,7 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 			} else {
 				mClearTextView.setVisibility(View.VISIBLE);
 
-				String selection = ChengyuColums.NAME + " like '"
-						+ s.toString() + "%'";
-				mChengyuQuery.startQuery(TOKEN_SEARCHBOX_QUERY, null,
-						ChengyuColums.CONTENT_URI, PROJECTION, selection, null,
-						null);
+				searchChengYu();
 			}
 		}
 
