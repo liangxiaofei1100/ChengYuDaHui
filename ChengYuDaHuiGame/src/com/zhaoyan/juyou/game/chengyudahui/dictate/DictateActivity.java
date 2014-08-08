@@ -5,12 +5,12 @@ import java.util.Map;
 import java.util.Random;
 
 import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.db.CopyDBFile;
 import com.zhaoyan.juyou.game.chengyudahui.db.DictateData;
 import com.zhaoyan.juyou.game.chengyudahui.db.DictateData.DictateColums;
 import com.zhaoyan.juyou.game.chengyudahui.db.HistoryData;
 import com.zhaoyan.juyou.game.chengyudahui.db.HistoryData.HistoryColums;
 import com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty;
+import com.zhaoyan.juyou.game.chengyudahui.utils.CopyFileUtil;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

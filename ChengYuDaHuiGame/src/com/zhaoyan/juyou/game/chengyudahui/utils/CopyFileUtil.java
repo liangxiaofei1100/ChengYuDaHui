@@ -1,4 +1,4 @@
-package com.zhaoyan.juyou.game.chengyudahui.db;
+package com.zhaoyan.juyou.game.chengyudahui.utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,8 +10,8 @@ import android.content.Context;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.DBConfig;
 
-public class CopyDBFile {
-	private static final String TAG = CopyDBFile.class.getSimpleName();
+public class CopyFileUtil {
+	private static final String TAG = CopyFileUtil.class.getSimpleName();
 
 	public static void copyDB(Context mContext, String name) {
 		File file = new File(DBConfig.DATABASE_DIR + "/" + name);

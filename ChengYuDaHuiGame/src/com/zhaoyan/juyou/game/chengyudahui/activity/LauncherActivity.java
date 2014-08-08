@@ -11,7 +11,7 @@ import android.view.View;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.DBConfig;
 import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.db.CopyDBFile;
+import com.zhaoyan.juyou.game.chengyudahui.utils.CopyFileUtil;
 
 /**
  * First page of the App. Press "Start Game" button to launch main menu
@@ -33,12 +33,12 @@ public class LauncherActivity extends Activity {
 			databaseDir.mkdirs();
 		}
 		
-		CopyDBFile.copyDB(mContext, DBConfig.DB_CHENGYU_NAME);
-		CopyDBFile.copyDB(mContext, DBConfig.DB_GUOXUE_NAME);
-		CopyDBFile.copyDB(mContext, DBConfig.DB_WORD_NAME);
-		CopyDBFile.copyDB(mContext, DBConfig.DB_DICTATE_NAME);
+		CopyFileUtil.copyDB(mContext, DBConfig.DB_CHENGYU_NAME);
+		CopyFileUtil.copyDB(mContext, DBConfig.DB_GUOXUE_NAME);
+		CopyFileUtil.copyDB(mContext, DBConfig.DB_WORD_NAME);
+		CopyFileUtil.copyDB(mContext, DBConfig.DB_DICTATE_NAME);
 		
-		CopyDBFile.copyFile(mContext, DBConfig.FILE_KNOWLEDGE1);
+		CopyFileUtil.copyFile(mContext, DBConfig.FILE_KNOWLEDGE1);
 	}
 
 	public void launchMainMenu(View view) {
