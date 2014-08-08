@@ -20,6 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class KnowledgeMainActivity extends Activity implements OnClickListener, OnItemClickListener {
 	private static final String TAG = KnowledgeMainActivity.class.getSimpleName();
@@ -29,10 +30,8 @@ public class KnowledgeMainActivity extends Activity implements OnClickListener, 
 	
 	private List<String> mList = new ArrayList<String>();
 	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.knowledge_main);
 		
@@ -66,8 +65,32 @@ public class KnowledgeMainActivity extends Activity implements OnClickListener, 
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		
+		switch (v.getId()) {
+		case R.id.iv_back:
+			KnowledgeMainActivity.this.finish();
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		//每一回的配置文件以固定格式命名：knowledge1.xml,1表示第一回
+		String path = MainActivity.FILES_DIR + "/knowledge" + (position + 1) + ".xml";
+		File file = new File(path);
+		if (!file.exists()) {
+			Log.e(TAG, file.getAbsolutePath() + " is not exist");
+			Toast.makeText(getApplicationContext(), "暂时只做了第一个，这些都没做呢", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		Intent intent = new Intent();
+		intent.setClass(KnowledgeMainActivity.this, GuessGameOfPictureActivity.class);
+		intent.putExtra("path", path);
+		startActivity(intent);
+		Log.d(TAG, "filepath:" + file.getAbsolutePath());
 	}
 	
 	private class MyAdapter extends BaseAdapter{
@@ -105,20 +128,4 @@ public class KnowledgeMainActivity extends Activity implements OnClickListener, 
 		
 	}
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		// TODO Auto-generated method stub
-		//每一回的配置文件以固定格式命名：knowledge1.xml,1表示第一回
-		String path = MainActivity.FILES_DIR + "/knowledge" + (position + 1) + ".xml";
-		File file = new File(path);
-		if (!file.exists()) {
-			return;
-		}
-		Intent intent = new Intent();
-		intent.setClass(KnowledgeMainActivity.this, GuessGameOfPictureActivity.class);
-		intent.putExtra("path", path);
-		startActivity(intent);
-		Log.d(TAG, "filepath:" + file.getAbsolutePath());
-	}
 }
