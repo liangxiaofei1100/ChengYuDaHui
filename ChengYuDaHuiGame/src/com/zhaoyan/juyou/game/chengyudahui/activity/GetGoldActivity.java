@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,7 +21,7 @@ import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.BaiduFrontiaUser;
 import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
 
-public class GetGoldActivity extends Activity implements OnClickListener {
+public class GetGoldActivity extends ActionBarActivity implements OnClickListener {
 	private static final String TAG = GetGoldActivity.class.getSimpleName();
 
 	private Context mContext;
@@ -40,6 +41,9 @@ public class GetGoldActivity extends Activity implements OnClickListener {
 		mContext = this;
 		setTitle("领取俸禄");
 		setContentView(R.layout.get_gold_activity);
+		
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		mZhaoYanAccountManager = new ZhaoYanAccountManager();
 
 		initView();

@@ -65,6 +65,9 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity"
             android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" />
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanAccountSettingActivity"
@@ -85,6 +88,9 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanLoginActivity"
             android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanRegisterActivity"
@@ -174,7 +180,7 @@
             android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.historyrovider"
             android:exported="false" >
         </provider>
-         <provider
+        <provider
             android:name="com.zhaoyan.juyou.game.chengyudahui.db.WordProvider"
             android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.wordprovider"
             android:exported="false" >
