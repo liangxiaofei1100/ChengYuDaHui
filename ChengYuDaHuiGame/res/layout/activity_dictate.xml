@@ -190,16 +190,18 @@
             <ImageView
                 android:id="@+id/dictate_word_image"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dip" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/dictate_word_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginTop="20dip"
-                android:paddingLeft="5dip"
-                android:paddingRight="5dip"
+                android:background="@drawable/text_box_bg"
+                android:gravity="center_vertical"
                 android:textSize="20sp" />
         </LinearLayout>
     </ScrollView>
@@ -210,12 +212,13 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/advert_layout"
         android:layout_marginTop="15dip"
+        android:background="@drawable/list_click_item_selector"
         android:text="@string/show_result" />
 
     <TextView
         android:id="@+id/advert_layout"
         android:layout_width="match_parent"
-        android:layout_height="50dip"
+        android:layout_height="10dip"
         android:layout_alignParentBottom="true" >
     </TextView>
 

@@ -176,6 +176,11 @@
             android:exported="false" >
         </provider>
         <provider
+            android:name="com.zhaoyan.juyou.game.chengyudahui.db.DictateProvider"
+            android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.dictateprovider"
+            android:exported="false" >
+        </provider>
+        <provider
             android:name="com.zhaoyan.juyou.game.chengyudahui.db.HistoryProvider"
             android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.historyrovider"
             android:exported="false" >
