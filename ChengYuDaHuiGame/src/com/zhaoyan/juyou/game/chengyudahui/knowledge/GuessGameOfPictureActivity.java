@@ -28,7 +28,7 @@ import android.widget.Toast;
 import com.baidu.kirin.d.d;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.WordColums;
+import com.zhaoyan.juyou.game.chengyudahui.db.WordData.WordColums;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 import com.zhaoyan.juyou.game.chengyudahui.view.Effectstype;
 import com.zhaoyan.juyou.game.chengyudahui.view.NiftyDialogBuilder;
@@ -279,6 +279,20 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 		for(Button button : mAnswerBtns){
 			button.setTextColor(color);
 		}
+	}
+	
+	/**
+	 * @param n 
+	 */
+	private void clickAnswerButton(int n){
+		setButtonsColor(Color.BLACK);
+		
+		Word word = mAnswerBtns[n].getWord();
+		mAdapter.setVisibile(word.getPosition(), true);
+		mAdapter.notifyDataSetChanged();
+		
+		mAnswerBtns[n].setWord(null);
+		mAnswerArray.put(n, false);
 	}
 	
 	private void showRightDialog(){

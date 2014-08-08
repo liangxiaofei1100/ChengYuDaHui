@@ -175,8 +175,8 @@
             android:exported="false" >
         </provider>
          <provider
-            android:name="com.zhaoyan.juyou.game.chengyudahui.knowledge.NoteProvider"
-            android:authorities="com.yuri.notebook.db.notebookproviderrrr"
+            android:name="com.zhaoyan.juyou.game.chengyudahui.db.WordProvider"
+            android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.wordprovider"
             android:exported="false" >
         </provider>
 
