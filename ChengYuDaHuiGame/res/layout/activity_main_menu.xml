@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:onClick="launchPictureGuessGame"
+                android:onClick="launchChengYuDaHui"
                 android:src="@drawable/main_menu_chengyudahui_selector" />
 
             <ImageView

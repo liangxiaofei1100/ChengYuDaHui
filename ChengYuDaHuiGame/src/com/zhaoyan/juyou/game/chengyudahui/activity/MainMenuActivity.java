@@ -80,9 +80,9 @@ public class MainMenuActivity extends Activity {
 		startActivity(intent);
 	}
 
-	public void launchChengYuNewComment(View view) {
-		Log.d(TAG, "launchChengYuNewComment");
-		Intent intent = new Intent(mContext, ChengYuNewCommentActivity.class);
+	public void launchChengYuDaHui(View view) {
+		Log.d(TAG, "launchChengYuDaHui");
+		Intent intent = new Intent(mContext, SpeakGameActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 		startActivity(intent);
 	}
