@@ -8,41 +8,27 @@ import java.io.InputStream;
 import android.content.Context;
 
 import com.zhaoyan.communication.util.Log;
-import com.zhaoyan.juyou.game.chengyudahui.MainActivity;
+import com.zhaoyan.juyou.game.chengyudahui.DBConfig;
 
 public class CopyDBFile {
 	private static final String TAG = CopyDBFile.class.getSimpleName();
 
-	public void copyDB(Context mContext, String name) {
-		File file = new File(MainActivity.DB_DIR + "/" + name);
+	public static void copyDB(Context mContext, String name) {
+		File file = new File(DBConfig.DATABASE_DIR + "/" + name);
 		doCopyDB(mContext, file, name);
 	}
-
-	public void copyGuoXueDB(Context mContext) {
-		File file = new File(MainActivity.GUOXUE_DB_PATH);
-		doCopyDB(mContext, file, "guoxue.db");
-	}
 	
-	public void copyWordDB(Context context){
-		File file = new File(MainActivity.WORD_PATH);
-		doCopyDB(context, file, "word.db");
-	}
-	
-	public void copyKnowledgeFile(Context context){
-		File file = new File(MainActivity.KNOWLEDGE_FILES);
-		doCopyFiles(context, file, "knowledge1.xml");
+	public static void copyFile(Context context, String name){
+		File file = new File(DBConfig.FILES_DIR + "/" + name);
+		doCopyFiles(context, file, name);
 	}
 
-	private void doCopyDB(Context context, File desFile, String srcFileName) {
-		Log.e(TAG, desFile.getAbsolutePath());
+	private static void doCopyDB(Context context, File desFile, String srcFileName) {
+		Log.d(TAG, "doCopyDB:" + desFile.getAbsolutePath());
 		if (desFile.exists() && desFile.isFile()) {
 			Log.d(TAG, desFile.getName() + " is exist");
 			return;
 		} else if (!desFile.exists()) {
-			File file = new File(MainActivity.DB_DIR);
-			if (!file.exists() || !file.isDirectory()) {
-				file.mkdirs();
-			}
 
 			FileOutputStream fos = null;
 			try {
@@ -65,15 +51,11 @@ public class CopyDBFile {
 		}
 	}
 
-	private void doCopyFiles(Context context, File desFile, String srcFileName) {
+	private static void doCopyFiles(Context context, File desFile, String srcFileName) {
 		if (desFile.exists() && desFile.isFile()) {
 			Log.d(TAG, desFile.getName() + " is exist");
 			return;
 		} else if (!desFile.exists()) {
-			File file = new File(MainActivity.FILES_DIR);
-			if (!file.exists() || !file.isDirectory()) {
-				file.mkdirs();
-			}
 
 			FileOutputStream fos = null;
 			try {

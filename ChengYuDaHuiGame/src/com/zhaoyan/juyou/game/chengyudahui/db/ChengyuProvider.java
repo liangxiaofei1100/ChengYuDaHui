@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
+import com.zhaoyan.juyou.game.chengyudahui.DBConfig;
 import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
 
 /**
@@ -59,7 +60,7 @@ public class ChengyuProvider extends ContentProvider {
 			builder.setTables(ChengyuColums.TableName);
 			if (mSqLiteDatabase == null) {
 				mSqLiteDatabase = mChengyuDbHelper
-						.getReadDb(com.zhaoyan.juyou.game.chengyudahui.MainActivity.DB_PATH);
+						.getReadDb(DBConfig.CHENGYU_DB_PATH);
 			}
 			break;
 		default:

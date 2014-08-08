@@ -1,7 +1,5 @@
 package com.zhaoyan.juyou.game.chengyudahui.db;
 
-import com.zhaoyan.juyou.game.chengyudahui.db.WordData.WordColums;
-
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -9,6 +7,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+
+import com.zhaoyan.communication.util.Log;
+import com.zhaoyan.juyou.game.chengyudahui.DBConfig;
+import com.zhaoyan.juyou.game.chengyudahui.db.WordData.WordColums;
 
 
 /**
@@ -56,16 +58,20 @@ public class WordProvider extends ContentProvider {
 		SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
 		switch (mUriMatcher.match(arg0)) {
 		case 0:
+			Log.d(TAG, "query.11database:" + mSqLiteDatabase);
 			builder.setTables(WordColums.TableName);
 			if (mSqLiteDatabase == null) {
-				mSqLiteDatabase = mChengyuDbHelper
-						.getReadDb(com.zhaoyan.juyou.game.chengyudahui.MainActivity.WORD_PATH);
+				Log.d(TAG, "query.22database:" + mSqLiteDatabase);
+				mSqLiteDatabase = mChengyuDbHelper.getReadDb(DBConfig.WORD_DB_PATH);
+				Log.d(TAG, "query.33database:" + mSqLiteDatabase);
 			}
 			break;
 		default:
+			Log.e(TAG, "Unknwo Uri:" + arg0);
 			throw new IllegalArgumentException("Unknow Uri : " + arg0);
 		}
-
+		Log.d(TAG, "query.buid:" + builder);
+		Log.d(TAG, "query.44dabatease:" + mSqLiteDatabase);
 		return builder.query(mSqLiteDatabase, arg1, arg2, arg3, null, null,
 				arg4);
 	}

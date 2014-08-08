@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.zhaoyan.communication.util.Log;
+import com.zhaoyan.juyou.game.chengyudahui.DBConfig;
 import com.zhaoyan.juyou.game.chengyudahui.MainActivity;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 
@@ -79,7 +80,7 @@ public class KnowledgeMainActivity extends Activity implements OnClickListener, 
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		//每一回的配置文件以固定格式命名：knowledge1.xml,1表示第一回
-		String path = MainActivity.FILES_DIR + "/knowledge" + (position + 1) + ".xml";
+		String path =DBConfig.FILES_DIR + "/knowledge" + (position + 1) + ".xml";
 		File file = new File(path);
 		if (!file.exists()) {
 			Log.e(TAG, file.getAbsolutePath() + " is not exist");

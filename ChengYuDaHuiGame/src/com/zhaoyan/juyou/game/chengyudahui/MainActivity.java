@@ -1,21 +1,13 @@
 package com.zhaoyan.juyou.game.chengyudahui;
 
-import com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity;
-
 import java.text.SimpleDateFormat;
 
-import com.zhaoyan.juyou.game.chengyudahui.db.CopyDBFile;
-import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
-import com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty;
-import com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameActivity;
-import com.zhaoyan.juyou.game.chengyudahui.study.StudyActivity;
-
-import android.support.v7.app.ActionBarActivity;
-import android.support.v4.app.Fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,11 +17,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity;
+import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
+import com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty;
+import com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameActivity;
+import com.zhaoyan.juyou.game.chengyudahui.study.StudyActivity;
+
 public class MainActivity extends ActionBarActivity implements OnClickListener {
-	public static String DB_PATH = "", DB_DIR, FILES_DIR;
-	public static String GUOXUE_DB_PATH = "";
-	public static String WORD_PATH = "";
-	public static String KNOWLEDGE_FILES = "";
 	public static Button mStudyBtn, mSpeakBtn, mPaintBtn, mScoreBtn;
 	public static int DB_NUMBER = -1;
 	@Override
@@ -42,10 +36,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
-
-		DB_DIR = this.getFilesDir().getAbsolutePath() + "/database";
-		DB_PATH = DB_DIR + "/chengyu.db";
-		new CopyDBFile().copyDB(this,"chengyu.db");
 	}
 
 	@Override

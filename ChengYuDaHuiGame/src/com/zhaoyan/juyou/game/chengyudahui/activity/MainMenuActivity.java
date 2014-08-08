@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -99,5 +100,13 @@ public class MainMenuActivity extends Activity {
 		Intent intent = new Intent(mContext, GetGoldActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 		startActivity(intent);
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (KeyEvent.KEYCODE_BACK == keyCode) {
+			moveTaskToBack(false);
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }
