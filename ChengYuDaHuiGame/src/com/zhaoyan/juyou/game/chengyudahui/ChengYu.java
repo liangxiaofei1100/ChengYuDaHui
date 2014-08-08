@@ -32,4 +32,9 @@ public class ChengYu {
 
 	}
 
+	@Override
+	public String toString() {
+		return "ChengYu [id=" + id + ", name=" + name + "]";
+	}
+
 }
