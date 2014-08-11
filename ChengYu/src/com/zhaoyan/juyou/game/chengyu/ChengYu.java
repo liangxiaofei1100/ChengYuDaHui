@@ -1,16 +1,16 @@
 package com.zhaoyan.juyou.game.chengyu;
 
 public class ChengYu {
-	String name = "";
-	String pinyin = "";
-	String comment = "";
-	String original = "";
-	String example = "";
-	int frequently = 0;
-	String opposite = "";
-	String similar = "";
-	String story = "";
-	int caici = 0;
+	public String name = "";
+	public String pinyin = "";
+	public String comment = "";
+	public String original = "";
+	public String example = "";
+	public int frequently = 0;
+	public String opposite = "";
+	public String similar = "";
+	public String story = "";
+	public int caici = 0;
 
 	public ChengYu(String name, String pinyin, String comment, String original,
 			String example, int frequently, String opposite, String similar,
