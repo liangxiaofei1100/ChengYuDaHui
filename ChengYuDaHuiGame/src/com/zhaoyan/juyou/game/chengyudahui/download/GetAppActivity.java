@@ -1,4 +1,4 @@
-package com.zhaoyan.juyou.game.chengyudahui.activity;
+package com.zhaoyan.juyou.game.chengyudahui.download;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,11 +44,6 @@ import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.bae.GetAppInfoBae;
 import com.zhaoyan.juyou.bae.GetAppInfoResultListener;
 import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.adapter.GetAppAdapter;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.AppInfo;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.DownloadUtils;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.GetAppListener;
 
 public class GetAppActivity extends ListActivity implements OnItemClickListener {
 	private static final String TAG = "GetAppActivity";

@@ -1,8 +1,7 @@
-package com.zhaoyan.juyou.game.chengyudahui.frontia;
+package com.zhaoyan.juyou.game.chengyudahui.download;
 
 import org.json.JSONObject;
 
-import android.R.integer;
 import android.os.Parcel;
 import android.os.Parcelable;
 

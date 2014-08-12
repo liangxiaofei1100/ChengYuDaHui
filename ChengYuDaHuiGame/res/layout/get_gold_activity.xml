@@ -83,19 +83,4 @@
 
     <include layout="@layout/splitline" />
 
-    <Button
-        android:id="@+id/btn_download_app"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="下载应用得金币"
-        android:visibility="gone" />
-
-    <Button
-        android:id="@+id/btn_logout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="登出"
-        android:visibility="gone" />
-
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.zhaoyan.juyou.game.chengyudahui.adapter;
+package com.zhaoyan.juyou.game.chengyudahui.download;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,12 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.angel.devil.view.AsyncImageView;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.AppInfo;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.GetAppListener;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
 public class GetAppAdapter extends BaseAdapter {
@@ -62,7 +58,8 @@ public class GetAppAdapter extends BaseAdapter {
 		if (convertView == null) {
 			view = mInflater.inflate(R.layout.get_app_list_item, null);
 			holder = new ViewHolder();
-			holder.imageView = (AsyncImageView) view.findViewById(R.id.iv_app_icon);
+//			holder.imageView = (AsyncImageView) view.findViewById(R.id.iv_app_icon);
+			holder.imageView = (NetworkCacheableImageView) view.findViewById(R.id.iv_app_icon);
 			holder.appLabelView = (TextView) view.findViewById(R.id.tv_app_label);
 			holder.appInfoView = (TextView) view.findViewById(R.id.tv_app_info);
 			holder.infoView = (TextView) view.findViewById(R.id.tv_info);
@@ -90,8 +87,12 @@ public class GetAppAdapter extends BaseAdapter {
 		
 		holder.appLabelView.setText(appInfo.getLabel());
 		holder.infoView.setText(appInfo.getTitle());
-		holder.imageView.setDefaultImageResource(R.drawable.ic_launcher);
-		holder.imageView.setPath(appInfo.getIconUrl());
+//		holder.imageView.setDefaultImageResource(R.drawable.ic_launcher);
+//		holder.imageView.setPath(appInfo.getIconUrl());
+		boolean fromCache = holder.imageView.loadImage(appInfo.getIconUrl(), false, null);
+		if (!fromCache) {
+			holder.imageView.setImageResource(R.drawable.ic_launcher);
+		}
 		
 		String size = Utils.getFormatSize(appInfo.getAppSize());
 		holder.appInfoView.setText(size);
@@ -100,13 +101,13 @@ public class GetAppAdapter extends BaseAdapter {
 		case Conf.NOT_DOWNLOAD:
 			holder.downloadView.setVisibility(View.GONE);
 			holder.appInfoView.setVisibility(View.VISIBLE);
-			holder.downloadBtn.setText("下载");
+			holder.downloadBtn.setText(R.string.download);
 			holder.appInfoView.setText(size);
 			break;
 		case  Conf.DOWNLOADING:
 			holder.downloadView.setVisibility(View.VISIBLE);
 			holder.appInfoView.setVisibility(View.GONE);
-			holder.downloadBtn.setText("取消");
+			holder.downloadBtn.setText(R.string.cancel);
 			int percent = appInfo.getPercent();
 			Log.d(TAG, "percent:" + percent);
 			
@@ -117,19 +118,19 @@ public class GetAppAdapter extends BaseAdapter {
 		case Conf.DOWNLOADED:
 			holder.downloadView.setVisibility(View.GONE);
 			holder.appInfoView.setVisibility(View.VISIBLE);
-			holder.downloadBtn.setText("安装");
+			holder.downloadBtn.setText(R.string.install);
 			holder.appInfoView.setText(size);
 			break;
 		case Conf.INSTALLED:
 			holder.downloadView.setVisibility(View.GONE);
 			holder.appInfoView.setVisibility(View.VISIBLE);
-			holder.downloadBtn.setText("打开");
+			holder.downloadBtn.setText(R.string.open);
 			holder.appInfoView.setText(size);
 			break;
 		case Conf.NEED_UDPATE:
 			holder.downloadView.setVisibility(View.GONE);
 			holder.appInfoView.setVisibility(View.VISIBLE);
-			holder.downloadBtn.setText("更新");
+			holder.downloadBtn.setText(R.string.update);
 			holder.appInfoView.setText(size);
 			break;
 		default:
@@ -140,7 +141,8 @@ public class GetAppAdapter extends BaseAdapter {
 	}
 	
 	private class ViewHolder{
-		AsyncImageView imageView;
+//		AsyncImageView imageView;
+		NetworkCacheableImageView imageView;
 		TextView appLabelView;
 		TextView appInfoView;
 		TextView infoView;

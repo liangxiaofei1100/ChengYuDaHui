@@ -119,7 +119,7 @@
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.GetAppActivity"
+            android:name="com.zhaoyan.juyou.game.chengyudahui.download.GetAppActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -131,7 +131,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.AppInfoActicity"
+            android:name="com.zhaoyan.juyou.game.chengyudahui.download.AppInfoActicity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>

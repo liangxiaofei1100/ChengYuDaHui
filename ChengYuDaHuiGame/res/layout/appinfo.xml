@@ -22,7 +22,15 @@
                 android:orientation="horizontal"
                 android:layout_margin="8dp"
                 >
-                <com.angel.devil.view.AsyncImageView
+<!--                 <com.angel.devil.view.AsyncImageView -->
+<!--             android:id="@+id/iv_app_icon" -->
+<!--             android:layout_width="48dp" -->
+<!--             android:layout_height="48dp" -->
+<!--             android:layout_marginRight="8dp" -->
+<!--             android:layout_gravity="center_vertical" -->
+<!--             android:src="@drawable/ic_launcher" /> -->
+                
+                <com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView
             android:id="@+id/iv_app_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -91,14 +99,28 @@
                android:weightSum="2"
                android:orientation="horizontal"
                >
-               <com.angel.devil.view.AsyncImageView 
+<!--                <com.angel.devil.view.AsyncImageView  -->
+<!--                    android:id="@+id/iv_app_jiemian1" -->
+<!--                    android:layout_width="wrap_content" -->
+<!--                    android:layout_height="250dp" -->
+<!--                    android:layout_weight="1" -->
+<!--                    /> -->
+               
+<!--                <com.angel.devil.view.AsyncImageView  -->
+<!--                    android:id="@+id/iv_app_jiemian2" -->
+<!--                    android:layout_width="wrap_content" -->
+<!--                    android:layout_height="250dp" -->
+<!--                    android:layout_weight="1" -->
+<!--                    /> -->
+
+ <com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView
                    android:id="@+id/iv_app_jiemian1"
                    android:layout_width="wrap_content"
                    android:layout_height="250dp"
                    android:layout_weight="1"
                    />
                
-               <com.angel.devil.view.AsyncImageView 
+               <com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView
                    android:id="@+id/iv_app_jiemian2"
                    android:layout_width="wrap_content"
                    android:layout_height="250dp"
