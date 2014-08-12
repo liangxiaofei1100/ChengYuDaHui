@@ -4,7 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 
+import com.zhaoyan.juyou.common.pinyin.PinYinComparator;
 import com.zhaoyan.juyou.common.pinyin.PinYinUtil;
 
 /**
@@ -36,6 +38,11 @@ public class MainClass {
 			isChengYuExist = false;
 		}
 		log("CaiCi ChengYu end.");
+		// Sort by pinyin
+		log("Sort by pinyin start.");
+		Collections.sort(chengyuList, new PinYinComparator());
+		log("Sort by pinyin end");
+
 		// Write into database.
 		writeIntoDataBase(chengyuList);
 		log("Finished.");

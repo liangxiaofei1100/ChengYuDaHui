@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PinYinUtil {
+	public static final String PINYIN_SEPERATOR = "[ ，]";
 	private static Map<Character, Character> PIN_YIN_MAP = new HashMap<Character, Character>();
 
 	static {
@@ -56,7 +57,8 @@ public class PinYinUtil {
 				if (cRemovedShengDiao != null) {
 					stringBuilder.append(cRemovedShengDiao);
 				} else {
-					System.err.println("Unkown characer found: " + c + ", " + pinyinWithShengDiao);
+					System.err.println("Unkown characer found: " + c + ", "
+							+ pinyinWithShengDiao);
 					return null;
 				}
 			}
