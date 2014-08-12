@@ -30,6 +30,7 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/tv_chengyu_comment_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
@@ -49,6 +50,7 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/tv_chengyu_original_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
@@ -68,6 +70,7 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/tv_chengyu_example_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
