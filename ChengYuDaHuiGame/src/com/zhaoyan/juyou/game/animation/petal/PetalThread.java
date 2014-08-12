@@ -7,7 +7,7 @@ public class PetalThread extends Thread {
 	// Change this can change petal speed.
 	private static final int SLEEP_TIME = 30;
 	// Change this can change petal number.
-	private static final int PETAL_ADD_TIME = 10;
+	private static final int PETAL_ADD_TIME = 20;
 	private PetalView mPetalView;
 	private int mTime;
 
