@@ -241,6 +241,18 @@
             </intent-filter>
         </service>
         <!-- push结束 -->
+        <!--  frontia share -->
+        <activity
+            android:name="com.baidu.frontia.activity.share.FrontiaSocialOAuthActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity
+            android:name="com.baidu.frontia.activity.share.FrontiaLocalShareActivity"
+            android:launchMode="singleTask" >
+        </activity>
+        <!-- frontia share -->
         <!-- baidu push end -->
         <service android:name="com.zhaoyan.juyou.game.chengyudahui.JuYouService" />
         <service android:name="com.zhaoyan.juyou.game.chengyudahui.spy.SpyService" >

@@ -15,6 +15,7 @@ public class Conf {
     public static final String KEY_NAME_LAST_STATUS = "last_status";
     
     public static final String URL_EX = "http://bcs.duapp.com/bccd1eyw7zka7zmyudununkbfgmbaas/";
+    public static final String LISTEN_DIR = "listen_pic/";
     
     public static final String ACTION_CANCEL_DOWNLOAD = "com.zhaoyan.cancel.download";
     public static final String ACTION_START_DOWNLOAD = "com.zhaoyan.start.download";

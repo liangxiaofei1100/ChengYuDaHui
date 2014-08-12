@@ -177,7 +177,7 @@
                 >
 
                 <ImageView
-                    android:id="@+id/iv_cy_free"
+                    android:id="@+id/iv_cy_share"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="centerInside"
@@ -188,7 +188,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="免费"
+                    android:text="分享"
                     android:textColor="@android:color/black" />
             </RelativeLayout>
         </LinearLayout>

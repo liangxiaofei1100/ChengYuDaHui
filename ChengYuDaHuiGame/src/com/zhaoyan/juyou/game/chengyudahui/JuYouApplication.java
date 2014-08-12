@@ -23,7 +23,7 @@ public class JuYouApplication extends FrontiaApplication {
 		Log.d(TAG, "onCreate");
 		initApplication(getApplicationContext());
 		
-		initCacheDir();
+		initBitmapCache();
 	}
 
 	/**
@@ -57,7 +57,10 @@ public class JuYouApplication extends FrontiaApplication {
 		context.startService(intent);
 	}
 	
-	private void initCacheDir(){
+	/**
+	 * bitmap from network,download to ZhaoYanCache dir
+	 */
+	private void initBitmapCache(){
 		// If we have external storage use it for the disk cache. Otherwise we use
         // the cache dir
 		File cacheLocation = null;
