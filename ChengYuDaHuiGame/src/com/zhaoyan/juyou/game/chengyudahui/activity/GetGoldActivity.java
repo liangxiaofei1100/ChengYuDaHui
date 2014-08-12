@@ -1,6 +1,5 @@
 package com.zhaoyan.juyou.game.chengyudahui.activity;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,8 +16,9 @@ import com.zhaoyan.juyou.account.GetUserInfoResultListener;
 import com.zhaoyan.juyou.account.ZhaoYanAccount;
 import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.BaiduFrontiaUser;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
+import com.zhaoyan.juyou.game.chengyudahui.download.BaiduFrontiaUser;
+import com.zhaoyan.juyou.game.chengyudahui.download.Conf;
+import com.zhaoyan.juyou.game.chengyudahui.download.GetAppActivity;
 
 public class GetGoldActivity extends ActionBarActivity implements OnClickListener {
 	private static final String TAG = GetGoldActivity.class.getSimpleName();
@@ -90,12 +89,6 @@ public class GetGoldActivity extends ActionBarActivity implements OnClickListene
 
 		View downloadAppView = findViewById(R.id.tv_download_app);
 		downloadAppView.setOnClickListener(this);
-
-		Button downloadAppButton = (Button) findViewById(R.id.btn_download_app);
-		downloadAppButton.setOnClickListener(this);
-
-		Button logoutButton = (Button) findViewById(R.id.btn_logout);
-		logoutButton.setOnClickListener(this);
 	}
 
 	private void initAccount() {
@@ -171,7 +164,6 @@ public class GetGoldActivity extends ActionBarActivity implements OnClickListene
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
-		case R.id.btn_download_app:
 		case R.id.tv_download_app:
 			launchGetApp();
 			break;

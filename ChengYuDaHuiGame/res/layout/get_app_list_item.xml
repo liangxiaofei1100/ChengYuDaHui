@@ -14,7 +14,15 @@
         android:paddingBottom="8dp"
         android:paddingTop="8dp" >
 
-        <com.angel.devil.view.AsyncImageView
+<!--         <com.angel.devil.view.AsyncImageView -->
+<!--             android:id="@+id/iv_app_icon" -->
+<!--             android:layout_width="48dp" -->
+<!--             android:layout_height="48dp" -->
+<!--             android:layout_alignParentLeft="true" -->
+<!--             android:layout_centerVertical="true" -->
+<!--             android:layout_margin="10dp" -->
+<!--             android:src="@drawable/ic_launcher" /> -->
+ <com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView
             android:id="@+id/iv_app_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"

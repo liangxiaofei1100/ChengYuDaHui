@@ -1,12 +1,12 @@
-package com.zhaoyan.juyou.game.chengyudahui.activity;
+package com.zhaoyan.juyou.game.chengyudahui.download;
 
 import java.io.File;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DownloadManager;
 import android.app.AlertDialog.Builder;
+import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,30 +20,29 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.angel.devil.view.AsyncImageView;
 import com.zhaoyan.common.file.APKUtil;
 import com.zhaoyan.common.util.DownloadManagerPro;
 import com.zhaoyan.common.util.PreferencesUtils;
+import com.zhaoyan.communication.cache.CacheableBitmapDrawable;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.AppInfo;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.Conf;
-import com.zhaoyan.juyou.game.chengyudahui.frontia.DownloadUtils;
+import com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView.OnImageLoadedListener;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
 public class AppInfoActicity extends Activity implements OnClickListener {
 	private static final String TAG = AppInfoActicity.class.getSimpleName();
 	
-	private AsyncImageView mAppIconView;
+//	private AsyncImageView mAppIconView;
+	private NetworkCacheableImageView mAppIconView;
 	private TextView mAppNameView,mAppVersionView,mAppSizeView;
 	private TextView mJiFenView, mAppIntroduceView;
-	private AsyncImageView mJieMianView1,mJieMianView2;
+//	private AsyncImageView mJieMianView1,mJieMianView2;
+	private NetworkCacheableImageView mJieMianView1,mJieMianView2;
 	private TextView mAuthorView;
 	
 //	private Button mCancelBtn;
@@ -113,7 +112,8 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 	}
 	
 	private void initView(){
-		mAppIconView = (AsyncImageView) findViewById(R.id.iv_app_icon);
+//		mAppIconView = (AsyncImageView) findViewById(R.id.iv_app_icon);
+		mAppIconView = (NetworkCacheableImageView) findViewById(R.id.iv_app_icon);
 		mAppNameView = (TextView) findViewById(R.id.tv_app_name);
 		mAppVersionView = (TextView) findViewById(R.id.tv_app_version);
 		mAppSizeView = (TextView) findViewById(R.id.tv_app_size);
@@ -121,10 +121,12 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 		mAppIntroduceView = (TextView) findViewById(R.id.tv_app_introduce);
 		mAuthorView = (TextView) findViewById(R.id.tv_app_author);
 		
-		mJieMianView1 = (AsyncImageView) findViewById(R.id.iv_app_jiemian1);
-		mJieMianView2 = (AsyncImageView) findViewById(R.id.iv_app_jiemian2);
+//		mJieMianView1 = (AsyncImageView) findViewById(R.id.iv_app_jiemian1);
+//		mJieMianView2 = (AsyncImageView) findViewById(R.id.iv_app_jiemian2);
+		mJieMianView1 = (NetworkCacheableImageView) findViewById(R.id.iv_app_jiemian1);
+		mJieMianView2 = (NetworkCacheableImageView) findViewById(R.id.iv_app_jiemian2);
 		
-		mAppIconView.setDefaultImageResource(R.drawable.ic_launcher);
+//		mAppIconView.setDefaultImageResource(R.drawable.ic_launcher);
 		
 //		mCancelBtn = (Button) findViewById(R.id.ib_cancel);
 //		mCancelBtn.setOnClickListener(this);
@@ -138,7 +140,11 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 		mInfoTipTV.setVisibility(View.GONE);
 		
 		if (mAppInfo != null) {
-			mAppIconView.setPath(mAppInfo.getIconUrl());
+//			mAppIconView.setPath(mAppInfo.getIconUrl());
+			boolean fromcache = mAppIconView.loadImage(mAppInfo.getIconUrl(), false, null);
+			if (!fromcache) {
+				mAppIconView.setImageResource(R.drawable.ic_launcher);
+			}
 			
 			mAppNameView.setText(mAppInfo.getLabel());
 			mAppVersionView.setText(getString(R.string.app_version, mAppInfo.getVersion()));
@@ -150,10 +156,35 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 			mAppIntroduceView.setText(mAppInfo.getIntroduce());
 			mAuthorView.setText(getString(R.string.app_author, mAppInfo.getAuthor()));
 			
-			mJieMianView1.setPath(mAppInfo.getJiemianUrl1());
-			mJieMianView2.setPath(mAppInfo.getJiemianUrl2());
-			mJieMianView1.setDefaultImageResource(R.drawable.sw_downloading_bg);
-			mJieMianView2.setDefaultImageResource(R.drawable.sw_downloading_bg);
+//			mJieMianView1.setPath(mAppInfo.getJiemianUrl1());
+//			mJieMianView2.setPath(mAppInfo.getJiemianUrl2());
+//			mJieMianView1.setDefaultImageResource(R.drawable.sw_downloading_bg);
+//			mJieMianView2.setDefaultImageResource(R.drawable.sw_downloading_bg);
+			boolean ret1 = mJieMianView1.loadImage(mAppInfo.getJiemianUrl1(), false, new OnImageLoadedListener() {
+				@Override
+				public void onImageLoaded(CacheableBitmapDrawable result) {
+					if (result == null) {
+						mJieMianView1.setImageResource(R.drawable.sw_error_bg);
+					}
+				}
+			});
+			
+			if (!ret1) {
+				mJieMianView1.setImageResource(R.drawable.sw_downloading_bg);
+			}
+			
+			boolean ret2 = mJieMianView2.loadImage(mAppInfo.getJiemianUrl2(), false, new OnImageLoadedListener() {
+				
+				@Override
+				public void onImageLoaded(CacheableBitmapDrawable result) {
+					if (result == null) {
+						mJieMianView2.setImageResource(R.drawable.sw_error_bg);
+					}
+				}
+			});
+			if (!ret2) {
+				mJieMianView2.setImageResource(R.drawable.sw_downloading_bg);
+			}
 			
 			switch (mAppInfo.getStatus()) {
 			case Conf.DOWNLOADED:
