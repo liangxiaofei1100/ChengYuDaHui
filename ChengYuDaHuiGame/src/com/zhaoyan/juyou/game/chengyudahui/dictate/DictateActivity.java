@@ -9,20 +9,15 @@ import java.util.Random;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.db.DictateData;
 import com.zhaoyan.juyou.game.chengyudahui.db.DictateData.DictateColums;
-import com.zhaoyan.juyou.game.chengyudahui.db.HistoryData;
 import com.zhaoyan.juyou.game.chengyudahui.db.HistoryData.HistoryColums;
 import com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty;
-import com.zhaoyan.juyou.game.chengyudahui.utils.CopyFileUtil;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -142,60 +137,13 @@ public class DictateActivity extends ActionBarActivity implements
 							null, null);
 			if (c != null && c.getCount() > 0) {
 				c.moveToNext();
-				mWord = c.getString(
-						c.getColumnIndex(DictateData.DictateColums.NAME))
-						.trim();
-				setWord(mWord);
-				setPinyin(c.getString(c
-						.getColumnIndex(DictateData.DictateColums.PINYIN)));
-				String s = c
-						.getString(c.getColumnIndex(DictateColums.ALLUSION));
-				if (s != null && !s.equals("null")) {
-					mDictateAllusion.setText(c.getString(c
-							.getColumnIndex(DictateColums.ALLUSION)) + "");
-				} else {
-					mDictateAllusion.setText("无");
+				try {
+					setValue(c);
+				} catch (Exception e) {
+					// TODO: handle exception
+				} finally {
+					c.close();
 				}
-				s = c.getString(c
-						.getColumnIndex(DictateData.DictateColums.COMMENT));
-				if (s != null && !s.equals("null")) {
-					mDictateComment
-							.setText(c.getString(c
-									.getColumnIndex(DictateData.DictateColums.COMMENT)));
-				} else {
-					mDictateComment.setText("无");
-				}
-				s = c.getString(c
-						.getColumnIndex(DictateData.DictateColums.EXAMPLE));
-				if (s != null && !s.equals("null")) {
-					mDictateExample.setText(c.getString(c
-							.getColumnIndex(DictateData.DictateColums.EXAMPLE))
-							+ "");
-				} else {
-					mDictateExample.setText("无");
-				}
-				s = c.getString(c
-						.getColumnIndex(DictateData.DictateColums.ORIGINAL));
-				if (s != null && !s.equals("null")) {
-					mDictateOriginal
-							.setText(c.getString(c
-									.getColumnIndex(DictateData.DictateColums.ORIGINAL))
-									+ "");
-				} else {
-					mDictateOriginal.setText("无");
-				}
-				mImgDescription.setText(c.getString(c
-						.getColumnIndex(DictateData.DictateColums.IMG_DES))
-						+ "");
-				s = c.getString(
-						c.getColumnIndex(DictateData.DictateColums.DICTATE))
-						.trim();
-				int len = s.length();
-				for (int j = 0; j < len; j++) {
-					showPaint(Integer.valueOf(s.charAt(j) + ""));
-				}
-				s = null;
-				c.close();
 			}
 		} else {
 			mWord = "沉鱼落雁";
@@ -313,6 +261,25 @@ public class DictateActivity extends ActionBarActivity implements
 		}
 	}
 
+	private int updateResult(final String result) {
+		if (result == null)
+			return -1;
+		else {
+			ContentValues values = new ContentValues();
+			values.put(DictateColums.RESULT, result);
+			try {
+				return getContentResolver()
+						.update(DictateColums.CONTENT_URI, values,
+								DictateColums.NAME + " = '" + mWord + "'", null);
+			} catch (Exception e) {
+				Log.e(DictateActivity.class.getSimpleName(),
+						"update result exception : " + e.toString());
+				e.printStackTrace();
+				return -1;
+			}
+		}
+	}
+
 	private void showResult() {
 		if (mResultView == null)
 			mResultView = new ResultView(this);
@@ -339,15 +306,17 @@ public class DictateActivity extends ActionBarActivity implements
 			switch (id) {
 			case R.id.dictate_right:
 				// TODO right
+				updateResult("right");
 				nextWord();
 				break;
 			case R.id.dictate_wrong:
 				// TODO wrong
-				if (!testFlag) {
-					ContentValues values = new ContentValues();
-					getContentResolver()
-							.insert(HistoryColums.CONTENT_URI, null);
-				}
+				// if (!testFlag) {
+				// ContentValues values = new ContentValues();
+				// getContentResolver()
+				// .insert(HistoryColums.CONTENT_URI, null);
+				// }
+				updateResult("wrong");
 				nextWord();
 				break;
 			default:
@@ -404,5 +373,50 @@ public class DictateActivity extends ActionBarActivity implements
 				break;
 			}
 		}
+	}
+
+	private void setValue(Cursor c) {
+		mWord = c.getString(c.getColumnIndex(DictateData.DictateColums.NAME))
+				.trim();
+		setWord(mWord);
+		setPinyin(c.getString(c
+				.getColumnIndex(DictateData.DictateColums.PINYIN)));
+		String s = c.getString(c.getColumnIndex(DictateColums.ALLUSION));
+		if (s != null && !s.equals("null")) {
+			mDictateAllusion.setText(c.getString(c
+					.getColumnIndex(DictateColums.ALLUSION)) + "");
+		} else {
+			mDictateAllusion.setText("无");
+		}
+		s = c.getString(c.getColumnIndex(DictateData.DictateColums.COMMENT));
+		if (s != null && !s.equals("null")) {
+			mDictateComment.setText(c.getString(c
+					.getColumnIndex(DictateData.DictateColums.COMMENT)));
+		} else {
+			mDictateComment.setText("无");
+		}
+		s = c.getString(c.getColumnIndex(DictateData.DictateColums.EXAMPLE));
+		if (s != null && !s.equals("null")) {
+			mDictateExample.setText(c.getString(c
+					.getColumnIndex(DictateData.DictateColums.EXAMPLE)) + "");
+		} else {
+			mDictateExample.setText("无");
+		}
+		s = c.getString(c.getColumnIndex(DictateData.DictateColums.ORIGINAL));
+		if (s != null && !s.equals("null")) {
+			mDictateOriginal.setText(c.getString(c
+					.getColumnIndex(DictateData.DictateColums.ORIGINAL)) + "");
+		} else {
+			mDictateOriginal.setText("无");
+		}
+		mImgDescription.setText(c.getString(c
+				.getColumnIndex(DictateData.DictateColums.IMG_DES)) + "");
+		s = c.getString(c.getColumnIndex(DictateData.DictateColums.DICTATE))
+				.trim();
+		int len = s.length();
+		for (int j = 0; j < len; j++) {
+			showPaint(Integer.valueOf(s.charAt(j) + ""));
+		}
+		s = null;
 	}
 }

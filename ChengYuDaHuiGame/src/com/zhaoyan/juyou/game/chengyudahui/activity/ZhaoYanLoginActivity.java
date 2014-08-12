@@ -1,6 +1,7 @@
 package com.zhaoyan.juyou.game.chengyudahui.activity;
 
 import com.zhaoyan.common.net.NetWorkUtil;
+import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.account.LoginResultListener;
 import com.zhaoyan.juyou.account.QuickRegisterUserResultListener;
 import com.zhaoyan.juyou.account.ZhaoYanAccount;
@@ -9,7 +10,6 @@ import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.utils.DeviceInfoUtil;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -120,7 +121,7 @@ public class ZhaoYanLoginActivity extends ActionBarActivity implements OnClickLi
 		}
 		final String password;
 		String imei = DeviceInfoUtil.getIMEI(mContext);
-		if (!"".equals(imei)) {
+		if (!TextUtils.isEmpty(imei)) {
 			password = imei;
 		} else {
 			password = DeviceInfoUtil.getAndroidID(mContext);

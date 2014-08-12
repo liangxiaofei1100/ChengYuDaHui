@@ -10,7 +10,7 @@ public class DictateData {
 
 	public static class DictateColums implements BaseColumns {
 		public static final String TableName = "dictateword";
-		
+
 		public static final String NAME = "name";// 原始词
 		public static final int INDEX_NAME = 2;
 
@@ -33,7 +33,8 @@ public class DictateData {
 		public static final int INDEX_LEVEL = 9;
 		public static final String ALLUSION = "allusion";// 典故
 		public static final int INDEX_ALLUSION = 10;
-
+		public static final String RESULT = "result";// 听写结果
+		public static final int INDEX_RESULT = 11;
 
 		public static final Uri CONTENT_URI = Uri.parse("content://"
 				+ AUTHORITY + "/" + TableName);

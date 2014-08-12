@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">成语大会</string>
+    <string name="app_name">汉语大会</string>
     <string name="disconnect">断开连接</string>
     <string name="connect_friends">连朋友</string>
     <string name="search_ap_tips">在Wi-Fi热点创建的Wi-Fi局域网中与其他人互连。</string>

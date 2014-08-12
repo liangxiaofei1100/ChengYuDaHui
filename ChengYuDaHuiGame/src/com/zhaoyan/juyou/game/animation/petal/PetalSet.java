@@ -15,12 +15,12 @@ public class PetalSet {
 	ArrayList<Petal> petalSet;
 	private Random mRandom;
 	private static final int START_X = -15;
-	private static final float START_Y = 0.8f;
+	private static final float START_Y = 0.5f;
 	// petal acceleration.
 	private static final float ACCELERATION_X_BASE = 0.008f;
-	private static final float ACCELERATION_X = 0.008f;
+	private static final float ACCELERATION_X = 0.02f;
 	private static final float ACCELERATION_Y_BASE = 0.001f;
-	private static final float ACCELERATION_Y = 0.002f;
+	private static final float ACCELERATION_Y = 0.008f;
 
 	private Bitmap mPetalBitmap;
 	private Paint mPaint;
@@ -46,7 +46,7 @@ public class PetalSet {
 			int acceleration_y = (int) (maxY * ACCELERATION_Y_BASE)
 					+ mRandom.nextInt((int) (maxY * ACCELERATION_Y));
 			// alpha in rang (0x88, 0xff)
-			int imageAlpha = Math.min(0xff, (0x88 + mRandom.nextInt(0xff)));
+			int imageAlpha = Math.min(0xff, (0x88 + mRandom.nextInt(0x99)));
 			Petal petal = new Petal(bitmap, imageAlpha, x, y, acceleration_x,
 					acceleration_y);
 			petalSet.add(petal);
@@ -56,7 +56,7 @@ public class PetalSet {
 	public Bitmap getRandomPetalBitmap() {
 		Matrix matrix = new Matrix();
 		// scale
-		float scale = 0.1f * (5 + mRandom.nextInt(5));
+		float scale = 0.1f * (2 + mRandom.nextInt(6));
 		scale = Math.min(1.5f, scale);
 		matrix.postScale(scale, scale);
 		// rotate
