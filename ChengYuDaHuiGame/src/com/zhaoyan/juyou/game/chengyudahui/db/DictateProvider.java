@@ -2,6 +2,7 @@ package com.zhaoyan.juyou.game.chengyudahui.db;
 
 import com.zhaoyan.juyou.game.chengyudahui.DBConfig;
 import com.zhaoyan.juyou.game.chengyudahui.db.DictateData.DictateColums;
+import com.zhaoyan.juyou.game.chengyudahui.db.HistoryData.HistoryColums;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -58,7 +59,8 @@ public class DictateProvider extends ContentProvider {
 			throw new IllegalArgumentException("Unknow Uri : " + uri);
 		}
 		if (mSqLiteDatabase == null) {
-			mSqLiteDatabase = mChengyuDbHelper.getReadDb(DBConfig.DICTATE_DB_PATH);
+			mSqLiteDatabase = mChengyuDbHelper
+					.getReadDb(DBConfig.DICTATE_DB_PATH);
 		}
 
 		return builder.query(mSqLiteDatabase, projection, selection,
@@ -69,6 +71,21 @@ public class DictateProvider extends ContentProvider {
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
 		// TODO Auto-generated method stub
+		switch (mUriMatcher.match(uri)) {
+		case 0:
+			if (mSqLiteDatabase == null) {
+				mSqLiteDatabase = mChengyuDbHelper
+						.getReadDb(DBConfig.DICTATE_DB_PATH);
+			}
+			int id = mSqLiteDatabase.update(DictateColums.TableName, values,
+					selection, selectionArgs);
+			if (id > 0)
+				return id;
+			break;
+
+		default:
+			break;
+		}
 		return 0;
 	}
 
