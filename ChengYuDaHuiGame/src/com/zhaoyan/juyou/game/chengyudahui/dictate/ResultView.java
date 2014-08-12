@@ -107,31 +107,38 @@ public class ResultView {
 
 	public void setImage(Map<Integer, Bitmap> map, List<Integer> index) {
 		ImageView im = null;
-		if (map != null && map.size() > 0) {
-			for (java.util.Map.Entry<Integer, Bitmap> entry : map.entrySet()) {
-				int i = entry.getKey();
+		if (index != null) {
+			for (int i : index) {
+				i += 1;
 				switch (i) {
 				case 1:
 					im = (ImageView) mView.findViewById(R.id.result_first_img);
-					im.setImageBitmap(entry.getValue());
 					break;
 				case 2:
 					im = (ImageView) mView.findViewById(R.id.result_second_img);
-					im.setImageBitmap(entry.getValue());
 					break;
 				case 3:
 					im = (ImageView) mView.findViewById(R.id.result_third_img);
-					im.setImageBitmap(entry.getValue());
 					break;
 				case 4:
 					im = (ImageView) mView.findViewById(R.id.result_fourth_img);
-					im.setImageBitmap(entry.getValue());
 					break;
 				default:
 					break;
 				}
-				if (im != null)
+				if (im != null) {
+					if (map != null) {
+						Bitmap bt = map.get(i);
+						if (bt != null) {
+							im.setImageBitmap(bt);
+						} else {
+							im.setImageResource(R.drawable.mizige1);
+						}
+					} else {
+						im.setImageResource(R.drawable.mizige1);
+					}
 					im.setVisibility(View.VISIBLE);
+				}
 			}
 		} else {
 			im = (ImageView) mView.findViewById(R.id.result_first_img);
@@ -146,36 +153,7 @@ public class ResultView {
 			im = (ImageView) mView.findViewById(R.id.result_third_img);
 			im.setImageResource(R.drawable.mizige1);
 			im.setVisibility(View.INVISIBLE);
-			if (index != null && index.size() > 0) {
-				for (int j : index) {
-					switch (j) {
-					case 0:
-						im = (ImageView) mView
-								.findViewById(R.id.result_first_img);
-						break;
-					case 1:
-						im = (ImageView) mView
-								.findViewById(R.id.result_second_img);
-						break;
-					case 2:
-						im = (ImageView) mView
-								.findViewById(R.id.result_third_img);
-						break;
-					case 3:
-						im = (ImageView) mView
-								.findViewById(R.id.result_fourth_img);
-						break;
-					default:
-						break;
-					}
-					if (im != null) {
-						im.setImageResource(R.drawable.mizige1);
-						im.setVisibility(View.VISIBLE);
-					}
-				}
-			}
 		}
 
 	}
-
 }

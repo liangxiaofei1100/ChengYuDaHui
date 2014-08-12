@@ -46,8 +46,10 @@ public class DictateActivity extends ActionBarActivity implements
 	private ResultView mResultView;
 	private ResultListener mrListener;
 	private AlertDialog resultDialog;
-	private boolean testFlag = true;
+	private boolean testFlag = false;
 	private List<Integer> wordIndex;
+	private TextView mDictateComment, mDictateOriginal, mDictateExample,
+			mDictateAllusion, mImgDescription;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,11 @@ public class DictateActivity extends ActionBarActivity implements
 		mThirdLayout = findViewById(R.id.third_layout);
 		mFourthLayout = findViewById(R.id.fourth_layout);
 		mDictateWordImage.setImageResource(R.drawable.test);
+		mDictateAllusion = (TextView) findViewById(R.id.tv_dictate_allusion);
+		mDictateComment = (TextView) findViewById(R.id.tv_dictate_comment);
+		mDictateExample = (TextView) findViewById(R.id.tv_dictate_example);
+		mDictateOriginal = (TextView) findViewById(R.id.tv_dictate_original);
+		mImgDescription = (TextView) findViewById(R.id.img_des_text);
 		findViewById(R.id.dictate_show_result).setOnClickListener(
 				new OnClickListener() {
 
@@ -117,34 +124,77 @@ public class DictateActivity extends ActionBarActivity implements
 		if (mIndexRandom == null) {
 			mIndexRandom = new Random();
 		}
-		Cursor c = getContentResolver().query(
-				DictateColums.CONTENT_URI,
-				new String[] { DictateColums.NAME, DictateColums.PINYIN,
-						DictateColums.COMMENT, DictateColums.DICTATE }, null,
-				null, null);
+		Cursor c = getContentResolver().query(DictateColums.CONTENT_URI,
+				new String[] { DictateColums.NAME }, null, null, null);
 		if (c != null && c.getCount() > 0 && !testFlag) {
 			id = Math.abs(mIndexRandom.nextInt()) % c.getCount();
 			c.close();
-			c = getContentResolver().query(
-					DictateColums.CONTENT_URI,
-					new String[] { DictateColums.NAME, DictateColums.PINYIN,
-							DictateColums.COMMENT, DictateColums.DICTATE },
-					"_id = " + id, null, null);
+			c = getContentResolver()
+					.query(DictateColums.CONTENT_URI,
+							new String[] { DictateColums.NAME,
+									DictateColums.PINYIN,
+									DictateColums.COMMENT,
+									DictateColums.DICTATE,
+									DictateColums.ORIGINAL,
+									DictateColums.EXAMPLE,
+									DictateColums.IMG_DES, DictateColums.LEVEL,
+									DictateColums.ALLUSION }, "_id = " + id,
+							null, null);
 			if (c != null && c.getCount() > 0) {
 				c.moveToNext();
-				mWord = c.getString(c
-						.getColumnIndex(DictateData.DictateColums.NAME));
+				mWord = c.getString(
+						c.getColumnIndex(DictateData.DictateColums.NAME))
+						.trim();
 				setWord(mWord);
-				mDictateWordComment.setText(c.getString(c
-						.getColumnIndex(DictateData.DictateColums.COMMENT)));
 				setPinyin(c.getString(c
 						.getColumnIndex(DictateData.DictateColums.PINYIN)));
-				String s = c.getString(c
-						.getColumnIndex(DictateData.DictateColums.DICTATE));
+				String s = c
+						.getString(c.getColumnIndex(DictateColums.ALLUSION));
+				if (s != null && !s.equals("null")) {
+					mDictateAllusion.setText(c.getString(c
+							.getColumnIndex(DictateColums.ALLUSION)) + "");
+				} else {
+					mDictateAllusion.setText("无");
+				}
+				s = c.getString(c
+						.getColumnIndex(DictateData.DictateColums.COMMENT));
+				if (s != null && !s.equals("null")) {
+					mDictateComment
+							.setText(c.getString(c
+									.getColumnIndex(DictateData.DictateColums.COMMENT)));
+				} else {
+					mDictateComment.setText("无");
+				}
+				s = c.getString(c
+						.getColumnIndex(DictateData.DictateColums.EXAMPLE));
+				if (s != null && !s.equals("null")) {
+					mDictateExample.setText(c.getString(c
+							.getColumnIndex(DictateData.DictateColums.EXAMPLE))
+							+ "");
+				} else {
+					mDictateExample.setText("无");
+				}
+				s = c.getString(c
+						.getColumnIndex(DictateData.DictateColums.ORIGINAL));
+				if (s != null && !s.equals("null")) {
+					mDictateOriginal
+							.setText(c.getString(c
+									.getColumnIndex(DictateData.DictateColums.ORIGINAL))
+									+ "");
+				} else {
+					mDictateOriginal.setText("无");
+				}
+				mImgDescription.setText(c.getString(c
+						.getColumnIndex(DictateData.DictateColums.IMG_DES))
+						+ "");
+				s = c.getString(
+						c.getColumnIndex(DictateData.DictateColums.DICTATE))
+						.trim();
 				int len = s.length();
 				for (int j = 0; j < len; j++) {
-					showPaint(mWord.indexOf(s.charAt(j) + ""));
+					showPaint(Integer.valueOf(s.charAt(j) + ""));
 				}
+				s = null;
 				c.close();
 			}
 		} else {
