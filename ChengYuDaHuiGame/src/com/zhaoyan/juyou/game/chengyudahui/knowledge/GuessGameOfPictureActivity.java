@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -25,9 +26,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.frontia.Frontia;
+import com.baidu.frontia.api.FrontiaAuthorization.MediaType;
+import com.baidu.frontia.api.FrontiaSocialShare;
+import com.baidu.frontia.api.FrontiaSocialShare.FrontiaTheme;
+import com.baidu.frontia.api.FrontiaSocialShareContent;
+import com.baidu.frontia.api.FrontiaSocialShareListener;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.db.WordData.WordColums;
+import com.zhaoyan.juyou.game.chengyudahui.download.Conf;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 import com.zhaoyan.juyou.game.chengyudahui.view.Effectstype;
 import com.zhaoyan.juyou.game.chengyudahui.view.NiftyDialogBuilder;
@@ -47,6 +55,9 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 	private SparseBooleanArray mAnswerArray = new SparseBooleanArray(4);
 	String testStr  = "沉鱼落雁";
 	
+	private FrontiaSocialShare mSocialShare;
+	private FrontiaSocialShareContent mShareContent = new FrontiaSocialShareContent();
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,12 +70,21 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 		
 		//init 
 		initAnswerButtonArray();
+		
+		Frontia.init(this.getApplicationContext(), Conf.APIKEY);
+		mSocialShare = Frontia.getSocialShare();
+		mSocialShare.setContext(this);
+		mSocialShare.setClientId(MediaType.WEIXIN.toString(), "wx329c742cb69b41b8");
+		mShareContent.setTitle("成语大会");
+		mShareContent.setContent("欢迎使用成语大会，相关问题请邮件dev_support@zhaoyan.com");
+		mShareContent.setLinkUrl("http://developer.baidu.com/");
+		mShareContent.setImageUri(Uri.parse("http://apps.bdimg.com/developer/static/04171450/developer/images/icon/terminal_adapter.png"));
 	}
 	
 	private void initView(){
 		mBackView = (ImageView) findViewById(R.id.iv_back);
 		mTipView = (ImageView) findViewById(R.id.iv_cy_tip);
-		mFreeView = (ImageView) findViewById(R.id.iv_cy_free);
+		mFreeView = (ImageView) findViewById(R.id.iv_cy_share);
 		
 		mBackView.setOnClickListener(this);
 		mTipView.setOnClickListener(this);
@@ -183,7 +203,9 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 			break;
 		case R.id.iv_cy_tip:
 			break;
-		case R.id.iv_cy_free:
+		case R.id.iv_cy_share:
+			mSocialShare.show(GuessGameOfPictureActivity.this.getWindow().getDecorView(), 
+					mShareContent, FrontiaTheme.LIGHT,  new ShareListener());
 			break;
 		case R.id.btn_answer_01:
 			clickAnswerButton(1);
@@ -280,6 +302,26 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 		}).show();
 	}
 	
+	private class ShareListener implements FrontiaSocialShareListener {
+
+		@Override
+		public void onSuccess() {
+			Log.d(TAG,"share success");
+			Toast.makeText(getApplicationContext(), "分享成功", Toast.LENGTH_SHORT).show();
+		}
+
+		@Override
+		public void onFailure(int errCode, String errMsg) {
+			Log.d(TAG,"share errCode "+errCode + ";errMsg:" + errMsg);
+		}
+
+		@Override
+		public void onCancel() {
+			Log.d(TAG,"cancel ");
+		}
+		
+	}
+	
 	class PicGuessAdapter extends BaseAdapter{
 		private LayoutInflater mInflater = null;
 		
@@ -327,7 +369,6 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 			wordBtn.setText(mWordsList.get(position).getWord());
 			return view;
 		}
-		
 	}
 	
 }
