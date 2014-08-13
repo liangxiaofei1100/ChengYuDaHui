@@ -2,217 +2,205 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#faf3f3"
-    >
-    <ScrollView 
+    android:background="#faf3f3" >
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/rl_bottom"
-        android:scrollbarStyle="outsideOverlay"
-        >
-        <LinearLayout 
+        android:layout_above="@+id/ll_info_dl"
+        android:layout_alignParentTop="true"
+        android:scrollbars="none"
+        android:scrollbarStyle="outsideOverlay" >
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-            <LinearLayout 
+            android:orientation="vertical" >
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_margin="8dp"
-                >
-<!--                 <com.angel.devil.view.AsyncImageView -->
-<!--             android:id="@+id/iv_app_icon" -->
-<!--             android:layout_width="48dp" -->
-<!--             android:layout_height="48dp" -->
-<!--             android:layout_marginRight="8dp" -->
-<!--             android:layout_gravity="center_vertical" -->
-<!--             android:src="@drawable/ic_launcher" /> -->
-                
+                android:orientation="horizontal" >
+
+                <!-- <com.angel.devil.view.AsyncImageView -->
+                <!-- android:id="@+id/iv_app_icon" -->
+                <!-- android:layout_width="48dp" -->
+                <!-- android:layout_height="48dp" -->
+                <!-- android:layout_marginRight="8dp" -->
+                <!-- android:layout_gravity="center_vertical" -->
+                <!-- android:src="@drawable/ic_launcher" /> -->
+
                 <com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView
-            android:id="@+id/iv_app_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginRight="8dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_launcher" />
-                
-                <RelativeLayout 
+                    android:id="@+id/iv_app_icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="8dp"
+                    android:src="@drawable/ic_launcher" />
+
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    >
-                    <TextView 
+                    android:layout_height="wrap_content" >
+
+                    <TextView
                         android:id="@+id/tv_app_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
                         android:textSize="18sp"
-                        />
-                    
-                    <TextView 
+                        android:textStyle="bold" />
+
+                    <TextView
                         android:id="@+id/tv_app_version"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_app_name"
                         android:layout_alignParentLeft="true"
-                        />
-                    <TextView 
+                        android:layout_below="@+id/tv_app_name" />
+
+                    <TextView
                         android:id="@+id/tv_app_size"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_app_version"
                         android:layout_alignParentLeft="true"
-                        />
+                        android:layout_below="@+id/tv_app_version" />
                 </RelativeLayout>
             </LinearLayout>
-            
-            <LinearLayout 
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-                <TextView 
+                android:orientation="vertical" >
+
+                <TextView
                     android:id="@+id/tv_app_jifen"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
-            
-           <View 
-               android:layout_width="match_parent"
-               android:layout_height="1dp"
-               android:background="@android:color/darker_gray"
-               android:layout_marginTop="5dp"
-               android:layout_marginBottom="5dp"
-               />
-           
-           <TextView 
-               android:id="@+id/tv_app_introduce"
-               android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-               />
-           
-           <LinearLayout 
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:weightSum="2"
-               android:orientation="horizontal"
-               >
-<!--                <com.angel.devil.view.AsyncImageView  -->
-<!--                    android:id="@+id/iv_app_jiemian1" -->
-<!--                    android:layout_width="wrap_content" -->
-<!--                    android:layout_height="250dp" -->
-<!--                    android:layout_weight="1" -->
-<!--                    /> -->
-               
-<!--                <com.angel.devil.view.AsyncImageView  -->
-<!--                    android:id="@+id/iv_app_jiemian2" -->
-<!--                    android:layout_width="wrap_content" -->
-<!--                    android:layout_height="250dp" -->
-<!--                    android:layout_weight="1" -->
-<!--                    /> -->
 
- <com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView
-                   android:id="@+id/iv_app_jiemian1"
-                   android:layout_width="wrap_content"
-                   android:layout_height="250dp"
-                   android:layout_weight="1"
-                   />
-               
-               <com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView
-                   android:id="@+id/iv_app_jiemian2"
-                   android:layout_width="wrap_content"
-                   android:layout_height="250dp"
-                   android:layout_weight="1"
-                   />
-           </LinearLayout>
-           
-           <View
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:background="@android:color/darker_gray" />
-           
-           <TextView
+
+            <TextView
+                android:id="@+id/tv_app_introduce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+
+                <!-- <com.angel.devil.view.AsyncImageView -->
+                <!-- android:id="@+id/iv_app_jiemian1" -->
+                <!-- android:layout_width="wrap_content" -->
+                <!-- android:layout_height="250dp" -->
+                <!-- android:layout_weight="1" -->
+                <!-- /> -->
+
+
+                <!-- <com.angel.devil.view.AsyncImageView -->
+                <!-- android:id="@+id/iv_app_jiemian2" -->
+                <!-- android:layout_width="wrap_content" -->
+                <!-- android:layout_height="250dp" -->
+                <!-- android:layout_weight="1" -->
+                <!-- /> -->
+
+                <com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView
+                    android:id="@+id/iv_app_jiemian1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="250dp"
+                    android:layout_weight="1" />
+
+                <com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView
+                    android:id="@+id/iv_app_jiemian2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="250dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
                 android:id="@+id/tv_app_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:singleLine="true"
-                />
-           
+                android:singleLine="true" />
         </LinearLayout>
     </ScrollView>
 
-    <RelativeLayout 
-        android:id="@+id/rl_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#D5DAE0"
-        >
-        
-<!--         <Button  -->
-<!--             android:id="@+id/ib_cancel" -->
-<!--             android:layout_width="wrap_content" -->
-<!--             android:layout_height="35.0dp" -->
-<!--             android:background="@drawable/ps__button_digg" -->
-<!--             android:layout_centerVertical="true" -->
-<!--             android:layout_alignParentRight="true" -->
-<!--             android:layout_margin="5dp" -->
-<!--             android:text="@android:string/cancel" -->
-<!--             android:textSize="14.0sp" -->
-<!--             android:textColor="@android:color/black" -->
-<!--             android:gravity="center" -->
-<!--             /> -->
+<!--     <RelativeLayout -->
+<!--         android:id="@+id/rl_bottom" -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_alignParentBottom="true" -->
+<!--         android:background="#D5DAE0" > -->
 
-		<LinearLayout 
-		    android:id="@+id/ll_info_dl"
-		    android:layout_width="match_parent"
-		    android:layout_height="35.0dp"
-		    android:orientation="horizontal"
-		    android:layout_margin="10dp"
-		    android:background="@drawable/ps__button_flat_dropbox"
-		    android:gravity="center"
-		    >
-		    
-		    <ProgressBar 
-		        android:id="@+id/bar_info_loading"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_marginRight="8dp"
-		        style="@android:style/Widget.ProgressBar.Small.Inverse"
-		        />
-		    
-		    <TextView 
-		        android:id="@+id/tv_info_dl"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:textColor="@android:color/white"
-		        android:text="正在下载: 45%"
-		        />
-		    
-		    <TextView 
-		        android:id="@+id/tv_info_d_tip"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:textColor="@android:color/white"
-		        android:text="（点击取消下载）"
-		        />
-		</LinearLayout>
-        
-<!--         <com.zhaoyan.common.progressbutton.SubmitProcessButton -->
-<!--             android:id="@+id/btn_d" -->
-<!--             android:layout_width="match_parent" -->
-<!--             android:layout_height="35.0dp" -->
-<!--             android:textColor="@android:color/white" -->
-<!--             android:layout_centerVertical="true" -->
-<!--             android:layout_toLeftOf="@+id/ib_cancel" -->
-<!--             android:layout_margin="5dp" -->
-<!--             android:textSize="16.0sp" -->
-<!--             android:gravity="center" -->
-<!--             /> -->
-        
-    </RelativeLayout>
+        <!-- <Button -->
+        <!-- android:id="@+id/ib_cancel" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="35.0dp" -->
+        <!-- android:background="@drawable/ps__button_digg" -->
+        <!-- android:layout_centerVertical="true" -->
+        <!-- android:layout_alignParentRight="true" -->
+        <!-- android:layout_margin="5dp" -->
+        <!-- android:text="@android:string/cancel" -->
+        <!-- android:textSize="14.0sp" -->
+        <!-- android:textColor="@android:color/black" -->
+        <!-- android:gravity="center" -->
+        <!-- /> -->
+
+        <LinearLayout
+            android:id="@+id/ll_info_dl"
+            android:layout_width="match_parent"
+            android:layout_height="35.0dp"
+            android:background="@drawable/ps__button_flat_dropbox"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <ProgressBar
+                android:id="@+id/bar_info_loading"
+                style="@android:style/Widget.ProgressBar.Small.Inverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp" />
+
+            <TextView
+                android:id="@+id/tv_info_dl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="正在下载: 45%"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/tv_info_d_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="（点击取消下载）"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <!-- <com.zhaoyan.common.progressbutton.SubmitProcessButton -->
+        <!-- android:id="@+id/btn_d" -->
+        <!-- android:layout_width="match_parent" -->
+        <!-- android:layout_height="35.0dp" -->
+        <!-- android:textColor="@android:color/white" -->
+        <!-- android:layout_centerVertical="true" -->
+        <!-- android:layout_toLeftOf="@+id/ib_cancel" -->
+        <!-- android:layout_margin="5dp" -->
+        <!-- android:textSize="16.0sp" -->
+        <!-- android:gravity="center" -->
+        <!-- /> -->
+
+<!--     </RelativeLayout> -->
+
 </RelativeLayout>

@@ -129,11 +129,17 @@
 
                 <data android:mimeType="application/com.chenyu.download.file" />
             </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.download.AppInfoActicity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zhaoyan.juyou.game.chengyudahui.download.GetAppActivity" />
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameActivity"

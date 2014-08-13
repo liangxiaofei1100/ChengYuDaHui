@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -25,6 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.angel.devil.view.AsyncImageView;
 import com.zhaoyan.common.file.APKUtil;
 import com.zhaoyan.common.util.DownloadManagerPro;
 import com.zhaoyan.common.util.PreferencesUtils;
@@ -34,7 +36,7 @@ import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView.OnImageLoadedListener;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
-public class AppInfoActicity extends Activity implements OnClickListener {
+public class AppInfoActicity extends ActionBarActivity implements OnClickListener {
 	private static final String TAG = AppInfoActicity.class.getSimpleName();
 	
 //	private AsyncImageView mAppIconView;
@@ -86,6 +88,8 @@ public class AppInfoActicity extends Activity implements OnClickListener {
 		} else {
 			Log.e(TAG, "mAppInfo is null");
 		}
+		
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		initView();
 		
