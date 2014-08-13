@@ -180,6 +180,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" />
         
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.BaikeActivity"
+            android:screenOrientation="portrait"
+            />
+        
         <provider 
             android:name="com.zhaoyan.juyou.game.chengyudahui.db.ZyProvider"
             android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.ZyProvider"

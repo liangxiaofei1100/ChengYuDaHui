@@ -8,6 +8,7 @@ import java.util.Set;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -34,6 +35,7 @@ import com.baidu.frontia.api.FrontiaSocialShareContent;
 import com.baidu.frontia.api.FrontiaSocialShareListener;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BaikeActivity;
 import com.zhaoyan.juyou.game.chengyudahui.db.WordData.WordColums;
 import com.zhaoyan.juyou.game.chengyudahui.download.Conf;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
@@ -290,7 +292,8 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 		.isCancelableOnTouchOutside(false) 
 		.withDuration(450)
 		.withEffect(Effectstype.SlideBottom) 
-		.withButton1Text("下一题") 
+		.withButton1Text("继续闯关") 
+		.withButton2Text("了解更多")
 		.setCustomView(R.layout.custom_view, getApplicationContext()) 
 		.setButton1Click(new View.OnClickListener() {
 			@Override
@@ -299,7 +302,18 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 				Toast.makeText(v.getContext(), "NExt",
 						Toast.LENGTH_SHORT).show();
 			}
-		}).show();
+		})
+		.setButton2Click(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialogBuilder.dismiss();
+				Intent intent = new Intent();
+				intent.setClass(GuessGameOfPictureActivity.this, BaikeActivity.class);
+				intent.putExtra(BaikeActivity.KEYWORD, testStr);
+				startActivity(intent);
+			}
+		})
+		.show();
 	}
 	
 	private class ShareListener implements FrontiaSocialShareListener {
