@@ -27,12 +27,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.ChengYu;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
+import com.zhaoyan.juyou.game.chengyudahui.utils.ClipboadUtil;
 
 public class ChengYuDictionary extends Activity implements OnItemClickListener {
 	private static final String TAG = ChengYuDictionary.class.getSimpleName();
@@ -72,6 +74,8 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 
 	private SimpleCursorAdapter mSearchListAdapter;
 	private Cursor mSearchCursor;
+
+	private Toast mToast;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -207,6 +211,24 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 
 	public void clearText(View view) {
 		mSearchEditText.setText("");
+	}
+
+	public void copyText(View view) {
+		TextView textView = (TextView) view;
+		ClipboadUtil.setText(mContext, textView.getText());
+		showToast("已复制到剪切板");
+	}
+
+	public void getMore(View view) {
+
+	}
+
+	private void showToast(String message) {
+		if (mToast != null) {
+			mToast.cancel();
+		}
+		mToast = Toast.makeText(mContext, "已复制到剪切板", Toast.LENGTH_SHORT);
+		mToast.show();
 	}
 
 	private void loadNextPage() {

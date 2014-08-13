@@ -1,16 +1,21 @@
 package com.zhaoyan.juyou.game.chengyudahui.dictate;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.zhaoyan.communication.cache.CacheableBitmapDrawable;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.db.DictateData;
 import com.zhaoyan.juyou.game.chengyudahui.db.DictateData.DictateColums;
-import com.zhaoyan.juyou.game.chengyudahui.db.HistoryData.HistoryColums;
+import com.zhaoyan.juyou.game.chengyudahui.download.Conf;
+import com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView;
+import com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView.OnImageLoadedListener;
 import com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -19,6 +24,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
@@ -32,8 +39,9 @@ public class DictateActivity extends ActionBarActivity implements
 	private TextView mDictateWordPinyin, mFirstPinyin, mSecondPinyin,
 			mThirdPinyin, mFourthPinyin, mDictateWordFirst, mDictateWordFourth,
 			mDictateWordSecond, mDictateWordThird, mDictateWordComment;
-	private ImageView mDictateWordImage, mFirstPaintImg, mSecondPaintImg,
-			mThirdPaintImg, mFourthPaintImg;
+	private ImageView mFirstPaintImg, mSecondPaintImg, mThirdPaintImg,
+			mFourthPaintImg;
+	private NetworkCacheableImageView mDictateWordImage;
 	private View mFirstLayout, mSecondLayout, mThirdLayout, mFourthLayout;
 	private Random mIndexRandom;
 	private String mWord;
@@ -45,6 +53,25 @@ public class DictateActivity extends ActionBarActivity implements
 	private List<Integer> wordIndex;
 	private TextView mDictateComment, mDictateOriginal, mDictateExample,
 			mDictateAllusion, mImgDescription;
+	private final String PIC_PATH = Conf.URL_EX + Conf.LISTEN_DIR;
+	private final int IMG_LOADED = 0;
+	private String mImgDescriptionStr;
+	private Handler mHandler = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub
+			super.handleMessage(msg);
+			switch (msg.what) {
+			case IMG_LOADED:
+				mImgDescription.setText(mImgDescriptionStr);
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +94,7 @@ public class DictateActivity extends ActionBarActivity implements
 		mDictateWordComment = (TextView) findViewById(R.id.dictate_word_comment);
 		mDictateWordFirst = (TextView) findViewById(R.id.dictate_first_word);
 		mDictateWordFourth = (TextView) findViewById(R.id.dictate_fourth_word);
-		mDictateWordImage = (ImageView) findViewById(R.id.dictate_word_image);
+		mDictateWordImage = (NetworkCacheableImageView) findViewById(R.id.dictate_word_image);
 		mDictateWordPinyin = (TextView) findViewById(R.id.dictate_pinyin);
 		mDictateWordSecond = (TextView) findViewById(R.id.dictate_second_word);
 		mDictateWordThird = (TextView) findViewById(R.id.dictate_third_word);
@@ -83,7 +110,7 @@ public class DictateActivity extends ActionBarActivity implements
 		mSecondLayout = findViewById(R.id.second_layout);
 		mThirdLayout = findViewById(R.id.third_layout);
 		mFourthLayout = findViewById(R.id.fourth_layout);
-		mDictateWordImage.setImageResource(R.drawable.test);
+		// mDictateWordImage.setImageResource(R.drawable.test);
 		mDictateAllusion = (TextView) findViewById(R.id.tv_dictate_allusion);
 		mDictateComment = (TextView) findViewById(R.id.tv_dictate_comment);
 		mDictateExample = (TextView) findViewById(R.id.tv_dictate_example);
@@ -124,37 +151,34 @@ public class DictateActivity extends ActionBarActivity implements
 		if (c != null && c.getCount() > 0 && !testFlag) {
 			id = Math.abs(mIndexRandom.nextInt()) % c.getCount();
 			c.close();
-			c = getContentResolver()
-					.query(DictateColums.CONTENT_URI,
-							new String[] { DictateColums.NAME,
-									DictateColums.PINYIN,
-									DictateColums.COMMENT,
-									DictateColums.DICTATE,
-									DictateColums.ORIGINAL,
-									DictateColums.EXAMPLE,
-									DictateColums.IMG_DES, DictateColums.LEVEL,
-									DictateColums.ALLUSION }, "_id = " + id,
-							null, null);
+			c = getContentResolver().query(
+					DictateColums.CONTENT_URI,
+					new String[] { "_id", DictateColums.NAME,
+							DictateColums.PINYIN, DictateColums.COMMENT,
+							DictateColums.DICTATE, DictateColums.ORIGINAL,
+							DictateColums.EXAMPLE, DictateColums.IMG_DES,
+							DictateColums.LEVEL, DictateColums.ALLUSION },
+					"_id = " + id, null, null);
 			if (c != null && c.getCount() > 0) {
 				c.moveToNext();
 				try {
 					setValue(c);
 				} catch (Exception e) {
 					// TODO: handle exception
+					e.printStackTrace();
 				} finally {
 					c.close();
 				}
+				return;
 			}
-		} else {
-			mWord = "沉鱼落雁";
-			mDictateWordComment.setText("鱼见之chén入水底，yàn见之降落沙洲，形容女子容貌的美丽");
-			// String temp = mWord;
-			setWord(mWord);
-			setPinyin("chén yú luò yàn");
-			showPaint(0);
-			showPaint(3);
 		}
-
+		mWord = "沉鱼落雁";
+		mDictateWordComment.setText("鱼见之chén入水底，yàn见之降落沙洲，形容女子容貌的美丽");
+		// String temp = mWord;
+		setWord(mWord);
+		setPinyin("chén yú luò yàn");
+		showPaint(0);
+		showPaint(3);
 	}
 
 	private void showPaint(int index) {
@@ -376,6 +400,12 @@ public class DictateActivity extends ActionBarActivity implements
 	}
 
 	private void setValue(Cursor c) {
+		boolean fromcache = mDictateWordImage.loadImage(
+				PIC_PATH + c.getInt(c.getColumnIndex("_id")) + ".jpg", false,
+				listener);
+		if (!fromcache) {
+			mDictateWordImage.setImageResource(R.drawable.ic_launcher);
+		}
 		mWord = c.getString(c.getColumnIndex(DictateData.DictateColums.NAME))
 				.trim();
 		setWord(mWord);
@@ -409,8 +439,13 @@ public class DictateActivity extends ActionBarActivity implements
 		} else {
 			mDictateOriginal.setText("无");
 		}
-		mImgDescription.setText(c.getString(c
-				.getColumnIndex(DictateData.DictateColums.IMG_DES)) + "");
+		if (!fromcache) {
+			mImgDescription.setText("需要网络连接才能获取图片");
+			mImgDescriptionStr = c.getString(c
+					.getColumnIndex(DictateData.DictateColums.IMG_DES)) + "";
+		} else
+			mImgDescription.setText(c.getString(c
+					.getColumnIndex(DictateData.DictateColums.IMG_DES)) + "");
 		s = c.getString(c.getColumnIndex(DictateData.DictateColums.DICTATE))
 				.trim();
 		int len = s.length();
@@ -419,4 +454,13 @@ public class DictateActivity extends ActionBarActivity implements
 		}
 		s = null;
 	}
+
+	private OnImageLoadedListener listener = new OnImageLoadedListener() {
+
+		@Override
+		public void onImageLoaded(CacheableBitmapDrawable result) {
+			// TODO Auto-generated method stub
+			mHandler.obtainMessage(IMG_LOADED).sendToTarget();
+		}
+	};
 }
