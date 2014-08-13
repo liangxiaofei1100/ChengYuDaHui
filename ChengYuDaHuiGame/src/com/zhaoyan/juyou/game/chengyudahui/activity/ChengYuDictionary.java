@@ -299,20 +299,41 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 					R.layout.chengyu_content, null);
 			TextView pinyin = (TextView) view
 					.findViewById(R.id.tv_chengyu_pinyin);
+			TextView commentTitle = (TextView) view
+					.findViewById(R.id.tv_chengyu_comment_title);
 			TextView comment = (TextView) view
 					.findViewById(R.id.tv_chengyu_comment);
+			TextView originalTitle = (TextView) view
+					.findViewById(R.id.tv_chengyu_original_title);
 			TextView original = (TextView) view
 					.findViewById(R.id.tv_chengyu_original);
+			TextView exampleTitle = (TextView) view
+					.findViewById(R.id.tv_chengyu_example_title);
 			TextView example = (TextView) view
 					.findViewById(R.id.tv_chengyu_example);
 
 			pinyin.setText(chengYu.pinyin);
 			comment.setText(chengYu.comment);
+			handleEmptyChengYuItem(chengYu.comment, commentTitle, comment);
 			original.setText(chengYu.original);
+			handleEmptyChengYuItem(chengYu.original, originalTitle, original);
 			example.setText(chengYu.example);
+			handleEmptyChengYuItem(chengYu.example, exampleTitle, example);
 
 			container.addView(view);
 			return view;
+		}
+
+		private void handleEmptyChengYuItem(String item, View... views) {
+			if (item.length() == 0 || item.equals("无")) {
+				for (View view : views) {
+					view.setVisibility(View.GONE);
+				}
+			} else {
+				for (View view : views) {
+					view.setVisibility(View.VISIBLE);
+				}
+			}
 		}
 
 		@Override
