@@ -179,6 +179,12 @@
             android:name="com.zhaoyan.juyou.game.chengyudahui.knowledge.KnowledgeMainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" />
+        
+        <provider 
+            android:name="com.zhaoyan.juyou.game.chengyudahui.db.ZyProvider"
+            android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.ZyProvider"
+            android:exported="false" 
+            ></provider>
 
         <provider
             android:name="com.zhaoyan.juyou.game.chengyudahui.db.ChengyuProvider"

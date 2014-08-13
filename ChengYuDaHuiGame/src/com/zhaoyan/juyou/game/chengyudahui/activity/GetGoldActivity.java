@@ -1,24 +1,31 @@
 package com.zhaoyan.juyou.game.chengyudahui.activity;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.provider.Settings.System;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jakewharton.disklrucache.Util;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.account.GetUserInfoResultListener;
 import com.zhaoyan.juyou.account.ZhaoYanAccount;
 import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.db.ZyData.SignInColumns;
 import com.zhaoyan.juyou.game.chengyudahui.download.BaiduFrontiaUser;
 import com.zhaoyan.juyou.game.chengyudahui.download.Conf;
 import com.zhaoyan.juyou.game.chengyudahui.download.GetAppActivity;
+import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
 public class GetGoldActivity extends ActionBarActivity implements OnClickListener {
 	private static final String TAG = GetGoldActivity.class.getSimpleName();
@@ -89,6 +96,9 @@ public class GetGoldActivity extends ActionBarActivity implements OnClickListene
 
 		View downloadAppView = findViewById(R.id.tv_download_app);
 		downloadAppView.setOnClickListener(this);
+		
+		View dailySignView = findViewById(R.id.tv_daily_gold);
+		dailySignView.setOnClickListener(this);
 	}
 
 	private void initAccount() {
@@ -170,6 +180,22 @@ public class GetGoldActivity extends ActionBarActivity implements OnClickListene
 		case R.id.ll_acount_info:
 			launchAccountSetting();
 			break;
+		case R.id.tv_daily_gold:
+			long lastSignDate = getLastSignInDate();
+			if (lastSignDate != -1) {
+				if (!Utils.isToday(lastSignDate)) {
+					//sign
+					signIn();
+					return;
+				}
+			} else {
+				//sign
+				signIn();
+				return;
+			}
+			
+			toast("今天已经签过了，请明天再来!");
+			break;
 		default:
 			break;
 		}
@@ -188,5 +214,28 @@ public class GetGoldActivity extends ActionBarActivity implements OnClickListene
 		public void onReceive(Context context, Intent intent) {
 			finish();
 		}
+	}
+	
+	private long getLastSignInDate(){
+		long date = -1;
+		Cursor cursor = getContentResolver().query(SignInColumns.CONTENT_URI, null, null, null, null);
+		
+		if (cursor.moveToLast()) {
+			date = cursor.getLong(cursor.getColumnIndex(SignInColumns.DATE));
+		}
+		
+		if (cursor != null) {
+			cursor.close();
+		}
+		return date;
+	}
+	
+	private void signIn(){
+		GetAppActivity.addGold(mContext, 10);
+		toast("签到成功!");
+		
+		ContentValues values = new ContentValues();
+		values.put(SignInColumns.DATE, java.lang.System.currentTimeMillis());
+		getContentResolver().insert(SignInColumns.CONTENT_URI, values);
 	}
 }
