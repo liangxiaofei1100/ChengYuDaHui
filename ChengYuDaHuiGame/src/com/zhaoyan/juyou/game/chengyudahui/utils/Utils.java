@@ -7,6 +7,7 @@ import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -127,5 +128,42 @@ public class Utils {
 		}
 		return set;
 	}
+	
+	/**
+	 * is the date in today
+	 * @param date
+	 * @return
+	 */
+	public static boolean isToday(long date){
+		long todayStartTime = getStartTime();
+		long todayEndTime = getEndTime();
+		return date >= todayStartTime && date < todayEndTime;
+	}
+	
+	/**
+	 * get today start time,long
+	 * @return
+	 */
+	public static Long getStartTime(){  
+        Calendar todayStart = Calendar.getInstance();  
+        todayStart.set(Calendar.HOUR, 0);  
+        todayStart.set(Calendar.MINUTE, 0);  
+        todayStart.set(Calendar.SECOND, 0);  
+        todayStart.set(Calendar.MILLISECOND, 0);  
+        return todayStart.getTime().getTime();  
+    }  
+      
+	/**
+	 * get today start time,long
+	 * @return
+	 */
+	public static Long getEndTime(){  
+        Calendar todayEnd = Calendar.getInstance();  
+        todayEnd.set(Calendar.HOUR, 23);  
+        todayEnd.set(Calendar.MINUTE, 59);  
+        todayEnd.set(Calendar.SECOND, 59);  
+        todayEnd.set(Calendar.MILLISECOND, 999);  
+        return todayEnd.getTime().getTime();  
+    }  
 	
 }

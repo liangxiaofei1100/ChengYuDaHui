@@ -26,6 +26,7 @@ import android.database.ContentObserver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -133,7 +134,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 				Intent intent = pm.getLaunchIntentForPackage(packagename);
 				if (null != intent) {
 					startActivity(intent);
-					addGold();
+					addGold(GetAppActivity.this, 10);
 				} else {
 					Toast.makeText(getApplicationContext(),
 							"Cannot open this app", Toast.LENGTH_SHORT).show();
@@ -145,24 +146,24 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 		}
 	};
 
-	private void addGold() {
-		ZhaoYanAccount account = ZhaoYanAccountManager.getAccountFromLocal(this);
+	public static void addGold(final Context context, int goldNum) {
+		ZhaoYanAccount account = ZhaoYanAccountManager.getAccountFromLocal(context);
 		if (account == null) {
-			Toast.makeText(this, "领取金币失败，请先登录。", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "领取金币失败，请先登录。", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		ZhaoYanAccountManager.addGold(account.userName, 10,
+		ZhaoYanAccountManager.addGold(account.userName, goldNum,
 				new GoldOperationResultListener() {
 
 					@Override
 					public void onGoldOperationSuccess(String message) {
-						Toast.makeText(GetAppActivity.this, message,
+						Toast.makeText(context, message,
 								Toast.LENGTH_SHORT).show();
 					}
 
 					@Override
 					public void onGoldOperationFail(String message) {
-						Toast.makeText(GetAppActivity.this, message,
+						Toast.makeText(context, message,
 								Toast.LENGTH_SHORT).show();
 					}
 				});
