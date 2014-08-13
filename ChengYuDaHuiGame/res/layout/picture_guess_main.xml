@@ -136,9 +136,11 @@
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:background="@drawable/text_box_bg"
+                android:background="@drawable/corner_rect_bg_selector"
                 android:padding="0dp"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black" 
+                android:clickable="false"
+                />
 
             <com.zhaoyan.juyou.game.chengyudahui.knowledge.AnswerButton
                 android:id="@+id/btn_answer_02"
@@ -146,9 +148,11 @@
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:background="@drawable/text_box_bg"
+                android:background="@drawable/corner_rect_bg_selector"
                 android:padding="0dp"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black" 
+                android:clickable="false"
+                />
 
             <com.zhaoyan.juyou.game.chengyudahui.knowledge.AnswerButton
                 android:id="@+id/btn_answer_03"
@@ -156,9 +160,11 @@
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:background="@drawable/text_box_bg"
+                android:background="@drawable/corner_rect_bg_selector"
                 android:padding="0dp"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black" 
+                android:clickable="false"
+                />
 
             <com.zhaoyan.juyou.game.chengyudahui.knowledge.AnswerButton
                 android:id="@+id/btn_answer_04"
@@ -166,9 +172,11 @@
                 android:layout_height="35dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:background="@drawable/text_box_bg"
+                android:background="@drawable/corner_rect_bg_selector"
                 android:padding="0dp"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black" 
+                android:clickable="false"
+                />
 
             <RelativeLayout
                 android:layout_width="wrap_content"

@@ -15,7 +15,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import com.zhaoyan.juyou.game.chengyudahui.activity.BaikeActivity;
+import com.zhaoyan.juyou.game.chengyudahui.knowledge.GuessGameOfPictureActivity;
+
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.StatFs;
 import android.view.Window;
 import android.view.WindowManager;
@@ -165,5 +170,17 @@ public class Utils {
         todayEnd.set(Calendar.MILLISECOND, 999);  
         return todayEnd.getTime().getTime();  
     }  
+	
+	/**
+	 * start baidu baike activity
+	 * @param context context for start activity
+	 * @param keyword 
+	 */
+	public static void startBaikeActivity(Context context, String keyword){
+		Intent intent = new Intent();
+		intent.setClass(context, BaikeActivity.class);
+		intent.putExtra(BaikeActivity.KEYWORD, keyword);
+		context.startActivity(intent);
+	}
 	
 }

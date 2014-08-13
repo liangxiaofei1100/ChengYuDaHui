@@ -100,6 +100,10 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 		mAnswerBtns[1].setOnClickListener(this);
 		mAnswerBtns[2].setOnClickListener(this);
 		mAnswerBtns[3].setOnClickListener(this);
+		//init btns cannot click
+		for (AnswerButton button : mAnswerBtns) {
+			button.setClickable(false);
+		}
 		
 		
 		mWordsList = getData(testStr);
@@ -173,6 +177,7 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 			if (!mAnswerArray.get(i)) {//
 				mAnswerArray.put(i, true);//置为true，表示我这个框有字了
 				mAnswerBtns[i].setWord(word2);
+				mAnswerBtns[i].setClickable(true);//can clickable
 				mAdapter.setVisibile(position, false);//点击过了，就在gridview中隐藏掉
 				mAdapter.notifyDataSetChanged();
 				
@@ -263,6 +268,7 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 		mAdapter.notifyDataSetChanged();
 		
 		mAnswerBtns[n].setWord(null);
+		mAnswerBtns[n].setClickable(false);
 		mAnswerArray.put(n, false);
 	}
 	
@@ -307,10 +313,7 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 			@Override
 			public void onClick(View v) {
 				dialogBuilder.dismiss();
-				Intent intent = new Intent();
-				intent.setClass(GuessGameOfPictureActivity.this, BaikeActivity.class);
-				intent.putExtra(BaikeActivity.KEYWORD, testStr);
-				startActivity(intent);
+				Utils.startBaikeActivity(GuessGameOfPictureActivity.this, testStr);
 			}
 		})
 		.show();
