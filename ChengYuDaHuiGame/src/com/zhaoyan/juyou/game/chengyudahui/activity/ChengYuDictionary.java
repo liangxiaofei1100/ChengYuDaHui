@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -14,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -220,7 +222,15 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 	}
 
 	public void getMore(View view) {
-
+		if (mChengYuList != null) {
+			ChengYu chengYu = mChengYuList.get(mCurrentViewPageIndex);
+			if (chengYu != null) {
+				Intent intent = new Intent(mContext, BaikeActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+				intent.putExtra(BaikeActivity.KEYWORD, chengYu.name);
+				startActivity(intent);
+			}
+		}
 	}
 
 	private void showToast(String message) {
@@ -268,10 +278,20 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 	}
 
 	private void searchChengYu() {
-		String selection = ChengyuColums.NAME + " like '"
-				+ mSearchEditText.getText().toString() + "%'";
-		mChengyuQuery.startQuery(TOKEN_SEARCHBOX_QUERY, null,
-				ChengyuColums.CONTENT_URI, PROJECTION, selection, null, null);
+		if (TextUtils.isEmpty(mSearchEditText.getText().toString())) {
+			mSearchCursor = null;
+			Cursor old = mSearchListAdapter.swapCursor(mSearchCursor);
+			if (old != null && !old.isClosed()) {
+				old.close();
+			}
+		} else {
+			String selection = ChengyuColums.NAME + " like '"
+					+ mSearchEditText.getText().toString() + "%'";
+			mChengyuQuery.cancelOperation(TOKEN_SEARCHBOX_QUERY);
+			mChengyuQuery.startQuery(TOKEN_SEARCHBOX_QUERY, null,
+					ChengyuColums.CONTENT_URI, PROJECTION, selection, null,
+					null);
+		}
 	}
 
 	private class SearchTextWatcher implements TextWatcher {
@@ -436,6 +456,7 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 		}
 
 		private void searchQuery(Cursor cursor) {
+			Log.d(TAG, "searchQuery result count = " + cursor.getCount());
 			mSearchCursor = cursor;
 			Cursor old = mSearchListAdapter.swapCursor(mSearchCursor);
 			if (old != null && !old.isClosed()) {
