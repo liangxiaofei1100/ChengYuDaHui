@@ -194,10 +194,12 @@
                 android:background="@drawable/img_box1"
                 android:gravity="center"
                 android:orientation="horizontal"
+                android:paddingBottom="5dip"
                 android:paddingLeft="10dip"
-                android:paddingRight="10dip" >
+                android:paddingRight="10dip"
+                android:paddingTop="5dip" >
 
-                <ImageView
+                <com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView
                     android:id="@+id/dictate_word_image"
                     android:layout_width="300dip"
                     android:layout_height="wrap_content" />
