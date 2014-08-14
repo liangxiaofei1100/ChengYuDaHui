@@ -7,6 +7,9 @@ import android.app.Activity;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -14,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -38,6 +42,7 @@ import com.zhaoyan.juyou.game.chengyudahui.utils.ClipboadUtil;
 
 public class ChengYuDictionary extends Activity implements OnItemClickListener {
 	private static final String TAG = ChengYuDictionary.class.getSimpleName();
+	private static final String CHENGYU_PREFERENCE = "chengyu_dictionary";
 	private static final int CHENGYU_TOTAL_NUMBER = 29349;
 
 	private Context mContext;
@@ -87,6 +92,7 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 
 		initView();
 
+		mInitChengYuId = getLastChengYu();
 		movetoChengYu(mInitChengYuId);
 		updatePrievousAndNextButton();
 	}
@@ -206,7 +212,18 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 	 * @param view
 	 */
 	public void feedback(View view) {
-		// TODO
+		if (mChengYuList != null) {
+			ChengYu chengYu = mChengYuList.get(mCurrentViewPageIndex);
+			if (chengYu != null) {
+				Intent intent = new Intent(mContext,
+						FeedBackChengYuActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+				intent.putExtra(FeedBackChengYuActivity.EXTRA_CHENGYU,
+						chengYu.name);
+				startActivity(intent);
+				overridePendingTransition(R.anim.activity_right_in, 0);
+			}
+		}
 	}
 
 	public void clearText(View view) {
@@ -220,7 +237,15 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 	}
 
 	public void getMore(View view) {
-
+		if (mChengYuList != null) {
+			ChengYu chengYu = mChengYuList.get(mCurrentViewPageIndex);
+			if (chengYu != null) {
+				Intent intent = new Intent(mContext, BaikeActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+				intent.putExtra(BaikeActivity.KEYWORD, chengYu.name);
+				startActivity(intent);
+			}
+		}
 	}
 
 	private void showToast(String message) {
@@ -268,10 +293,20 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 	}
 
 	private void searchChengYu() {
-		String selection = ChengyuColums.NAME + " like '"
-				+ mSearchEditText.getText().toString() + "%'";
-		mChengyuQuery.startQuery(TOKEN_SEARCHBOX_QUERY, null,
-				ChengyuColums.CONTENT_URI, PROJECTION, selection, null, null);
+		if (TextUtils.isEmpty(mSearchEditText.getText().toString())) {
+			mSearchCursor = null;
+			Cursor old = mSearchListAdapter.swapCursor(mSearchCursor);
+			if (old != null && !old.isClosed()) {
+				old.close();
+			}
+		} else {
+			String selection = ChengyuColums.NAME + " like '"
+					+ mSearchEditText.getText().toString() + "%'";
+			mChengyuQuery.cancelOperation(TOKEN_SEARCHBOX_QUERY);
+			mChengyuQuery.startQuery(TOKEN_SEARCHBOX_QUERY, null,
+					ChengyuColums.CONTENT_URI, PROJECTION, selection, null,
+					null);
+		}
 	}
 
 	private class SearchTextWatcher implements TextWatcher {
@@ -319,6 +354,8 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 
 			View view = LayoutInflater.from(mContext).inflate(
 					R.layout.chengyu_content, null);
+
+			TextView name = (TextView) view.findViewById(R.id.tv_chengyu_name);
 			TextView pinyin = (TextView) view
 					.findViewById(R.id.tv_chengyu_pinyin);
 			TextView commentTitle = (TextView) view
@@ -333,7 +370,7 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 					.findViewById(R.id.tv_chengyu_example_title);
 			TextView example = (TextView) view
 					.findViewById(R.id.tv_chengyu_example);
-
+			name.setText(chengYu.name);
 			pinyin.setText(chengYu.pinyin);
 			comment.setText(chengYu.comment);
 			handleEmptyChengYuItem(chengYu.comment, commentTitle, comment);
@@ -392,6 +429,8 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 
 			loadNextPage();
 			loadPrePage();
+
+			recordCurrentChengYu(mCurrentChengYuId);
 		}
 
 	}
@@ -436,6 +475,7 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 		}
 
 		private void searchQuery(Cursor cursor) {
+			Log.d(TAG, "searchQuery result count = " + cursor.getCount());
 			mSearchCursor = cursor;
 			Cursor old = mSearchListAdapter.swapCursor(mSearchCursor);
 			if (old != null && !old.isClosed()) {
@@ -609,6 +649,21 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 			imm.hideSoftInputFromWindow(view.getWindowToken(),
 					InputMethodManager.HIDE_NOT_ALWAYS);
 		}
+	}
+
+	private void recordCurrentChengYu(int lastId) {
+		SharedPreferences sharedPreferences = getSharedPreferences(
+				CHENGYU_PREFERENCE, MODE_PRIVATE);
+		Editor editor = sharedPreferences.edit();
+		editor.putInt("lastId", lastId);
+		editor.apply();
+	}
+
+	private int getLastChengYu() {
+		SharedPreferences sharedPreferences = getSharedPreferences(
+				CHENGYU_PREFERENCE, MODE_PRIVATE);
+		int lastId = sharedPreferences.getInt("lastId", 1);
+		return lastId;
 	}
 
 }

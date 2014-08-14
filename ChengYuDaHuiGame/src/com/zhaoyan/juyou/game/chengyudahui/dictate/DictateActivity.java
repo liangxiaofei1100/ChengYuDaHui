@@ -42,7 +42,8 @@ public class DictateActivity extends ActionBarActivity implements
 	private ImageView mFirstPaintImg, mSecondPaintImg, mThirdPaintImg,
 			mFourthPaintImg;
 	private NetworkCacheableImageView mDictateWordImage;
-	private View mFirstLayout, mSecondLayout, mThirdLayout, mFourthLayout;
+	private View mFirstLayout, mSecondLayout, mThirdLayout, mFourthLayout,
+			mOriginalView, mExampleView, mAllusionView;
 	private Random mIndexRandom;
 	private String mWord;
 	private Map<Integer, Bitmap> mPaintMap;
@@ -116,6 +117,9 @@ public class DictateActivity extends ActionBarActivity implements
 		mDictateExample = (TextView) findViewById(R.id.tv_dictate_example);
 		mDictateOriginal = (TextView) findViewById(R.id.tv_dictate_original);
 		mImgDescription = (TextView) findViewById(R.id.img_des_text);
+		mOriginalView = findViewById(R.id.dictate_original);
+		mExampleView = findViewById(R.id.dictate_example);
+		mAllusionView = findViewById(R.id.dictate_allusion);
 		findViewById(R.id.dictate_show_result).setOnClickListener(
 				new OnClickListener() {
 
@@ -406,6 +410,7 @@ public class DictateActivity extends ActionBarActivity implements
 		if (!fromcache) {
 			mDictateWordImage.setImageResource(R.drawable.ic_launcher);
 		}
+		// mDictateWordImage.setImageResource(R.drawable.test);
 		mWord = c.getString(c.getColumnIndex(DictateData.DictateColums.NAME))
 				.trim();
 		setWord(mWord);
@@ -415,29 +420,32 @@ public class DictateActivity extends ActionBarActivity implements
 		if (s != null && !s.equals("null")) {
 			mDictateAllusion.setText(c.getString(c
 					.getColumnIndex(DictateColums.ALLUSION)) + "");
+			setViewVisiable(2, true);
 		} else {
-			mDictateAllusion.setText("无");
+			setViewVisiable(2, false);
 		}
 		s = c.getString(c.getColumnIndex(DictateData.DictateColums.COMMENT));
 		if (s != null && !s.equals("null")) {
 			mDictateComment.setText(c.getString(c
 					.getColumnIndex(DictateData.DictateColums.COMMENT)));
 		} else {
-			mDictateComment.setText("无");
+			mDictateComment.setText("");
 		}
 		s = c.getString(c.getColumnIndex(DictateData.DictateColums.EXAMPLE));
 		if (s != null && !s.equals("null")) {
 			mDictateExample.setText(c.getString(c
 					.getColumnIndex(DictateData.DictateColums.EXAMPLE)) + "");
+			setViewVisiable(1, true);
 		} else {
-			mDictateExample.setText("无");
+			setViewVisiable(1, false);
 		}
 		s = c.getString(c.getColumnIndex(DictateData.DictateColums.ORIGINAL));
 		if (s != null && !s.equals("null")) {
 			mDictateOriginal.setText(c.getString(c
 					.getColumnIndex(DictateData.DictateColums.ORIGINAL)) + "");
+			setViewVisiable(0, true);
 		} else {
-			mDictateOriginal.setText("无");
+			setViewVisiable(0, false);
 		}
 		if (!fromcache) {
 			mImgDescription.setText("需要网络连接才能获取图片");
@@ -463,4 +471,29 @@ public class DictateActivity extends ActionBarActivity implements
 			mHandler.obtainMessage(IMG_LOADED).sendToTarget();
 		}
 	};
+
+	private void setViewVisiable(int index, boolean flag) {
+		int visiable;
+		if (flag) {
+			visiable = View.VISIBLE;
+		} else {
+			visiable = View.GONE;
+		}
+		switch (index) {
+		case 0:
+			mDictateOriginal.setVisibility(visiable);
+			mOriginalView.setVisibility(visiable);
+			break;
+		case 1:
+			mDictateExample.setVisibility(visiable);
+			mExampleView.setVisibility(visiable);
+			break;
+		case 2:
+			mDictateAllusion.setVisibility(visiable);
+			mAllusionView.setVisibility(visiable);
+			break;
+		default:
+			break;
+		}
+	}
 }
