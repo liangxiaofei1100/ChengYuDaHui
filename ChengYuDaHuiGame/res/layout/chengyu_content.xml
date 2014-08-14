@@ -11,6 +11,20 @@
         android:padding="5dp" >
 
         <TextView
+            android:id="@+id/tv_chengyu_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/corner_rect_bg_selector"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:onClick="copyText"
+            android:padding="5dp"
+            android:textSize="14sp" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
@@ -140,7 +154,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/iv_arrow"
-                android:text="点击查看更多内容"
+                android:text="点击查看图片、英译、典故等更多内容"
                 android:textSize="14sp" />
         </RelativeLayout>
     </LinearLayout>
