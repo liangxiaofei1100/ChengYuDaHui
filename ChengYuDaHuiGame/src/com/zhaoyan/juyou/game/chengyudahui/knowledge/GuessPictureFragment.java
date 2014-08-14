@@ -4,22 +4,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.StringDef;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -29,28 +28,32 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.a.a.a.a.a;
 import com.baidu.frontia.Frontia;
-import com.baidu.frontia.api.FrontiaAuthorization.MediaType;
 import com.baidu.frontia.api.FrontiaSocialShare;
-import com.baidu.frontia.api.FrontiaSocialShare.FrontiaTheme;
 import com.baidu.frontia.api.FrontiaSocialShareContent;
 import com.baidu.frontia.api.FrontiaSocialShareListener;
+import com.baidu.frontia.api.FrontiaAuthorization.MediaType;
+import com.baidu.frontia.api.FrontiaSocialShare.FrontiaTheme;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.activity.BaikeActivity;
 import com.zhaoyan.juyou.game.chengyudahui.db.WordData.WordColums;
 import com.zhaoyan.juyou.game.chengyudahui.download.Conf;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 import com.zhaoyan.juyou.game.chengyudahui.view.Effectstype;
 import com.zhaoyan.juyou.game.chengyudahui.view.NiftyDialogBuilder;
 
-public class GuessGameOfPictureActivity extends Activity implements OnItemClickListener, OnClickListener{
-	private static final String TAG = GuessGameOfPictureActivity.class.getSimpleName();
+/**
+ * guess the chengyu from a picture
+ * @author Yuri
+ */
+public class GuessPictureFragment extends Fragment implements OnClickListener, OnItemClickListener {
+
+	private static final String TAG = GuessPictureFragment.class.getSimpleName();
 	
 	private GridView mGridView;
 	private PicGuessAdapter mAdapter;
 	private ImageView mTipView, mFreeView;
-	private ImageView mBackView;
 	
 	private AnswerButton[] mAnswerBtns = new AnswerButton[4];
 	
@@ -62,42 +65,60 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 	private FrontiaSocialShare mSocialShare;
 	private FrontiaSocialShareContent mShareContent = new FrontiaSocialShareContent();
 	
+	private KnowledgeMainActivity mActivity;
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.picture_guess_main);
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+		Log.d(TAG, "onAttach.activity:"  + activity);
+		mActivity = (KnowledgeMainActivity) activity;
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater,
+		 ViewGroup container, Bundle savedInstanceState) {
+		Log.d(TAG, "onCreateView");
+		View rootView = inflater.inflate(R.layout.picture_guess_main, container,
+				false);
 		
-		String path = getIntent().getStringExtra("path");
-		Log.d(TAG, "path:" + path);
-		
-		initView();
-		
-		//init 
+		initView(rootView);
+		return rootView;
+	}
+	
+	@Override
+	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		Log.d(TAG, "onActivityCreated");
+		mActivity.setTitle("看图猜成语");
+		// init
 		initAnswerButtonArray();
-		
-		Frontia.init(this.getApplicationContext(), Conf.APIKEY);
+
+		Frontia.init(getActivity().getApplicationContext(), Conf.APIKEY);
 		mSocialShare = Frontia.getSocialShare();
-		mSocialShare.setContext(this);
-		mSocialShare.setClientId(MediaType.WEIXIN.toString(), "wx329c742cb69b41b8");
+		mSocialShare.setContext(getActivity());
+		mSocialShare.setClientId(MediaType.WEIXIN.toString(),
+				"wx329c742cb69b41b8");
 		mShareContent.setTitle("成语大会");
 		mShareContent.setContent("欢迎使用成语大会，相关问题请邮件dev_support@zhaoyan.com");
 		mShareContent.setLinkUrl("http://developer.baidu.com/");
-		mShareContent.setImageUri(Uri.parse("http://apps.bdimg.com/developer/static/04171450/developer/images/icon/terminal_adapter.png"));
+		mShareContent
+				.setImageUri(Uri
+						.parse("http://apps.bdimg.com/developer/static/04171450/developer/images/icon/terminal_adapter.png"));
 	}
 	
-	private void initView(){
-		mBackView = (ImageView) findViewById(R.id.iv_back);
-		mTipView = (ImageView) findViewById(R.id.iv_cy_tip);
-		mFreeView = (ImageView) findViewById(R.id.iv_cy_share);
+	private void initView(View rootView){
+		mTipView = (ImageView) rootView.findViewById(R.id.iv_cy_tip);
+		mFreeView = (ImageView) rootView.findViewById(R.id.iv_cy_share);
 		
-		mBackView.setOnClickListener(this);
 		mTipView.setOnClickListener(this);
 		mFreeView.setOnClickListener(this);
 		
-		mAnswerBtns[0] = (AnswerButton) findViewById(R.id.btn_answer_01);
-		mAnswerBtns[1] = (AnswerButton) findViewById(R.id.btn_answer_02);
-		mAnswerBtns[2] = (AnswerButton) findViewById(R.id.btn_answer_03);
-		mAnswerBtns[3] = (AnswerButton) findViewById(R.id.btn_answer_04);
+		mAnswerBtns[0] = (AnswerButton) rootView.findViewById(R.id.btn_answer_01);
+		mAnswerBtns[1] = (AnswerButton) rootView.findViewById(R.id.btn_answer_02);
+		mAnswerBtns[2] = (AnswerButton) rootView.findViewById(R.id.btn_answer_03);
+		mAnswerBtns[3] = (AnswerButton) rootView.findViewById(R.id.btn_answer_04);
 		mAnswerBtns[0].setOnClickListener(this);
 		mAnswerBtns[1].setOnClickListener(this);
 		mAnswerBtns[2].setOnClickListener(this);
@@ -109,8 +130,8 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 		
 		mWordsList = getData(testStr);
 
-		mGridView = (GridView) findViewById(R.id.gv_cy_word);
-		mAdapter = new PicGuessAdapter(getApplicationContext());
+		mGridView = (GridView) rootView.findViewById(R.id.gv_cy_word);
+		mAdapter = new PicGuessAdapter(getActivity().getApplicationContext());
 		mGridView.setAdapter(mAdapter);
 		mGridView.setOnItemClickListener(this);
 	}
@@ -123,7 +144,7 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 	private List<Word> getData(String chengyu){
 		List<String> list = new ArrayList<String>();
 		//从数据库中取得20个随机汉字
-		Cursor cursor = getContentResolver().query(
+		Cursor cursor = getActivity().getContentResolver().query(
 				WordColums.CONTENT_URI, new String[] {"word"}, null,
 				null, null);
 		int count = cursor.getCount();
@@ -164,6 +185,9 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 	private void tip(){
 		//获取当前用户还没有找到的 还有哪些
 		Integer[] nums = getEmptyNums();
+		if (nums.length == 0) {
+			return;
+		}
 		//剩下没有找到的 随机找一个出来
 		int index=(int)(Math.random()*nums.length);
 		int rand = nums[index];
@@ -286,14 +310,11 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.iv_back:
-			GuessGameOfPictureActivity.this.finish();
-			break;
 		case R.id.iv_cy_tip:
 			tip();
 			break;
 		case R.id.iv_cy_share:
-			mSocialShare.show(GuessGameOfPictureActivity.this.getWindow().getDecorView(), 
+			mSocialShare.show(getActivity().getWindow().getDecorView(), 
 					mShareContent, FrontiaTheme.LIGHT,  new ShareListener());
 			break;
 		case R.id.btn_answer_01:
@@ -372,7 +393,7 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 	}
 	
 	private void showRightDialog(){
-		final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(this);
+		final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(getActivity());
 		dialogBuilder.withTitle(testStr)
 		.withTitleColor("#000000")
 		.withDividerColor("#11000000")
@@ -384,7 +405,7 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 		.withEffect(Effectstype.SlideBottom) 
 		.withButton1Text("继续闯关") 
 		.withButton2Text("了解更多")
-		.setCustomView(R.layout.custom_view, getApplicationContext()) 
+		.setCustomView(R.layout.custom_view, getActivity().getApplicationContext()) 
 		.setButton1Click(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -399,7 +420,7 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 		.setButton2Click(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Utils.startBaikeActivity(GuessGameOfPictureActivity.this, testStr);
+				Utils.startBaikeActivity(getActivity(), testStr);
 			}
 		})
 		.show();
@@ -410,7 +431,7 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 		@Override
 		public void onSuccess() {
 			Log.d(TAG,"share success");
-			Toast.makeText(getApplicationContext(), "分享成功", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity().getApplicationContext(), "分享成功", Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
@@ -473,5 +494,4 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 			return view;
 		}
 	}
-	
 }

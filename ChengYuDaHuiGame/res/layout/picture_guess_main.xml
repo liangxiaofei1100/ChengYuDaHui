@@ -4,203 +4,132 @@
     android:layout_height="match_parent"
     tools:context="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" >
 
-    <RelativeLayout
-        android:id="@+id/title_top"
+    <LinearLayout
+        android:id="@+id/ll_cy_icon"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="174dp"
         android:layout_alignParentTop="true"
-        android:background="@drawable/title_top_bg" >
-
-        <TextView
-            android:id="@+id/tv_jifen"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:drawableLeft="@drawable/ic_jifen"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            android:text="0" />
-
-        <TextView
-            android:id="@+id/tv_gold"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:layout_toLeftOf="@id/tv_jifen"
-            android:drawableLeft="@drawable/ic_gold"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            android:text="0" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@id/title_top"
-        android:background="@drawable/title_chengyu_bg" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="看图猜成语"
-            android:textColor="@android:color/black"
-            android:textSize="25sp"
-            android:textStyle="bold" />
+        android:layout_margin="16dp"
+        android:background="@drawable/img_bg"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp" >
 
         <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:clickable="true"
-            android:padding="10dp"
-            android:src="@drawable/ic_back_selector" />
-    </RelativeLayout>
+            android:id="@+id/iv_cy_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/test" />
+    </LinearLayout>
 
-    <RelativeLayout
+    <GridView
+        android:id="@+id/gv_cy_word"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/title"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/activity_middle"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp" >
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="16dp"
+        android:horizontalSpacing="4dp"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="8"
+        android:verticalSpacing="1dp" >
+    </GridView>
 
-        <LinearLayout
-            android:id="@+id/ll_cy_icon"
-            android:layout_width="match_parent"
-            android:layout_height="174dp"
-            android:layout_alignParentTop="true"
-            android:layout_margin="16dp"
-            android:background="@drawable/img_bg"
-            android:padding="5dp"
-            android:gravity="center"
-            android:orientation="horizontal" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/gv_cy_word"
+        android:layout_below="@+id/ll_cy_icon"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp" >
 
             <ImageView
-                android:id="@+id/iv_cy_icon"
+                android:id="@+id/iv_cy_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/test" />
-        </LinearLayout>
+                android:clickable="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/cy_word" />
 
-        <GridView
-            android:id="@+id/gv_cy_word"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="24dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginTop="16dp"
-            android:horizontalSpacing="4dp"
-            android:listSelector="@android:color/transparent"
-            android:numColumns="8"
-            android:verticalSpacing="1dp" >
-        </GridView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/gv_cy_word"
-            android:layout_below="@+id/ll_cy_icon"
-            android:gravity="center"
-            android:orientation="horizontal" >
-
-            <RelativeLayout
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" 
-                android:layout_marginRight="10dp"
-                >
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="提示"
+                android:textColor="@android:color/black" />
+        </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/iv_cy_tip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="centerInside"
-                    android:clickable="true"
-                    android:src="@drawable/cy_word" />
+        <com.zhaoyan.juyou.game.chengyudahui.knowledge.AnswerButton
+            android:id="@+id/btn_answer_01"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/corner_rect_bg_selector"
+            android:clickable="false"
+            android:padding="0dp"
+            android:textColor="@android:color/black" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="提示"
-                    android:textColor="@android:color/black" />
-            </RelativeLayout>
+        <com.zhaoyan.juyou.game.chengyudahui.knowledge.AnswerButton
+            android:id="@+id/btn_answer_02"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/corner_rect_bg_selector"
+            android:clickable="false"
+            android:padding="0dp"
+            android:textColor="@android:color/black" />
 
-            <com.zhaoyan.juyou.game.chengyudahui.knowledge.AnswerButton
-                android:id="@+id/btn_answer_01"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/corner_rect_bg_selector"
-                android:padding="0dp"
-                android:textColor="@android:color/black" 
-                android:clickable="false"
-                />
+        <com.zhaoyan.juyou.game.chengyudahui.knowledge.AnswerButton
+            android:id="@+id/btn_answer_03"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/corner_rect_bg_selector"
+            android:clickable="false"
+            android:padding="0dp"
+            android:textColor="@android:color/black" />
 
-            <com.zhaoyan.juyou.game.chengyudahui.knowledge.AnswerButton
-                android:id="@+id/btn_answer_02"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/corner_rect_bg_selector"
-                android:padding="0dp"
-                android:textColor="@android:color/black" 
-                android:clickable="false"
-                />
+        <com.zhaoyan.juyou.game.chengyudahui.knowledge.AnswerButton
+            android:id="@+id/btn_answer_04"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/corner_rect_bg_selector"
+            android:clickable="false"
+            android:padding="0dp"
+            android:textColor="@android:color/black" />
 
-            <com.zhaoyan.juyou.game.chengyudahui.knowledge.AnswerButton
-                android:id="@+id/btn_answer_03"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/corner_rect_bg_selector"
-                android:padding="0dp"
-                android:textColor="@android:color/black" 
-                android:clickable="false"
-                />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp" >
 
-            <com.zhaoyan.juyou.game.chengyudahui.knowledge.AnswerButton
-                android:id="@+id/btn_answer_04"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/corner_rect_bg_selector"
-                android:padding="0dp"
-                android:textColor="@android:color/black" 
-                android:clickable="false"
-                />
-
-            <RelativeLayout
+            <ImageView
+                android:id="@+id/iv_cy_share"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" 
-                android:layout_marginLeft="10dp"
-                >
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/cy_word" />
 
-                <ImageView
-                    android:id="@+id/iv_cy_share"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="centerInside"
-                    android:clickable="true"
-                    android:src="@drawable/cy_word" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="分享"
-                    android:textColor="@android:color/black" />
-            </RelativeLayout>
-        </LinearLayout>
-    </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="分享"
+                android:textColor="@android:color/black" />
+        </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>
