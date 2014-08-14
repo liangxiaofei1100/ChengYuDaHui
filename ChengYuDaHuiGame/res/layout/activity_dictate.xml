@@ -195,7 +195,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/img_box1"
+                android:background="@drawable/corner_rect_bg_selector"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingBottom="5dip"
@@ -252,8 +252,9 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/text_box_bg"
+                    android:background="@drawable/corner_rect_bg_selector"
                     android:gravity="center_vertical"
+                    android:padding="5dp"
                     android:textSize="14sp" />
 
                 <TextView
@@ -272,8 +273,9 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/text_box_bg"
+                    android:background="@drawable/corner_rect_bg_selector"
                     android:gravity="center_vertical"
+                    android:padding="5dp"
                     android:textSize="14sp" />
 
                 <TextView
@@ -292,8 +294,9 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/text_box_bg"
+                    android:background="@drawable/corner_rect_bg_selector"
                     android:gravity="center_vertical"
+                    android:padding="5dp"
                     android:textSize="14sp" />
 
                 <TextView
@@ -312,8 +315,9 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/text_box_bg"
+                    android:background="@drawable/corner_rect_bg_selector"
                     android:gravity="center_vertical"
+                    android:padding="5dp"
                     android:text="点击查看近义词、反义词、典故、英文等更多内容"
                     android:textSize="14sp" />
             </LinearLayout>

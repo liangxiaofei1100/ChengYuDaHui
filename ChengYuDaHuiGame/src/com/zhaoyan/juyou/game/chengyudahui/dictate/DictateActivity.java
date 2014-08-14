@@ -468,7 +468,11 @@ public class DictateActivity extends ActionBarActivity implements
 		@Override
 		public void onImageLoaded(CacheableBitmapDrawable result) {
 			// TODO Auto-generated method stub
-			mHandler.obtainMessage(IMG_LOADED).sendToTarget();
+			if (result != null) {
+				mHandler.obtainMessage(IMG_LOADED).sendToTarget();
+			} else {
+				mDictateWordImage.setImageResource(R.drawable.ic_launcher);
+			}
 		}
 	};
 
