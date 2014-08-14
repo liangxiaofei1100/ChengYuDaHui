@@ -74,7 +74,8 @@
             android:layout_height="174dp"
             android:layout_alignParentTop="true"
             android:layout_margin="16dp"
-            android:background="@drawable/text_box_bg"
+            android:background="@drawable/img_bg"
+            android:padding="5dp"
             android:gravity="center"
             android:orientation="horizontal" >
 

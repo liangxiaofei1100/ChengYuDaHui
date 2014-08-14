@@ -6,17 +6,11 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
-import com.zhaoyan.juyou.game.chengyudahui.activity.BaikeActivity;
-import com.zhaoyan.juyou.game.chengyudahui.knowledge.GuessGameOfPictureActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,8 +19,11 @@ import android.os.StatFs;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class Utils {
+import com.zhaoyan.communication.util.Log;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BaikeActivity;
 
+public class Utils {
+	private static final String TAG = Utils.class.getSimpleName();
 	/**
 	 * byte convert
 	 * @param size like 3232332
@@ -142,6 +139,10 @@ public class Utils {
 	public static boolean isToday(long date){
 		long todayStartTime = getStartTime();
 		long todayEndTime = getEndTime();
+		Log.d(TAG, "===========isToday==========");
+		Log.d(TAG, "current time:" + date);
+		Log.d(TAG, "start time:" + todayStartTime);
+		Log.d(TAG, "end time:" + todayStartTime);
 		return date >= todayStartTime && date < todayEndTime;
 	}
 	

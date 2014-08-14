@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import android.app.Activity;
@@ -13,6 +14,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.StringDef;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,7 +107,6 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 			button.setClickable(false);
 		}
 		
-		
 		mWordsList = getData(testStr);
 
 		mGridView = (GridView) findViewById(R.id.gv_cy_word);
@@ -159,6 +160,86 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 		}
 		return wordList;
 	}
+	
+	private void tip(){
+		//获取当前用户还没有找到的 还有哪些
+		Integer[] nums = getEmptyNums();
+		//剩下没有找到的 随机找一个出来
+		int index=(int)(Math.random()*nums.length);
+		int rand = nums[index];
+		System.out.println("rand:" + rand);
+		//得到这是个什么字，比如"沉"
+		String keyword = getSpecWord(rand);
+		System.out.println("word:" + keyword);
+		
+		Word word = getWordByKeyword(keyword);
+		word.setTip(true);
+		mAdapter.setVisibile(word.getPosition(), false);
+		mAdapter.notifyDataSetChanged();
+		
+		mAnswerBtns[rand].setWord(word);
+		mAnswerBtns[rand].setClickable(false);
+		mAnswerArray.put(rand, true);
+		
+		if (mAnswerArray.indexOfValue(false) == -1 ) {
+			//用户已经找到四个字了
+			String answer = "";
+			for(Button button : mAnswerBtns){
+				//将四个字组成一个词，看一下是不是我们的答案
+				answer += button.getText();
+			}
+			if (answer.equals(testStr)) {
+				//答对了，弹出对话框，显示该成语意思
+				showRightDialog();
+				setButtonsColor(Color.BLACK);
+			} else {
+				//打错了，将字体颜色改为红色，以提醒用户
+				setButtonsColor(Color.RED);
+			}
+		}
+	}
+	
+	private Word getWordByKeyword(String keyword){
+		for (Word word : mWordsList) {
+			if (word.getWord().equals(keyword)) {
+				return word;
+			}
+		}
+		return null;
+	}
+	
+	private Integer[] getEmptyNums(){
+		List<Integer> list = new ArrayList<Integer>();
+		for (int i = 0; i < 4; i++) {
+			if (!mAnswerArray.get(i)) {
+				list.add(i);
+			}
+		}
+		
+		if (list.size() == 0) {
+			//用户已找到四个字，但是还是没找到答案
+			//继续找空的，不是提示的，清空继续来
+			for (int i = 0; i < 4; i++) {
+				if (mAnswerBtns[i].getWord().isTip()) {
+					//是我们提示的，就继续显示在那 不要动他
+				} else {
+					//清空其他错误答案，继续
+					clickAnswerButton(i + 1);
+					list.add(i);
+				}
+			}
+		}
+		return (Integer[])list.toArray(new Integer[list.size()]);
+	}
+	
+	/**
+	 * 获取当前成语指定位置的字
+	 * @param pos
+	 * @return
+	 */
+	private String getSpecWord(int pos){
+		return testStr.substring(pos, pos + 1);
+	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -191,7 +272,7 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 					if (answer.equals(testStr)) {
 						//答对了，弹出对话框，显示该成语意思
 						showRightDialog();
-						setButtonsColor(Color.GREEN);
+						setButtonsColor(Color.BLACK);
 					} else {
 						//打错了，将字体颜色改为红色，以提醒用户
 						setButtonsColor(Color.RED);
@@ -209,6 +290,7 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 			GuessGameOfPictureActivity.this.finish();
 			break;
 		case R.id.iv_cy_tip:
+			tip();
 			break;
 		case R.id.iv_cy_share:
 			mSocialShare.show(GuessGameOfPictureActivity.this.getWindow().getDecorView(), 
@@ -243,8 +325,10 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 	 * @param color
 	 */
 	private void setButtonsColor(int color){
-		for(Button button : mAnswerBtns){
-			button.setTextColor(color);
+		for(AnswerButton button : mAnswerBtns){
+			if (button.getWord() != null && !button.getWord().isTip()) {
+				button.setTextColor(color);
+			}
 		}
 	}
 	
@@ -305,6 +389,9 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 			@Override
 			public void onClick(View v) {
 				dialogBuilder.dismiss();
+				for (int i = 0; i < 4; i++) {
+					clickAnswerButton(i + 1);
+				}
 				Toast.makeText(v.getContext(), "NExt",
 						Toast.LENGTH_SHORT).show();
 			}
@@ -312,7 +399,6 @@ public class GuessGameOfPictureActivity extends Activity implements OnItemClickL
 		.setButton2Click(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				dialogBuilder.dismiss();
 				Utils.startBaikeActivity(GuessGameOfPictureActivity.this, testStr);
 			}
 		})

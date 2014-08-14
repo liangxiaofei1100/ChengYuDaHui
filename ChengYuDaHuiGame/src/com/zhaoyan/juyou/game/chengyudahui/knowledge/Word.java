@@ -5,6 +5,7 @@ public class Word {
 	private int position;
 	private String word;
 	private boolean visibile;
+	private boolean tip;
 	
 	public int getPosition() {
 		return position;
@@ -27,6 +28,14 @@ public class Word {
 	
 	public void setVisibile(boolean visibile) {
 		this.visibile = visibile;
+	}
+	
+	public boolean isTip() {
+		return tip;
+	}
+	
+	public void setTip(boolean tip) {
+		this.tip = tip;
 	}
 
 	
