@@ -15,6 +15,8 @@ public class KnowledgeMainActivity extends FragmentActivity {
 	
 	private TextView mTitleView;
 	
+	private int mPosition = 0;
+	
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
@@ -22,11 +24,12 @@ public class KnowledgeMainActivity extends FragmentActivity {
 		
 		mTitleView = (TextView) findViewById(R.id.tv_item_title);
 		
-		selectItem(0);
+		selectItem(mPosition);
 	}
 	
 	public void selectItem(int position) {
 		Log.d(TAG, "selectItem.position=" + position);
+		mPosition = position;
 		Fragment fragment = null;
 		switch (position) {
 		case 0:
@@ -52,7 +55,11 @@ public class KnowledgeMainActivity extends FragmentActivity {
 	}
 	
 	public void onClickBack(View view){
-		KnowledgeMainActivity.this.finish();
+		if (mPosition != 0) {
+			selectItem(0);
+		} else {
+			KnowledgeMainActivity.this.finish();
+		}
 	}
 
 }

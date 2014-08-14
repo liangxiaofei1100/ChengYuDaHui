@@ -23,6 +23,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class KnowledgeMainFragment extends Fragment implements OnItemClickListener {
@@ -91,7 +92,7 @@ public class KnowledgeMainFragment extends Fragment implements OnItemClickListen
 		File file = new File(path);
 		if (!file.exists()) {
 			Log.e(TAG, file.getAbsolutePath() + " is not exist");
-			Toast.makeText(getActivity().getApplicationContext(), "暂时只做了第一个，这些都没做呢", Toast.LENGTH_SHORT).show();
+			showToast("该关卡尚未解锁");
 			return;
 		}
 //		Intent intent = new Intent();
@@ -100,6 +101,16 @@ public class KnowledgeMainFragment extends Fragment implements OnItemClickListen
 //		startActivity(intent);
 		mActivity.selectItem(1);
 		Log.d(TAG, "filepath:" + file.getAbsolutePath());
+	}
+	
+	private Toast mToast = null;
+	private void showToast(String message){
+		if (mToast != null) {
+			mToast.cancel();
+		}
+		
+		mToast = Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT);
+		mToast.show();
 	}
 	
 	private class MyAdapter extends BaseAdapter{
@@ -132,6 +143,13 @@ public class KnowledgeMainFragment extends Fragment implements OnItemClickListen
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			View view = inflater.inflate(R.layout.knowledge_list_item, null);
+			ImageView imageView = (ImageView) view.findViewById(R.id.iv_stage_lock);
+			if (position == 0) {
+				imageView.setVisibility(View.INVISIBLE);
+			}
+			
+			TextView stageView = (TextView) view.findViewById(R.id.tv_knowledge_stage);
+			stageView.setText("第" + (position + 1) + "回");
 			return view;
 		}
 		

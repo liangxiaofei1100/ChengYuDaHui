@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <knowledge>
     <question id="1"  type="0">
-        <!-- type,0:看图猜成语，1：国学问答 2：成语消除 3：成语接龙 -->
-        <chengyu_name>惊弓之鸟</chengyu_name>
+        <!-- type,0:看图猜成语，1：国学问答 2：成语消除 3：成语接龙 4:手疾眼快 -->
+        <!-- 一共6个成语；第一个为正确答案，其他为混淆视听的 -->
+        <chengyu_name>惊弓之鸟,伊宁惊人,沉鱼落雁,落井下石,眼疾手快,语无伦次</chengyu_name>
+        <!-- 该成语的形象图片存放路径 -->
         <pic_path></pic_path>
     </question>
      <question id="2"  type="1">
-        <!-- type,0:看图猜成语，1：国学问答 2：成语消除 3：成语接龙 -->
+        <!-- type,0:看图猜成语，1：国学问答 2：成语消除 3：成语接龙 4:手疾眼快-->
         <id>1</id><!--国学问题编号 -->
+    </question>
+    <question id="3"  type="2">
+        <!-- type,0:看图猜成语，1：国学问答 2：成语消除 3：成语接龙 4:手疾眼快-->
+       <chengyu_name>惊弓之鸟,伊宁惊人,沉鱼落雁,落井下石,眼疾手快,语无伦次,语无伦次,语无伦次,语无伦次,语无伦次</chengyu_name>
     </question>
 </knowledge>

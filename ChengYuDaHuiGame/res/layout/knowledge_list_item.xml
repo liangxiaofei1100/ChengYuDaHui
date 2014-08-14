@@ -6,7 +6,7 @@
     >
     
     <TextView 
-        android:id="@+id/tv_knowledge_hui"
+        android:id="@+id/tv_knowledge_stage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -29,6 +29,17 @@
         android:paddingTop="16dp"
     	android:paddingBottom="16dp"
         android:layout_centerInParent="true"
+        />
+    
+    <ImageView 
+        android:id="@+id/iv_stage_lock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/game_stage_lock"
         />
 
 </RelativeLayout>

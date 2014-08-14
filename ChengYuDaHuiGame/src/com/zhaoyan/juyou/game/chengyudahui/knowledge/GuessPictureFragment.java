@@ -37,6 +37,7 @@ import com.baidu.frontia.api.FrontiaAuthorization.MediaType;
 import com.baidu.frontia.api.FrontiaSocialShare.FrontiaTheme;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
 import com.zhaoyan.juyou.game.chengyudahui.db.WordData.WordColums;
 import com.zhaoyan.juyou.game.chengyudahui.download.Conf;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
@@ -393,19 +394,48 @@ public class GuessPictureFragment extends Fragment implements OnClickListener, O
 	}
 	
 	private void showRightDialog(){
+		//get chengyu comment and original
+		String selection = ChengyuColums.NAME + "='" + testStr + "'";
+		String[] projections = {ChengyuColums.COMMENT, ChengyuColums.ORIGINAL};
+		Cursor cursor = getActivity().getContentResolver().query(ChengyuColums.CONTENT_URI, projections, selection, null, null);
+		String comment = "";
+		String originStr = "";
+//		System.out.println("count:" + cursor.getCount());
+		if (cursor.moveToFirst()) {
+			comment = cursor.getString(cursor.getColumnIndex(ChengyuColums.COMMENT));
+			originStr = cursor.getString(cursor.getColumnIndex(ChengyuColums.ORIGINAL));
+		}
+		
+//		System.out.println("comment:" + comment);
+//		System.out.println("origin:" + originStr);
+		if (cursor != null) {
+			cursor.close();
+		}
+		
+		//dialog custom view
+		LayoutInflater inflater = LayoutInflater.from(getActivity().getApplicationContext());
+		View view = inflater.inflate(R.layout.picture_guess_dialog_custom_view, null);
+		TextView commentView = (TextView) view.findViewById(R.id.tv_cy_comment);
+		TextView originalView = (TextView) view.findViewById(R.id.tv_cy_original);
+		TextView goldView = (TextView) view.findViewById(R.id.tv_cy_gold);
+		
+		commentView.setText(comment);
+		originalView.setText(originStr);
+		goldView.setText("金币+10");
+		
 		final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(getActivity());
 		dialogBuilder.withTitle(testStr)
 		.withTitleColor("#000000")
 		.withDividerColor("#11000000")
-		.withMessage("成语解释在这里.")
-		.withMessageColor("#000000")
+		.withMessage(null)
+		.withTipMessage("小贴士:遇到困难可以点击提示寻找帮助哦")
 		.withIcon(getResources().getDrawable(R.drawable.ic_launcher))
 		.isCancelableOnTouchOutside(false) 
 		.withDuration(450)
 		.withEffect(Effectstype.SlideBottom) 
 		.withButton1Text("继续闯关") 
 		.withButton2Text("了解更多")
-		.setCustomView(R.layout.custom_view, getActivity().getApplicationContext()) 
+		.setCustomView(view, getActivity().getApplicationContext()) 
 		.setButton1Click(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -413,8 +443,6 @@ public class GuessPictureFragment extends Fragment implements OnClickListener, O
 				for (int i = 0; i < 4; i++) {
 					clickAnswerButton(i + 1);
 				}
-				Toast.makeText(v.getContext(), "NExt",
-						Toast.LENGTH_SHORT).show();
 			}
 		})
 		.setButton2Click(new OnClickListener() {

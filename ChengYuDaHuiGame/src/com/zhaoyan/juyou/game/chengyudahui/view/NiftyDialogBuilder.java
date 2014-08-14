@@ -53,6 +53,8 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
     private TextView mTitle;
 
     private TextView mMessage;
+    
+    private TextView mTipMessage;
 
     private ImageView mIcon;
 
@@ -99,8 +101,8 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
     private void init(Context context) {
 
 
-        mDialogView = View.inflate(context, R.layout.dialog_layout, null);
-
+        mDialogView = View.inflate(context, R.layout.nifty_dialog_layout, null);
+        
         mLinearLayoutView=(LinearLayout)mDialogView.findViewById(R.id.parentPanel);
         mRlinearLayoutView=(RelativeLayout)mDialogView.findViewById(R.id.main);
         mLinearLayoutTopView=(LinearLayout)mDialogView.findViewById(R.id.topPanel);
@@ -109,6 +111,7 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
 
         mTitle = (TextView) mDialogView.findViewById(R.id.alertTitle);
         mMessage = (TextView) mDialogView.findViewById(R.id.message);
+        mTipMessage = (TextView) mDialogView.findViewById(R.id.tv_nifty_tip);
         mIcon = (ImageView) mDialogView.findViewById(R.id.icon);
         mDivider = mDialogView.findViewById(R.id.titleDivider);
         mButton1=(Button)mDialogView.findViewById(R.id.button1);
@@ -173,6 +176,18 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
     public NiftyDialogBuilder withMessageColor(String colorString) {
         mMessage.setTextColor(Color.parseColor(colorString));
         return this;
+    }
+    
+    public NiftyDialogBuilder withTipMessage(int textResId){
+    	toggleView(mTipMessage,textResId);
+    	mTipMessage.setText(textResId);
+    	return this;
+    }
+    
+    public NiftyDialogBuilder withTipMessage(CharSequence tipMsg){
+    	toggleView(mTipMessage,tipMsg);
+    	mTipMessage.setText(tipMsg);
+    	return this;
     }
 
     public NiftyDialogBuilder withIcon(int drawableResId) {
