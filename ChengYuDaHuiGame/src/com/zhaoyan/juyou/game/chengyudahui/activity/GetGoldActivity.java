@@ -27,7 +27,8 @@ import com.zhaoyan.juyou.game.chengyudahui.download.Conf;
 import com.zhaoyan.juyou.game.chengyudahui.download.GetAppActivity;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
-public class GetGoldActivity extends ActionBarActivity implements OnClickListener {
+public class GetGoldActivity extends ActionBarActivity implements
+		OnClickListener {
 	private static final String TAG = GetGoldActivity.class.getSimpleName();
 
 	private Context mContext;
@@ -41,15 +42,17 @@ public class GetGoldActivity extends ActionBarActivity implements OnClickListene
 
 	private BroadcastReceiver mLogoutReceiver;
 
+	private Toast mToast;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
 		setTitle("领取俸禄");
 		setContentView(R.layout.get_gold_activity);
-		
+
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		
+
 		mZhaoYanAccountManager = new ZhaoYanAccountManager();
 
 		initView();
@@ -96,7 +99,7 @@ public class GetGoldActivity extends ActionBarActivity implements OnClickListene
 
 		View downloadAppView = findViewById(R.id.tv_download_app);
 		downloadAppView.setOnClickListener(this);
-		
+
 		View dailySignView = findViewById(R.id.tv_daily_gold);
 		dailySignView.setOnClickListener(this);
 	}
@@ -167,8 +170,17 @@ public class GetGoldActivity extends ActionBarActivity implements OnClickListene
 	}
 
 	private void toast(String message) {
-		Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
-		toast.show();
+		if (mToast != null) {
+			mToast.cancel();
+		}
+		mToast = Toast.makeText(mContext, message, Toast.LENGTH_SHORT);
+		mToast.show();
+	}
+
+	public void shareApp(View view) {
+		Intent intent = new Intent(mContext, ShareAppActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+		startActivity(intent);
 	}
 
 	@Override
@@ -184,16 +196,16 @@ public class GetGoldActivity extends ActionBarActivity implements OnClickListene
 			long lastSignDate = getLastSignInDate();
 			if (lastSignDate != -1) {
 				if (!Utils.isToday(lastSignDate)) {
-					//sign
+					// sign
 					signIn();
 					return;
 				}
 			} else {
-				//sign
+				// sign
 				signIn();
 				return;
 			}
-			
+
 			toast("今天已经签过了，请明天再来!");
 			break;
 		default:
@@ -215,25 +227,26 @@ public class GetGoldActivity extends ActionBarActivity implements OnClickListene
 			finish();
 		}
 	}
-	
-	private long getLastSignInDate(){
+
+	private long getLastSignInDate() {
 		long date = -1;
-		Cursor cursor = getContentResolver().query(SignInColumns.CONTENT_URI, null, null, null, null);
-		
+		Cursor cursor = getContentResolver().query(SignInColumns.CONTENT_URI,
+				null, null, null, null);
+
 		if (cursor.moveToLast()) {
 			date = cursor.getLong(cursor.getColumnIndex(SignInColumns.DATE));
 		}
-		
+
 		if (cursor != null) {
 			cursor.close();
 		}
 		return date;
 	}
-	
-	private void signIn(){
+
+	private void signIn() {
 		GetAppActivity.addGold(mContext, 10);
 		toast("签到成功!");
-		
+
 		ContentValues values = new ContentValues();
 		values.put(SignInColumns.DATE, java.lang.System.currentTimeMillis());
 		getContentResolver().insert(SignInColumns.CONTENT_URI, values);
