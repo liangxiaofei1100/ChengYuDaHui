@@ -39,7 +39,7 @@
                 android:layout_width="100dip"
                 android:layout_height="75dip"
                 android:clickable="true"
-                android:src="@drawable/cy_word" />
+                android:src="@drawable/short_btn_bg_selector" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -58,7 +58,7 @@
                 android:layout_width="100dip"
                 android:layout_height="75dip"
                 android:clickable="true"
-                android:src="@drawable/cy_word" />
+                android:src="@drawable/short_btn_bg_selector" />
 
             <TextView
                 android:layout_width="wrap_content"
