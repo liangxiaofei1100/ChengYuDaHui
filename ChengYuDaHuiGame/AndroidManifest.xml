@@ -129,6 +129,7 @@
 
                 <data android:mimeType="application/com.chenyu.download.file" />
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
@@ -179,18 +180,18 @@
             android:name="com.zhaoyan.juyou.game.chengyudahui.knowledge.KnowledgeMainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" />
-        
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.BaikeActivity"
-            android:screenOrientation="portrait"
-            />
-        
-        <provider 
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.DictateMainActivity"
+            android:screenOrientation="portrait" />
+
+        <provider
             android:name="com.zhaoyan.juyou.game.chengyudahui.db.ZyProvider"
             android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.ZyProvider"
-            android:exported="false" 
-            ></provider>
-
+            android:exported="false" >
+        </provider>
         <provider
             android:name="com.zhaoyan.juyou.game.chengyudahui.db.ChengyuProvider"
             android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.chengyuprovider"
@@ -258,7 +259,7 @@
             </intent-filter>
         </service>
         <!-- push结束 -->
-        <!--  frontia share -->
+        <!-- frontia share -->
         <activity
             android:name="com.baidu.frontia.activity.share.FrontiaSocialOAuthActivity"
             android:exported="true"
