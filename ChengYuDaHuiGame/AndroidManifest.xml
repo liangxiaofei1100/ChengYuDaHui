@@ -189,9 +189,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" />
         <activity
-            android:name="com.zhaoyan.juyou.game.chengyudahui.knowledge.KnowledgeMainActivity"
+            android:name="com.zhaoyan.juyou.game.chengyudahui.service.MusicPlayerTestActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ActivityTheme" />
+             />
         
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.BaikeActivity"
@@ -284,6 +284,8 @@
         <!-- baidu push end -->
         <service android:name="com.zhaoyan.juyou.game.chengyudahui.JuYouService" />
         <service android:name="com.zhaoyan.juyou.game.chengyudahui.spy.SpyService" >
+        </service>
+        <service android:name="com.zhaoyan.juyou.game.chengyudahui.service.MusicPlayerService" >
         </service>
     </application>
 

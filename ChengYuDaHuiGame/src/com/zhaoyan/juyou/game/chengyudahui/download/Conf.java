@@ -4,10 +4,14 @@ package com.zhaoyan.juyou.game.chengyudahui.download;
 public class Conf {
 	
 	public final static String APIKEY = "cd1EyW7zKA7ZmYuDunUnkBfG";
+	
+	public final static String ZHAOYAN_DIR = "zhaoyan";
+	
     public final static String CLOUD_APP_LOCATION = "apps/";
     public final static String CLOUD_ICON_LOCATION = "icons/";
     public final static String CLOUD_INFO_LOCATION = "infos/";
-    public final static String LOCAL_APP_DOWNLOAD_PATH = "/baiduApp";
+    public final static String LOCAL_APP_DOWNLOAD_DIR = "/apps";
+    public final static String LOCAL_AUDIO_DOWNLOAD_DIR = "/audio";
     
     public final static String SHARED_PREFS_NAME = "dlapp";
     public static final String KEY_NAME_DOWNLOAD_ID = "downloadId";
@@ -16,6 +20,8 @@ public class Conf {
     
     public static final String URL_EX = "http://bcs.duapp.com/bccd1eyw7zka7zmyudununkbfgmbaas/";
     public static final String LISTEN_DIR = "listen_pic/";
+    public static final String AUDIO_DIR = "audio/";
+    public static final String AUDIO_URL_EX = URL_EX + AUDIO_DIR;
     
     public static final String ACTION_CANCEL_DOWNLOAD = "com.zhaoyan.cancel.download";
     public static final String ACTION_START_DOWNLOAD = "com.zhaoyan.start.download";
