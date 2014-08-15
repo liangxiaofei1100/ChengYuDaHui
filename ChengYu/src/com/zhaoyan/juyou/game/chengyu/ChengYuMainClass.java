@@ -1,19 +1,17 @@
 package com.zhaoyan.juyou.game.chengyu;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import com.zhaoyan.juyou.common.pinyin.PinYinComparator;
-import com.zhaoyan.juyou.common.pinyin.PinYinUtil;
 
 /**
  * Convert ChengYu from chengyu.txt to chengyu.db.
  * 
  */
-public class MainClass {
+public class ChengYuMainClass {
 
 	public static void main(String[] args) throws ClassNotFoundException,
 			FileNotFoundException {

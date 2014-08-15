@@ -54,7 +54,7 @@ public class GuessPictureFragment extends Fragment implements OnClickListener, O
 	
 	private GridView mGridView;
 	private PicGuessAdapter mAdapter;
-	private ImageView mTipView, mFreeView;
+	private Button mTipView, mFreeView;
 	
 	private AnswerButton[] mAnswerBtns = new AnswerButton[4];
 	
@@ -110,8 +110,8 @@ public class GuessPictureFragment extends Fragment implements OnClickListener, O
 	}
 	
 	private void initView(View rootView){
-		mTipView = (ImageView) rootView.findViewById(R.id.iv_cy_tip);
-		mFreeView = (ImageView) rootView.findViewById(R.id.iv_cy_share);
+		mTipView = (Button) rootView.findViewById(R.id.btn_cy_tip);
+		mFreeView = (Button) rootView.findViewById(R.id.btn_cy_share);
 		
 		mTipView.setOnClickListener(this);
 		mFreeView.setOnClickListener(this);
@@ -311,10 +311,10 @@ public class GuessPictureFragment extends Fragment implements OnClickListener, O
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.iv_cy_tip:
+		case R.id.btn_cy_tip:
 			tip();
 			break;
-		case R.id.iv_cy_share:
+		case R.id.btn_cy_share:
 			mSocialShare.show(getActivity().getWindow().getDecorView(), 
 					mShareContent, FrontiaTheme.LIGHT,  new ShareListener());
 			break;
