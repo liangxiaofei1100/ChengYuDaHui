@@ -104,7 +104,7 @@
         android:layout_below="@id/title_dictate"
         android:horizontalSpacing="10dip"
         android:listSelector="@android:color/transparent"
-        android:numColumns="6"
+        android:numColumns="4"
         android:verticalSpacing="10dip"
         android:visibility="gone" >
     </GridView>

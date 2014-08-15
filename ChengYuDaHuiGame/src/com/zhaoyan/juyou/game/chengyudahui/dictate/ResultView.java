@@ -3,12 +3,14 @@ package com.zhaoyan.juyou.game.chengyudahui.dictate;
 import java.util.List;
 import java.util.Map;
 
+import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zhaoyan.juyou.game.chengyudahui.R;
@@ -22,9 +24,10 @@ public class ResultView {
 	}
 
 	public View getView(String s, List<Integer> index) {
-		if (mView == null)
+		if (mView == null) {
 			mView = mLayoutInflater.inflate(R.layout.dictate_result_layout,
 					null);
+		}
 		if (s != null && s.length() > 0) {
 			int i = 0;
 			try {

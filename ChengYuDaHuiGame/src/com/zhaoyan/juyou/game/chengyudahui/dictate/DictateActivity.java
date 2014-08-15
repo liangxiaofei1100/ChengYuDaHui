@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.zhaoyan.communication.cache.CacheableBitmapDrawable;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.db.DictateData;
@@ -14,6 +15,7 @@ import com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView.On
 import com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.ContentValues;
@@ -23,16 +25,16 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 @SuppressLint("UseSparseArrays")
-public class DictateActivity extends ActionBarActivity implements
-		OnClickListener {
+public class DictateActivity extends Activity implements OnClickListener {
 	private TextView mFirstPinyin, mSecondPinyin, mThirdPinyin, mFourthPinyin,
 			mDictateWordFirst, mDictateWordFourth, mDictateWordSecond,
 			mDictateWordThird;
@@ -77,8 +79,8 @@ public class DictateActivity extends ActionBarActivity implements
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		initView(R.layout.activity_dictate);
-//		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//		setTitle("汉字听写");
+		// getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		// setTitle("汉字听写");
 		mGameLevel = getIntent().getStringExtra("level");
 		wordInCursor = getIntent().getIntExtra("index", 0);
 		getWord(mGameLevel);
@@ -319,6 +321,7 @@ public class DictateActivity extends ActionBarActivity implements
 			mrListener = new ResultListener();
 		v.findViewById(R.id.dictate_right).setOnClickListener(mrListener);
 		v.findViewById(R.id.dictate_wrong).setOnClickListener(mrListener);
+		v.findViewById(R.id.dictate_shared).setOnClickListener(mrListener);
 		if (resultDialog == null) {
 			Builder mBuilder = new Builder(this);
 			mBuilder.setView(v);
@@ -343,6 +346,9 @@ public class DictateActivity extends ActionBarActivity implements
 				// TODO wrong
 				updateResult("wrong");
 				nextWord();
+				break;
+			case R.id.dictate_shared:
+				// TODO shared the picture
 				break;
 			default:
 				break;

@@ -31,13 +31,14 @@
 
         <RelativeLayout
             android:layout_width="100dip"
-            android:layout_height="75dip" >
+            android:layout_height="50dip" >
 
             <ImageView
                 android:id="@+id/paint_clean_btn"
                 android:layout_width="100dip"
-                android:layout_height="75dip"
+                android:layout_height="50dip"
                 android:clickable="true"
+                android:scaleType="fitXY"
                 android:src="@drawable/short_btn_bg_selector" />
 
             <TextView
@@ -52,13 +53,14 @@
 
         <RelativeLayout
             android:layout_width="100dip"
-            android:layout_height="75dip" >
+            android:layout_height="50dip" >
 
             <ImageView
-                android:id="@+id/paint_chengyu_right"
+                android:id="@+id/paint_chengyu_right "
                 android:layout_width="100dip"
-                android:layout_height="75dip"
+                android:layout_height="50dip"
                 android:clickable="true"
+                android:scaleType="fitXY"
                 android:src="@drawable/short_btn_bg_selector" />
 
             <TextView
