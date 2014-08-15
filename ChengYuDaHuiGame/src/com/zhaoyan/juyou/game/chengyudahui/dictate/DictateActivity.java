@@ -77,8 +77,8 @@ public class DictateActivity extends ActionBarActivity implements
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		initView(R.layout.activity_dictate);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		setTitle("汉字听写");
+//		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//		setTitle("汉字听写");
 		mGameLevel = getIntent().getStringExtra("level");
 		wordInCursor = getIntent().getIntExtra("index", 0);
 		getWord(mGameLevel);
