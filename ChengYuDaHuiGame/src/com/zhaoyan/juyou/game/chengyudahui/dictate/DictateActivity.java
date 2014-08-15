@@ -1,12 +1,9 @@
 package com.zhaoyan.juyou.game.chengyudahui.dictate;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-
 import com.zhaoyan.communication.cache.CacheableBitmapDrawable;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.db.DictateData;
@@ -36,27 +33,28 @@ import android.widget.TextView;
 @SuppressLint("UseSparseArrays")
 public class DictateActivity extends ActionBarActivity implements
 		OnClickListener {
-	private TextView mDictateWordPinyin, mFirstPinyin, mSecondPinyin,
-			mThirdPinyin, mFourthPinyin, mDictateWordFirst, mDictateWordFourth,
-			mDictateWordSecond, mDictateWordThird, mDictateWordComment;
+	private TextView mFirstPinyin, mSecondPinyin, mThirdPinyin, mFourthPinyin,
+			mDictateWordFirst, mDictateWordFourth, mDictateWordSecond,
+			mDictateWordThird;
 	private ImageView mFirstPaintImg, mSecondPaintImg, mThirdPaintImg,
 			mFourthPaintImg;
 	private NetworkCacheableImageView mDictateWordImage;
 	private View mFirstLayout, mSecondLayout, mThirdLayout, mFourthLayout,
-			mOriginalView, mExampleView, mAllusionView;
-	private Random mIndexRandom;
+			mOriginalView, mExampleView, mAllusionView, mBackView;
 	private String mWord;
 	private Map<Integer, Bitmap> mPaintMap;
 	private ResultView mResultView;
 	private ResultListener mrListener;
 	private AlertDialog resultDialog;
-	private boolean testFlag = false;
 	private List<Integer> wordIndex;
 	private TextView mDictateComment, mDictateOriginal, mDictateExample,
 			mDictateAllusion, mImgDescription;
 	private final String PIC_PATH = Conf.URL_EX + Conf.LISTEN_DIR;
 	private final int IMG_LOADED = 0;
 	private String mImgDescriptionStr;
+	private Cursor mWordCursor;
+	private String mGameLevel;
+	private int wordInCursor;
 	private Handler mHandler = new Handler() {
 
 		@Override
@@ -81,7 +79,9 @@ public class DictateActivity extends ActionBarActivity implements
 		initView(R.layout.activity_dictate);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		setTitle("汉字听写");
-		getWord();
+		mGameLevel = getIntent().getStringExtra("level");
+		wordInCursor = getIntent().getIntExtra("index", 0);
+		getWord(mGameLevel);
 	}
 
 	@Override
@@ -92,11 +92,9 @@ public class DictateActivity extends ActionBarActivity implements
 
 	private void initView(int id) {
 		setContentView(id);
-		mDictateWordComment = (TextView) findViewById(R.id.dictate_word_comment);
 		mDictateWordFirst = (TextView) findViewById(R.id.dictate_first_word);
 		mDictateWordFourth = (TextView) findViewById(R.id.dictate_fourth_word);
 		mDictateWordImage = (NetworkCacheableImageView) findViewById(R.id.dictate_word_image);
-		mDictateWordPinyin = (TextView) findViewById(R.id.dictate_pinyin);
 		mDictateWordSecond = (TextView) findViewById(R.id.dictate_second_word);
 		mDictateWordThird = (TextView) findViewById(R.id.dictate_third_word);
 		mFirstPaintImg = (ImageView) findViewById(R.id.dictate_first_word_img);
@@ -111,6 +109,7 @@ public class DictateActivity extends ActionBarActivity implements
 		mSecondLayout = findViewById(R.id.second_layout);
 		mThirdLayout = findViewById(R.id.third_layout);
 		mFourthLayout = findViewById(R.id.fourth_layout);
+		mBackView = findViewById(R.id.iv_back_dictate_game);
 		// mDictateWordImage.setImageResource(R.drawable.test);
 		mDictateAllusion = (TextView) findViewById(R.id.tv_dictate_allusion);
 		mDictateComment = (TextView) findViewById(R.id.tv_dictate_comment);
@@ -120,6 +119,14 @@ public class DictateActivity extends ActionBarActivity implements
 		mOriginalView = findViewById(R.id.dictate_original);
 		mExampleView = findViewById(R.id.dictate_example);
 		mAllusionView = findViewById(R.id.dictate_allusion);
+		mBackView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
 		findViewById(R.id.dictate_show_result).setOnClickListener(
 				new OnClickListener() {
 
@@ -142,47 +149,42 @@ public class DictateActivity extends ActionBarActivity implements
 
 	}
 
-	private void getWord() {
+	private void getWord(String level) {
 		if (wordIndex == null)
 			wordIndex = new ArrayList<Integer>();
 		wordIndex.clear();
-		int id;
-		if (mIndexRandom == null) {
-			mIndexRandom = new Random();
+		if (mWordCursor != null && !mWordCursor.isClosed()) {
+			setValue(mWordCursor);
+			return;
 		}
-		Cursor c = getContentResolver().query(DictateColums.CONTENT_URI,
-				new String[] { DictateColums.NAME }, null, null, null);
-		if (c != null && c.getCount() > 0 && !testFlag) {
-			id = Math.abs(mIndexRandom.nextInt()) % c.getCount();
-			c.close();
-			c = getContentResolver().query(
-					DictateColums.CONTENT_URI,
-					new String[] { "_id", DictateColums.NAME,
-							DictateColums.PINYIN, DictateColums.COMMENT,
-							DictateColums.DICTATE, DictateColums.ORIGINAL,
-							DictateColums.EXAMPLE, DictateColums.IMG_DES,
-							DictateColums.LEVEL, DictateColums.ALLUSION },
-					"_id = " + id, null, null);
-			if (c != null && c.getCount() > 0) {
-				c.moveToNext();
-				try {
-					setValue(c);
-				} catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
-				} finally {
-					c.close();
-				}
-				return;
+		if (level == null)
+			level = "初级";
+		mWordCursor = getContentResolver().query(
+				DictateColums.CONTENT_URI,
+				new String[] { "_id", DictateColums.NAME, DictateColums.PINYIN,
+						DictateColums.COMMENT, DictateColums.DICTATE,
+						DictateColums.ORIGINAL, DictateColums.EXAMPLE,
+						DictateColums.IMG_DES, DictateColums.LEVEL,
+						DictateColums.ALLUSION, DictateColums.RESULT },
+				DictateColums.LEVEL + " = '" + level + "'", null, null);
+		if (mWordCursor != null && mWordCursor.getCount() > 0) {
+			if (wordInCursor > 0)
+				mWordCursor.move(wordInCursor);
+			try {
+				setValue(mWordCursor);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
 			}
+			return;
+		} else {
+			if (mGameLevel.equals("初级")) {
+				mGameLevel = "中级";
+			} else {
+				mGameLevel = "高级";
+			}
+			getWord(mGameLevel);
 		}
-		mWord = "沉鱼落雁";
-		mDictateWordComment.setText("鱼见之chén入水底，yàn见之降落沙洲，形容女子容貌的美丽");
-		// String temp = mWord;
-		setWord(mWord);
-		setPinyin("chén yú luò yàn");
-		showPaint(0);
-		showPaint(3);
 	}
 
 	private void showPaint(int index) {
@@ -269,7 +271,7 @@ public class DictateActivity extends ActionBarActivity implements
 			}
 			mPaintMap.clear();
 		}
-		getWord();
+		getWord(mGameLevel);
 	}
 
 	private void setPinyin(String pinyin) {
@@ -339,11 +341,6 @@ public class DictateActivity extends ActionBarActivity implements
 				break;
 			case R.id.dictate_wrong:
 				// TODO wrong
-				// if (!testFlag) {
-				// ContentValues values = new ContentValues();
-				// getContentResolver()
-				// .insert(HistoryColums.CONTENT_URI, null);
-				// }
 				updateResult("wrong");
 				nextWord();
 				break;
@@ -366,6 +363,8 @@ public class DictateActivity extends ActionBarActivity implements
 			}
 			mPaintMap.clear();
 		}
+		if (mWordCursor != null)
+			mWordCursor.close();
 	}
 
 	private void setWord(String s) {
@@ -404,11 +403,26 @@ public class DictateActivity extends ActionBarActivity implements
 	}
 
 	private void setValue(Cursor c) {
+		if (!c.moveToNext()) {
+			if (mGameLevel == null) {
+				mGameLevel = "初级";
+			} else if (mGameLevel.equals("初级")) {
+				mGameLevel = "中级";
+			} else {
+				mGameLevel = "高级";
+			}
+			wordInCursor = -1;
+			c.close();
+			mWordCursor.close();
+			mWordCursor = null;
+			getWord(mGameLevel);
+			return;
+		}
 		boolean fromcache = mDictateWordImage.loadImage(
 				PIC_PATH + c.getInt(c.getColumnIndex("_id")) + ".jpg", false,
 				listener);
 		if (!fromcache) {
-			mDictateWordImage.setImageResource(R.drawable.ic_launcher);
+			mDictateWordImage.setImageResource(R.drawable.default_img);
 		}
 		// mDictateWordImage.setImageResource(R.drawable.test);
 		mWord = c.getString(c.getColumnIndex(DictateData.DictateColums.NAME))
@@ -468,7 +482,11 @@ public class DictateActivity extends ActionBarActivity implements
 		@Override
 		public void onImageLoaded(CacheableBitmapDrawable result) {
 			// TODO Auto-generated method stub
-			mHandler.obtainMessage(IMG_LOADED).sendToTarget();
+			if (result != null) {
+				mHandler.obtainMessage(IMG_LOADED).sendToTarget();
+			} else {
+				mDictateWordImage.setImageResource(R.drawable.default_img);
+			}
 		}
 	};
 
@@ -496,4 +514,5 @@ public class DictateActivity extends ActionBarActivity implements
 			break;
 		}
 	}
+
 }

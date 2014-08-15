@@ -5,10 +5,66 @@
     android:background="@drawable/bg_activity"
     android:orientation="vertical" >
 
+    <RelativeLayout
+        android:id="@+id/title_top_dictate_game"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/title_top_bg" >
+
+        <TextView
+            android:id="@+id/tv_jifen_dictate_game"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@drawable/ic_jifen"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="0" />
+
+        <TextView
+            android:id="@+id/tv_gold_dictate_game"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/tv_jifen_dictate_game"
+            android:drawableLeft="@drawable/ic_gold"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="0" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/title_dictate_game"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/title_top_dictate_game"
+        android:background="@drawable/title_chengyu_bg" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="汉字听写"
+            android:textColor="@android:color/black"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/iv_back_dictate_game"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:clickable="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_back_selector" />
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/dictate_pinyin"
         android:layout_width="match_parent"
         android:layout_height="50dip"
+        android:layout_below="@+id/title_dictate_game"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:visibility="gone" />
@@ -195,7 +251,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/img_box1"
+                android:background="@drawable/corner_rect_bg_selector"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingBottom="5dip"
@@ -252,8 +308,9 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/text_box_bg"
+                    android:background="@drawable/corner_rect_bg_selector"
                     android:gravity="center_vertical"
+                    android:padding="5dp"
                     android:textSize="14sp" />
 
                 <TextView
@@ -272,8 +329,9 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/text_box_bg"
+                    android:background="@drawable/corner_rect_bg_selector"
                     android:gravity="center_vertical"
+                    android:padding="5dp"
                     android:textSize="14sp" />
 
                 <TextView
@@ -292,8 +350,9 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/text_box_bg"
+                    android:background="@drawable/corner_rect_bg_selector"
                     android:gravity="center_vertical"
+                    android:padding="5dp"
                     android:textSize="14sp" />
 
                 <TextView
@@ -312,8 +371,9 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/text_box_bg"
+                    android:background="@drawable/corner_rect_bg_selector"
                     android:gravity="center_vertical"
+                    android:padding="5dp"
                     android:text="点击查看近义词、反义词、典故、英文等更多内容"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -325,6 +385,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/advert_layout"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_marginTop="15dip"
         android:background="@drawable/list_click_item_selector"
         android:text="@string/show_result" />
