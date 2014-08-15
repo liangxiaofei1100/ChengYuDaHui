@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#faf3f3"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    tools:context="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" >
 
     <TextView
         android:layout_width="match_parent"
@@ -67,6 +69,18 @@
         android:clickable="true"
         android:padding="10dp"
         android:text="下载应用得金币"
+        android:textSize="16sp" />
+
+    <include layout="@layout/splitline" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_white_bg"
+        android:clickable="true"
+        android:padding="10dp"
+        android:onClick="shareApp"
+        android:text="分享应用得金币"
         android:textSize="16sp" />
 
     <include layout="@layout/splitline" />
