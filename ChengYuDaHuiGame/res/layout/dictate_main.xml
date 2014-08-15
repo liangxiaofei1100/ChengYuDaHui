@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_activity"
+    android:orientation="vertical"
+    tools:context="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" >
+
+    <RelativeLayout
+        android:id="@+id/title_top_dictate"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/title_top_bg" >
+
+        <TextView
+            android:id="@+id/tv_jifen_dictate"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@drawable/ic_jifen"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="0" />
+
+        <TextView
+            android:id="@+id/tv_gold_dictate"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/tv_jifen_dictate"
+            android:drawableLeft="@drawable/ic_gold"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="0" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/title_dictate"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/title_top_dictate"
+        android:background="@drawable/title_chengyu_bg" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="汉字听写"
+            android:textColor="@android:color/black"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/iv_back_dictate"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:clickable="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_back_selector" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/level_select_dictate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/title_dictate" >
+
+        <Button
+            android:id="@+id/junior_level"
+            android:layout_width="300dip"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/middle_level"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/list_click_item_selector"
+            android:text="初级" />
+
+        <Button
+            android:id="@+id/middle_level"
+            android:layout_width="300dip"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="45dip"
+            android:layout_marginTop="45dip"
+            android:background="@drawable/list_click_item_selector"
+            android:text="中级" />
+
+        <Button
+            android:id="@+id/senior_level"
+            android:layout_width="300dip"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/middle_level"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/list_click_item_selector"
+            android:text="高级" />
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/item_select_dictate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/title_dictate"
+        android:horizontalSpacing="10dip"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="6"
+        android:verticalSpacing="10dip"
+        android:visibility="gone" >
+    </GridView>
+
+</RelativeLayout>

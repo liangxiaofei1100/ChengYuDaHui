@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1affffff"
-     >
+    android:background="#1affffff" >
 
     <TextView
         android:id="@+id/paint_chengyu_name"
@@ -39,14 +38,16 @@
                 android:layout_width="100dip"
                 android:layout_height="75dip"
                 android:clickable="true"
-                android:src="@drawable/cy_word" />
+                android:src="@drawable/short_btn_bg_selector" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@string/paint_clean"
-                android:textSize="20sp" />
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -58,14 +59,16 @@
                 android:layout_width="100dip"
                 android:layout_height="75dip"
                 android:clickable="true"
-                android:src="@drawable/cy_word" />
+                android:src="@drawable/short_btn_bg_selector" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@string/game_confirm"
-                android:textSize="20sp" />
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </RelativeLayout>
 
         <Button

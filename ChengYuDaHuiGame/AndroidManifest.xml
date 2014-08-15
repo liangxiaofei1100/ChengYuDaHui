@@ -179,7 +179,8 @@
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.DictateActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait" 
+            android:theme="@style/ActivityTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" />
@@ -188,14 +189,14 @@
             android:name="com.zhaoyan.juyou.game.chengyudahui.knowledge.KnowledgeMainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" />
-        <activity
-            android:name="com.zhaoyan.juyou.game.chengyudahui.knowledge.KnowledgeMainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ActivityTheme" />
         
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.BaikeActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.DictateMainActivity"
+            android:screenOrientation="portrait" 
+            android:theme="@style/ActivityTheme" />
 
         <provider
             android:name="com.zhaoyan.juyou.game.chengyudahui.db.ZyProvider"
