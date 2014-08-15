@@ -234,34 +234,33 @@
     </LinearLayout>
 
     <ScrollView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/dictate_show_result"
         android:layout_below="@+id/dictate_word_layout"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="15dip"
         android:scrollbars="vertical" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:padding="10dip" >
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/corner_rect_bg_selector"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingBottom="5dip"
-                android:paddingLeft="10dip"
-                android:paddingRight="10dip"
-                android:paddingTop="5dip" >
+                android:padding="10dip" >
 
                 <com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView
                     android:id="@+id/dictate_word_image"
-                    android:layout_width="300dip"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
@@ -385,8 +384,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/advert_layout"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="15dip"
         android:background="@drawable/list_click_item_selector"
         android:text="@string/show_result" />
