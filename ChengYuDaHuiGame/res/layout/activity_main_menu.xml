@@ -46,9 +46,9 @@
             android:layout_alignParentRight="true"
             android:clickable="true"
             android:padding="10dp"
-            android:src="@drawable/ic_settings_selector" 
             android:onClick="setting"
-            />
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_settings_selector" />
     </RelativeLayout>
 
     <LinearLayout

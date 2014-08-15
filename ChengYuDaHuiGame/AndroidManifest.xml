@@ -78,6 +78,13 @@
                 android:value="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" />
         </activity>
         <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ShareAppActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
+        </activity>
+        <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanAccountSettingActivity"
             android:theme="@style/Theme.Translucent" >
         </activity>
@@ -179,7 +186,8 @@
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.DictateActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait" 
+            android:theme="@style/ActivityTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" />
@@ -196,6 +204,10 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.BaikeActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.DictateMainActivity"
+            android:screenOrientation="portrait" 
+            android:theme="@style/ActivityTheme" />
 
         <provider
             android:name="com.zhaoyan.juyou.game.chengyudahui.db.ZyProvider"

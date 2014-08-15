@@ -46,7 +46,7 @@ import com.zhaoyan.juyou.bae.GetAppInfoBae;
 import com.zhaoyan.juyou.bae.GetAppInfoResultListener;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 
-public class GetAppActivity extends ListActivity implements OnItemClickListener {
+public class GetAppActivity extends ActionBarActivity implements OnItemClickListener {
 	private static final String TAG = "GetAppActivity";
 	private ListView mListView;
 
@@ -174,6 +174,8 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.get_app_main);
 		setTitle("应用下载");
+		
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		mAppReceiver = new AppReceiver();
 		IntentFilter filter = new IntentFilter();
@@ -194,7 +196,7 @@ public class GetAppActivity extends ListActivity implements OnItemClickListener 
 		
 		mDownloadChangeObserver = new DownloadChangeObserver();
 
-		mListView = getListView();
+		mListView = (ListView) findViewById(android.R.id.list);
 		ProgressBar loadingBar = (ProgressBar) findViewById(R.id.bar_info_loading);
 		mListView.setEmptyView(loadingBar);
 

@@ -10,6 +10,7 @@ import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -51,7 +52,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 	private Drawable mDrawable;
 	private float mX, mY;
 	private final float TOUCH_TOLERANCE = 4;
-	public static int mPaintWidth = 20, mCurrentColor = Color.BLACK;
+	public static int mPaintWidth = 16, mCurrentColor = Color.BLACK;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -241,18 +242,18 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 									// TODO Auto-generated method stub
 									switch (arg1) {
 									case 0:
-										mPaintWidth = 10;
+										mPaintWidth = 8;
 										break;
 									case 1:
-										mPaintWidth = 15;
+										mPaintWidth = 12;
 										break;
 									case 2:
-										mPaintWidth = 20;
+										mPaintWidth = 16;
 										break;
 									default:
 										break;
 									}
-									mPaint.setStrokeWidth(mPaintWidth);
+									mPaint.setStrokeWidth(DipToPixels(PaintGameActivty.this, mPaintWidth));
 									selectStyle.dismiss();
 									selectStyle = null;
 								}
@@ -302,20 +303,6 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 		finish();
 	}
 
-	public static Bitmap setAlpha(Bitmap sourceImg, int number) {
-		int[] argb = new int[sourceImg.getWidth() * sourceImg.getHeight()];
-		sourceImg.getPixels(argb, 0, sourceImg.getWidth(), 0, 0,
-				sourceImg.getWidth(), sourceImg.getHeight());// 获得图片的ARGB值
-		number = number * 255 / 100;
-		for (int i = 0; i < argb.length; i++) {
-			argb[0] = (number << 24) | (argb[0] & 0x00FFFFFF);// 修改最高2位的值
-		}
-		sourceImg = Bitmap.createBitmap(argb, sourceImg.getWidth(),
-				sourceImg.getHeight(), Config.ARGB_8888);
-
-		return sourceImg;
-	}
-
 	private void createBitmap() {
 		if (mPaintBitmap != null) {
 			mPaintBitmap.recycle();
@@ -328,7 +315,7 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 		}
 		mCanvas = new Canvas(mPaintBitmap);
 		mPaint = new Paint();
-		mPaint.setStrokeWidth(mPaintWidth);
+		mPaint.setStrokeWidth(DipToPixels(this, mPaintWidth));
 		mPaint.setAntiAlias(true);
 		mPaint.setDither(true);
 		mPaint.setColor(mCurrentColor);
@@ -341,9 +328,9 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 
 	private int getStyleIndex(int width) {
 		switch (width) {
-		case 15:
+		case 12:
 			return 1;
-		case 20:
+		case 16:
 			return 2;
 
 		default:
@@ -369,5 +356,15 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 			break;
 		}
 		return 0;
+	}
+
+	public int DipToPixels(Context context,final int dip) {
+		final float SCALE = context.getResources().getDisplayMetrics().density;
+
+		float valueDips = dip;
+		int valuePixels = (int) (valueDips * SCALE + 0.5f);
+		Log.e("ArbiterLiu", valuePixels + "@@@@@@@@@@@@@@@" + valueDips);
+		return valuePixels;
+
 	}
 }

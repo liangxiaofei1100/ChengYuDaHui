@@ -12,7 +12,7 @@
         android:clickable="false"
         android:focusable="false"
         android:scaleType="centerInside"
-        android:src="@drawable/cy_word"
+        android:src="@drawable/short_btn_bg_selector"
         />
 
     <TextView
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="泥"
-        android:textSize="18sp"
+        android:textSize="22sp"
         android:textColor="@android:color/black" />
 
 </RelativeLayout>
