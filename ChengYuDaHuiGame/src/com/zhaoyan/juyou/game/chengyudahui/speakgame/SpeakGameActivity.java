@@ -27,6 +27,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -34,13 +36,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class SpeakGameActivity extends Activity implements OnClickListener {
-	private Button mLocalBtn, mInterBtn, mStartGameBtn, mLocalRightBtn,
-			mLocalChangeBtn, mGameTimeSetting;
-	private View mModeSelectView, mLocalGameView, mInterGameView,
-			mGameSettingAndStartLayout;
+	private Button mLocalBtn, mInterBtn, mStartGameBtn, mGameTimeSetting;
+	private View mModeSelectView, mLocalGameView, mInterGameView, mBackView,
+			mGameSettingAndStartLayout, mLocalRightBtn, mLocalChangeBtn;
 	private int mGameMode = -1;// if 0 ,local mode; else if 1 ,Internet mode
 	private Random mRandom;
-	private TextView mLocalChengyuName, mLocalCountDown, mLocalInfoForChengyu;
+	private TextView mLocalChengyuName, mLocalCountDown, mLocalInfoForChengyu,
+			mRightTv, mNextTv;
 	private int mGameSocre, mRemainderTime;
 	private Timer mCountDownTimer;
 	private final int COUNT_DOWN = 0;
@@ -61,14 +63,18 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 		mLocalGameView = findViewById(R.id.local_game_layout);
 		mInterGameView = findViewById(R.id.internet_game_layout);
 		mStartGameBtn = (Button) findViewById(R.id.speak_game_start);
-		mLocalChangeBtn = (Button) findViewById(R.id.speak_game_next);
+		mLocalChangeBtn = findViewById(R.id.speak_game_next);
 		mLocalChengyuName = (TextView) findViewById(R.id.speak_chengyu_game_name);
-		mLocalRightBtn = (Button) findViewById(R.id.speak_game_right);
+		mLocalRightBtn = findViewById(R.id.speak_game_right);
 		mLocalCountDown = (TextView) findViewById(R.id.count_down);
 		mLocalCountDown.setText(GAME_TIME + "");
+		mRightTv = (TextView) findViewById(R.id.tv_right_speak);
+		mNextTv = (TextView) findViewById(R.id.tv_next_speak);
 		mLocalInfoForChengyu = (TextView) findViewById(R.id.info_for_chengyu);
 		mGameSettingAndStartLayout = findViewById(R.id.mode_setting_layout);
 		mGameTimeSetting = (Button) findViewById(R.id.speak_game_time_setting);
+		mBackView = findViewById(R.id.iv_back_speak);
+		mBackView.setOnClickListener(this);
 		mLocalBtn.setOnClickListener(this);
 		mInterBtn.setOnClickListener(this);
 		mStartGameBtn.setOnClickListener(this);
@@ -87,9 +93,17 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 			mGameMode = 0;
 			break;
 		case R.id.internet_mode:
-			mModeSelectView.setVisibility(View.GONE);
-			mGameSettingAndStartLayout.setVisibility(View.VISIBLE);
+			// mModeSelectView.setVisibility(View.GONE);
+			// mGameSettingAndStartLayout.setVisibility(View.VISIBLE);
+			//
+			//
+			//
 			mGameMode = 1;
+			Intent intent = new Intent();
+			intent.setClass(this, UserInfoSettingActivity.class);
+			intent.putExtra("Game", "speak");
+			startActivity(intent);
+
 			break;
 		case R.id.speak_game_start:// if mode==-1,change it to be 0,for local
 									// mode
@@ -140,6 +154,21 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 				mTimeSetting = builder.create();
 			}
 			mTimeSetting.show();
+			break;
+		case R.id.iv_back_speak:
+			if (mLocalGameView.getVisibility() == View.VISIBLE) {
+				mLocalGameView.setVisibility(View.GONE);
+				mModeSelectView.setVisibility(View.VISIBLE);
+				if (mCountDownTimer != null) {
+					mCountDownTimer.cancel();
+					mCountDownTimer = null;
+				}
+			} else if (mGameSettingAndStartLayout.getVisibility() == View.VISIBLE) {
+				mGameSettingAndStartLayout.setVisibility(View.GONE);
+				mModeSelectView.setVisibility(View.VISIBLE);
+			} else {
+				finish();
+			}
 			break;
 		default:
 			break;
@@ -291,6 +320,24 @@ public class SpeakGameActivity extends Activity implements OnClickListener {
 		cursor.close();
 		cursor = null;
 		return map;
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+			if (mLocalGameView.getVisibility() == View.VISIBLE) {
+				mLocalGameView.setVisibility(View.GONE);
+				mModeSelectView.setVisibility(View.VISIBLE);
+				if (mCountDownTimer != null) {
+					mCountDownTimer.cancel();
+					mCountDownTimer = null;
+				}
+				return true;
+			}
+		}
+
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override

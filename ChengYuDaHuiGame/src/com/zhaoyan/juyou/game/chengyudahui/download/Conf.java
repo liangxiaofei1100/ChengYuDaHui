@@ -5,23 +5,31 @@ public class Conf {
 	
 	public final static String APIKEY = "cd1EyW7zKA7ZmYuDunUnkBfG";
 	
+	//local path
 	public final static String ZHAOYAN_DIR = "zhaoyan";
 	
-    public final static String CLOUD_APP_LOCATION = "apps/";
-    public final static String CLOUD_ICON_LOCATION = "icons/";
-    public final static String CLOUD_INFO_LOCATION = "infos/";
-    public final static String LOCAL_APP_DOWNLOAD_DIR = "/apps";
-    public final static String LOCAL_AUDIO_DOWNLOAD_DIR = "/audio";
+    public final static String LOCAL_APP_DIR = "/apps";
+    public final static String LOCAL_STORY_DIR = "/story";
+    //local path
     
     public final static String SHARED_PREFS_NAME = "dlapp";
     public static final String KEY_NAME_DOWNLOAD_ID = "downloadId";
     public static final String KEY_NAME_ITEM_POSITION = "item_position";
     public static final String KEY_NAME_LAST_STATUS = "last_status";
     
+    //cloud path
     public static final String URL_EX = "http://bcs.duapp.com/bccd1eyw7zka7zmyudununkbfgmbaas/";
-    public static final String LISTEN_DIR = "listen_pic/";
-    public static final String AUDIO_DIR = "audio/";
-    public static final String AUDIO_URL_EX = URL_EX + AUDIO_DIR;
+    public final static String CLOUD_APP_DIR = "apps/";
+    public final static String CLOUD_ICON_DIR = "icons/";
+    public final static String CLOUD_INFO_DIR = "infos/";
+    public static final String CLOUD_LISTEN_DIR = "listen_pic/";
+    public static final String CLOUD_STORY_DIR = "story/";
+    
+    public static final String APP_URL_EX = URL_EX + CLOUD_APP_DIR;
+    public static final String ICON_URL_EX = URL_EX + CLOUD_ICON_DIR;
+    public static final String LISTEN_URL_EX = URL_EX + CLOUD_LISTEN_DIR;
+    public static final String STORY_URL_EX = URL_EX + CLOUD_STORY_DIR;
+    //cloud path
     
     public static final String ACTION_CANCEL_DOWNLOAD = "com.zhaoyan.cancel.download";
     public static final String ACTION_START_DOWNLOAD = "com.zhaoyan.start.download";

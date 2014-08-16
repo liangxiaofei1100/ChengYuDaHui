@@ -1,234 +1,346 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <RelativeLayout
-        android:id="@+id/loading_layout"
+        android:id="@+id/title_top_speak_in"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="30dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/title_top_bg" >
 
         <TextView
-            android:id="@+id/loading_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="30dip"
-            android:text="@string/game_loading"
-            android:textSize="40sp" />
+            android:id="@+id/tv_jifen_speak"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@drawable/ic_jifen"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="0" />
 
-        <LinearLayout
-            android:id="@+id/setting_rule_speak"
+        <TextView
+            android:id="@+id/tv_gold_speak"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/tv_jifen_dictate"
+            android:drawableLeft="@drawable/ic_gold"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="0" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/title_speak_in"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/title_top_speak_in"
+        android:background="@drawable/title_chengyu_bg" >
+
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dip"
-                android:text="@string/speak_game_rule_setting"
-                android:textSize="25sp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/speak_right_number"
-                    android:textSize="20sp" />
-
-                <EditText
-                    android:id="@+id/speak_right_number_edit"
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="@string/speak_game_number_unit"
-                    android:inputType="number" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/speak_pass_number"
-                    android:textSize="20sp" />
-
-                <EditText
-                    android:id="@+id/speak_pass_number_edit"
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="@string/speak_game_number_unit"
-                    android:inputType="number" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/speak_wrong_number"
-                    android:textSize="20sp" />
-
-                <EditText
-                    android:id="@+id/speak_wrong_number_edit"
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="@string/speak_game_number_unit"
-                    android:inputType="number" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/speak_game_time"
-                    android:textSize="20sp" />
-
-                <EditText
-                    android:id="@+id/speak_time_setting_edit"
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="@string/setting_time_unit"
-                    android:inputType="number" />
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/rule_start"
-                android:layout_width="150dip"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dip"
-                android:gravity="center"
-                android:text="@string/start_game" />
-        </LinearLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/select_role_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" >
-
-        <TextView
-            android:id="@+id/info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textSize="25sp"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/referee_internet_game"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/actor_internet_game"
-            android:layout_centerHorizontal="true"
-            android:text="@string/referee"
-            android:textSize="40sp" />
-
-        <Button
-            android:id="@+id/actor_internet_game"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/actor"
-            android:textSize="40sp" />
-
-        <Button
-            android:id="@+id/observer_internet_game"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/actor_internet_game"
-            android:layout_centerHorizontal="true"
-            android:text="@string/observer"
-            android:textSize="40sp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/internet_game_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" >
-
-        <TextView
-            android:id="@+id/internet_count_down"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="@string/count_down_sample"
+            android:text="成语大会"
+            android:textColor="@android:color/black"
             android:textSize="25sp"
             android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/iv_back_speak_in"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:clickable="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_back_selector" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title_speak_in"
+        android:layout_marginBottom="10dip"
+        android:background="@drawable/activity_middle" >
+
         <RelativeLayout
+            android:id="@+id/loading_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/internet_count_down" >
+            android:layout_height="match_parent" >
 
             <TextView
-                android:id="@+id/internet_speak_chengyu_game_name"
+                android:id="@+id/loading_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:textSize="40sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/internet_speak_chengyu_game_name"
-                android:layout_centerHorizontal="true"
-                android:orientation="horizontal" >
-
-                <Button
-                    android:id="@+id/internet_speak_game_next"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/game_next"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/internet_speak_game_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/game_right"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/internet_info_for_chengyu"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:textSize="20sp" />
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="30dip"
+                android:background="@drawable/short_btn_bg_selector"
+                android:text="@string/game_loading"
+                android:textSize="40sp" />
+
+            <LinearLayout
+                android:id="@+id/setting_rule_speak"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dip"
+                    android:background="@drawable/short_btn_bg_selector"
+                    android:text="@string/speak_game_rule_setting"
+                    android:textSize="25sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/short_btn_bg_selector"
+                        android:gravity="center"
+                        android:text="@string/speak_right_number"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/speak_right_number_edit"
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:hint="@string/speak_game_number_unit"
+                        android:inputType="number" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/short_btn_bg_selector"
+                        android:gravity="center"
+                        android:text="@string/speak_pass_number"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/speak_pass_number_edit"
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:hint="@string/speak_game_number_unit"
+                        android:inputType="number" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/short_btn_bg_selector"
+                        android:gravity="center"
+                        android:text="@string/speak_wrong_number"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/speak_wrong_number_edit"
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:hint="@string/speak_game_number_unit"
+                        android:inputType="number" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/short_btn_bg_selector"
+                        android:gravity="center"
+                        android:text="@string/speak_game_time"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/speak_time_setting_edit"
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:hint="@string/setting_time_unit"
+                        android:inputType="number" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/rule_start"
+                    android:layout_width="150dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dip"
+                    android:background="@drawable/list_click_item_selector"
+                    android:gravity="center"
+                    android:text="@string/start_game" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/select_role_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/short_btn_bg_selector"
+                android:textSize="25sp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/referee_internet_game"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/actor_internet_game"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/list_click_item_selector"
+                android:text="@string/referee"
+                android:textSize="40sp" />
+
+            <Button
+                android:id="@+id/actor_internet_game"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/list_click_item_selector"
+                android:text="@string/actor"
+                android:textSize="40sp" />
+
+            <Button
+                android:id="@+id/observer_internet_game"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/actor_internet_game"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/list_click_item_selector"
+                android:text="@string/observer"
+                android:textSize="40sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/internet_game_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/internet_count_down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dip"
+                android:background="@drawable/short_btn_bg_selector"
+                android:text="@string/count_down_sample"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/internet_count_down" >
+
+                <TextView
+                    android:id="@+id/internet_speak_chengyu_game_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/short_btn_bg_selector"
+                    android:textSize="60sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/internet_speak_chengyu_game_name"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="vertical" >
+
+                    <RelativeLayout
+                        android:id="@+id/internet_next_layout"
+                        android:layout_width="200dip"
+                        android:layout_height="50dip" >
+
+                        <ImageView
+                            android:id="@+id/internet_speak_game_next"
+                            android:layout_width="200dip"
+                            android:layout_height="50dip"
+                            android:clickable="true"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/short_btn_bg_selector" />
+
+                        <TextView
+                            android:id="@+id/tv_next_speak_internet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="@string/game_next"
+                            android:textColor="@android:color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/internet_right_layout"
+                        android:layout_width="200dip"
+                        android:layout_height="50dip"
+                        android:layout_marginTop="10dip" >
+
+                        <ImageView
+                            android:id="@+id/internet_speak_game_right"
+                            android:layout_width="200dip"
+                            android:layout_height="50dip"
+                            android:clickable="true"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/short_btn_bg_selector" />
+
+                        <TextView
+                            android:id="@+id/tv_right_speak_internet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="@string/game_right"
+                            android:textColor="@android:color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/internet_info_for_chengyu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="5dip"
+                    android:background="@drawable/short_btn_bg_selector"
+                    android:textSize="16sp" />
+            </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
 
-</FrameLayout>
+</RelativeLayout>

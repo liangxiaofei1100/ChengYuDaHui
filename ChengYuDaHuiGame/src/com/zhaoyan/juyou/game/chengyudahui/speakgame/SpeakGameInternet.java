@@ -39,10 +39,11 @@ import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGame
 public class SpeakGameInternet extends Activity implements OnClickListener,
 		OnCommunicationListenerExternal {
 	private View mLoadingView, mSelectRoleView, mGameView, mRuleSettingView,
-			mLoadingText;
-	private TextView infoText, mCountDownText, mGameWordText, mGameWordInfo;
-	private Button mRefereeBtn, mActorBtn, mObserverBtn, mGameRightBtn,
-			mGameNextBtn, mRuleStartBtn;
+			mLoadingText, mGameNextBtn, mGameRightBtn, rightLayout, nextLayout,
+			mBackView;
+	private TextView infoText, mCountDownText, mGameWordText, mGameWordInfo,
+			mRigntTv, mNextTv;
+	private Button mRefereeBtn, mActorBtn, mObserverBtn, mRuleStartBtn;
 	private EditText mTimeEditText, mRightNumberEditText, mWrongNumberEditText,
 			mPassNumberEditText;
 	private ProtocolCommunication mProtocolCommunication;
@@ -106,7 +107,6 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 				break;
 			case READY_START:
 				infoText.setText(getString(R.string.start_game));
-				infoText.setBackgroundColor(Color.BLUE);
 				infoText.setClickable(true);
 				infoText.setOnClickListener(new OnClickListener() {
 					@Override
@@ -186,17 +186,17 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 
 		}
 		if (mRoleType == RoleType.REFEREE) {
-			mGameNextBtn.setText("错误");
+			mNextTv.setText("错误");
 		}
 		if (mRoleType == RoleType.OBSERVER) {
-			mGameNextBtn.setVisibility(View.GONE);
+			nextLayout.setVisibility(View.GONE);
 			mGameWordText.setVisibility(View.INVISIBLE);
-			mGameRightBtn.setText("提示");
-			mGameWordInfo.setVisibility(View.INVISIBLE);
+			mRigntTv.setText("提示");
+			mRigntTv.setVisibility(View.INVISIBLE);
 		}
 		if (mRoleType == RoleType.ACTOR) {
-			mGameRightBtn.setText("略过");
-			mGameNextBtn.setVisibility(View.GONE);
+			mRigntTv.setText("略过");
+			nextLayout.setVisibility(View.GONE);
 		}
 	}
 
@@ -265,8 +265,12 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 		mGameView = findViewById(R.id.internet_game_layout);
 		infoText = (TextView) findViewById(R.id.info);
 		mCountDownText = (TextView) findViewById(R.id.internet_count_down);
-		mGameNextBtn = (Button) findViewById(R.id.internet_speak_game_next);
-		mGameRightBtn = (Button) findViewById(R.id.internet_speak_game_right);
+		mGameNextBtn = findViewById(R.id.internet_speak_game_next);
+		mGameRightBtn = findViewById(R.id.internet_speak_game_right);
+		mRigntTv = (TextView) findViewById(R.id.tv_right_speak_internet);
+		mNextTv = (TextView) findViewById(R.id.tv_next_speak_internet);
+		rightLayout = findViewById(R.id.internet_right_layout);
+		nextLayout = findViewById(R.id.internet_next_layout);
 		mGameWordText = (TextView) findViewById(R.id.internet_speak_chengyu_game_name);
 		mGameWordInfo = (TextView) findViewById(R.id.internet_info_for_chengyu);
 		mRuleSettingView = findViewById(R.id.setting_rule_speak);
@@ -276,12 +280,14 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 		mWrongNumberEditText = (EditText) findViewById(R.id.speak_wrong_number_edit);
 		mPassNumberEditText = (EditText) findViewById(R.id.speak_pass_number_edit);
 		mLoadingText = findViewById(R.id.loading_text);
+		mBackView = findViewById(R.id.iv_back_speak_in);
 		mRefereeBtn.setOnClickListener(this);
 		mActorBtn.setOnClickListener(this);
 		mObserverBtn.setOnClickListener(this);
 		mGameNextBtn.setOnClickListener(this);
 		mGameRightBtn.setOnClickListener(this);
 		mRuleStartBtn.setOnClickListener(this);
+		mBackView.setOnClickListener(this);
 	}
 
 	private void showSelectRole() {
@@ -373,6 +379,9 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 		case R.id.rule_start:
 			initRule();
 			return;
+		case R.id.iv_back_speak_in:
+			finish();
+			return;
 		default:
 			type = RoleType.OBSERVER;
 			break;
@@ -426,7 +435,7 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 			readyFlag = true;
 			if (!isMainServer) {
 				try {
-					Thread.sleep(100);
+					Thread.sleep(1000);
 				} catch (Exception exception) {
 				}
 				sendMessage(Command.READY, 0, RoleType.UNKONWN, 0,
@@ -615,7 +624,6 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 	 * maybe return null ,please check the return value
 	 * */
 	private Map<String, String> getChengyuRandom(int id) {
-		Log.e("ArbiterLiu", "id                " + id);
 		if (id < 1) {
 			if (mRandom == null)
 				mRandom = new Random();
@@ -625,9 +633,7 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 				ChengyuColums.CONTENT_URI,
 				new String[] { ChengyuColums.NAME, ChengyuColums.PINYIN,
 						ChengyuColums.COMMENT, ChengyuColums.ORIGINAL,
-						ChengyuColums.EXAMPLE, ChengyuColums.ENGLISH,
-						ChengyuColums.SIMILAR, ChengyuColums.OPPOSITE },
-				"_id = " + id, null, null);
+						ChengyuColums.EXAMPLE }, "_id = " + id, null, null);
 		if (cursor != null) {
 			if (cursor.moveToNext()) {
 				Map<String, String> map = new HashMap<String, String>();
@@ -651,14 +657,13 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 			mRandom = new Random();
 		if (id < 1) {
 			if (chengyuCursor == null) {
-				chengyuCursor = getContentResolver()
-						.query(ChengyuColums.CONTENT_URI,
-								new String[] { ChengyuColums.NAME,
-										ChengyuColums.PINYIN,
-										ChengyuColums.COMMENT,
-										ChengyuColums.ORIGINAL,
-										ChengyuColums.EXAMPLE },
-								ChengyuColums.CAICI + " = 1", null, null);
+				chengyuCursor = getContentResolver().query(
+						ChengyuColums.CONTENT_URI,
+						new String[] { ChengyuColums.NAME,
+								ChengyuColums.PINYIN, ChengyuColums.COMMENT,
+								ChengyuColums.ORIGINAL, ChengyuColums.EXAMPLE,
+								"_id" }, ChengyuColums.CAICI + " = 1", null,
+						null);
 				if (chengyuCursor == null) {
 					Log.e(SpeakGameInternet.class.getSimpleName(),
 							"can not find the caici word");
@@ -673,6 +678,7 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 			map.put(ChengyuColums.COMMENT, chengyuCursor.getString(2));
 			map.put(ChengyuColums.ORIGINAL, chengyuCursor.getString(3));
 			map.put(ChengyuColums.EXAMPLE, chengyuCursor.getString(4));
+			wordId = chengyuCursor.getInt(5);
 			chengyuCursor.close();
 			chengyuCursor = null;
 			return map;
@@ -715,10 +721,10 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 
 	private void resetGameView() {
 		overFlag = true;
-		mGameRightBtn.setText("重来");
-		mGameNextBtn.setText("结束");
-		mGameNextBtn.setVisibility(View.VISIBLE);
-		mGameRightBtn.setVisibility(View.VISIBLE);
+		mRigntTv.setText("重来");
+		mNextTv.setText("结束");
+		nextLayout.setVisibility(View.VISIBLE);
+		rightLayout.setVisibility(View.VISIBLE);
 	}
 
 	private void ruleSetting() {

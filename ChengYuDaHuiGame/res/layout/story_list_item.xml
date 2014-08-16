@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_click_item_selector"
+    >
+    
+    <TextView 
+        android:id="@+id/story_item_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="24dp"
+        android:paddingTop="10dp"
+    	android:paddingBottom="10dp"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:text="第一回"
+        />
+    
+    <ImageView 
+        android:id="@+id/story_item_iv_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/game_stage_lock"
+        />
+
+</RelativeLayout>
