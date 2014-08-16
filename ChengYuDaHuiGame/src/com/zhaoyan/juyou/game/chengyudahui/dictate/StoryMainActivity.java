@@ -25,7 +25,7 @@ public class StoryMainActivity extends ActionBarActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.story_main);
-		setTitle("中华好故事");
+		setTitle("天天听故事");
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
