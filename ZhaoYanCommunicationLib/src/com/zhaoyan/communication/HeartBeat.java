@@ -82,8 +82,12 @@ public class HeartBeat {
 		}
 		mIsStarted = false;
 		mIsStoped = true;
-		mSendTimer.cancel();
-		mReceiveTimer.cancel();
+		if (mSendTimer != null) {
+			mSendTimer.cancel();
+		}
+		if (mReceiveTimer != null) {
+			mReceiveTimer.cancel();
+		}
 		mSendTimer = null;
 		mReceiveTimer = null;
 	}

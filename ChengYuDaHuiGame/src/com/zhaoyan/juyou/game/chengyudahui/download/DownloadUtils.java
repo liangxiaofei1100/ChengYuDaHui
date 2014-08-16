@@ -23,8 +23,14 @@ public class DownloadUtils {
 	}
 	
 	public static long downloadApp(Context context, DownloadManager dm, AppInfo appInfo){
+		// Check storage remain size.
+		boolean isStorageSizeAvailable = checkStorageRemainSize(context, appInfo.getAppSize());
+		if (!isStorageSizeAvailable) {
+			return -1;
+		}
+		
 		String remotePath = appInfo.getAppUrl();
-		String localPath = DownloadUtils.getLocalFilePath(context, appInfo.getAppSize(), remotePath);
+		String localPath = DownloadUtils.getLocalFilePath(remotePath);
 		if (localPath == null) {
 			return -1;
 		}
@@ -46,6 +52,22 @@ public class DownloadUtils {
         PreferencesUtils.putLong(context, Conf.KEY_NAME_DOWNLOAD_ID, downloadId);
         
         return downloadId;
+	}
+
+	private static boolean checkStorageRemainSize(Context context, long fileSize) {
+		String sdCardPathString = Environment.getExternalStorageDirectory()
+				.getPath();
+		long aviable = Utils.getAvailableBlockSize(sdCardPathString);
+		if (aviable <= fileSize) {
+			String fileSizeStr = Utils.getFormatSize(fileSize);
+			String availableStr = Utils.getFormatSize(aviable);
+			Toast.makeText(
+					context,
+					"可用空间不足" + "\n" + "文件大小:" + fileSizeStr + "\n" + "可用空间:"
+							+ availableStr, Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		return true;
 	}
 	
 	public static long downloadAudio(Context context, DownloadManager dm, long size, String name){
@@ -72,27 +94,14 @@ public class DownloadUtils {
 	
 	/**
 	 * is sdcard space is full</br>
-	 * @param context
-	 * @param filesize
 	 * @return local file path
 	 */
-	public static String getLocalFilePath(Context context, long filesize, String remotePath){
+	public static String getLocalFilePath(String remotePath){
 		String sdCardPathString = Environment.getExternalStorageDirectory()
 				.getPath();
 		if (!new File(sdCardPathString).exists()) {
 			new File(sdCardPathString).mkdirs();
 		}
-		long aviable = Utils.getAvailableBlockSize(sdCardPathString);
-		if (aviable <= filesize) {
-			String fileSizeStr = Utils.getFormatSize(filesize);
-			String availableStr = Utils.getFormatSize(aviable);
-			Toast.makeText(
-					context,
-					"可用空间不足" + "\n" + "文件大小:" + fileSizeStr + "\n" + "可用空间:"
-							+ availableStr, Toast.LENGTH_SHORT).show();
-			return null;
-		}
-
 		int index = remotePath.lastIndexOf('/');
 		String appName = remotePath.substring(index + 1);
 		

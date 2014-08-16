@@ -62,6 +62,8 @@ public class JuYouService extends Service {
 		SocketCommunicationManager.getInstance().init(mContext);
 		// Initialize ProtocolCommunication
 		ProtocolCommunication.getInstance().init(mContext);
+		
+		startFileTransferServer(mContext);
 	}
 
 	private void stopCommunication() {
@@ -103,7 +105,13 @@ public class JuYouService extends Service {
 		serverSearcher.stopSearch(ServerSearcher.SERVER_TYPE_ALL);
 		serverSearcher.release();
 	}
-
+	
+	private static void startFileTransferServer(Context context) {
+		Intent intent = new Intent();
+		intent.setClass(context, FileTransferService.class);
+		context.startService(intent);
+	}
+	
 	private static void stopFileTransferService(Context context) {
 		Intent intent = new Intent();
 		intent.setClass(context, FileTransferService.class);

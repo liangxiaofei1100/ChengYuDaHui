@@ -4,6 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.zhaoyan.communication.UserHelper;
+import com.zhaoyan.communication.UserInfo;
+import com.zhaoyan.communication.UserManager;
+import com.zhaoyan.communication.ipc.aidl.User;
+import com.zhaoyan.communication.protocol.UserInfoUtil;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.account.bae.FindPassword;
 import com.zhaoyan.juyou.account.bae.GetUserInfo;
@@ -42,6 +47,15 @@ public class ZhaoYanAccountManager {
 		editor.putInt("gold", account.gold);
 		editor.putInt("jifen", account.jifen);
 		editor.commit();
+		UserInfo userInfo = UserHelper.loadLocalUser(context);
+		if (userInfo == null) {
+			userInfo = new UserInfo();
+			User user = new User();
+			user.setUserName(account.userName);
+			userInfo.setUser(user);
+			userInfo.setType(com.zhaoyan.communication.provider.ZhaoYanCommunicationData.User.TYPE_LOCAL);
+		}
+		UserHelper.saveLocalUser(context, userInfo);
 	}
 
 	public static void deleteLocalAccount(Context context) {

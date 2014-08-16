@@ -1,5 +1,6 @@
 package com.zhaoyan.juyou.game.chengyudahui.download;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -30,7 +32,7 @@ public class ShareAppActivity extends ActionBarActivity {
 	private List<AppInfo> mAppList = new ArrayList<AppInfo>();
 
 	private Toast mToast;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -104,7 +106,8 @@ public class ShareAppActivity extends ActionBarActivity {
 							appInfo.setAppLocalPath(localPath);
 						}
 
-						if (appInfo.getStatus() == Conf.INSTALLED) {
+						File file = new File(DownloadUtils.getLocalFilePath(appInfo.getAppUrl()));
+						if (appInfo.getStatus() == Conf.INSTALLED && file.exists()) {
 							mAppList.add(appInfo);
 						}
 					}

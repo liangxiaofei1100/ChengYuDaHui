@@ -301,7 +301,7 @@ public class FileTransferService extends Service implements
 			mFileSender = mProtocolCommunication.sendFile(file,
 					FileTransferService.this, receiveUser, mAppId, key);
 			// when send a file,notify othes that need to know
-			sendBroadcastForNotify(true);
+//			sendBroadcastForNotify(true);
 		}
 
 		public User getReceiveUser() {
@@ -423,7 +423,7 @@ public class FileTransferService extends Service implements
 
 		fileReceiver.receiveFile(file, FileTransferService.this, key);
 		// when receive a file,notify othes that need to know
-		sendBroadcastForNotify(true);
+//		sendBroadcastForNotify(true);
 	}
 
 	@Override
@@ -498,6 +498,7 @@ public class FileTransferService extends Service implements
 		mUriMap.remove(getFileUri(key).toString());
 		mTransferMap.remove(key);
 		mFileReceiverMap.remove(key);
+		sendBroadcastForNotify(true);
 	}
 
 	@Override

@@ -176,9 +176,14 @@ public class ShareAppAdapter extends BaseAdapter {
 			MsgData msgData = (MsgData) v.getTag();
 			int position = msgData.position;
 			int status = msgData.status;
+
+			String appFilePath = DownloadUtils.getLocalFilePath(mDataList.get(
+					position).getAppUrl());
+
 			Intent intent = new Intent(mContext, ShareAppServerActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-			intent.putExtra(ShareAppServerActivity.EXTRA_APP_FILE_NAME, "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
+			intent.putExtra(ShareAppServerActivity.EXTRA_APP_FILE_PATH,
+					appFilePath);
 			mContext.startActivity(intent);
 		}
 
