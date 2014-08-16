@@ -49,7 +49,7 @@ public class DownloadUtils {
 	}
 	
 	public static long downloadAudio(Context context, DownloadManager dm, long size, String name){
-		String remoteUrl = Conf.AUDIO_URL_EX + name;
+		String remoteUrl = Conf.STORY_URL_EX + name;
 		
 		//需要对sdcard剩余空间作判断
 		String localPath = getAUdioLocalPath(context, size, name);
@@ -96,7 +96,7 @@ public class DownloadUtils {
 		int index = remotePath.lastIndexOf('/');
 		String appName = remotePath.substring(index + 1);
 		
-		String localDir = sdCardPathString + "/" + Conf.ZHAOYAN_DIR + Conf.LOCAL_APP_DOWNLOAD_DIR;
+		String localDir = sdCardPathString + "/" + Conf.ZHAOYAN_DIR + Conf.LOCAL_APP_DIR;
 		if (!new File(localDir).exists()) {
 			new File(localDir).mkdirs();
 		}
@@ -118,7 +118,7 @@ public class DownloadUtils {
 			return null;
 		}
 		
-		String localDir = sdCardPathString + "/" + Conf.ZHAOYAN_DIR + Conf.LOCAL_AUDIO_DOWNLOAD_DIR;
+		String localDir = sdCardPathString + "/" + Conf.ZHAOYAN_DIR + Conf.LOCAL_STORY_DIR;
 		if (!new File(localDir).exists()) {
 			new File(localDir).mkdirs();
 		}

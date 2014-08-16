@@ -71,26 +71,29 @@
         <Button
             android:id="@+id/junior_level"
             android:layout_width="300dip"
-            android:layout_height="wrap_content"
+            android:layout_height="75dip"
             android:layout_above="@+id/middle_level"
             android:layout_centerHorizontal="true"
             android:background="@drawable/list_click_item_selector"
+            android:textSize="35sp"
             android:text="初级" />
 
         <Button
             android:id="@+id/middle_level"
             android:layout_width="300dip"
-            android:layout_height="wrap_content"
+            android:layout_height="75dip"
             android:layout_centerInParent="true"
             android:layout_marginBottom="45dip"
             android:layout_marginTop="45dip"
+            android:textSize="35sp"
             android:background="@drawable/list_click_item_selector"
             android:text="中级" />
 
         <Button
             android:id="@+id/senior_level"
             android:layout_width="300dip"
-            android:layout_height="wrap_content"
+            android:layout_height="75dip"
+            android:textSize="35sp"
             android:layout_below="@+id/middle_level"
             android:layout_centerHorizontal="true"
             android:background="@drawable/list_click_item_selector"
@@ -98,14 +101,15 @@
     </RelativeLayout>
 
     <GridView
+        android:padding="10dip"
         android:id="@+id/item_select_dictate"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/title_dictate"
-        android:horizontalSpacing="10dip"
+        android:horizontalSpacing="20dip"
         android:listSelector="@android:color/transparent"
         android:numColumns="4"
-        android:verticalSpacing="10dip"
+        android:verticalSpacing="20dip"
         android:visibility="gone" >
     </GridView>
 

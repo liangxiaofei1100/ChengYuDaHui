@@ -80,7 +80,10 @@ public class DictateMainActivity extends Activity implements OnClickListener {
 			return;
 		case R.id.junior_level:
 			mLevelString = "初级";
-			break;
+			Intent intent = new Intent();
+			intent.setClass(this, StoryMainActivity.class);
+			startActivity(intent);
+			return;
 		case R.id.middle_level:
 			mLevelString = "中级";
 			break;

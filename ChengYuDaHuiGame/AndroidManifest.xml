@@ -49,8 +49,8 @@
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.FeedBackChengYuActivity"
-            android:screenOrientation="portrait" 
-            android:theme="@style/Theme.Translucent">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Translucent" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.zhaoyan.juyou.game.chengyudahui.activity.ChengYuDictionary" />
@@ -160,7 +160,7 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@style/ActivityTheme" >
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.study.StudyActivity"
@@ -173,7 +173,7 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameInternet"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@style/ActivityTheme" />
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.QRCodeDisplayActivity"
             android:screenOrientation="portrait" />
@@ -186,7 +186,7 @@
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.DictateActivity"
-            android:screenOrientation="portrait" 
+            android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -210,7 +210,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.DictateMainActivity"
-            android:screenOrientation="portrait" 
+            android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" />
 
         <provider
