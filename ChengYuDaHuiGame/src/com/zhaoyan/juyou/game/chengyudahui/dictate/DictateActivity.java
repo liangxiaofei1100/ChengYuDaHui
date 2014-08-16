@@ -160,15 +160,29 @@ public class DictateActivity extends Activity implements OnClickListener {
 			return;
 		}
 		if (level == null)
-			level = "初级";
-		mWordCursor = getContentResolver().query(
-				DictateColums.CONTENT_URI,
-				new String[] { "_id", DictateColums.NAME, DictateColums.PINYIN,
-						DictateColums.COMMENT, DictateColums.DICTATE,
-						DictateColums.ORIGINAL, DictateColums.EXAMPLE,
-						DictateColums.IMG_DES, DictateColums.LEVEL,
-						DictateColums.ALLUSION, DictateColums.RESULT },
-				DictateColums.LEVEL + " = '" + level + "'", null, null);
+			level = "高级";
+		if (level.equals("高级")) {
+
+			mWordCursor = getContentResolver().query(
+					DictateColums.CONTENT_URI,
+					new String[] { "_id", DictateColums.NAME,
+							DictateColums.PINYIN, DictateColums.COMMENT,
+							DictateColums.DICTATE, DictateColums.ORIGINAL,
+							DictateColums.EXAMPLE, DictateColums.IMG_DES,
+							DictateColums.LEVEL, DictateColums.ALLUSION,
+							DictateColums.RESULT },
+					DictateColums.LEVEL + " = '" + level + "'", null, null);
+		} else {
+			mWordCursor = getContentResolver().query(
+					DictateColums.CONTENT_URI,
+					new String[] { "_id", DictateColums.NAME,
+							DictateColums.PINYIN, DictateColums.COMMENT,
+							DictateColums.DICTATE, DictateColums.ORIGINAL,
+							DictateColums.EXAMPLE, DictateColums.IMG_DES,
+							DictateColums.LEVEL, DictateColums.ALLUSION,
+							DictateColums.RESULT },
+					DictateColums.LEVEL + " != '高级'", null, null);
+		}
 		if (mWordCursor != null && mWordCursor.getCount() > 0) {
 			if (wordInCursor > 0)
 				mWordCursor.move(wordInCursor);
