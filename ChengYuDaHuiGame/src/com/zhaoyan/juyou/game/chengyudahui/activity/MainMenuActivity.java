@@ -15,6 +15,7 @@ import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.dictate.DictateActivity;
 import com.zhaoyan.juyou.game.chengyudahui.dictate.DictateMainActivity;
 import com.zhaoyan.juyou.game.chengyudahui.knowledge.KnowledgeMainActivity;
+import com.zhaoyan.juyou.game.chengyudahui.service.MusicPlayerTestActivity;
 import com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameActivity;
 import com.zhaoyan.juyou.game.chengyudahui.spy.SpyMainActivity;
 
@@ -98,6 +99,13 @@ public class MainMenuActivity extends Activity {
 	public void launchJifen(View view) {
 		Log.d(TAG, "launchJifen");
 		Intent intent = new Intent(mContext, GetGoldActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+		startActivity(intent);
+	}
+	
+	public void setting(View view){
+		Log.d(TAG, "launchsetting");
+		Intent intent = new Intent(mContext, MusicPlayerTestActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 		startActivity(intent);
 	}

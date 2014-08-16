@@ -300,9 +300,12 @@ public class DictateActivity extends Activity implements OnClickListener {
 			ContentValues values = new ContentValues();
 			values.put(DictateColums.RESULT, result);
 			try {
-				return getContentResolver()
-						.update(DictateColums.CONTENT_URI, values,
-								DictateColums.NAME + " = '" + mWord + "'", null);
+				return getContentResolver().update(
+						DictateColums.CONTENT_URI,
+						values,
+						" _id = '"
+								+ mWordCursor.getInt(mWordCursor
+										.getColumnIndex("_id")) + "'", null);
 			} catch (Exception e) {
 				Log.e(DictateActivity.class.getSimpleName(),
 						"update result exception : " + e.toString());

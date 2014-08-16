@@ -48,6 +48,28 @@ public class DownloadUtils {
         return downloadId;
 	}
 	
+	public static long downloadAudio(Context context, DownloadManager dm, long size, String name){
+		String remoteUrl = Conf.AUDIO_URL_EX + name;
+		
+		//需要对sdcard剩余空间作判断
+		String localPath = getAUdioLocalPath(context, size, name);
+		
+		Log.d(TAG, "remoteUrl:" + remoteUrl);
+		Uri downloadUri = Uri.parse(remoteUrl);
+		Uri localUri = Uri.parse("file://" + localPath);
+		
+		DownloadManager.Request request = new DownloadManager.Request(downloadUri);
+		request.setDestinationUri(localUri);
+        request.setTitle("应用下载:" + name);
+        //下载完毕后，保留通知栏信息
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
+        request.setVisibleInDownloadsUi(false);
+        request.setMimeType("application/com.chenyu.download.file");
+        long downloadId = dm.enqueue(request);
+        /** save download id to preferences **/
+        return downloadId;
+	}
+	
 	/**
 	 * is sdcard space is full</br>
 	 * @param context
@@ -74,12 +96,34 @@ public class DownloadUtils {
 		int index = remotePath.lastIndexOf('/');
 		String appName = remotePath.substring(index + 1);
 		
-		String localDir = sdCardPathString + Conf.LOCAL_APP_DOWNLOAD_PATH;
+		String localDir = sdCardPathString + "/" + Conf.ZHAOYAN_DIR + Conf.LOCAL_APP_DOWNLOAD_DIR;
 		if (!new File(localDir).exists()) {
 			new File(localDir).mkdirs();
 		}
 		
-		String nativePath = sdCardPathString+Conf.LOCAL_APP_DOWNLOAD_PATH+"/" + appName;
+		String nativePath = localDir +"/" + appName;
+		return nativePath;
+	}
+	
+	public static String getAUdioLocalPath(Context context, long size, String name){
+		String sdCardPathString = Environment.getExternalStorageDirectory().getAbsolutePath();
+		long aviable = Utils.getAvailableBlockSize(sdCardPathString);
+		if (aviable <= size) {
+			String fileSizeStr = Utils.getFormatSize(size);
+			String availableStr = Utils.getFormatSize(aviable);
+			Toast.makeText(
+					context,
+					"可用空间不足" + "\n" + "文件大小:" + fileSizeStr + "\n" + "可用空间:"
+							+ availableStr, Toast.LENGTH_SHORT).show();
+			return null;
+		}
+		
+		String localDir = sdCardPathString + "/" + Conf.ZHAOYAN_DIR + Conf.LOCAL_AUDIO_DOWNLOAD_DIR;
+		if (!new File(localDir).exists()) {
+			new File(localDir).mkdirs();
+		}
+		
+		String nativePath = localDir +"/" + name;
 		return nativePath;
 	}
 
