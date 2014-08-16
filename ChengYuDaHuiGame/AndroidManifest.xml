@@ -200,6 +200,10 @@
             android:name="com.zhaoyan.juyou.game.chengyudahui.service.MusicPlayerTestActivity"
             android:screenOrientation="portrait"
              />
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.StoryMainActivity"
+            android:screenOrientation="portrait"
+             />
         
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.BaikeActivity"
