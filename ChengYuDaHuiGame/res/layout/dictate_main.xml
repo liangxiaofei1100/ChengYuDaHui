@@ -63,54 +63,62 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/level_select_dictate"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/title_dictate" >
-
-        <Button
-            android:id="@+id/junior_level"
-            android:layout_width="300dip"
-            android:layout_height="75dip"
-            android:layout_above="@+id/middle_level"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/list_click_item_selector"
-            android:textSize="35sp"
-            android:text="初级" />
-
-        <Button
-            android:id="@+id/middle_level"
-            android:layout_width="300dip"
-            android:layout_height="75dip"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="45dip"
-            android:layout_marginTop="45dip"
-            android:textSize="35sp"
-            android:background="@drawable/list_click_item_selector"
-            android:text="中级" />
-
-        <Button
-            android:id="@+id/senior_level"
-            android:layout_width="300dip"
-            android:layout_height="75dip"
-            android:textSize="35sp"
-            android:layout_below="@+id/middle_level"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/list_click_item_selector"
-            android:text="高级" />
-    </RelativeLayout>
-
-    <GridView
-        android:padding="10dip"
-        android:id="@+id/item_select_dictate"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/title_dictate"
-        android:horizontalSpacing="20dip"
-        android:listSelector="@android:color/transparent"
-        android:numColumns="4"
-        android:verticalSpacing="20dip"
-        android:visibility="gone" >
-    </GridView>
+        android:background="@drawable/activity_middle"
+        android:layout_marginBottom="5dip" >
+
+        <RelativeLayout
+            android:id="@+id/level_select_dictate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <Button
+                android:id="@+id/junior_level"
+                android:layout_width="300dip"
+                android:layout_height="75dip"
+                android:layout_above="@+id/middle_level"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/list_click_item_selector"
+                android:text="初级"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/middle_level"
+                android:layout_width="300dip"
+                android:layout_height="75dip"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="45dip"
+                android:layout_marginTop="45dip"
+                android:background="@drawable/list_click_item_selector"
+                android:text="中级"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/senior_level"
+                android:layout_width="300dip"
+                android:layout_height="75dip"
+                android:layout_below="@+id/middle_level"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/list_click_item_selector"
+                android:text="高级"
+                android:textSize="20sp" />
+        </RelativeLayout>
+
+        <GridView
+            android:scrollbars="none"
+            android:id="@+id/item_select_dictate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:horizontalSpacing="25dip"
+            android:listSelector="@android:color/transparent"
+            android:numColumns="4"
+            android:padding="10dip"
+            android:verticalSpacing="25dip"
+            android:visibility="gone" >
+        </GridView>
+
+    </RelativeLayout>
 
 </RelativeLayout>
