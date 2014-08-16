@@ -78,9 +78,21 @@
         android:layout_height="wrap_content"
         android:background="@drawable/item_white_bg"
         android:clickable="true"
-        android:padding="10dp"
         android:onClick="shareApp"
-        android:text="分享应用得金币"
+        android:padding="10dp"
+        android:text="零流量分享应用得金币"
+        android:textSize="16sp" />
+
+    <include layout="@layout/splitline" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_white_bg"
+        android:clickable="true"
+        android:onClick="getShareApp"
+        android:padding="10dp"
+        android:text="零流量接收应用得金币"
         android:textSize="16sp" />
 
     <include layout="@layout/splitline" />

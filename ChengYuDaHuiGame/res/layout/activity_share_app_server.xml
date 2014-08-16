@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.zhaoyan.juyou.game.chengyudahui.view.AspectRatioImageView
+        android:id="@+id/iv_qrcode"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/iv_qrcode"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:text="扫描二维码下载应用" />
+
+</RelativeLayout>
