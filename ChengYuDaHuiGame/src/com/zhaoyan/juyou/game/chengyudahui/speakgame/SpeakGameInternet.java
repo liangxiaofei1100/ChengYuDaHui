@@ -39,7 +39,8 @@ import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGame
 public class SpeakGameInternet extends Activity implements OnClickListener,
 		OnCommunicationListenerExternal {
 	private View mLoadingView, mSelectRoleView, mGameView, mRuleSettingView,
-			mLoadingText, mGameNextBtn, mGameRightBtn, rightLayout, nextLayout;
+			mLoadingText, mGameNextBtn, mGameRightBtn, rightLayout, nextLayout,
+			mBackView;
 	private TextView infoText, mCountDownText, mGameWordText, mGameWordInfo,
 			mRigntTv, mNextTv;
 	private Button mRefereeBtn, mActorBtn, mObserverBtn, mRuleStartBtn;
@@ -170,7 +171,6 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 	private void showGameView(int id, int time) {
 		hintNumber = 0;
 		mChengyuMap = getChengyuRandomByLimit(id);
-		Log.e("ArbiterLiu", "===id = " + id);
 		if (id == 0) {
 			sendMessage(Command.NEXT, wordId, RoleType.UNKONWN, 0, null);
 		}
@@ -280,12 +280,14 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 		mWrongNumberEditText = (EditText) findViewById(R.id.speak_wrong_number_edit);
 		mPassNumberEditText = (EditText) findViewById(R.id.speak_pass_number_edit);
 		mLoadingText = findViewById(R.id.loading_text);
+		mBackView = findViewById(R.id.iv_back_speak_in);
 		mRefereeBtn.setOnClickListener(this);
 		mActorBtn.setOnClickListener(this);
 		mObserverBtn.setOnClickListener(this);
 		mGameNextBtn.setOnClickListener(this);
 		mGameRightBtn.setOnClickListener(this);
 		mRuleStartBtn.setOnClickListener(this);
+		mBackView.setOnClickListener(this);
 	}
 
 	private void showSelectRole() {
@@ -376,6 +378,9 @@ public class SpeakGameInternet extends Activity implements OnClickListener,
 			return;
 		case R.id.rule_start:
 			initRule();
+			return;
+		case R.id.iv_back_speak_in:
+			finish();
 			return;
 		default:
 			type = RoleType.OBSERVER;
