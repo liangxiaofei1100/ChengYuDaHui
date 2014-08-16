@@ -13,7 +13,7 @@
         android:dividerHeight="4dp"
         android:fadingEdge="none"
         android:listSelector="@android:color/transparent"
-        android:padding="16dp"
+        android:padding="4dp"
         android:scrollbarStyle="outsideInset" >
     </ListView>
 

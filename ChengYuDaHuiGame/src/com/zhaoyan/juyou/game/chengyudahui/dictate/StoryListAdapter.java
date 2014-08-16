@@ -10,14 +10,17 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 
 public class StoryListAdapter extends BaseAdapter {
+	private static final String TAG = StoryListAdapter.class.getSimpleName();
+	
 	private LayoutInflater mInflater;
-	public List<String> mDataList = null;
+	public List<StoryInfo> mDataList = null;
 
 
-	public StoryListAdapter(Context con, List<String> dataList) {
+	public StoryListAdapter(Context con, List<StoryInfo> dataList) {
 		mInflater = LayoutInflater.from(con);
 		this.mDataList = dataList;
 	}
@@ -56,7 +59,9 @@ public class StoryListAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		holder.textView.setText(mDataList.get(pos));
+		String title = mDataList.get(pos).getTitle();
+		Log.d(TAG, "getView.title:" + title);
+		holder.textView.setText(title);
 
 		return convertView;
 	}

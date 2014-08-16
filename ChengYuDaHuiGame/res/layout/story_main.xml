@@ -2,54 +2,49 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    
-	 <android.support.v4.view.ViewPager
-            android:id="@+id/story_dvp"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_margin="10.0dip"
-            android:layout_alignParentTop="true"
-            android:layout_above="@+id/story_tv_count"
-            />
-	 
-	 <TextView 
-	     android:id="@+id/story_tv_count"
-	     android:layout_width="wrap_content"
-	     android:layout_height="wrap_content"
-	     android:layout_centerHorizontal="true"
-	     android:text="2/30"
-	     android:layout_above="@+id/story_rl_bottom_bar"
-	     />
-	 
-	 <RelativeLayout 
-	     android:id="@+id/story_rl_bottom_bar"
-	     android:layout_width="match_parent"
-	     android:layout_height="wrap_content"
-	     android:layout_alignParentBottom="true"
-	     >
-	     <TextView 
-	         android:id="@+id/story_tv_title"
-	         android:layout_width="wrap_content"
-	         android:layout_height="wrap_content"
-	         android:text="zhognhuaxiaogushi"
-	         android:layout_centerVertical="true"
-	         />
-	     
-	     <Button 
-	         android:id="@+id/story_btn_next"
-	         android:layout_width="wrap_content"
-	         android:layout_height="wrap_content"
-	         android:text="Next"
-	         android:layout_alignParentRight="true"
-	         />
-	     
-	     <Button 
-	         android:id="@+id/story_btn_playpause"
-	         android:layout_width="wrap_content"
-	         android:layout_height="wrap_content"
-	         android:text="Play"
-	         android:layout_toLeftOf="@+id/story_btn_next"
-	         />
-	 </RelativeLayout>
-	 
+
+    <com.zhaoyan.juyou.game.chengyudahui.dictate.CustomIndicator
+        android:id="@+id/story_tv_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:padding="10dp"
+        android:text="2/30" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/story_viewpager"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/story_rl_bottom_bar"
+        android:layout_below="@+id/story_tv_count" />
+
+    <RelativeLayout
+        android:id="@+id/story_rl_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <TextView
+            android:id="@+id/story_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="zhognhuaxiaogushi" />
+
+        <Button
+            android:id="@+id/story_btn_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Next" />
+
+        <Button
+            android:id="@+id/story_btn_playpause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/story_btn_next"
+            android:text="Play" />
+    </RelativeLayout>
+
 </RelativeLayout>

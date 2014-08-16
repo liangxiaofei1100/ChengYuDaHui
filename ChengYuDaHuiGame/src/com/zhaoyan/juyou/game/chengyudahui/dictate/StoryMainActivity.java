@@ -14,35 +14,43 @@ import com.zhaoyan.juyou.game.chengyudahui.R;
 public class StoryMainActivity extends ActionBarActivity {
 	private static final String TAG = StoryMainActivity.class.getSimpleName();
 	
-	private List<String> mList = new ArrayList<String>();
+	private List<StoryInfo> mList = new ArrayList<StoryInfo>();
 	
 	private ViewPager mDirectionalViewPager;
 	private StoryPagerAdapter mPagerAdapter;
+	private CustomIndicator mIndicator;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.story_main);
+		setTitle("中华好故事");
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		for (int i = 0; i < 300; i++) {
-			mList.add("TEST" + i);
+		StoryInfo info = null;
+		for (int i = 0; i < 55; i++) {
+			info = new StoryInfo();
+			info.setTitle("TEST" + i);
+			mList.add(info);
 		}
 		
-		mDirectionalViewPager = (ViewPager) findViewById(R.id.story_dvp);
-		mPagerAdapter = new StoryPagerAdapter(this, mList,10);
+		mIndicator = (CustomIndicator) findViewById(R.id.story_tv_count);
+		
+		mDirectionalViewPager = (ViewPager) findViewById(R.id.story_viewpager);
+		mPagerAdapter = new StoryPagerAdapter(this, mList, mIndicator, 6);
 		mDirectionalViewPager.setAdapter(mPagerAdapter);
 		mDirectionalViewPager.setOnPageChangeListener(listener);
+		
 	}
 	
 	private OnPageChangeListener listener = new OnPageChangeListener() {
 
 		@Override
 		public void onPageSelected(int arg0) {
-//			indicator.setCurrentPosition(arg0);
-			System.out.println(arg0 + "");
+			mIndicator.setCurrentPosition(arg0);
+			mPagerAdapter.setCurrentPage(arg0);
 		}
 
 		@Override
