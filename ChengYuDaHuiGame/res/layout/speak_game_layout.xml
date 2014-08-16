@@ -99,7 +99,7 @@
         <RelativeLayout
             android:id="@+id/mode_setting_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:visibility="gone" >
 
@@ -107,7 +107,7 @@
                 android:id="@+id/speak_game_start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
                 android:layout_marginBottom="10dip"
                 android:background="@drawable/list_click_item_selector"
                 android:text="@string/start_game"
