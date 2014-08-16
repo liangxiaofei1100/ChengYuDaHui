@@ -17,6 +17,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="30dip"
             android:text="@string/game_loading"
+            android:background="@drawable/short_btn_bg_selector"
             android:textSize="40sp" />
 
         <LinearLayout
@@ -32,6 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dip"
+                android:background="@drawable/short_btn_bg_selector"
                 android:text="@string/speak_game_rule_setting"
                 android:textSize="25sp" />
 
@@ -44,6 +46,7 @@
                     android:layout_width="100dip"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:background="@drawable/short_btn_bg_selector"
                     android:text="@string/speak_right_number"
                     android:textSize="20sp" />
 
@@ -64,6 +67,7 @@
                 <TextView
                     android:layout_width="100dip"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/short_btn_bg_selector"
                     android:gravity="center"
                     android:text="@string/speak_pass_number"
                     android:textSize="20sp" />
@@ -85,6 +89,7 @@
                 <TextView
                     android:layout_width="100dip"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/short_btn_bg_selector"
                     android:gravity="center"
                     android:text="@string/speak_wrong_number"
                     android:textSize="20sp" />
@@ -106,6 +111,7 @@
                 <TextView
                     android:layout_width="100dip"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/short_btn_bg_selector"
                     android:gravity="center"
                     android:text="@string/speak_game_time"
                     android:textSize="20sp" />
@@ -124,6 +130,7 @@
                 android:layout_width="150dip"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dip"
+                android:background="@drawable/list_click_item_selector"
                 android:gravity="center"
                 android:text="@string/start_game" />
         </LinearLayout>
@@ -140,6 +147,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:background="@drawable/short_btn_bg_selector"
             android:textSize="25sp"
             android:visibility="gone" />
 
@@ -149,6 +157,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/actor_internet_game"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/list_click_item_selector"
             android:text="@string/referee"
             android:textSize="40sp" />
 
@@ -157,6 +166,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:background="@drawable/list_click_item_selector"
             android:text="@string/actor"
             android:textSize="40sp" />
 
@@ -166,6 +176,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/actor_internet_game"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/list_click_item_selector"
             android:text="@string/observer"
             android:textSize="40sp" />
     </RelativeLayout>
@@ -182,6 +193,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="@string/count_down_sample"
+            android:background="@drawable/short_btn_bg_selector"
             android:textSize="25sp"
             android:textStyle="bold" />
 
@@ -195,6 +207,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:background="@drawable/short_btn_bg_selector"
                 android:textSize="40sp"
                 android:textStyle="bold" />
 
@@ -205,21 +218,53 @@
                 android:layout_centerHorizontal="true"
                 android:orientation="horizontal" >
 
-                <Button
-                    android:id="@+id/internet_speak_game_next"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/game_next"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                <RelativeLayout
+                    android:id="@+id/internet_next_layout"
+                    android:layout_width="100dip"
+                    android:layout_height="50dip" >
 
-                <Button
-                    android:id="@+id/internet_speak_game_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/game_right"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    <ImageView
+                        android:id="@+id/internet_speak_game_next"
+                        android:layout_width="100dip"
+                        android:layout_height="50dip"
+                        android:clickable="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/short_btn_bg_selector" />
+
+                    <TextView
+                        android:id="@+id/tv_next_speak_internet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="@string/game_next"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/internet_right_layout"
+                    android:layout_width="100dip"
+                    android:layout_height="50dip" >
+
+                    <ImageView
+                        android:id="@+id/internet_speak_game_right"
+                        android:layout_width="100dip"
+                        android:layout_height="50dip"
+                        android:clickable="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/short_btn_bg_selector" />
+
+                    <TextView
+                        android:id="@+id/tv_right_speak_internet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="@string/game_right"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
             </LinearLayout>
 
             <TextView

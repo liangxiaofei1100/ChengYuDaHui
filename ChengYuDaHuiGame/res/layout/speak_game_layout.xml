@@ -15,6 +15,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dip"
+            android:background="@drawable/list_click_item_selector"
             android:text="@string/local_mode"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -25,6 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/local_mode"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/list_click_item_selector"
             android:text="@string/internet_mode"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -42,6 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:background="@drawable/list_click_item_selector"
             android:text="@string/start_game"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -52,6 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/speak_game_start"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/list_click_item_selector"
             android:text="@string/speak_time_setting"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -92,21 +98,51 @@
                 android:layout_centerHorizontal="true"
                 android:orientation="horizontal" >
 
-                <Button
-                    android:id="@+id/speak_game_next"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/game_next"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                <RelativeLayout
+                    android:layout_width="100dip"
+                    android:layout_height="50dip" >
 
-                <Button
-                    android:id="@+id/speak_game_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/game_right"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    <ImageView
+                        android:id="@+id/speak_game_next"
+                        android:layout_width="100dip"
+                        android:layout_height="50dip"
+                        android:clickable="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/short_btn_bg_selector" />
+
+                    <TextView
+                        android:id="@+id/tv_next_speak"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="@string/game_next"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="100dip"
+                    android:layout_height="50dip" >
+
+                    <ImageView
+                        android:id="@+id/speak_game_right"
+                        android:layout_width="100dip"
+                        android:layout_height="50dip"
+                        android:clickable="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/short_btn_bg_selector" />
+
+                    <TextView
+                        android:id="@+id/tv_right_speak"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="@string/game_right"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
             </LinearLayout>
 
             <TextView
