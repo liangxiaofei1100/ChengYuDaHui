@@ -239,7 +239,7 @@
         android:layout_above="@+id/dictate_show_result"
         android:layout_below="@+id/dictate_word_layout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dip"
+        android:layout_marginTop="10dip"
         android:scrollbars="vertical" >
 
         <LinearLayout
@@ -247,16 +247,16 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="10dip" >
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip" >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/corner_rect_bg_selector"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="10dip" >
+                android:orientation="horizontal" >
 
                 <com.zhaoyan.juyou.game.chengyudahui.download.NetworkCacheableImageView
                     android:id="@+id/dictate_word_image"
@@ -387,7 +387,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="15dip"
+        android:layout_marginTop="5dip"
         android:background="@drawable/list_click_item_selector"
         android:text="@string/show_result" />
 
