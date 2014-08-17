@@ -1,28 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#faf3f3"
-    >
+    tools:context="com.zhaoyan.juyou.game.chengyudahui.download.GetAppActivity" >
 
-    <ListView
-        android:id="@android:id/list" 
+    <Button
+        android:id="@+id/btn_get_share_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/list_click_item_selector"
+        android:onClick="getShareApp"
+        android:text="零流量下载" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusable="false"
-        android:divider="@null"
-        android:dividerHeight="8dp"
-        android:padding="8dp"
-        android:listSelector="@android:color/transparent"
-        ></ListView>
-    
-    <ProgressBar 
-        android:id="@+id/bar_info_loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        style="@android:style/Widget.ProgressBar.Large.Inverse"
-        android:visibility="gone"
-        />
+        android:layout_above="@id/btn_get_share_app" >
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="8dp"
+            android:focusable="false"
+            android:listSelector="@android:color/transparent"
+            android:padding="8dp" >
+        </ListView>
+
+        <ProgressBar
+            android:id="@+id/bar_info_loading"
+            style="@android:style/Widget.ProgressBar.Large.Inverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+    </RelativeLayout>
 
 </RelativeLayout>

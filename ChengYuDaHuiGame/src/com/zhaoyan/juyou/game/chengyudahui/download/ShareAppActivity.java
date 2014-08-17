@@ -106,8 +106,7 @@ public class ShareAppActivity extends ActionBarActivity {
 							appInfo.setAppLocalPath(localPath);
 						}
 
-						File file = new File(DownloadUtils.getLocalFilePath(appInfo.getAppUrl()));
-						if (appInfo.getStatus() == Conf.INSTALLED && file.exists()) {
+						if (appInfo.getStatus() == Conf.INSTALLED || appInfo.getStatus() == Conf.DOWNLOADED) {
 							mAppList.add(appInfo);
 						}
 					}

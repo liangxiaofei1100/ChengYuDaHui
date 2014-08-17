@@ -1,21 +1,24 @@
 package com.zhaoyan.juyou.game.chengyudahui.download;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
@@ -179,6 +182,19 @@ public class ShareAppAdapter extends BaseAdapter {
 
 			String appFilePath = DownloadUtils.getLocalFilePath(mDataList.get(
 					position).getAppUrl());
+			File apkFile = new File(appFilePath);
+			if (!apkFile.exists()) {
+				PackageManager packageManager = mContext.getPackageManager();
+				ApplicationInfo applicationInfo = null;
+				try {
+					applicationInfo = packageManager.getApplicationInfo(
+							mDataList.get(position).getPackageName(), 0);
+					appFilePath = applicationInfo.sourceDir;
+				} catch (NameNotFoundException e) {
+					Log.e(TAG, "get app file fail:"
+							+ mDataList.get(position).getAppUrl());
+				}
+			}
 
 			Intent intent = new Intent(mContext, ShareAppServerActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
@@ -186,7 +202,6 @@ public class ShareAppAdapter extends BaseAdapter {
 					appFilePath);
 			mContext.startActivity(intent);
 		}
-
 	}
 
 	private static class Record {

@@ -46,19 +46,20 @@ import com.zhaoyan.juyou.bae.GetAppInfoBae;
 import com.zhaoyan.juyou.bae.GetAppInfoResultListener;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 
-public class GetAppActivity extends ActionBarActivity implements OnItemClickListener {
+public class GetAppActivity extends ActionBarActivity implements
+		OnItemClickListener {
 	private static final String TAG = "GetAppActivity";
 	private ListView mListView;
 
 	private GetAppAdapter mAdapter;
 
 	private AppReceiver mAppReceiver = null;
-	
+
 	private DownloadManager mDownloadManager;
 	private DownloadManagerPro mDownloadManagerPro;
-	
+
 	private DownloadChangeObserver mDownloadChangeObserver;
-	
+
 	private HashMap<Long, Integer> mIdMaps = new HashMap<Long, Integer>();
 
 	private GetAppListener getAppListener = new GetAppListener() {
@@ -147,7 +148,8 @@ public class GetAppActivity extends ActionBarActivity implements OnItemClickList
 	};
 
 	public static void addGold(final Context context, int goldNum) {
-		ZhaoYanAccount account = ZhaoYanAccountManager.getAccountFromLocal(context);
+		ZhaoYanAccount account = ZhaoYanAccountManager
+				.getAccountFromLocal(context);
 		if (account == null) {
 			Toast.makeText(context, "领取金币失败，请先登录。", Toast.LENGTH_SHORT).show();
 			return;
@@ -157,14 +159,14 @@ public class GetAppActivity extends ActionBarActivity implements OnItemClickList
 
 					@Override
 					public void onGoldOperationSuccess(String message) {
-						Toast.makeText(context, message,
-								Toast.LENGTH_SHORT).show();
+						Toast.makeText(context, message, Toast.LENGTH_SHORT)
+								.show();
 					}
 
 					@Override
 					public void onGoldOperationFail(String message) {
-						Toast.makeText(context, message,
-								Toast.LENGTH_SHORT).show();
+						Toast.makeText(context, message, Toast.LENGTH_SHORT)
+								.show();
 					}
 				});
 	}
@@ -174,7 +176,7 @@ public class GetAppActivity extends ActionBarActivity implements OnItemClickList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.get_app_main);
 		setTitle("应用下载");
-		
+
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		mAppReceiver = new AppReceiver();
@@ -183,17 +185,17 @@ public class GetAppActivity extends ActionBarActivity implements OnItemClickList
 		filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
 		filter.addDataScheme("package");
 		registerReceiver(mAppReceiver, filter);
-		
+
 		IntentFilter filter2 = new IntentFilter();
 		filter2.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
 		filter2.addAction(DownloadManager.ACTION_NOTIFICATION_CLICKED);
 		filter2.addAction(Conf.ACTION_CANCEL_DOWNLOAD);
 		filter2.addAction(Conf.ACTION_START_DOWNLOAD);
 		registerReceiver(mAppReceiver, filter2);
-		
-		mDownloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
+
+		mDownloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
 		mDownloadManagerPro = new DownloadManagerPro(mDownloadManager);
-		
+
 		mDownloadChangeObserver = new DownloadChangeObserver();
 
 		mListView = (ListView) findViewById(android.R.id.list);
@@ -206,9 +208,15 @@ public class GetAppActivity extends ActionBarActivity implements OnItemClickList
 		queryAppInfos();
 
 		mListView.setOnItemClickListener(this);
-		
-		getContentResolver().registerContentObserver(DownloadManagerPro.CONTENT_URI, 
-				true, mDownloadChangeObserver);
+
+		getContentResolver().registerContentObserver(
+				DownloadManagerPro.CONTENT_URI, true, mDownloadChangeObserver);
+	}
+
+	public void getShareApp(View view) {
+		Intent intent = new Intent(this, ShareAppClientActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+		startActivity(intent);
 	}
 
 	public void stopDownload(AppInfo appInfo) {
@@ -239,18 +247,23 @@ public class GetAppActivity extends ActionBarActivity implements OnItemClickList
 					for (int i = 0; i < array.length(); i++) {
 						jsonObject = array.getJSONObject(i);
 						appInfo = AppInfo.parseJson(jsonObject);
-						
+
 						String packagename = appInfo.getPackageName();
-						boolean isInstalled = APKUtil.isAppInstalled(getApplicationContext(), packagename);
+						boolean isInstalled = APKUtil.isAppInstalled(
+								getApplicationContext(), packagename);
 						String serverVersion = appInfo.getVersion();
-						String localVersion = APKUtil.getInstalledAppVersion(getApplicationContext(), packagename);
-						boolean isVersionEqual =serverVersion.equals(localVersion);
-						Log.d(TAG, "serverVersion:" + serverVersion + ",localVersion:" + localVersion);
+						String localVersion = APKUtil.getInstalledAppVersion(
+								getApplicationContext(), packagename);
+						boolean isVersionEqual = serverVersion
+								.equals(localVersion);
+						Log.d(TAG, "serverVersion:" + serverVersion
+								+ ",localVersion:" + localVersion);
 						Log.d(TAG, "isVersionEqual:" + isVersionEqual);
-						
-						String localPath = PreferencesUtils.getString(getApplicationContext(), packagename, null);
-						
-						if (isInstalled ) {
+
+						String localPath = PreferencesUtils.getString(
+								getApplicationContext(), packagename, null);
+
+						if (isInstalled) {
 							if (!isVersionEqual) {
 								appInfo.setStatus(Conf.NEED_UDPATE);
 							} else {
@@ -280,13 +293,14 @@ public class GetAppActivity extends ActionBarActivity implements OnItemClickList
 		});
 	}
 
-	private void download(AppInfo appInfo, int position){
-		Log.d(TAG, "download.label:" + appInfo.getLabel() + ",position:" + position);
-		long downloadId = DownloadUtils.downloadApp(getApplicationContext(), mDownloadManager, appInfo);
+	private void download(AppInfo appInfo, int position) {
+		Log.d(TAG, "download.label:" + appInfo.getLabel() + ",position:"
+				+ position);
+		long downloadId = DownloadUtils.downloadApp(getApplicationContext(),
+				mDownloadManager, appInfo);
 		appInfo.setDownloadId(downloadId);
 		mIdMaps.put(downloadId, position);
 	}
-	
 
 	protected void showCancelDownloadDialog(final AppInfo appInfo) {
 		AlertDialog.Builder builder = new Builder(GetAppActivity.this);
@@ -323,59 +337,61 @@ public class GetAppActivity extends ActionBarActivity implements OnItemClickList
 		intent.putExtra(Conf.KEY_NAME_ITEM_POSITION, position);
 		startActivity(intent);
 	}
-	
+
 	class DownloadChangeObserver extends ContentObserver {
 
-        public DownloadChangeObserver() {
-            super(mHandler);
-        }
+		public DownloadChangeObserver() {
+			super(mHandler);
+		}
 
-        @Override
-        public void onChange(boolean selfChange) {
-        	Log.d(TAG, "onChange");
-            updateView();
-        }
+		@Override
+		public void onChange(boolean selfChange) {
+			Log.d(TAG, "onChange");
+			updateView();
+		}
 
-    }
+	}
 
-    public void updateView() {
-    	int[] bytesAndStatus = null;
-    	int status = -1;
-    	long downloadId = -1;
-    	int position = -1;
-    	AppInfo appInfo = null;
-    	int percent = 0;
-    	long progressBytes = 0;
-    	Set<Long> keys = mIdMaps.keySet();
-    	Iterator<Long> iterator = keys.iterator();
-    	while (iterator.hasNext()) {
+	public void updateView() {
+		int[] bytesAndStatus = null;
+		int status = -1;
+		long downloadId = -1;
+		int position = -1;
+		AppInfo appInfo = null;
+		int percent = 0;
+		long progressBytes = 0;
+		Set<Long> keys = mIdMaps.keySet();
+		Iterator<Long> iterator = keys.iterator();
+		while (iterator.hasNext()) {
 			downloadId = iterator.next();
-			Log.d(TAG, "downloadid:"  + downloadId);
+			Log.d(TAG, "downloadid:" + downloadId);
 			position = mIdMaps.get(downloadId);
 			Log.d(TAG, "position:" + position);
 			bytesAndStatus = mDownloadManagerPro.getBytesAndStatus(downloadId);
 			appInfo = mAppList.get(position);
-			
+
 			status = bytesAndStatus[2];
-			
+
 			if (AppInfoActicity.isDownloading(status)) {
 				progressBytes = bytesAndStatus[0];
-				percent = AppInfoActicity.getProgress(bytesAndStatus[0], bytesAndStatus[1]);
+				percent = AppInfoActicity.getProgress(bytesAndStatus[0],
+						bytesAndStatus[1]);
 				appInfo.setProgressBytes(progressBytes);
 				appInfo.setPercent(percent);
-				mHandler.sendMessage(mHandler.obtainMessage(GetAppListener.MSG_UPDATE_UI));
+				mHandler.sendMessage(mHandler
+						.obtainMessage(GetAppListener.MSG_UPDATE_UI));
 			} else {
 				if (status == DownloadManager.STATUS_FAILED) {
-                	int reason = mDownloadManagerPro.getReason(downloadId);
-                	Log.e(TAG, "download failed.reason:" + reason);
-                } else if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                	Log.d(TAG, "Download Successful");
-                } else {
-                	Log.d(TAG, "Other status:" + status);
-                }
+					int reason = mDownloadManagerPro.getReason(downloadId);
+					Log.e(TAG, "download failed.reason:" + reason);
+				} else if (status == DownloadManager.STATUS_SUCCESSFUL) {
+					Log.d(TAG, "Download Successful");
+				} else {
+					Log.d(TAG, "Other status:" + status);
+				}
 			}
 		}
-    }
+	}
 
 	class AppReceiver extends BroadcastReceiver {
 		@Override
@@ -400,40 +416,48 @@ public class GetAppActivity extends ActionBarActivity implements OnItemClickList
 					}
 				}
 			} else if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
-        		long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-        		if (!mIdMaps.containsKey(completeDownloadId)) {
-					//if the completeDownloadId is not my id,ignore
-        			return;
+				long completeDownloadId = intent.getLongExtra(
+						DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+				if (!mIdMaps.containsKey(completeDownloadId)) {
+					// if the completeDownloadId is not my id,ignore
+					return;
 				}
-        		AppInfo appInfo = mAppList.get(getPosition(completeDownloadId));
-        		Log.d(TAG, "complteteid" + completeDownloadId);
-                String localFileName = mDownloadManagerPro.getFileName(completeDownloadId);
-                appInfo.setAppLocalPath(localFileName);
-                Log.d(TAG, "localFileName:" + localFileName);
-                updateView();
-                appInfo.setDownloadId(-1);
-                removeDownloadId(completeDownloadId);
-                
-             // if download successful, install apk
-                int status = mDownloadManagerPro.getStatusById(completeDownloadId);
-                
-                Log.d(TAG, "status:" +  status);
-                if ( status == DownloadManager.STATUS_SUCCESSFUL) {
-                	PreferencesUtils.putString(getApplicationContext(), appInfo.getPackageName(), localFileName);
-                	appInfo.setStatus(Conf.DOWNLOADED);
-                	appInfo.setProgressBytes(0);
-    				appInfo.setPercent(0);
-    				mHandler.sendMessage(mHandler.obtainMessage(GetAppListener.MSG_UPDATE_UI));
-    				APKUtil.installApp(context, localFileName);
-                } else {
+				AppInfo appInfo = mAppList.get(getPosition(completeDownloadId));
+				Log.d(TAG, "complteteid" + completeDownloadId);
+				String localFileName = mDownloadManagerPro
+						.getFileName(completeDownloadId);
+				appInfo.setAppLocalPath(localFileName);
+				Log.d(TAG, "localFileName:" + localFileName);
+				updateView();
+				appInfo.setDownloadId(-1);
+				removeDownloadId(completeDownloadId);
+
+				// if download successful, install apk
+				int status = mDownloadManagerPro
+						.getStatusById(completeDownloadId);
+
+				Log.d(TAG, "status:" + status);
+				if (status == DownloadManager.STATUS_SUCCESSFUL) {
+					PreferencesUtils.putString(getApplicationContext(),
+							appInfo.getPackageName(), localFileName);
+					appInfo.setStatus(Conf.DOWNLOADED);
+					appInfo.setProgressBytes(0);
+					appInfo.setPercent(0);
+					mHandler.sendMessage(mHandler
+							.obtainMessage(GetAppListener.MSG_UPDATE_UI));
+					APKUtil.installApp(context, localFileName);
+				} else {
 					Log.e(TAG, "download complete.status:" + status);
 				}
-			} else if (DownloadManager.ACTION_NOTIFICATION_CLICKED.equals(action)) {
+			} else if (DownloadManager.ACTION_NOTIFICATION_CLICKED
+					.equals(action)) {
 				Log.d(TAG, "Notification clicked");
 			} else if (Conf.ACTION_CANCEL_DOWNLOAD.equals(action)) {
-				long downloadId = intent.getLongExtra(Conf.KEY_NAME_DOWNLOAD_ID, -1);
+				long downloadId = intent.getLongExtra(
+						Conf.KEY_NAME_DOWNLOAD_ID, -1);
 				Log.d(TAG, "ACTION_CANCEL_DOWNLOAD:" + downloadId);
-				int lastStatus = intent.getIntExtra(Conf.KEY_NAME_LAST_STATUS, 1);
+				int lastStatus = intent.getIntExtra(Conf.KEY_NAME_LAST_STATUS,
+						1);
 				if (downloadId != -1) {
 					int position = getPosition(downloadId);
 					AppInfo appInfo = mAppList.get(position);
@@ -445,24 +469,28 @@ public class GetAppActivity extends ActionBarActivity implements OnItemClickList
 					mAdapter.notifyDataSetChanged();
 				}
 			} else if (Conf.ACTION_START_DOWNLOAD.equals(action)) {
-				long downloadId = intent.getLongExtra(Conf.KEY_NAME_DOWNLOAD_ID, -1);
-				int position = intent.getIntExtra(Conf.KEY_NAME_ITEM_POSITION, -1);
-				Log.d(TAG, "ACTION_START_DOWNLOAD:" + downloadId + "," + position);
-				int lastStatus = intent.getIntExtra(Conf.KEY_NAME_LAST_STATUS, 1);
+				long downloadId = intent.getLongExtra(
+						Conf.KEY_NAME_DOWNLOAD_ID, -1);
+				int position = intent.getIntExtra(Conf.KEY_NAME_ITEM_POSITION,
+						-1);
+				Log.d(TAG, "ACTION_START_DOWNLOAD:" + downloadId + ","
+						+ position);
+				int lastStatus = intent.getIntExtra(Conf.KEY_NAME_LAST_STATUS,
+						1);
 				if (downloadId != -1 && position != -1) {
 					AppInfo appInfo = mAppList.get(position);
 					appInfo.setLastStatus(lastStatus);
 					appInfo.setStatus(Conf.DOWNLOADING);
 					appInfo.setDownloadId(downloadId);
 					mIdMaps.put(downloadId, position);
-					
+
 					updateView();
 				}
 			}
 		}
 	}
-	
-	private int getPosition(long downloadId){
+
+	private int getPosition(long downloadId) {
 		Log.d(TAG, "getPosition.id:" + downloadId);
 		int postion = -1;
 		if (mIdMaps.containsKey(downloadId)) {
@@ -471,8 +499,8 @@ public class GetAppActivity extends ActionBarActivity implements OnItemClickList
 		Log.d(TAG, "getPosition.position:" + postion);
 		return postion;
 	}
-	
-	private void removeDownloadId(long id){
+
+	private void removeDownloadId(long id) {
 		if (mIdMaps.containsKey(id)) {
 			mIdMaps.remove(id);
 		}

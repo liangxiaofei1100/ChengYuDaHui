@@ -185,12 +185,6 @@ public class GetGoldActivity extends ActionBarActivity implements
 		startActivity(intent);
 	}
 	
-	public void getShareApp(View view) {
-		Intent intent = new Intent(mContext, ShareAppClientActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-		startActivity(intent);
-	}
-
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
