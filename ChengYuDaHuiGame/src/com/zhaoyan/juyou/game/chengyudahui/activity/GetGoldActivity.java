@@ -27,6 +27,8 @@ import com.zhaoyan.juyou.game.chengyudahui.download.Conf;
 import com.zhaoyan.juyou.game.chengyudahui.download.GetAppActivity;
 import com.zhaoyan.juyou.game.chengyudahui.download.ShareAppActivity;
 import com.zhaoyan.juyou.game.chengyudahui.download.ShareAppClientActivity;
+import com.zhaoyan.juyou.game.chengyudahui.invite.InviteBluetoothActivity;
+import com.zhaoyan.juyou.game.chengyudahui.invite.InviteHttpActivity;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
 public class GetGoldActivity extends ActionBarActivity implements
@@ -181,6 +183,18 @@ public class GetGoldActivity extends ActionBarActivity implements
 
 	public void shareApp(View view) {
 		Intent intent = new Intent(mContext, ShareAppActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+		startActivity(intent);
+	}
+	
+	public void inviteWiFi(View view){
+		Intent intent = new Intent(mContext, InviteHttpActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+		startActivity(intent);
+	}
+	
+	public void inviteBluetooth(View view){
+		Intent intent = new Intent(mContext, InviteBluetoothActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 		startActivity(intent);
 	}

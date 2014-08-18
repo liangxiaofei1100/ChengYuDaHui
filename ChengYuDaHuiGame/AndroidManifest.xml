@@ -78,6 +78,20 @@
                 android:value="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" />
         </activity>
         <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.invite.InviteHttpActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
+        </activity>
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.invite.InviteBluetoothActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
+        </activity>
+        <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.download.ShareAppActivity"
             android:screenOrientation="portrait" >
             <meta-data
