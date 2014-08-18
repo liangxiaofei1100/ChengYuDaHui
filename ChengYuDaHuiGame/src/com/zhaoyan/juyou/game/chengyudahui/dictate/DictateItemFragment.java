@@ -35,6 +35,13 @@ public class DictateItemFragment extends Fragment{
 	}
 	
 	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		prepareGridView(mLevelString);
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -58,7 +65,6 @@ public class DictateItemFragment extends Fragment{
 		mItemAdapter = new ItemAdapter(getActivity(), null);
 		mGridView.setAdapter(mItemAdapter);
 		mGridView.setOnItemClickListener(new ItemClick());
-		prepareGridView(mLevelString);
 	}
 	
 	@SuppressLint("NewApi")
