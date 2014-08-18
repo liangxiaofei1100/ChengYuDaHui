@@ -11,7 +11,6 @@ import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 
 public class DictateMainFragmentActivity extends FragmentActivity {
-
 	private static final String TAG = DictateMainFragmentActivity.class
 			.getSimpleName();
 
@@ -29,31 +28,33 @@ public class DictateMainFragmentActivity extends FragmentActivity {
 		selectItem(mPosition);
 	}
 
+
 	public void selectItem(int position) {
 		Log.d(TAG, "selectItem.position=" + position);
 		mPosition = position;
 		Fragment fragment = null;
 		switch (position) {
 		case 0:
-			//汉字听写主界面
+			// 汉字听写主界面
 			fragment = new DictateMainFragment();
 			break;
 		case 1:
-			//听听天故事
+			// 听听天故事
 			fragment = new StoryMainFragment();
 			break;
 		case 2:
-			//常用字书写
+			// 常用字书写
+			fragment = new DictateSelectFragment(position-2);
 			break;
 		case 3:
-			//生僻字书写
+			// 生僻字书写
+			fragment = new DictateSelectFragment(position-2);
 			break;
 		default:
 			// default
 			fragment = new DictateMainFragment();
 			break;
 		}
-
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.fl_knowledge_item, fragment).commit();
