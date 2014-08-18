@@ -43,10 +43,17 @@ public class DictateMainFragmentActivity extends FragmentActivity {
 			fragment = new StoryMainFragment();
 			break;
 		case 2:
-			//常用字书写
-			break;
 		case 3:
-			//生僻字书写
+			Bundle args = new Bundle();
+			if (position == 2) {
+				//常用字书写
+				args.putString("level","中级");
+			} else {
+				//生僻字书写
+				args.putString("level","高级");
+			}
+			fragment = new DictateItemFragment();
+			fragment.setArguments(args);
 			break;
 		default:
 			// default

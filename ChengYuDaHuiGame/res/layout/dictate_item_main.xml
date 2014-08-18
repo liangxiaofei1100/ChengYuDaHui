@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" >
+
+    <GridView
+        android:id="@+id/item_select_dictate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dip"
+        android:columnWidth="50dip"
+        android:horizontalSpacing="25dip"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="4"
+        android:padding="10dip"
+        android:scrollbars="none"
+        android:verticalSpacing="25dip"
+        >
+    </GridView>
+
+</RelativeLayout>
