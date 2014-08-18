@@ -163,7 +163,7 @@ public class GetGoldActivity extends ActionBarActivity implements
 		Bundle bundle = new Bundle();
 		bundle.putSerializable("USER", new BaiduFrontiaUser());
 		intent.putExtras(bundle);
-		startActivityForResult(intent, Conf.REQUEST_CODE3);
+		startActivity(intent);
 	}
 
 	private void launchLogin() {

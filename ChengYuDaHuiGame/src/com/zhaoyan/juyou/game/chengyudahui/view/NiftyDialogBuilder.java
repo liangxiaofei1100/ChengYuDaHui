@@ -216,13 +216,13 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
         return this;
     }
     public NiftyDialogBuilder withButton1Text(CharSequence text) {
-        mButton1.setVisibility(View.VISIBLE);
+    	toggleView(mButton1,text);
         mButton1.setText(text);
 
         return this;
     }
     public NiftyDialogBuilder withButton2Text(CharSequence text) {
-        mButton2.setVisibility(View.VISIBLE);
+    	toggleView(mButton2,text);
         mButton2.setText(text);
         return this;
     }

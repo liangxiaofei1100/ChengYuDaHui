@@ -482,5 +482,6 @@ public class GetAppActivity extends ActionBarActivity implements OnItemClickList
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(mAppReceiver);
+		mAdapter.unregisterMyKeyListener(getAppListener);
 	}
 }

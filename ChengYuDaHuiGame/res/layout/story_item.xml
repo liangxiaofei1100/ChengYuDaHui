@@ -23,20 +23,24 @@
         android:id="@+id/story_rl_bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" >
+        android:layout_alignParentBottom="true" 
+        android:visibility="invisible"
+        >
 
         <TextView
             android:id="@+id/story_tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="zhognhuaxiaogushi" />
+            android:text="zhognhuaxiaogushi" 
+            />
 
         <Button
             android:id="@+id/story_btn_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:onClick="next"
             android:text="Next" />
 
         <Button
@@ -44,6 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/story_btn_next"
+            android:onClick="playPause"
             android:text="Play" />
     </RelativeLayout>
 

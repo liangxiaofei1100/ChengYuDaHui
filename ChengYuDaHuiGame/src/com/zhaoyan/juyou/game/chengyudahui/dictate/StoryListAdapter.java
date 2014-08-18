@@ -3,10 +3,12 @@ package com.zhaoyan.juyou.game.chengyudahui.dictate;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,13 +20,12 @@ public class StoryListAdapter extends BaseAdapter {
 	
 	private LayoutInflater mInflater;
 	public List<StoryInfo> mDataList = null;
-
-
+	
 	public StoryListAdapter(Context con, List<StoryInfo> dataList) {
 		mInflater = LayoutInflater.from(con);
 		this.mDataList = dataList;
 	}
-
+	
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
@@ -59,15 +60,24 @@ public class StoryListAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		String title = mDataList.get(pos).getTitle();
+		StoryInfo info = mDataList.get(pos);
+		String title = info.getTitle();
 		Log.d(TAG, "getView.title:" + title);
 		holder.textView.setText(title);
+		
+		boolean isSelect = info.isSelect();
+		if (isSelect) {
+			holder.textView.setTextColor(Color.BLUE);
+		} else {
+			holder.textView.setTextColor(Color.BLACK);
+		}
 
 		return convertView;
 	}
 
 	 class ViewHolder {
 		ImageView imageview;
+//		Button button;
 		TextView textView;
 	}
 

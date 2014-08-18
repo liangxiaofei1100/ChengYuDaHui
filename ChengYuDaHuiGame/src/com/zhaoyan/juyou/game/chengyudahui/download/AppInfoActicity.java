@@ -145,7 +145,7 @@ public class AppInfoActicity extends ActionBarActivity implements OnClickListene
 		
 		if (mAppInfo != null) {
 //			mAppIconView.setPath(mAppInfo.getIconUrl());
-			boolean fromcache = mAppIconView.loadImage(mAppInfo.getIconUrl(), false, null);
+			boolean fromcache = mAppIconView.loadImage(Conf.URL_EX + mAppInfo.getIconUrl(), false, null);
 			if (!fromcache) {
 				mAppIconView.setImageResource(R.drawable.ic_launcher);
 			}
@@ -164,7 +164,7 @@ public class AppInfoActicity extends ActionBarActivity implements OnClickListene
 //			mJieMianView2.setPath(mAppInfo.getJiemianUrl2());
 //			mJieMianView1.setDefaultImageResource(R.drawable.sw_downloading_bg);
 //			mJieMianView2.setDefaultImageResource(R.drawable.sw_downloading_bg);
-			boolean ret1 = mJieMianView1.loadImage(mAppInfo.getJiemianUrl1(), false, new OnImageLoadedListener() {
+			boolean ret1 = mJieMianView1.loadImage(Conf.URL_EX + mAppInfo.getJiemianUrl1(), false, new OnImageLoadedListener() {
 				@Override
 				public void onImageLoaded(CacheableBitmapDrawable result) {
 					if (result == null) {
@@ -177,7 +177,7 @@ public class AppInfoActicity extends ActionBarActivity implements OnClickListene
 				mJieMianView1.setImageResource(R.drawable.sw_downloading_bg);
 			}
 			
-			boolean ret2 = mJieMianView2.loadImage(mAppInfo.getJiemianUrl2(), false, new OnImageLoadedListener() {
+			boolean ret2 = mJieMianView2.loadImage(Conf.URL_EX + mAppInfo.getJiemianUrl2(), false, new OnImageLoadedListener() {
 				
 				@Override
 				public void onImageLoaded(CacheableBitmapDrawable result) {

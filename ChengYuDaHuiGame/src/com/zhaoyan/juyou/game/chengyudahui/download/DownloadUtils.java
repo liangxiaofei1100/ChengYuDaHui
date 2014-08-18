@@ -5,6 +5,7 @@ import java.io.File;
 import com.baidu.frontia.FrontiaFile;
 import com.zhaoyan.common.util.PreferencesUtils;
 import com.zhaoyan.communication.util.Log;
+import com.zhaoyan.juyou.game.chengyudahui.dictate.StoryInfo;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
 import android.annotation.TargetApi;
@@ -70,19 +71,22 @@ public class DownloadUtils {
 		return true;
 	}
 	
-	public static long downloadAudio(Context context, DownloadManager dm, long size, String name){
-		String remoteUrl = Conf.STORY_URL_EX + name;
+	public static long downloadAudio(Context context, DownloadManager dm, StoryInfo info){
+		// Check storage remain size.
+		boolean isStorageSizeAvailable = checkStorageRemainSize(context,
+				info.getSize());
+		if (!isStorageSizeAvailable) {
+			return -1;
+		}
 		
-		//需要对sdcard剩余空间作判断
-		String localPath = getAUdioLocalPath(context, size, name);
+		String localPath = getStoryLocalPath(context, info.getFileName());
 		
-		Log.d(TAG, "remoteUrl:" + remoteUrl);
-		Uri downloadUri = Uri.parse(remoteUrl);
+		Log.d(TAG, "remoteUrl:" + info.getRemotePath());
+		Uri downloadUri = Uri.parse(Conf.URL_EX + info.getRemotePath());
 		Uri localUri = Uri.parse("file://" + localPath);
 		
 		DownloadManager.Request request = new DownloadManager.Request(downloadUri);
 		request.setDestinationUri(localUri);
-        request.setTitle("应用下载:" + name);
         //下载完毕后，保留通知栏信息
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
         request.setVisibleInDownloadsUi(false);
@@ -114,18 +118,8 @@ public class DownloadUtils {
 		return nativePath;
 	}
 	
-	public static String getAUdioLocalPath(Context context, long size, String name){
+	public static String getStoryLocalPath(Context context, String name){
 		String sdCardPathString = Environment.getExternalStorageDirectory().getAbsolutePath();
-		long aviable = Utils.getAvailableBlockSize(sdCardPathString);
-		if (aviable <= size) {
-			String fileSizeStr = Utils.getFormatSize(size);
-			String availableStr = Utils.getFormatSize(aviable);
-			Toast.makeText(
-					context,
-					"可用空间不足" + "\n" + "文件大小:" + fileSizeStr + "\n" + "可用空间:"
-							+ availableStr, Toast.LENGTH_SHORT).show();
-			return null;
-		}
 		
 		String localDir = sdCardPathString + "/" + Conf.ZHAOYAN_DIR + Conf.LOCAL_STORY_DIR;
 		if (!new File(localDir).exists()) {
@@ -134,6 +128,15 @@ public class DownloadUtils {
 		
 		String nativePath = localDir +"/" + name;
 		return nativePath;
+	}
+	
+	public static String getExistStoryLocalPath(Context context, String name){
+		String localpath = getStoryLocalPath(context, name);
+		if (new File(localpath).exists()) {
+			return localpath;
+		} else {
+			return null;
+		}
 	}
 
 }

@@ -215,7 +215,7 @@
             android:screenOrientation="portrait"
              />
         <activity
-            android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.StoryMainActivity"
+            android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.StoryItemActivity"
             android:screenOrientation="portrait"
              />
         

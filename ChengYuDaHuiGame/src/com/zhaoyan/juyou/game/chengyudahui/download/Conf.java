@@ -5,45 +5,36 @@ public class Conf {
 	
 	public final static String APIKEY = "cd1EyW7zKA7ZmYuDunUnkBfG";
 	
-	//local path
+	//local path  begin
 	public final static String ZHAOYAN_DIR = "zhaoyan";
 	
     public final static String LOCAL_APP_DIR = "/apps";
-    public final static String LOCAL_STORY_DIR = "/story";
-    //local path
+    public final static String LOCAL_STORY_DIR = "/storys";
+    //local path end
     
     public final static String SHARED_PREFS_NAME = "dlapp";
     public static final String KEY_NAME_DOWNLOAD_ID = "downloadId";
     public static final String KEY_NAME_ITEM_POSITION = "item_position";
     public static final String KEY_NAME_LAST_STATUS = "last_status";
     
-    //cloud path
+    //cloud path begin
     public static final String URL_EX = "http://bcs.duapp.com/bccd1eyw7zka7zmyudununkbfgmbaas/";
     public final static String CLOUD_APP_DIR = "apps/";
-    public final static String CLOUD_ICON_DIR = "icons/";
-    public final static String CLOUD_INFO_DIR = "infos/";
+    public final static String CLOUD_LOGO_DIR = "app_logos/";
+    public static final String CLOUD_APP_CAPTURES = "app_captures/";
+//    public final static String CLOUD_INFO_DIR = "infos/";
     public static final String CLOUD_LISTEN_DIR = "listen_pic/";
-    public static final String CLOUD_STORY_DIR = "story/";
+    public static final String CLOUD_STORY_DIR = "storys/";
     
     public static final String APP_URL_EX = URL_EX + CLOUD_APP_DIR;
-    public static final String ICON_URL_EX = URL_EX + CLOUD_ICON_DIR;
+    public static final String APP_LOGO_URL_EX = URL_EX + CLOUD_LOGO_DIR;
+    public static final String APP_CAPTURE_URL_EX = URL_EX + CLOUD_APP_CAPTURES;
     public static final String LISTEN_URL_EX = URL_EX + CLOUD_LISTEN_DIR;
     public static final String STORY_URL_EX = URL_EX + CLOUD_STORY_DIR;
-    //cloud path
+    //cloud path end
     
     public static final String ACTION_CANCEL_DOWNLOAD = "com.zhaoyan.cancel.download";
     public static final String ACTION_START_DOWNLOAD = "com.zhaoyan.start.download";
-    
-    //request_code
-    public final static int REQUEST_CODE1 = 2;
-    public final static int REQUEST_CODE2 = 3;
-    public final static int REQUEST_CODE3 = 4;
-    public final static int REQUEST_CODE4 = 5;
-    //result_code
-    public final static int RESULT_CODE1 = 10;
-    public final static int RESULT_CODE2 = 11;
-    public final static int RESULT_CODE3 = 12;
-    public final static int RESULT_CODE4 = 13;
     
     //app status
     public static final int NOT_DOWNLOAD = 1;

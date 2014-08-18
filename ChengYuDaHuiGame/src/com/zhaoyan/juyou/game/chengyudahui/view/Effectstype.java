@@ -3,6 +3,7 @@ package com.zhaoyan.juyou.game.chengyudahui.view;
 
 public enum  Effectstype {
 
+	FadeIn(FadeIn.class),
     SlideBottom(SlideBottom.class);
 
     private Class<BaseEffects> effectsClass;

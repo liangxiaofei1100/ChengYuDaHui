@@ -1,21 +1,27 @@
 package com.zhaoyan.juyou.game.chengyudahui.dictate;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.download.GetAppListener;
+import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
+import com.zhaoyan.juyou.game.chengyudahui.view.Effectstype;
+import com.zhaoyan.juyou.game.chengyudahui.view.NiftyDialogBuilder;
 
 public class StoryPagerAdapter extends PagerAdapter implements OnItemClickListener{
 	private static final String TAG = StoryPagerAdapter.class.getSimpleName();
@@ -30,6 +36,8 @@ public class StoryPagerAdapter extends PagerAdapter implements OnItemClickListen
 	private List<List<StoryInfo>> mAllPageList = null;
 	//每一页的数据
 	private List<StoryInfo> mPageList = null;
+	//
+	private List<StoryListAdapter> mListAdapters = new ArrayList<StoryListAdapter>();
 	
 	private int mPageNum = 1;
 	private CustomIndicator mCustomIndicator;
@@ -72,6 +80,7 @@ public class StoryPagerAdapter extends PagerAdapter implements OnItemClickListen
 			//获取每一页的数据
 			List<StoryInfo> item = new ArrayList<StoryInfo>();
 			for(int k = pos; k < mDataList.size(); k++){
+				mDataList.get(k).setPosition(k);
 				count++;
 				pos = k;
 				item.add(mDataList.get(k));
@@ -87,25 +96,80 @@ public class StoryPagerAdapter extends PagerAdapter implements OnItemClickListen
 		List<StoryInfo> storysList = null;
 		for (int j = 0; j < mPageNum; j++) {
 			storysList = mAllPageList.get(j);
+			setItemPage(storysList, j);
 			
 			View viewPager = LayoutInflater.from(context).inflate(
 					R.layout.story_list, null);
 			ListView mList = (ListView) viewPager.findViewById(R.id.story_listview);
 			final StoryListAdapter myadapter=new StoryListAdapter(context, storysList);
+			mListAdapters.add(myadapter);
 			mList.setAdapter(myadapter);
 			mListViewPager.add(viewPager);
 			mList.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					StoryInfo info  = mAllPageList.get(mCurrentPage).get(position);
-					info.setTitle("ssssssssssss");
-					Toast.makeText(context, info.getTitle(), Toast.LENGTH_SHORT).show();
-					myadapter.notifyDataSetChanged();
+					
+					final StoryInfo info  = mAllPageList.get(mCurrentPage).get(position);
+					final Bundle bundle = new Bundle(2);
+//					info.setTitle("ssssssssssss");
+					if (info.getLocalPath() == null) {
+//						final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
+						final NiftyDialogBuilder dialogBuilder = new NiftyDialogBuilder(context, R.style.dialog_untran);
+						dialogBuilder.withTitle(info.getTitle())
+						.withTitleColor("#000000")
+						.withDividerColor("#11000000")
+						.withMessage("该故事尚未下载，是否下载\n下载需要50金币\n文件大小：" + Utils.getFormatSize(info.getSize()))
+						.isCancelableOnTouchOutside(true) 
+						.withDuration(50)
+						.withEffect(Effectstype.FadeIn) 
+						.withTipMessage(null)
+						.withButton1Text("取消") 
+						.withButton2Text("下载")
+						.setButton1Click(new View.OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								dialogBuilder.dismiss();
+							}
+						})
+						.setButton2Click(new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								//download
+								dialogBuilder.dismiss();
+								bundle.putInt(StoryListener.CALLBACK_FLAG, StoryListener.MSG_START_DOWNLOAD);
+								bundle.putParcelable(StoryListener.KEY_ITEM_STORYINFO, info);
+								notifyActivityStateChanged(bundle);
+							}
+						})
+						.show();
+					} else {
+						bundle.putInt(StoryListener.CALLBACK_FLAG, StoryListener.MSG_START_PLAY);
+						bundle.putParcelable(StoryListener.KEY_ITEM_STORYINFO, info);
+						notifyActivityStateChanged(bundle);
+					}
+//					info.setSelect(true);
+//					myadapter.notifyDataSetChanged();
 				}
 			});
 		}
-
+	}
+	
+	/**
+	 * 给当前list中的内容标记上是哪一页的
+	 * @param infos
+	 * @param page
+	 */
+	private void setItemPage(List<StoryInfo> infos , int page){
+		for (StoryInfo storyInfo : infos) {
+			storyInfo.setPage(page);
+		}
+	}
+	
+	public void update(){
+		for (StoryListAdapter adapter : mListAdapters) {
+			adapter.notifyDataSetChanged();
+		}
 	}
 
 	@Override
@@ -137,7 +201,7 @@ public class StoryPagerAdapter extends PagerAdapter implements OnItemClickListen
 
 	@Override
 	public void startUpdate(View arg0) {
-		Log.d(TAG, "startUpdate:" + arg0);
+//		Log.d(TAG, "startUpdate:" + arg0);
 	}
 
 	@Override
@@ -161,6 +225,67 @@ public class StoryPagerAdapter extends PagerAdapter implements OnItemClickListen
 	
 	public void setCurrentPage(int page){
 		mCurrentPage = page;
+	}
+	
+	private static class Record{
+		int mHashCode;
+		StoryListener mCallBack;
+	}
+	
+	private ArrayList<Record> mRecords = new ArrayList<Record>();
+	public void registerKeyListener(StoryListener callBack){
+		synchronized (mRecords) {
+			//register callback in adapter,if the callback is exist,just replace the event
+			Record record = null;
+			int hashCode = callBack.hashCode();
+			final int n = mRecords.size();
+			for(int i = 0; i < n ; i++){
+				record = mRecords.get(i);
+				if (hashCode == record.mHashCode) {
+					return;
+				}
+			}
+			
+			record = new Record();
+			record.mHashCode = hashCode;
+			record.mCallBack = callBack;
+			mRecords.add(record);
+		}
+	}
+	
+	private void notifyActivityStateChanged(Bundle bundle){
+		if (!mRecords.isEmpty()) {
+			Log.d(TAG, "notifyActivityStateChanged.clients = " + mRecords.size());
+			synchronized (mRecords) {
+				Iterator<Record> iterator = mRecords.iterator();
+				while (iterator.hasNext()) {
+					Record record = iterator.next();
+					
+					StoryListener listener = record.mCallBack;
+					if (listener == null) {
+						iterator.remove();
+						return;
+					}
+					listener.onCallBack(bundle);
+				}
+			}
+		}
+	}
+	
+	public void unregisterMyKeyListener(StoryListener callBack){
+		remove(callBack.hashCode());
+	}
+	
+	private void remove(int hashCode){
+		synchronized (mRecords) {
+			Iterator<Record> iterator =mRecords.iterator();
+			while(iterator.hasNext()){
+				Record record = iterator.next();
+				if (record.mHashCode == hashCode) {
+					iterator.remove();
+				}
+			}
+		}
 	}
 	
 }
