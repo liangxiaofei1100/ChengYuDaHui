@@ -85,6 +85,7 @@ public class ShareAppClientActivity extends ActionBarActivity implements
 		} catch (Exception e) {
 			Log.d(TAG, "unregisterReceiver " + e);
 		}
+		SocketCommunicationManager.getInstance().closeAllCommunication();
 		SearchUtil.clearWifiConnectHistory(mContext);
 	}
 
