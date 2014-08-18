@@ -6,6 +6,8 @@ import java.sql.Statement;
 
 import com.zhaoyan.juyou.common.BaseColumns;
 import com.zhaoyan.juyou.common.SqliteDatabase;
+import com.zhaoyan.juyou.game.chengyu.ChengYuDatabase;
+import com.zhaoyan.juyou.game.knowledge.data.Stage;
 
 public class KnowledgeDatabase {
 
@@ -14,8 +16,38 @@ public class KnowledgeDatabase {
 	public KnowledgeDatabase(String databaseFilePath) {
 		mConnection = SqliteDatabase.connect(databaseFilePath);
 	}
-	
-	
+
+	public void addStage(Stage stage) {
+		String sql = "insert into " + StageTable.TABLE_NAME + " values("
+				+ stage.id + ", '" + stage.stageNumber + "'," + stage.gameType
+				+ "," + stage.gameId + ");";
+		try {
+			Statement statement = mConnection.createStatement();
+			statement.execute(sql);
+		} catch (Exception e) {
+			System.err.println("error sql = " + sql);
+		}
+	}
+
+	public void addGuessPicture() {
+
+	}
+
+	public void addGuoXue() {
+
+	}
+
+	public void addXiaoChu() {
+
+	}
+
+	public void addJieLong() {
+
+	}
+
+	public void addShouJiYanKuai() {
+
+	}
 
 	public void createTables() throws SQLException {
 		Statement statement = mConnection.createStatement();
