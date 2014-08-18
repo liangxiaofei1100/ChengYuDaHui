@@ -86,18 +86,6 @@
     <include layout="@layout/splitline" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/item_white_bg"
-        android:clickable="true"
-        android:onClick="getShareApp"
-        android:padding="10dp"
-        android:text="零流量接收应用得金币"
-        android:textSize="16sp" />
-
-    <include layout="@layout/splitline" />
-
-    <TextView
         android:id="@+id/tv_daily_gold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -105,6 +93,39 @@
         android:clickable="true"
         android:padding="10dp"
         android:text="每日签到得金币"
+        android:textSize="16sp" />
+
+    <include layout="@layout/splitline" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="邀请好友安装汉语大会："
+        android:textSize="12sp" />
+
+    <include layout="@layout/splitline" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_white_bg"
+        android:clickable="true"
+        android:onClick="inviteWiFi"
+        android:padding="10dp"
+        android:text="WiFi邀请"
+        android:textSize="16sp" />
+
+    <include layout="@layout/splitline" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_white_bg"
+        android:clickable="true"
+        android:onClick="inviteBluetooth"
+        android:padding="10dp"
+        android:text="蓝牙邀请"
         android:textSize="16sp" />
 
     <include layout="@layout/splitline" />

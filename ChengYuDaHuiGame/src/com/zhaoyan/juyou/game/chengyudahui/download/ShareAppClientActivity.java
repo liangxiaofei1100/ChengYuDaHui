@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.TextView;
@@ -55,6 +56,12 @@ public class ShareAppClientActivity extends ActionBarActivity implements
 		launchQRCodeScan();
 
 		SocketCommunicationManager.getInstance().closeAllCommunication();
+
+		WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		if (wifiManager.getWifiState() == WifiManager.WIFI_STATE_DISABLED) {
+			wifiManager.setWifiEnabled(true);
+		}
+
 		mServerConnector = ServerConnector.getInstance(mContext);
 		UserManager.getInstance().registerOnUserChangedListener(this);
 
@@ -78,6 +85,7 @@ public class ShareAppClientActivity extends ActionBarActivity implements
 		} catch (Exception e) {
 			Log.d(TAG, "unregisterReceiver " + e);
 		}
+		SocketCommunicationManager.getInstance().closeAllCommunication();
 		SearchUtil.clearWifiConnectHistory(mContext);
 	}
 

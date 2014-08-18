@@ -37,11 +37,12 @@ public class JuYouService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.d(TAG, "onStartCommand intent = " + intent);
 		if (intent != null) {
 			Log.d(TAG, "onStartCommand action = " + intent.getAction());
 			handlerIntent(intent);
 		}
-		return super.onStartCommand(intent, flags, startId);
+		return START_REDELIVER_INTENT;
 	}
 
 	private void handlerIntent(Intent intent) {
@@ -62,7 +63,7 @@ public class JuYouService extends Service {
 		SocketCommunicationManager.getInstance().init(mContext);
 		// Initialize ProtocolCommunication
 		ProtocolCommunication.getInstance().init(mContext);
-		
+
 		startFileTransferServer(mContext);
 	}
 
@@ -105,13 +106,13 @@ public class JuYouService extends Service {
 		serverSearcher.stopSearch(ServerSearcher.SERVER_TYPE_ALL);
 		serverSearcher.release();
 	}
-	
+
 	private static void startFileTransferServer(Context context) {
 		Intent intent = new Intent();
 		intent.setClass(context, FileTransferService.class);
 		context.startService(intent);
 	}
-	
+
 	private static void stopFileTransferService(Context context) {
 		Intent intent = new Intent();
 		intent.setClass(context, FileTransferService.class);
