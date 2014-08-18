@@ -13,6 +13,7 @@ import com.zhaoyan.juyou.account.ZhaoYanAccount;
 import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.dictate.DictateMainActivity;
+import com.zhaoyan.juyou.game.chengyudahui.dictate.DictateMainFragmentActivity;
 import com.zhaoyan.juyou.game.chengyudahui.knowledge.KnowledgeMainActivity;
 import com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameActivity;
 import com.zhaoyan.juyou.game.chengyudahui.spy.SpyMainActivity;
@@ -75,7 +76,7 @@ public class MainMenuActivity extends Activity {
 	}
 	public void launchChengyuDictatet(View view){
 		Log.d(TAG, "launchChengyuDictatet");
-		Intent intent = new Intent(mContext, DictateMainActivity.class);
+		Intent intent = new Intent(mContext, DictateMainFragmentActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 		startActivity(intent);
 	}

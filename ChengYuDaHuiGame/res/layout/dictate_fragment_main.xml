@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_activity"
+    android:orientation="vertical"
+    tools:context="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" >
+
+        <Button
+            android:id="@+id/junior_level"
+            android:layout_width="300dip"
+            android:layout_height="75dip"
+            android:layout_above="@+id/middle_level"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/list_click_item_selector"
+            android:text="天天听故事"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/middle_level"
+            android:layout_width="300dip"
+            android:layout_height="75dip"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="45dip"
+            android:layout_marginTop="45dip"
+            android:background="@drawable/list_click_item_selector"
+            android:text="常用字书写"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/senior_level"
+            android:layout_width="300dip"
+            android:layout_height="75dip"
+            android:layout_below="@+id/middle_level"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/list_click_item_selector"
+            android:text="生僻字书写"
+            android:textSize="20sp" />
+
+</RelativeLayout>
