@@ -454,7 +454,7 @@ public class DictateActivity extends Activity implements OnClickListener {
 		setPinyin(c.getString(c
 				.getColumnIndex(DictateData.DictateColums.PINYIN)));
 		String s = c.getString(c.getColumnIndex(DictateColums.ALLUSION));
-		if (s != null && !s.equals("null")) {
+		if (s != null && !s.equals("null")&&!s.isEmpty()) {
 			mDictateAllusion.setText(c.getString(c
 					.getColumnIndex(DictateColums.ALLUSION)) + "");
 			setViewVisiable(2, true);
@@ -462,14 +462,14 @@ public class DictateActivity extends Activity implements OnClickListener {
 			setViewVisiable(2, false);
 		}
 		s = c.getString(c.getColumnIndex(DictateData.DictateColums.COMMENT));
-		if (s != null && !s.equals("null")) {
+		if (s != null && !s.equals("null")&&!s.isEmpty()) {
 			mDictateComment.setText(c.getString(c
 					.getColumnIndex(DictateData.DictateColums.COMMENT)));
 		} else {
 			mDictateComment.setText("");
 		}
 		s = c.getString(c.getColumnIndex(DictateData.DictateColums.EXAMPLE));
-		if (s != null && !s.equals("null")) {
+		if (s != null && !s.equals("null")&&!s.isEmpty()) {
 			mDictateExample.setText(c.getString(c
 					.getColumnIndex(DictateData.DictateColums.EXAMPLE)) + "");
 			setViewVisiable(1, true);
@@ -477,7 +477,7 @@ public class DictateActivity extends Activity implements OnClickListener {
 			setViewVisiable(1, false);
 		}
 		s = c.getString(c.getColumnIndex(DictateData.DictateColums.ORIGINAL));
-		if (s != null && !s.equals("null")) {
+		if (s != null && !s.equals("null")&&!s.isEmpty()) {
 			mDictateOriginal.setText(c.getString(c
 					.getColumnIndex(DictateData.DictateColums.ORIGINAL)) + "");
 			setViewVisiable(0, true);
