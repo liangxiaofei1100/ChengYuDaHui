@@ -2,34 +2,45 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+            backward-compatibility can go here.
         -->
     </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
+    <style name="AppTheme" parent="@style/ThemeActivity">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
-    <style name="LauncherTheme" parent="AppBaseTheme">
+    <style name="LauncherTheme" parent="@style/ThemeActivity">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/bg_launcher</item>
     </style>
 
-    <style name="ActivityTheme" parent="AppBaseTheme">
+    <style name="ActivityTheme" parent="@style/ThemeActivity">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/bg_activity</item>
     </style>
 
-    <style name="ActivityTheme2" parent="AppBaseTheme">
+    <style name="ActivityTheme2" parent="@style/ThemeActivity">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@color/activity_background</item>
+    </style>
+
+    <style name="ThemeActivity" parent="AppBaseTheme">
+        <item name="android:windowAnimationStyle">@style/Animation_translate</item>
+    </style>
+
+    <style name="Animation_translate">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_right_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_right_out</item>
     </style>
 
     <style name="Custom.ProgressBar.Horizontal" parent="android:Widget.ProgressBar.Horizontal">
@@ -39,9 +50,9 @@
         <item name="android:maxHeight">3dip</item>
     </style>
 
-    <style name="Theme.Translucent" parent="@style/AppTheme">
+    <style name="Theme.Translucent" parent="@style/ThemeActivity">
         <item name="android:windowBackground">@color/translucent_background</item>
-        <item name="android:windowIsTranslucent">true</item>
+        <!-- <item name="android:windowIsTranslucent">true</item> -->
         <item name="android:screenOrientation">portrait</item>
     </style>
 
@@ -55,13 +66,13 @@
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
-    
-     <style name="DialogWindowTitle">
+
+    <style name="DialogWindowTitle">
         <item name="android:textSize">22sp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
-    
-     <style name="dialog_tran" parent="android:style/Theme.Dialog">
+
+    <style name="dialog_tran" parent="android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -71,12 +82,12 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:backgroundDimAmount">0.4</item>
     </style>
-    
-     <style name="dialog_untran" parent="dialog_tran">
+
+    <style name="dialog_untran" parent="dialog_tran">
         <item name="android:backgroundDimEnabled">true</item>
     </style>
-    
-     <style name="dialog_btn">
+
+    <style name="dialog_btn">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">36dp</item>

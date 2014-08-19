@@ -26,7 +26,7 @@
     </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
+    <style name="AppTheme" parent="@style/ThemeActivity">
         <item name="android:actionBarStyle">@style/CustomActionBarStyle</item>
         <item name="android:actionButtonStyle">@style/CustomActionButtonStyle</item>
         <item name="android:actionOverflowButtonStyle">@style/CustomActionOverflowButtonStyle</item>

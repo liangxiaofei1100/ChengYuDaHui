@@ -221,7 +221,7 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 				intent.putExtra(FeedBackChengYuActivity.EXTRA_CHENGYU,
 						chengYu.name);
 				startActivity(intent);
-				overridePendingTransition(R.anim.activity_right_in, 0);
+//				overridePendingTransition(R.anim.activity_right_in, 0);
 			}
 		}
 	}
