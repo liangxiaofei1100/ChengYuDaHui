@@ -19,6 +19,7 @@ public class MusicPlayerService extends Service {
 
 	public static final String PLAYER_PREPARE_END = "com.zhaoyao.juyou.musicplayerservice.prepared";
 	public static final String PLAY_COMPLETED = "com.zhaoyao.juyou.musicplayerservice.playcompleted";
+	public static final String PLAYER_NOT_PREPARE = "com.zhaoyao.juyou.musicplayerservice.notprepare";
 
 	MediaPlayer.OnCompletionListener mCompleteListener = new MediaPlayer.OnCompletionListener() {
 		public void onCompletion(MediaPlayer mp) {
@@ -47,6 +48,10 @@ public class MusicPlayerService extends Service {
 			@Override
 			public boolean onError(MediaPlayer mp, int what, int extra) {
 				Log.e(TAG, "onError.what:" + what + ",extra:" + extra);
+				if (what == -38) {
+					broadcastEvent(PLAYER_NOT_PREPARE);
+					return true;
+				}
 				return false;
 			}
 		});

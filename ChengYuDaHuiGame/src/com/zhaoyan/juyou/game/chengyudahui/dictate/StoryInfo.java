@@ -7,7 +7,7 @@ public class StoryInfo implements Parcelable{
 
 	private String title;
 	private String fileName;
-	private String remotePath;
+	private String folder;
 	private String localPath;
 	private long size;
 	private int position;
@@ -32,12 +32,12 @@ public class StoryInfo implements Parcelable{
 		this.fileName = fileName;
 	}
 
-	public String getRemotePath() {
-		return remotePath;
+	public String getFolder() {
+		return folder;
 	}
 
-	public void setRemotePath(String remotePath) {
-		this.remotePath = remotePath;
+	public void setFolder(String folder) {
+		this.folder = folder;
 	}
 
 	public String getLocalPath() {
@@ -107,7 +107,7 @@ public class StoryInfo implements Parcelable{
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(title);
 		dest.writeString(fileName);
-		dest.writeString(remotePath);
+		dest.writeString(folder);
 		dest.writeString(localPath);
 		dest.writeLong(size);
 		dest.writeInt(position);
@@ -118,7 +118,7 @@ public class StoryInfo implements Parcelable{
 	public void readFromParcel(Parcel in) {
 		title = in.readString();
 		fileName = in.readString();
-		remotePath = in.readString();
+		folder = in.readString();
 		localPath = in.readString();
 		size = in.readLong();
 		position = in.readInt();

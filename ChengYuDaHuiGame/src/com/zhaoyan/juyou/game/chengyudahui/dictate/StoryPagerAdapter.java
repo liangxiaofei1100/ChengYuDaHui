@@ -66,7 +66,7 @@ public class StoryPagerAdapter extends PagerAdapter implements OnItemClickListen
 		
 		mCustomIndicator.setCount(mPageNum);
 		mCurrentPage = 0;
-		Log.d(TAG, String.valueOf(mPageNum));
+//		Log.d(TAG, String.valueOf(mPageNum));
 		
 		if (Math.ceil(mDataList.size() / pageRows) == 0) {
 			mPageNum = 1;
@@ -76,7 +76,7 @@ public class StoryPagerAdapter extends PagerAdapter implements OnItemClickListen
 		//将数据分页
 		mAllPageList = new ArrayList<List<StoryInfo>>();
 		for (int i = 0; i < mPageNum; i++) {
-			Log.d(TAG, String.valueOf(i));
+//			Log.d(TAG, String.valueOf(i));
 			//获取每一页的数据
 			List<StoryInfo> item = new ArrayList<StoryInfo>();
 			for(int k = pos; k < mDataList.size(); k++){
@@ -112,9 +112,7 @@ public class StoryPagerAdapter extends PagerAdapter implements OnItemClickListen
 					
 					final StoryInfo info  = mAllPageList.get(mCurrentPage).get(position);
 					final Bundle bundle = new Bundle(2);
-//					info.setTitle("ssssssssssss");
 					if (info.getLocalPath() == null) {
-//						final NiftyDialogBuilder dialogBuilder = NiftyDialogBuilder.getInstance(context);
 						final NiftyDialogBuilder dialogBuilder = new NiftyDialogBuilder(context, R.style.dialog_untran);
 						dialogBuilder.withTitle(info.getTitle())
 						.withTitleColor("#000000")

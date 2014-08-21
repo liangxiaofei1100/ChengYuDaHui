@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,12 +22,13 @@ import android.widget.Toast;
 
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.db.StoryData.TypeColums;
 
 public class StoryMainFragment extends Fragment implements OnItemClickListener {
 	private static final String TAG = StoryMainFragment.class.getSimpleName();
 	
 	private ListView mListView;
-	private List<String> mList = new ArrayList<String>();
+	private List<StoryItem> mList = null;
 	
 	private DictateMainFragmentActivity mActivity;
 	
@@ -56,14 +58,29 @@ public class StoryMainFragment extends Fragment implements OnItemClickListener {
 		super.onActivityCreated(savedInstanceState);
 		Log.d(TAG, "onActivityCreated");
 		mActivity.setTitle("天天听故事");
-		// test
-		mList.add("小熊维尼");
-		mList.add("成语故事");
-		mList.add("睡前故事");
-		mList.add("幼儿故事");
-		mList.add("世界著名童话");
-		mList.add("世界历史故事");
-		// test
+		
+		//get items data
+		if (mList == null) {
+			mList = new ArrayList<StoryItem>();
+		}
+		
+		Cursor cursor  = getActivity().getContentResolver().query(TypeColums.CONTENT_URI, null, null, null, null);
+		if (cursor != null && cursor.moveToFirst()) {
+			int typeId;
+			String typeName;
+			String folder;
+			
+			StoryItem item = null;
+			do {
+				typeId = cursor.getInt(cursor.getColumnIndex(TypeColums.TYPE));
+				typeName = cursor.getString(cursor.getColumnIndex(TypeColums.NAME));
+				folder = cursor.getString(cursor.getColumnIndex(TypeColums.FOLDER));
+				
+				item = new StoryItem(typeId, typeName, folder);
+				mList.add(item);
+			} while (cursor.moveToNext());
+			cursor.close();
+		} 
 
 		MyAdapter myAdapter = new MyAdapter();
 		mListView.setAdapter(myAdapter);
@@ -74,7 +91,9 @@ public class StoryMainFragment extends Fragment implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		StoryItem item = mList.get(position);
 		Intent intent = new Intent();
+		intent.putExtra("storyItem", item);
 		intent.setClass(getActivity(), StoryItemActivity.class);
 		startActivity(intent);
 	}
@@ -126,7 +145,7 @@ public class StoryMainFragment extends Fragment implements OnItemClickListener {
 			stageView.setVisibility(View.GONE);
 			
 			TextView titleView = (TextView) view.findViewById(R.id.tv_knowledge_title);
-			titleView.setText(mList.get(position));
+			titleView.setText(mList.get(position).getTypeName());
 			return view;
 		}
 		

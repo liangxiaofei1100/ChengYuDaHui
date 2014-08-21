@@ -2,16 +2,21 @@ package com.zhaoyan.juyou.game.chengyudahui.dictate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.annotation.TargetApi;
 import android.app.DownloadManager;
+import android.content.AsyncQueryHandler;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.database.ContentObserver;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,27 +27,34 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zhaoyan.common.util.DownloadManagerPro;
 import com.zhaoyan.communication.util.Log;
+import com.zhaoyan.juyou.game.chengyudahui.DBConfig;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.db.StoryData.ItemColums;
 import com.zhaoyan.juyou.game.chengyudahui.dictate.StoryDownloadDialog.OnDownloadOverListener;
 import com.zhaoyan.juyou.game.chengyudahui.download.DownloadUtils;
 import com.zhaoyan.juyou.game.chengyudahui.service.MusicPlayerService;
 
-public class StoryItemActivity extends ActionBarActivity {
+public class StoryItemActivity extends ActionBarActivity{
 	private static final String TAG = StoryItemActivity.class.getSimpleName();
 	
 	private List<StoryInfo> mList = new ArrayList<StoryInfo>();
 	
-	private ViewPager mDirectionalViewPager;
+	//the count items that every page will view
+	private static final int PAGE_COUNT = 6;
+	
+	private ViewPager mViewPager;
 	private StoryPagerAdapter mPagerAdapter;
 	private CustomIndicator mIndicator;
 	
-	private Button mPlayPauseBtn, mNextBtn;
+	private ImageView mPlayPauseBtn;
+	private ProgressBar mProgressBar;
 	private TextView mTitleView;
 	private View mBottomBarView;
 	
@@ -60,6 +72,12 @@ public class StoryItemActivity extends ActionBarActivity {
     
     private long mDownloadId = 0;
     private String mAudioUrl = "";
+    
+    private UpdateThead mUpdateThead = null;
+    
+    private StoryItem mStoryItem = null;
+    
+    private StoryQuery mStoryQuery = null;
 
 	private ServiceConnection mPlaybackConnection = new ServiceConnection() {
 		public void onServiceConnected(ComponentName className, IBinder service) {
@@ -83,11 +101,18 @@ public class StoryItemActivity extends ActionBarActivity {
 				mTitleView.setText(mCurrentPlayStoryInfo.getTitle());
 				mBottomBarView.setVisibility(View.VISIBLE);
 				mPlayPauseBtn.setVisibility(View.VISIBLE);
-				mPlayPauseBtn.setText("暂停");
-				 
+				mPlayPauseBtn.setImageResource(R.drawable.pause);
+				
+				int duration = mMusicPlayerService.getDuration();
+				mProgressBar.setMax(duration);
+				updateProgressBar();
 			} else if (action.equals(MusicPlayerService.PLAY_COMPLETED)) {
-				mPlayPauseBtn.setText("播放");
-			}  else if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+				mPlayPauseBtn.setImageResource(R.drawable.play);
+			} else if (action.equals(MusicPlayerService.PLAYER_NOT_PREPARE)) {
+				StoryInfo info = mList.get(0);
+				//播放第一个
+				startPlay(info);
+			} else if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
         		long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
                 String localFileName = mDownloadManagerPro.getFileName(mDownloadId);
                 Log.d(TAG, "localFileName:" + localFileName);
@@ -123,80 +148,23 @@ public class StoryItemActivity extends ActionBarActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.story_item);
-		setTitle("天天听故事");
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		StoryInfo info = null;
-		//test /init
-		info = new StoryInfo();
-		info.setRemotePath("storys/chengyu/chengyu_01.mp3");
-		info.setFileName("chengyu_01.mp3");
-		info.setTitle("矮子看戏");
-		info.setSize(1065210);	
-		info.setLocalPath(DownloadUtils.getExistStoryLocalPath(getApplicationContext(), "chengyu_01.mp3"));
-		mList.add(info);
-		
-		info = new StoryInfo();
-		info.setRemotePath("storys/chengyu/chengyu_02.mp3");
-		info.setFileName("chengyu_02.mp3");
-		info.setTitle("安步当车");
-		info.setSize(2347509);
-		info.setLocalPath(DownloadUtils.getExistStoryLocalPath(getApplicationContext(), "chengyu_02.mp3"));
-		mList.add(info);
-		
-		info = new StoryInfo();
-		info.setRemotePath("storys/chengyu/chengyu_03.mp3");
-		info.setFileName("chengyu_03.mp3");
-		info.setTitle("按图索骥");
-		info.setSize(1161341);
-		info.setLocalPath(DownloadUtils.getExistStoryLocalPath(getApplicationContext(), "chengyu_03.mp3"));
-		mList.add(info);
-		
-		info = new StoryInfo();
-		info.setRemotePath("storys/chengyu/chengyu_04.mp3");
-		info.setFileName("chengyu_04.mp3");
-		info.setTitle("暗渡成仓");
-		info.setSize(2273498);	
-		info.setLocalPath(DownloadUtils.getExistStoryLocalPath(getApplicationContext(), "chengyu_04.mp3"));
-		mList.add(info);
-		
-		info = new StoryInfo();
-		info.setRemotePath("storys/bear/bear_01.mp3");
-		info.setFileName("bear_01.mp3");
-		info.setTitle("小熊维尼晚安故事-星期二-01-片头");
-		info.setSize(1333359);	
-		info.setLocalPath(DownloadUtils.getExistStoryLocalPath(getApplicationContext(), "bear_01.mp3"));
-		mList.add(info);
-		
-		info = new StoryInfo();
-		info.setRemotePath("storys/bear/bear_02.mp3");
-		info.setFileName("bear_02.mp3");
-		info.setTitle("小熊维尼晚安故事-星期二-02-追逐影子");
-		info.setSize(4194374);	
-		info.setLocalPath(DownloadUtils.getExistStoryLocalPath(getApplicationContext(), "bear_02.mp3"));
-		mList.add(info);
-		
-		//test init
-//		for (int i = 0; i < 55; i++) {
-//			info = new StoryInfo();
-//			info.setTitle("TEST" + i);
-//			mList.add(info);
-//		}
+		//getdata
+		mStoryItem = getIntent().getParcelableExtra("storyItem");
+		setTitle(mStoryItem.getTypeName());
 		
 		mIndicator = (CustomIndicator) findViewById(R.id.story_tv_count);
-		mPlayPauseBtn = (Button) findViewById(R.id.story_btn_playpause);
+		mPlayPauseBtn = (ImageView) findViewById(R.id.story_iv_playpause);
 		mTitleView = (TextView) findViewById(R.id.story_tv_title);
 		mBottomBarView = findViewById(R.id.story_rl_bottom_bar);
+		mProgressBar = (ProgressBar) findViewById(R.id.story_progressbar);
 		
-		mDirectionalViewPager = (ViewPager) findViewById(R.id.story_viewpager);
-		mPagerAdapter = new StoryPagerAdapter(this, mList, mIndicator, 6);
-		mDirectionalViewPager.setAdapter(mPagerAdapter);
-		mDirectionalViewPager.setOnPageChangeListener(listener);
-		mPagerAdapter.registerKeyListener(storyListener);
+		mViewPager = (ViewPager) findViewById(R.id.story_viewpager);
+		mViewPager.setOnPageChangeListener(pageChangeListener);
 		
 		bindService(new Intent(this,MusicPlayerService.class), mPlaybackConnection, Context.BIND_AUTO_CREATE);
 		
@@ -212,12 +180,51 @@ public class StoryItemActivity extends ActionBarActivity {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(MusicPlayerService.PLAYER_PREPARE_END);
 		filter.addAction(MusicPlayerService.PLAY_COMPLETED);
+		filter.addAction(MusicPlayerService.PLAYER_NOT_PREPARE);
 		filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
 		registerReceiver(mPlayerEvtReceiver, filter);
 		
+		getStoryDatas();
 	}
 	
-	private OnPageChangeListener listener = new OnPageChangeListener() {
+	private void getStoryDatas(){
+		Uri uri = null;
+		switch (mStoryItem.getTypeId()) {
+		case DBConfig.STORY_BEAR:
+			uri = ItemColums.BEAR_CONTENT_URI;
+			break;
+		case DBConfig.STORY_CHENGYU:
+			uri = ItemColums.CHENGYU_CONTENT_URI;
+			break;
+		case DBConfig.STORY_SLEEP:
+			uri = ItemColums.SLEEP_CONTENT_URI;
+			break;
+		case DBConfig.STORY_CHILD:
+			uri = ItemColums.CHILD_CONTENT_URI;
+			break;
+		case DBConfig.STORY_FAIRY_TALE:
+			uri = ItemColums.FAIRY_TALE_CONTENT_URI;
+			break;
+		case DBConfig.STORY_HISTORY:
+			uri = ItemColums.HISTORY_CONTENT_URI;
+			break;
+		case DBConfig.STORY_GOLD_CAT:
+			uri = ItemColums.GOLD_CAT_CONTENT_URI;
+			break;
+		case DBConfig.STORY_XIYOUJI:
+			uri = ItemColums.XIYOUJI_CONTENT_URI;
+			break;
+		case DBConfig.STORY_CHILD_SONG:
+			uri = ItemColums.CHILD_SONG_CONTENT_URI;
+			break;
+		default:
+			break;
+		}
+		mStoryQuery = new StoryQuery(getContentResolver());
+		mStoryQuery.startQuery(0, null, uri, null, null, null, null);
+	}
+	
+	private OnPageChangeListener pageChangeListener = new OnPageChangeListener() {
 
 		@Override
 		public void onPageSelected(int arg0) {
@@ -236,15 +243,49 @@ public class StoryItemActivity extends ActionBarActivity {
 		}
 	};
 	
+	private class StoryQuery extends AsyncQueryHandler{
+
+		public StoryQuery(ContentResolver cr) {
+			super(cr);
+			// TODO Auto-generated constructor stub
+		}
+		
+		@Override
+		protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+			super.onQueryComplete(token, cookie, cursor);
+			StoryInfo info = null;
+			if (cursor != null && cursor.moveToFirst()) {
+				String title = "";
+				String fileName = "";
+				long size;
+				do {
+					title = cursor.getString(cursor.getColumnIndex(ItemColums.TITLE));
+					fileName = cursor.getString(cursor.getColumnIndex(ItemColums.FILENAME));
+					size = cursor.getLong(cursor.getColumnIndex(ItemColums.SIZE));
+					
+					info = new StoryInfo();
+					info.setFolder(mStoryItem.getFolder());
+					info.setFileName(fileName);
+					info.setTitle(title);
+					info.setSize(size);
+					info.setLocalPath(DownloadUtils.getExistStoryLocalPath(
+							getApplicationContext(), mStoryItem.getFolder(), fileName));
+					mList.add(info);
+				} while (cursor.moveToNext());
+			}
+			mPagerAdapter = new StoryPagerAdapter(StoryItemActivity.this, mList, mIndicator, PAGE_COUNT);
+			mViewPager.setAdapter(mPagerAdapter);
+			mPagerAdapter.registerKeyListener(storyListener);
+		}
+	}
+	
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			finish();
 			break;
-
 		default:
 			break;
 		}
@@ -255,7 +296,7 @@ public class StoryItemActivity extends ActionBarActivity {
 		StoryInfo storyInfo = null;
 		for (int i = 0; i < mList.size(); i++) {
 			storyInfo = mList.get(i);
-			if ( info.getRemotePath().equals(storyInfo.getRemotePath() )) {
+			if ( info.getFileName().equals(storyInfo.getFileName())) {
 				storyInfo.setSelect(true);
 			} else {
 				storyInfo.setSelect(false);
@@ -265,8 +306,12 @@ public class StoryItemActivity extends ActionBarActivity {
 	}
 	
 	public void startPlay(StoryInfo info){
+		Log.d(TAG, "startPlay.info:" + info.getTitle());
+		mCurrentPlayStoryInfo = info;
+		if (info.getLocalPath() == null) {
+			return;
+		}
 		doSelect(info);
-		
 		mMusicPlayerService.setDataSource(info.getLocalPath());
 		mMusicPlayerService.start();
 	}
@@ -275,24 +320,101 @@ public class StoryItemActivity extends ActionBarActivity {
 		 // Perform action on click
         if (mMusicPlayerService != null && mMusicPlayerService.isPlaying()) {
         	mMusicPlayerService.pause();
-            mPlayPauseBtn.setText("播放");
+            mPlayPauseBtn.setImageResource(R.drawable.play);
         } else if (mMusicPlayerService != null){
         	mMusicPlayerService.start();
-        	mPlayPauseBtn.setText("暂停");
+        	mPlayPauseBtn.setImageResource(R.drawable.pause);
         }
 	}
 	
 	public void next(View view){
+		if (mCurrentPlayStoryInfo == null) {
+			return;
+		}
 		
+		int currentPosition = mCurrentPlayStoryInfo.getPosition();
+		int next = currentPosition + 1;
+		next = (next >= mList.size()) ? 0 : next;
+		while (mList.get(next).getLocalPath() == null) {
+			if (next == mList.size()) {
+				next = 0;
+			} else {
+				next += 1;
+				next = (next >= mList.size()) ? 0 : next;
+			}
+		}
+		
+//		int currentPage = mCurrentPlayStoryInfo.getPage();
+//		int nextPage = mList.get(next).getPage();
+//		if (nextPage != currentPage) {
+//			mViewPager.setCurrentItem(nextPage, true);
+//			mPagerAdapter.setCurrentPage(nextPage);
+//		}
+		startPlay(mList.get(next));
+	}
+	
+	public void previous(View view){
+		if (mCurrentPlayStoryInfo == null) {
+			return;
+		}
+		
+		int currentPosition = mCurrentPlayStoryInfo.getPosition();
+		int pre = currentPosition - 1;
+		pre = (pre < 0) ? (mList.size() - 1) : pre;
+		while (mList.get(pre).getLocalPath() == null) {
+			if (pre == 0) {
+				pre = mList.size() - 1;
+			} else {
+				pre -= 1;
+				pre = (pre < 0) ? (mList.size() - 1) : pre;
+			}
+		}
+//		int currentPage = mCurrentPlayStoryInfo.getPage();
+//		int nextPage = mList.get(pre).getPage();
+//		if (nextPage != currentPage) {
+//			mViewPager.setCurrentItem(nextPage, true);
+//			mPagerAdapter.setCurrentPage(nextPage);
+//		}
+		startPlay(mList.get(pre));
 	}
 
 	public void stop(View view) {
 		if (mMusicPlayerService != null) {
-//			mStopBtn.setVisibility(View.INVISIBLE);
-//			mPlayPauseBtn.setVisibility(View.INVISIBLE);
-//			mStartPlayButton.setVisibility(View.VISIBLE);
         	mMusicPlayerService.stop();
         } 
+	}
+	
+	private void updateProgressBar(){
+		mProgressBar.setProgress(0);
+		if (mUpdateThead != null && mUpdateThead.isAlive()) {
+			Log.d(TAG, "mupdate thread is alive");
+			return;
+		}
+		
+		mUpdateThead = new UpdateThead();
+		mUpdateThead.start();
+	}
+	
+	private class UpdateThead extends Thread {
+		@Override
+		public void run() {
+			super.run();
+			int currentPosition = 0;
+			int total = mMusicPlayerService.getDuration();
+			while (mMusicPlayerService != null && currentPosition < total) {
+				try {
+					Thread.sleep(1000);
+					currentPosition = mMusicPlayerService.getPosition();
+				} catch (InterruptedException e) {
+					Log.e(TAG, "run.error:" + e.toString());
+					return;
+				} catch (Exception e) {
+					Log.e(TAG, "run.error:" + e.toString());
+					return;
+				}
+				mProgressBar.setProgress(currentPosition);
+			}
+		}
 	}
 	
 	class DownloadChangeObserver extends ContentObserver {
@@ -353,7 +475,6 @@ public class StoryItemActivity extends ActionBarActivity {
                 	StoryInfo info = null;
                 	if (bundle != null) {
 						info = bundle.getParcelable(StoryListener.KEY_ITEM_STORYINFO);
-						mCurrentPlayStoryInfo = info;
 						mDownloaDialog = new StoryDownloadDialog(StoryItemActivity.this, info);
 						mDownloaDialog.setOnDwonloadOverListener(new OnDownloadOverListener() {
 							@Override
@@ -365,7 +486,7 @@ public class StoryItemActivity extends ActionBarActivity {
 						});
 						mDownloaDialog.show();
 						
-						mDownloadId = DownloadUtils.downloadAudio(StoryItemActivity.this, mDownloadManager, info);
+						mDownloadId = DownloadUtils.downloadStorys(StoryItemActivity.this, mDownloadManager, info);
 					} else {
 						Log.e(TAG, "myhandler.bundle is null");
 					}
@@ -415,6 +536,7 @@ public class StoryItemActivity extends ActionBarActivity {
                 || downloadManagerStatus == DownloadManager.STATUS_PAUSED
                 || downloadManagerStatus == DownloadManager.STATUS_PENDING;
     }
+    
 	
 	@Override
 	protected void onDestroy() {

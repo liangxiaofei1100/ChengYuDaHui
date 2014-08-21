@@ -62,7 +62,7 @@ public class StoryListAdapter extends BaseAdapter {
 
 		StoryInfo info = mDataList.get(pos);
 		String title = info.getTitle();
-		Log.d(TAG, "getView.title:" + title);
+//		Log.d(TAG, "getView.title:" + title);
 		holder.textView.setText(title);
 		
 		boolean isSelect = info.isSelect();

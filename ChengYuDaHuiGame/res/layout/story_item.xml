@@ -16,40 +16,85 @@
         android:id="@+id/story_viewpager"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/story_rl_bottom_bar"
+        android:layout_above="@+id/story_progressbar"
         android:layout_below="@+id/story_tv_count" />
+    
+    <ProgressBar
+        android:id="@+id/story_progressbar"
+        style="@style/Custom.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_above="@+id/story_rl_bottom_bar"
+        />
 
     <RelativeLayout
         android:id="@+id/story_rl_bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" 
-        android:visibility="invisible"
-        >
-
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible" >
         <TextView
             android:id="@+id/story_tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="zhognhuaxiaogushi" 
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/story_pre"
+            android:ellipsize="marquee"
+            android:singleLine="true"
             />
 
-        <Button
-            android:id="@+id/story_btn_next"
+        <LinearLayout
+            android:id="@+id/story_next"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
+            android:background="@drawable/story_ctrl_selector"
             android:onClick="next"
-            android:text="Next" />
+            android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/story_btn_playpause"
+            <ImageView
+                android:id="@+id/story_iv_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:src="@drawable/next" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/story_playpause"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/story_btn_next"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/story_next"
+            android:background="@drawable/story_ctrl_selector"
             android:onClick="playPause"
-            android:text="Play" />
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/story_iv_playpause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:src="@drawable/play" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/story_pre"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/story_playpause"
+            android:background="@drawable/story_ctrl_selector"
+            android:onClick="previous"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/story_iv_pre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:src="@drawable/previous" />
+        </LinearLayout>
     </RelativeLayout>
 
 </RelativeLayout>

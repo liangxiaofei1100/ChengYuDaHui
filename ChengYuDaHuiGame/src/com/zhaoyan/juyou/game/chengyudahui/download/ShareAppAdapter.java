@@ -98,7 +98,7 @@ public class ShareAppAdapter extends BaseAdapter {
 		holder.infoView.setText(appInfo.getTitle());
 		// holder.imageView.setDefaultImageResource(R.drawable.ic_launcher);
 		// holder.imageView.setPath(appInfo.getIconUrl());
-		boolean fromCache = holder.imageView.loadImage(appInfo.getIconUrl(),
+		boolean fromCache = holder.imageView.loadImage(Conf.URL_EX + appInfo.getIconUrl(),
 				false, null);
 		if (!fromCache) {
 			holder.imageView.setImageResource(R.drawable.ic_launcher);

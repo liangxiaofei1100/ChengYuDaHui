@@ -71,7 +71,7 @@ public class DownloadUtils {
 		return true;
 	}
 	
-	public static long downloadAudio(Context context, DownloadManager dm, StoryInfo info){
+	public static long downloadStorys(Context context, DownloadManager dm, StoryInfo info){
 		// Check storage remain size.
 		boolean isStorageSizeAvailable = checkStorageRemainSize(context,
 				info.getSize());
@@ -79,10 +79,11 @@ public class DownloadUtils {
 			return -1;
 		}
 		
-		String localPath = getStoryLocalPath(context, info.getFileName());
+		String localPath = getStoryLocalPath(context, info.getFolder(), info.getFileName());
 		
-		Log.d(TAG, "remoteUrl:" + info.getRemotePath());
-		Uri downloadUri = Uri.parse(Conf.URL_EX + info.getRemotePath());
+		String remotePath = Conf.CLOUD_STORY_DIR + info.getFolder() + "/" + info.getFileName();
+		Log.d(TAG, "remoteUrl:" + remotePath);
+		Uri downloadUri = Uri.parse(Conf.URL_EX + remotePath);
 		Uri localUri = Uri.parse("file://" + localPath);
 		
 		DownloadManager.Request request = new DownloadManager.Request(downloadUri);
@@ -118,10 +119,10 @@ public class DownloadUtils {
 		return nativePath;
 	}
 	
-	public static String getStoryLocalPath(Context context, String name){
+	public static String getStoryLocalPath(Context context, String folder, String name){
 		String sdCardPathString = Environment.getExternalStorageDirectory().getAbsolutePath();
 		
-		String localDir = sdCardPathString + "/" + Conf.ZHAOYAN_DIR + Conf.LOCAL_STORY_DIR;
+		String localDir = sdCardPathString + "/" + Conf.ZHAOYAN_DIR + Conf.LOCAL_STORY_DIR + "/" + folder;
 		if (!new File(localDir).exists()) {
 			new File(localDir).mkdirs();
 		}
@@ -130,8 +131,8 @@ public class DownloadUtils {
 		return nativePath;
 	}
 	
-	public static String getExistStoryLocalPath(Context context, String name){
-		String localpath = getStoryLocalPath(context, name);
+	public static String getExistStoryLocalPath(Context context, String folder, String name){
+		String localpath = getStoryLocalPath(context, folder, name);
 		if (new File(localpath).exists()) {
 			return localpath;
 		} else {

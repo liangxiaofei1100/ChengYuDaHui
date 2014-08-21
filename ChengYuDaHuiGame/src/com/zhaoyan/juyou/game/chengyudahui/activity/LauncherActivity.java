@@ -37,6 +37,7 @@ public class LauncherActivity extends Activity {
 		CopyFileUtil.copyDB(mContext, DBConfig.DB_GUOXUE_NAME);
 		CopyFileUtil.copyDB(mContext, DBConfig.DB_WORD_NAME);
 		CopyFileUtil.copyDB(mContext, DBConfig.DB_DICTATE_NAME);
+		CopyFileUtil.copyDB(mContext, DBConfig.DB_STORY_NAME);
 		
 		CopyFileUtil.copyFile(mContext, DBConfig.FILE_KNOWLEDGE1);
 	}

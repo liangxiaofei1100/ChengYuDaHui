@@ -270,6 +270,11 @@
             android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.wordprovider"
             android:exported="false" >
         </provider>
+        <provider
+            android:name="com.zhaoyan.juyou.game.chengyudahui.db.StoryProvider"
+            android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.storyprovider"
+            android:exported="false" >
+        </provider>
 
         <!-- baidu push begin -->
         <!-- push应用定义消息receiver声明 -->
