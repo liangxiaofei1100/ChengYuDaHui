@@ -23,8 +23,10 @@ import com.zhaoyan.common.net.http.HttpShareServer;
 import com.zhaoyan.common.util.QRCodeEncoder;
 import com.zhaoyan.communication.SocketPort;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BackgroundMusicBaseActivity;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BaseActivity;
 
-public class InviteHttpActivity extends ActionBarActivity {
+public class InviteHttpActivity extends BackgroundMusicBaseActivity  {
 	private static final String TAG = "InviteHttpActivity";
 
 	private String WIFI_AP_NAME;

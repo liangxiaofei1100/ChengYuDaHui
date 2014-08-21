@@ -3,7 +3,7 @@
     <!--
         Base application theme for API 14+. This theme completely replaces
         AppBaseTheme from BOTH res/values/styles.xml and
-        res/values-v11/styles.xml on API 14+ devices.
+        res/values-v11/styles.xml on API 14+ devices.
     -->
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
         <!-- API 14 theme customizations can go here. -->
@@ -30,6 +30,38 @@
         <item name="android:actionBarStyle">@style/CustomActionBarStyle</item>
         <item name="android:actionButtonStyle">@style/CustomActionButtonStyle</item>
         <item name="android:actionOverflowButtonStyle">@style/CustomActionOverflowButtonStyle</item>
+    </style>
+
+    <style name="SlideTheme" parent="AppBaseTheme">
+        <item name="android:actionBarStyle">@style/CustomActionBarStyle</item>
+        <item name="android:actionButtonStyle">@style/CustomActionButtonStyle</item>
+        <item name="android:actionOverflowButtonStyle">@style/CustomActionOverflowButtonStyle</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@style/Animation_translate</item>
+        <item name="android:windowBackground">@drawable/bg_activity</item>
+    </style>
+
+    <style name="Animation_translate">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_right_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_right_out</item>
+    </style>
+
+    <style name="SlideExitTheme" parent="AppBaseTheme">
+        <item name="android:actionBarStyle">@style/CustomActionBarStyle</item>
+        <item name="android:actionButtonStyle">@style/CustomActionButtonStyle</item>
+        <item name="android:actionOverflowButtonStyle">@style/CustomActionOverflowButtonStyle</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@drawable/bg_activity</item>
+        <item name="android:windowAnimationStyle">@style/Animation_exit_translate</item>
+    </style>
+
+    <style name="Animation_exit_translate">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_right_out</item>
     </style>
 
 </resources>

@@ -86,41 +86,26 @@
             android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.invite.InviteHttpActivity"
             android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
         </activity>
         <activity
             android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.invite.InviteBluetoothActivity"
             android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
         </activity>
         <activity
             android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.download.ShareAppActivity"
             android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
         </activity>
         <activity
             android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.download.ShareAppServerActivity"
             android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.ShareAppActivity" />
         </activity>
         <activity
             android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.download.ShareAppClientActivity"
             android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
         </activity>
         <activity
             android:theme="@style/SlideTheme"
@@ -145,9 +130,6 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanLoginActivity"
             android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
         </activity>
         <activity
             android:theme="@style/SlideTheme"
@@ -193,9 +175,6 @@
                 <data android:mimeType="application/com.chenyu.download.file" />
             </intent-filter>
 
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
         </activity>
         <activity
             android:theme="@style/SlideTheme"

@@ -45,8 +45,10 @@ import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.bae.GetAppInfoBae;
 import com.zhaoyan.juyou.bae.GetAppInfoResultListener;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BackgroundMusicBaseActivity;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BaseActivity;
 
-public class GetAppActivity extends ActionBarActivity implements
+public class GetAppActivity extends BackgroundMusicBaseActivity implements
 		OnItemClickListener {
 	private static final String TAG = "GetAppActivity";
 	private ListView mListView;

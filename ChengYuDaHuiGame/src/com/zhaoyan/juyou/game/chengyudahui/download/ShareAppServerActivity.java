@@ -28,8 +28,10 @@ import com.zhaoyan.communication.qrcode.SendFileMessage;
 import com.zhaoyan.communication.qrcode.ServerInfoMessage;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BackgroundMusicBaseActivity;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BaseActivity;
 
-public class ShareAppServerActivity extends ActionBarActivity implements
+public class ShareAppServerActivity extends BackgroundMusicBaseActivity implements
 		OnUserChangedListener {
 	private static final String TAG = ShareAppServerActivity.class
 			.getSimpleName();

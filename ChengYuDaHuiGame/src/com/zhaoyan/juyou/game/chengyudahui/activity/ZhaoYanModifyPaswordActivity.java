@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class ZhaoYanModifyPaswordActivity extends Activity implements
+public class ZhaoYanModifyPaswordActivity extends BackgroundMusicBaseActivity implements
 		OnClickListener {
 	private Context mContext;
 	private EditText mOriginPassword;

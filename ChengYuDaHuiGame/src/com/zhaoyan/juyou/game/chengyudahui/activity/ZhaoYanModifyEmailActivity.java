@@ -16,7 +16,7 @@ import com.zhaoyan.juyou.account.ZhaoYanAccount;
 import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 
-public class ZhaoYanModifyEmailActivity extends Activity implements
+public class ZhaoYanModifyEmailActivity extends BackgroundMusicBaseActivity implements
 		OnClickListener {
 	private Context mContext;
 	private EditText mPasswordEditText;

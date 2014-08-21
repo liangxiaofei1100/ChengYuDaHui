@@ -13,7 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class ZhaoYanAccountSettingActivity extends Activity implements
+public class ZhaoYanAccountSettingActivity extends BackgroundMusicBaseActivity implements
 		OnClickListener {
 	private static final String TAG = ZhaoYanAccountSettingActivity.class
 			.getSimpleName();

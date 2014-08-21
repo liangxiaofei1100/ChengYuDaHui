@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 public class BaseActivity extends ActionBarActivity {
 	protected Context mContext;
@@ -24,6 +25,7 @@ public class BaseActivity extends ActionBarActivity {
 		default:
 			break;
 		}
+		WindowManager.LayoutParams attrs = getWindow().getAttributes();
 		return super.onOptionsItemSelected(item);
 	}
 
