@@ -18,22 +18,22 @@ import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.db.DictateData.DictateColums;
 
-public class DictateItemFragment extends Fragment{
+public class DictateItemFragment extends Fragment {
 	private static final String TAG = DictateItemFragment.class.getSimpleName();
-	
+
 	private DictateMainFragmentActivity mActivity;
-	
+
 	private GridView mGridView;
 	private ItemAdapter mItemAdapter;
 	private String mLevelString;
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
 		super.onAttach(activity);
 		mActivity = (DictateMainFragmentActivity) activity;
 	}
-	
+
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
@@ -47,7 +47,7 @@ public class DictateItemFragment extends Fragment{
 		super.onCreate(savedInstanceState);
 		mLevelString = getArguments().getString("level");
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class DictateItemFragment extends Fragment{
 		mGridView = (GridView) rootView.findViewById(R.id.item_select_dictate);
 		return rootView;
 	}
-	
+
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -66,7 +66,7 @@ public class DictateItemFragment extends Fragment{
 		mGridView.setAdapter(mItemAdapter);
 		mGridView.setOnItemClickListener(new ItemClick());
 	}
-	
+
 	@SuppressLint("NewApi")
 	private void prepareGridView(String level) {
 		Log.d(TAG, "prepareGridView.level:" + level);
@@ -94,7 +94,7 @@ public class DictateItemFragment extends Fragment{
 							DictateColums.RESULT },
 					DictateColums.LEVEL + " = '" + level + "'", null, null);
 		}
-		mItemAdapter.swapCursor(cursor);
+		mItemAdapter.changeCursor(cursor);
 
 	}
 
