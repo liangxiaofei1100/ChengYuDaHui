@@ -17,7 +17,7 @@ import com.zhaoyan.juyou.game.chengyudahui.utils.CopyFileUtil;
  * First page of the App. Press "Start Game" button to launch main menu
  * activity.
  */
-public class LauncherActivity extends Activity {
+public class LauncherActivity extends BackgroundMusicBaseActivity {
 	private static final String TAG = LauncherActivity.class.getSimpleName();
 	private Context mContext;
 

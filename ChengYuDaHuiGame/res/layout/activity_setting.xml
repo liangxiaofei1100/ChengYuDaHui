@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background"
+    tools:context="com.zhaoyan.juyou.game.chengyudahui.activity.SettingActivity" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical" >
+
+        <include layout="@layout/splitline" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/item_white_bg"
+            android:clickable="true"
+            android:onClick="settingMusic"
+            android:padding="10dp" >
+
+            <TextView
+                android:id="@+id/tv_daily_gold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:background="@drawable/item_white_bg"
+                android:text="背景音乐"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/cb_music"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:clickable="false"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
+        <include layout="@layout/splitline" />
+    </LinearLayout>
+
+</ScrollView>

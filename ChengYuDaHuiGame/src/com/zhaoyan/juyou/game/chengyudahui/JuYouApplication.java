@@ -14,16 +14,21 @@ import com.zhaoyan.juyou.game.chengyudahui.utils.ServiceUtil;
 
 public class JuYouApplication extends FrontiaApplication {
 	private static final String TAG = "JuYouApplication";
-
+	private static Context mContext;
 	private BitmapLruCache mCache = null;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		Log.d(TAG, "onCreate");
+		mContext = getApplicationContext();
 		initApplication(getApplicationContext());
 
 		initBitmapCache();
+	}
+
+	public static Context getApplicContext() {
+		return mContext;
 	}
 
 	/**
