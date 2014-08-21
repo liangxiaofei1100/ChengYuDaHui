@@ -42,6 +42,10 @@
             android:theme="@style/ActivityTheme" >
         </activity>
         <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.activity.SettingActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ChengYuDictionary"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme2"
@@ -333,6 +337,8 @@
         <service android:name="com.zhaoyan.juyou.game.chengyudahui.spy.SpyService" >
         </service>
         <service android:name="com.zhaoyan.juyou.game.chengyudahui.service.MusicPlayerService" >
+        </service>
+        <service android:name="com.zhaoyan.juyou.game.chengyudahui.BackgroundMusicService" >
         </service>
     </application>
 

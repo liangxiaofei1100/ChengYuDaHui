@@ -65,9 +65,22 @@ public class JuYouService extends Service {
 		ProtocolCommunication.getInstance().init(mContext);
 
 		startFileTransferServer(mContext);
+
+		initBackgroundMusic(mContext);
+	}
+
+	private void initBackgroundMusic(Context context) {
+		BackgroundMusicManager manager = BackgroundMusicManager.getInstance();
+		manager.init(mContext);
+	}
+
+	private void stopBackgroundMusic(Context context) {
+		BackgroundMusicManager manager = BackgroundMusicManager.getInstance();
+		manager.stopService(context);
 	}
 
 	private void stopCommunication() {
+		stopBackgroundMusic(mContext);
 		logout(mContext);
 		stopServerSearch(mContext);
 		stopServerCreator(mContext);
