@@ -44,13 +44,13 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ChengYuDictionary"
             android:screenOrientation="portrait"
-            android:theme="@style/ActivityTheme2"
+            android:theme="@style/SlideExitTheme"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.FeedBackChengYuActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Translucent" >
+            android:theme="@style/SlideTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.zhaoyan.juyou.game.chengyudahui.activity.ChengYuDictionary" />
@@ -71,6 +71,7 @@
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
+            android:theme="@style/SlideExitTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity"
             android:screenOrientation="portrait" >
             <meta-data
@@ -78,6 +79,7 @@
                 android:value="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" />
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.invite.InviteHttpActivity"
             android:screenOrientation="portrait" >
             <meta-data
@@ -85,6 +87,7 @@
                 android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.invite.InviteBluetoothActivity"
             android:screenOrientation="portrait" >
             <meta-data
@@ -92,6 +95,7 @@
                 android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.download.ShareAppActivity"
             android:screenOrientation="portrait" >
             <meta-data
@@ -99,6 +103,7 @@
                 android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.download.ShareAppServerActivity"
             android:screenOrientation="portrait" >
             <meta-data
@@ -106,6 +111,7 @@
                 android:value="com.zhaoyan.juyou.game.chengyudahui.activity.ShareAppActivity" />
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.download.ShareAppClientActivity"
             android:screenOrientation="portrait" >
             <meta-data
@@ -113,20 +119,24 @@
                 android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanAccountSettingActivity"
-            android:theme="@style/Theme.Translucent" >
+             >
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanModifyPaswordActivity"
-            android:theme="@style/Theme.Translucent" >
+            >
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanModifyEmailActivity"
-            android:theme="@style/Theme.Translucent" >
+             >
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanModifyPhoneActivity"
-            android:theme="@style/Theme.Translucent" >
+            >
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanLoginActivity"
@@ -136,32 +146,38 @@
                 android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanRegisterActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanRegisterPaswordActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ZhaoYanRegisterAccoutInfoActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ForgetPasswordActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.UserInfoSettingActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+             >
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ConnectFriendsActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+             >
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.download.GetAppActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
@@ -178,6 +194,7 @@
                 android:value="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity" />
         </activity>
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.download.AppInfoActicity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
@@ -234,6 +251,7 @@
              />
         
         <activity
+            android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.BaikeActivity"
             android:screenOrientation="portrait" />
         <activity

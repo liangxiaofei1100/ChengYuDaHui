@@ -13,32 +13,42 @@
     </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="@style/ThemeActivity">
+    <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
-    <style name="LauncherTheme" parent="@style/ThemeActivity">
+    <style name="LauncherTheme" parent="AppBaseTheme">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/bg_launcher</item>
     </style>
 
-    <style name="ActivityTheme" parent="@style/ThemeActivity">
+    <style name="ActivityTheme" parent="AppBaseTheme">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/bg_activity</item>
     </style>
 
-    <style name="ActivityTheme2" parent="@style/ThemeActivity">
+    <style name="ActivityTheme2" parent="AppBaseTheme">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@color/activity_background</item>
     </style>
 
-    <style name="ThemeActivity" parent="AppBaseTheme">
+    <style name="SlideTheme" parent="AppBaseTheme">
         <item name="android:windowAnimationStyle">@style/Animation_translate</item>
     </style>
 
     <style name="Animation_translate">
         <item name="android:activityOpenEnterAnimation">@anim/activity_right_in</item>
         <item name="android:activityOpenExitAnimation">@anim/activity_left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_right_out</item>
+    </style>
+    
+    <style name="SlideExitTheme" parent="AppBaseTheme">
+        <item name="android:windowAnimationStyle">@style/Animation_exit_translate</item>
+    </style>
+    <style name="Animation_exit_translate">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
         <item name="android:activityCloseEnterAnimation">@anim/activity_left_in</item>
         <item name="android:activityCloseExitAnimation">@anim/activity_right_out</item>
     </style>
@@ -50,7 +60,7 @@
         <item name="android:maxHeight">3dip</item>
     </style>
 
-    <style name="Theme.Translucent" parent="@style/ThemeActivity">
+    <style name="Theme.Translucent" parent="AppBaseTheme">
         <item name="android:windowBackground">@color/translucent_background</item>
         <!-- <item name="android:windowIsTranslucent">true</item> -->
         <item name="android:screenOrientation">portrait</item>
