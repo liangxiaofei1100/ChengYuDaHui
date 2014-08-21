@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnErrorListener;
 import android.os.Binder;
 import android.os.IBinder;
 
@@ -81,23 +80,30 @@ public class BackgroundMusicService extends Service {
 		Log.d(TAG, "play");
 		if (mMediaPlayer == null) {
 			mMediaPlayer = MediaPlayer.create(mContext, R.raw.bg_music);
+			mMediaPlayer.setLooping(true);
 		}
 
 		if (mMediaPlayer.isPlaying()) {
 			Log.d(TAG, "play isPlaying");
 			return;
 		}
-		mMediaPlayer.setLooping(true);
+
 		mMediaPlayer.start();
 	}
 
 	public void pause() {
 		Log.d(TAG, "pause");
+		if (mMediaPlayer == null) {
+			return;
+		}
 		mMediaPlayer.pause();
 	}
 
 	public void stop() {
 		Log.d(TAG, "stop");
+		if (mMediaPlayer == null) {
+			return;
+		}
 		mMediaPlayer.stop();
 		mMediaPlayer.release();
 		mMediaPlayer = null;
