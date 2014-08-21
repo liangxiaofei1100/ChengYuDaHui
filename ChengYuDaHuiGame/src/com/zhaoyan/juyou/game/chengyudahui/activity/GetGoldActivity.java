@@ -31,7 +31,7 @@ import com.zhaoyan.juyou.game.chengyudahui.invite.InviteBluetoothActivity;
 import com.zhaoyan.juyou.game.chengyudahui.invite.InviteHttpActivity;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
-public class GetGoldActivity extends ActionBarActivity implements
+public class GetGoldActivity extends BackgroundMusicBaseActivity implements
 		OnClickListener {
 	private static final String TAG = GetGoldActivity.class.getSimpleName();
 

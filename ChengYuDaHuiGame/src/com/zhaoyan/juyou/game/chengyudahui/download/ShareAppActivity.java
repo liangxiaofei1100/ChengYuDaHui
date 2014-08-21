@@ -22,8 +22,10 @@ import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.bae.GetAppInfoBae;
 import com.zhaoyan.juyou.bae.GetAppInfoResultListener;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BackgroundMusicBaseActivity;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BaseActivity;
 
-public class ShareAppActivity extends ActionBarActivity {
+public class ShareAppActivity extends BackgroundMusicBaseActivity {
 	private static final String TAG = ShareAppActivity.class.getSimpleName();
 	private Context mContext;
 

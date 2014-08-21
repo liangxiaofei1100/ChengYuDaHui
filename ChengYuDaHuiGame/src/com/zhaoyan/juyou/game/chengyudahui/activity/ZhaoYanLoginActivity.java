@@ -25,7 +25,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ZhaoYanLoginActivity extends ActionBarActivity implements OnClickListener {
+public class ZhaoYanLoginActivity extends BackgroundMusicBaseActivity implements OnClickListener {
 	private static final String TAG = ZhaoYanLoginActivity.class
 			.getSimpleName();
 	private Context mContext;

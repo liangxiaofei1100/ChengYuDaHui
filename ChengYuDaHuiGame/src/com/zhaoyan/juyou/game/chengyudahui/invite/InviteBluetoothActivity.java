@@ -14,8 +14,10 @@ import android.widget.Button;
 
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BackgroundMusicBaseActivity;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BaseActivity;
 
-public class InviteBluetoothActivity extends ActionBarActivity implements
+public class InviteBluetoothActivity extends BackgroundMusicBaseActivity implements
 		OnClickListener {
 	private static final String TAG = "InviteBluetoothActivity";
 

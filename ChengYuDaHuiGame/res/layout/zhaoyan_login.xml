@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#faf3f3"
     android:paddingBottom="10dp"
     android:paddingTop="10dp" >
 
