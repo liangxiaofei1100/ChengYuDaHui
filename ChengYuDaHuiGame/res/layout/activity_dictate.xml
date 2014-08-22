@@ -270,8 +270,7 @@
                     android:id="@+id/dictate_word_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="2dip"
-                    android:paddingTop="2dip" />
+                    android:layout_margin="2dip" />
             </LinearLayout>
 
             <TextView

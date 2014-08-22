@@ -38,7 +38,7 @@
         <item name="android:actionOverflowButtonStyle">@style/CustomActionOverflowButtonStyle</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@style/Animation_translate</item>
-        <item name="android:windowBackground">@drawable/bg_activity</item>
+        <item name="android:windowBackground">@color/activity_background</item>
     </style>
 
     <style name="Animation_translate">
@@ -53,15 +53,7 @@
         <item name="android:actionButtonStyle">@style/CustomActionButtonStyle</item>
         <item name="android:actionOverflowButtonStyle">@style/CustomActionOverflowButtonStyle</item>
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@drawable/bg_activity</item>
-        <item name="android:windowAnimationStyle">@style/Animation_exit_translate</item>
-    </style>
-
-    <style name="Animation_exit_translate">
-        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
-        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
-        <item name="android:activityCloseEnterAnimation">@anim/activity_left_in</item>
-        <item name="android:activityCloseExitAnimation">@anim/activity_right_out</item>
+        <item name="android:windowBackground">@color/activity_background</item>
     </style>
 
 </resources>

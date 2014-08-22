@@ -17,7 +17,7 @@ import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.utils.FeedbackUtil;
 import com.zhaoyan.juyou.game.chengyudahui.utils.FeedbackUtil.FeedbackResultListener;
 
-public class FeedBackChengYuActivity extends ActionBarActivity {
+public class FeedBackChengYuActivity extends BackgroundMusicBaseActivity {
 	private static final String TAG = FeedBackChengYuActivity.class
 			.getSimpleName();
 	public static final String EXTRA_CHENGYU = "chengyu";

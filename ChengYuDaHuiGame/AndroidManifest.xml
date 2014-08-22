@@ -55,9 +55,6 @@
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.FeedBackChengYuActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SlideTheme" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.ChengYuDictionary" />
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.knowledge.GuessGameOfPictureActivity"
@@ -78,9 +75,6 @@
             android:theme="@style/SlideExitTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity"
             android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" />
         </activity>
         <activity
             android:theme="@style/SlideTheme"
@@ -181,9 +175,6 @@
             android:name="com.zhaoyan.juyou.game.chengyudahui.download.AppInfoActicity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zhaoyan.juyou.game.chengyudahui.download.GetAppActivity" />
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameActivity"
@@ -216,9 +207,6 @@
             android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.DictateActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" />
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.knowledge.KnowledgeMainActivity"
