@@ -184,4 +184,69 @@ public class Utils {
 		context.startActivity(intent);
 	}
 	
+	/**
+	 * get percent from two spec num,like: 123123/11321400 = 9%
+	 * @param progress  current download bytes
+	 * @param max max file size bytes
+	 * @return like:20%
+	 */
+	public static String getPercent(long progress, long max) {
+        return new StringBuilder(16).append(getProgress(progress, max)).append("%").toString();
+    }
+    
+	/**
+	 * get progress from two spec nums
+	 * @param progress bytes,like:213123
+	 * @param max  bytes,like:34123131
+	 * @return progress,int,like:23
+	 */
+    public static int getProgress(long progress, long max) {
+        int rate = 0;
+        if (progress <= 0 || max <= 0) {
+            rate = 0;
+        } else if (progress > max) {
+            rate = 100;
+        } else {
+            rate = (int)((double)progress / max * 100);
+        }
+        return rate;
+    }
+    
+    /** 
+     * formate time
+     * @param time audio/video time like 12323312
+     * @return the format time string like 00:12:23
+     */  
+	public static String mediaTimeFormat(long duration) {
+		long hour = duration / (60 * 60 * 1000);
+		String min = duration % (60 * 60 * 1000) / (60 * 1000) + "";
+		String sec = duration % (60 * 60 * 1000) % (60 * 1000) + "";
+
+		if (min.length() < 2) {
+			min = "0" + duration / (1000 * 60) + "";
+		}
+
+		if (sec.length() == 4) {
+			sec = "0" + sec;
+		} else if (sec.length() == 3) {
+			sec = "00" + sec;
+		} else if (sec.length() == 2) {
+			sec = "000" + sec;
+		} else if (sec.length() == 1) {
+			sec = "0000" + sec;
+		}
+
+		if (hour == 0) {
+			return min + ":" + sec.trim().substring(0, 2);
+		} else {
+			String hours = "";
+			if (hour < 10) {
+				hours = "0" + hour;
+			} else {
+				hours = hours + "";
+			}
+			return hours + ":" + min + ":" + sec.trim().substring(0, 2);
+		}
+	}
+	
 }

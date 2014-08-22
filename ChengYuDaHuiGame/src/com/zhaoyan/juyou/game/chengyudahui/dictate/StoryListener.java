@@ -11,6 +11,7 @@ public interface StoryListener {
 	public static final int MSG_OPEN_APP = 5;
 	public static final int MSG_UPDATE_APP = 6;
 	public static final int MSG_DOWNLOAD_COMPLETE = 7;
+	public static final int MSG_UPDATE_AUDIO_TIME = 8;
 	
 	public static final String CALLBACK_FLAG = "callback_flag";
 	public static final String KEY_ITEM_STORYINFO = "key_item_storyinfo";

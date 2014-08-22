@@ -45,6 +45,7 @@ import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.bae.GetAppInfoBae;
 import com.zhaoyan.juyou.bae.GetAppInfoResultListener;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
 public class GetAppActivity extends ActionBarActivity implements
 		OnItemClickListener {
@@ -372,9 +373,9 @@ public class GetAppActivity extends ActionBarActivity implements
 
 			status = bytesAndStatus[2];
 
-			if (AppInfoActicity.isDownloading(status)) {
+			if (DownloadUtils.isDownloading(status)) {
 				progressBytes = bytesAndStatus[0];
-				percent = AppInfoActicity.getProgress(bytesAndStatus[0],
+				percent = Utils.getProgress(bytesAndStatus[0],
 						bytesAndStatus[1]);
 				appInfo.setProgressBytes(progressBytes);
 				appInfo.setPercent(percent);
