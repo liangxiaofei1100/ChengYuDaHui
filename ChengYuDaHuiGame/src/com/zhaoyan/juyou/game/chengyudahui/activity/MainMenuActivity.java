@@ -30,7 +30,6 @@ public class MainMenuActivity extends BackgroundMusicBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getSupportActionBar().hide();
 		setContentView(R.layout.activity_main_menu);
 		mContext = this;
 
