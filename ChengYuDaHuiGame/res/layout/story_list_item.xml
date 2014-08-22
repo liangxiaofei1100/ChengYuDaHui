@@ -63,7 +63,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="8dp"
-            android:layout_toLeftOf="@+id/story_item_duration"
+            android:layout_toLeftOf="@+id/story_item_size"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
             android:singleLine="true"
