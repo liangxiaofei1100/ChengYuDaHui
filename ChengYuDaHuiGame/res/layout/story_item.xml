@@ -2,23 +2,85 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
-    <com.zhaoyan.juyou.game.chengyudahui.dictate.CustomIndicator
-        android:id="@+id/story_tv_count"
+    
+    <ProgressBar 
+        android:id="@+id/story_bar_loading"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_centerInParent="true"
+        style="@android:style/Widget.ProgressBar.Large.Inverse"
+        />
+    
+    <com.zhaoyan.juyou.game.chengyudahui.view.TableTitleView
+        android:id="@+id/story_table_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:padding="10dp"
-        android:text="2/30" />
+        />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/story_viewpager"
+<!--     <FrameLayout -->
+<!--         android:id="@+id/story_fl_container" -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="match_parent" -->
+<!--         android:layout_below="@id/story_table_title"  -->
+<!--         android:layout_above="@+id/story_progressbar" -->
+<!--         /> -->
+	<FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/story_progressbar"
-        android:layout_below="@+id/story_tv_count" />
+        android:layout_above="@+id/rl_duration"
+        android:layout_below="@id/story_table_title"
+        android:layout_marginBottom="10dp"
+        >
+
+        <ListView
+            android:id="@+id/story_listview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/story_tv_tip"
+            android:layout_width="80.0dip"
+            android:layout_height="80.0dip"
+            android:layout_gravity="center"
+            android:background="@drawable/img_box1"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:textSize="30.0dip"
+            android:visibility="invisible" />
+
+        <com.zhaoyan.juyou.game.chengyudahui.dictate.SideBar
+            android:id="@+id/story_sidebar"
+            android:layout_width="30.0dip"
+            android:layout_height="fill_parent"
+            android:layout_gravity="right|center" />
+    </FrameLayout>
     
+	<RelativeLayout 
+	    android:id="@+id/rl_duration"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	     android:layout_above="@+id/story_progressbar"
+	    >
+	    <TextView
+            android:id="@+id/story_tv_max_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            />
+	    
+	    <TextView
+            android:id="@+id/story_tv_current_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="8dp"
+            />
+	</RelativeLayout>
+	    
     <ProgressBar
         android:id="@+id/story_progressbar"
         style="@style/Custom.ProgressBar.Horizontal"
@@ -30,9 +92,9 @@
     <RelativeLayout
         android:id="@+id/story_rl_bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="52dp"
         android:layout_alignParentBottom="true"
-        android:visibility="visible" >
+        >
         <TextView
             android:id="@+id/story_tv_title"
             android:layout_width="wrap_content"

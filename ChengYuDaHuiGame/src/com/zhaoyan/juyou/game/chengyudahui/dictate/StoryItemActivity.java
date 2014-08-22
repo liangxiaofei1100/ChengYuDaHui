@@ -1,8 +1,9 @@
 package com.zhaoyan.juyou.game.chengyudahui.dictate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+import java.util.Locale;
 
 import android.annotation.TargetApi;
 import android.app.DownloadManager;
@@ -16,18 +17,23 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,26 +43,31 @@ import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.DBConfig;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.db.StoryData.ItemColums;
+import com.zhaoyan.juyou.game.chengyudahui.dictate.SideBar.OnTouchingLetterChangedListener;
 import com.zhaoyan.juyou.game.chengyudahui.dictate.StoryDownloadDialog.OnDownloadOverListener;
 import com.zhaoyan.juyou.game.chengyudahui.download.DownloadUtils;
+import com.zhaoyan.juyou.game.chengyudahui.knowledge.Word;
 import com.zhaoyan.juyou.game.chengyudahui.service.MusicPlayerService;
+import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
+import com.zhaoyan.juyou.game.chengyudahui.view.Effectstype;
+import com.zhaoyan.juyou.game.chengyudahui.view.NiftyDialogBuilder;
+import com.zhaoyan.juyou.game.chengyudahui.view.TableTitleView;
+import com.zhaoyan.juyou.game.chengyudahui.view.TableTitleView.OnTableSelectChangeListener;
 
-public class StoryItemActivity extends ActionBarActivity{
+public class StoryItemActivity extends ActionBarActivity implements OnTableSelectChangeListener, OnItemClickListener{
 	private static final String TAG = StoryItemActivity.class.getSimpleName();
 	
-	private List<StoryInfo> mList = new ArrayList<StoryInfo>();
-	
-	//the count items that every page will view
-	private static final int PAGE_COUNT = 6;
-	
-	private ViewPager mViewPager;
-	private StoryPagerAdapter mPagerAdapter;
-	private CustomIndicator mIndicator;
+	private List<StoryInfo> mDownloadList = new ArrayList<StoryInfo>();
+	private List<StoryInfo> mUnDownloadList = new ArrayList<StoryInfo>();
+
+	private TableTitleView mTableTitleView;
 	
 	private ImageView mPlayPauseBtn;
 	private ProgressBar mProgressBar;
-	private TextView mTitleView;
-	private View mBottomBarView;
+	private TextView mPlayBarTitleView;
+	private View mPlayBarView;
+	private TextView mPlayBarMaxTimeView;
+	private TextView mPlayBarCurrentTimeView;
 	
 	private MusicPlayerService mMusicPlayerService = null;
 	
@@ -71,13 +82,22 @@ public class StoryItemActivity extends ActionBarActivity{
     private StoryInfo mCurrentPlayStoryInfo = null;
     
     private long mDownloadId = 0;
-    private String mAudioUrl = "";
     
     private UpdateThead mUpdateThead = null;
     
     private StoryItem mStoryItem = null;
     
-    private StoryQuery mStoryQuery = null;
+    private ListView mListView;
+	private SideBar mSideBar;
+	private TextView mTipTextView;
+	private StoryItemAdapter mAdapter;
+	private ProgressBar mLoadingBar;
+	
+	private CharacterParser mCharacterParser;
+	private PinyinComparator mPinyinComparator;
+	
+	//current is download list or undowload list
+	private int mCurrentTabPosition = 0;
 
 	private ServiceConnection mPlaybackConnection = new ServiceConnection() {
 		public void onServiceConnected(ComponentName className, IBinder service) {
@@ -98,20 +118,23 @@ public class StoryItemActivity extends ActionBarActivity{
 			String action = intent.getAction();
 			if (action.equals(MusicPlayerService.PLAYER_PREPARE_END)) {
 				// will begin to play
-				mTitleView.setText(mCurrentPlayStoryInfo.getTitle());
-				mBottomBarView.setVisibility(View.VISIBLE);
+				mPlayBarTitleView.setText(mCurrentPlayStoryInfo.getTitle());
+				mPlayBarView.setVisibility(View.VISIBLE);
 				mPlayPauseBtn.setVisibility(View.VISIBLE);
 				mPlayPauseBtn.setImageResource(R.drawable.pause);
 				
 				int duration = mMusicPlayerService.getDuration();
+				System.out.println(duration);
 				mProgressBar.setMax(duration);
+				mPlayBarMaxTimeView.setText(Utils.mediaTimeFormat(duration));
+				
 				updateProgressBar();
 			} else if (action.equals(MusicPlayerService.PLAY_COMPLETED)) {
 				mPlayPauseBtn.setImageResource(R.drawable.play);
 			} else if (action.equals(MusicPlayerService.PLAYER_NOT_PREPARE)) {
-				StoryInfo info = mList.get(0);
+//				StoryInfo info = mList.get(0);
 				//播放第一个
-				startPlay(info);
+//				startPlay(info);
 			} else if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
         		long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
                 String localFileName = mDownloadManagerPro.getFileName(mDownloadId);
@@ -123,7 +146,6 @@ public class StoryItemActivity extends ActionBarActivity{
                     int status = mDownloadManagerPro.getStatusById(mDownloadId);
                     Log.d(TAG, "status:" +  status);
                     if ( status == DownloadManager.STATUS_SUCCESSFUL) {
-                    	mAudioUrl = localFileName;
                     	
                     	mDownloaDialog.downloadOver("下载完成", localFileName);
                     }
@@ -150,21 +172,14 @@ public class StoryItemActivity extends ActionBarActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.story_item);
-		
+		Log.d(TAG, "onCreate start");
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		//getdata
 		mStoryItem = getIntent().getParcelableExtra("storyItem");
 		setTitle(mStoryItem.getTypeName());
 		
-		mIndicator = (CustomIndicator) findViewById(R.id.story_tv_count);
-		mPlayPauseBtn = (ImageView) findViewById(R.id.story_iv_playpause);
-		mTitleView = (TextView) findViewById(R.id.story_tv_title);
-		mBottomBarView = findViewById(R.id.story_rl_bottom_bar);
-		mProgressBar = (ProgressBar) findViewById(R.id.story_progressbar);
-		
-		mViewPager = (ViewPager) findViewById(R.id.story_viewpager);
-		mViewPager.setOnPageChangeListener(pageChangeListener);
+		initView();
 		
 		bindService(new Intent(this,MusicPlayerService.class), mPlaybackConnection, Context.BIND_AUTO_CREATE);
 		
@@ -185,9 +200,55 @@ public class StoryItemActivity extends ActionBarActivity{
 		registerReceiver(mPlayerEvtReceiver, filter);
 		
 		getStoryDatas();
+		Log.d(TAG, "onCreate end");
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+	}
+	
+	private void initView() {
+		mCharacterParser = CharacterParser.getInstance();
+		mPinyinComparator = new PinyinComparator();
+		
+		mSideBar = (SideBar) findViewById(R.id.story_sidebar);
+		mTipTextView = (TextView) findViewById(R.id.story_tv_tip);
+		mSideBar.setTextView(mTipTextView);
+		
+		//设置右侧触摸监听
+		mSideBar.setOnTouchingLetterChangedListener(new OnTouchingLetterChangedListener() {
+			@Override
+			public void onTouchingLetterChanged(String s) {
+				// 该字母首次出现的位置
+				int position = mAdapter.getPositionForSection(s.charAt(0));
+				if (position != -1) {
+					mListView.setSelection(position);
+				}
+
+			}
+		});
+		
+		mLoadingBar = (ProgressBar) findViewById(R.id.story_bar_loading);
+		
+		mListView = (ListView) findViewById(R.id.story_listview);
+		mListView.setOnItemClickListener(this);
+		mListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+		
+		mTableTitleView = (TableTitleView) findViewById(R.id.story_table_title);
+		mTableTitleView.initTitles(new String[] { "待下载", "已下载"});
+		mTableTitleView.setOnTableSelectChangeListener(this);
+		
+		mPlayPauseBtn = (ImageView) findViewById(R.id.story_iv_playpause);
+		mPlayBarTitleView = (TextView) findViewById(R.id.story_tv_title);
+		mPlayBarView = findViewById(R.id.story_rl_bottom_bar);
+		mProgressBar = (ProgressBar) findViewById(R.id.story_progressbar);
+		mPlayBarMaxTimeView = (TextView) findViewById(R.id.story_tv_max_duration);
+		mPlayBarCurrentTimeView = (TextView) findViewById(R.id.story_tv_current_duration);
 	}
 	
 	private void getStoryDatas(){
+		Log.d(TAG, "getStoryDatas start");
 		Uri uri = null;
 		switch (mStoryItem.getTypeId()) {
 		case DBConfig.STORY_BEAR:
@@ -220,44 +281,34 @@ public class StoryItemActivity extends ActionBarActivity{
 		default:
 			break;
 		}
-		mStoryQuery = new StoryQuery(getContentResolver());
-		mStoryQuery.startQuery(0, null, uri, null, null, null, null);
+		GetDataTask getDataTask = new GetDataTask();
+		getDataTask.execute(uri);
+		Log.d(TAG, "getStoryDatas end");
 	}
 	
-	private OnPageChangeListener pageChangeListener = new OnPageChangeListener() {
-
-		@Override
-		public void onPageSelected(int arg0) {
-			mIndicator.setCurrentPosition(arg0);
-			mPagerAdapter.setCurrentPage(arg0);
-		}
-
-		@Override
-		public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-		}
-
-		@Override
-		public void onPageScrollStateChanged(int arg0) {
-
-		}
-	};
 	
-	private class StoryQuery extends AsyncQueryHandler{
-
-		public StoryQuery(ContentResolver cr) {
-			super(cr);
-			// TODO Auto-generated constructor stub
-		}
+	/**
+	 * get story infos from db
+	 */
+	private class GetDataTask extends AsyncTask<Uri, Void, Void>{
 		
 		@Override
-		protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-			super.onQueryComplete(token, cookie, cursor);
+		protected void onPreExecute() {
+			super.onPreExecute();
+			mLoadingBar.setVisibility(View.VISIBLE);
+		}
+
+		@Override
+		protected Void doInBackground(Uri... params) {
+			Cursor cursor = getContentResolver().query(params[0], null, null, null, null);
 			StoryInfo info = null;
 			if (cursor != null && cursor.moveToFirst()) {
 				String title = "";
 				String fileName = "";
 				long size;
+				String pinyin;
+				String sortLetter;
+				String localPath;
 				do {
 					title = cursor.getString(cursor.getColumnIndex(ItemColums.TITLE));
 					fileName = cursor.getString(cursor.getColumnIndex(ItemColums.FILENAME));
@@ -268,15 +319,52 @@ public class StoryItemActivity extends ActionBarActivity{
 					info.setFileName(fileName);
 					info.setTitle(title);
 					info.setSize(size);
-					info.setLocalPath(DownloadUtils.getExistStoryLocalPath(
-							getApplicationContext(), mStoryItem.getFolder(), fileName));
-					mList.add(info);
+					localPath = DownloadUtils.getExistStoryLocalPath(
+							getApplicationContext(), mStoryItem.getFolder(), fileName);
+					info.setLocalPath(localPath);
+					
+					pinyin = mCharacterParser.getSelling(info.getTitle());
+					sortLetter = pinyin.substring(0, 1).toUpperCase(Locale.CHINA);
+					
+					// 正则表达式，判断首字母是否是英文字母
+					if(sortLetter.matches("[A-Z]")){
+						info.setSortLetter(sortLetter.toUpperCase(Locale.CHINA));
+					}else{
+						info.setSortLetter("#");
+					}
+					
+					if (localPath == null || localPath.isEmpty()) {
+						mUnDownloadList.add(info);
+					} else {
+						mDownloadList.add(info);
+					}
 				} while (cursor.moveToNext());
+				
+				Collections.sort(mDownloadList, mPinyinComparator);
+				Collections.sort(mUnDownloadList, mPinyinComparator);
+				
+				for(StoryInfo storyInfo : mDownloadList){
+					//得到重新排序后每个字所在的位置
+					int position = mDownloadList.indexOf(storyInfo);
+					storyInfo.setPosition(position);
+				}
 			}
-			mPagerAdapter = new StoryPagerAdapter(StoryItemActivity.this, mList, mIndicator, PAGE_COUNT);
-			mViewPager.setAdapter(mPagerAdapter);
-			mPagerAdapter.registerKeyListener(storyListener);
+			return null;
 		}
+		
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			mLoadingBar.setVisibility(View.GONE);
+			mAdapter = new StoryItemAdapter(StoryItemActivity.this, mUnDownloadList);
+			mListView.setAdapter(mAdapter);
+			updateTabText();
+		}
+	}
+	
+	private void updateTabText(){
+		mTableTitleView.setTableTitle(0, "待下载(" + mUnDownloadList.size() + ")");
+		mTableTitleView.setTableTitle(1, "已下载(" + mDownloadList.size() + ")");
 	}
 	
 	
@@ -292,31 +380,32 @@ public class StoryItemActivity extends ActionBarActivity{
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void doSelect(StoryInfo info){
-		StoryInfo storyInfo = null;
-		for (int i = 0; i < mList.size(); i++) {
-			storyInfo = mList.get(i);
-			if ( info.getFileName().equals(storyInfo.getFileName())) {
-				storyInfo.setSelect(true);
-			} else {
-				storyInfo.setSelect(false);
-			}
-		}
-		mPagerAdapter.update();
-	}
-	
 	public void startPlay(StoryInfo info){
-		Log.d(TAG, "startPlay.info:" + info.getTitle());
+		Log.d(TAG, "startPlay.info:" + info.getTitle() + ",position:" + info.getPosition());
 		mCurrentPlayStoryInfo = info;
 		if (info.getLocalPath() == null) {
 			return;
 		}
-		doSelect(info);
+		
+		mAdapter.setSelect(info.getPosition());
+		if (mCurrentTabPosition == 1) {
+			mAdapter.notifyDataSetChanged();
+		}
+		
 		mMusicPlayerService.setDataSource(info.getLocalPath());
 		mMusicPlayerService.start();
 	}
 	
 	public void playPause(View view) {
+		if (mCurrentPlayStoryInfo == null) {
+			if (mDownloadList.size() == 0) {
+				Toast.makeText(getApplicationContext(), "没有故事可播放，请先下载", Toast.LENGTH_SHORT).show();
+			} else {
+				startPlay(mDownloadList.get(0));
+			}
+			return;
+		}
+		
 		 // Perform action on click
         if (mMusicPlayerService != null && mMusicPlayerService.isPlaying()) {
         	mMusicPlayerService.pause();
@@ -334,48 +423,18 @@ public class StoryItemActivity extends ActionBarActivity{
 		
 		int currentPosition = mCurrentPlayStoryInfo.getPosition();
 		int next = currentPosition + 1;
-		next = (next >= mList.size()) ? 0 : next;
-		while (mList.get(next).getLocalPath() == null) {
-			if (next == mList.size()) {
-				next = 0;
-			} else {
-				next += 1;
-				next = (next >= mList.size()) ? 0 : next;
-			}
-		}
-		
-//		int currentPage = mCurrentPlayStoryInfo.getPage();
-//		int nextPage = mList.get(next).getPage();
-//		if (nextPage != currentPage) {
-//			mViewPager.setCurrentItem(nextPage, true);
-//			mPagerAdapter.setCurrentPage(nextPage);
-//		}
-		startPlay(mList.get(next));
+		next = (next >= mDownloadList.size()) ? 0 : next;
+		startPlay(mDownloadList.get(next));
 	}
 	
 	public void previous(View view){
 		if (mCurrentPlayStoryInfo == null) {
 			return;
 		}
-		
 		int currentPosition = mCurrentPlayStoryInfo.getPosition();
 		int pre = currentPosition - 1;
-		pre = (pre < 0) ? (mList.size() - 1) : pre;
-		while (mList.get(pre).getLocalPath() == null) {
-			if (pre == 0) {
-				pre = mList.size() - 1;
-			} else {
-				pre -= 1;
-				pre = (pre < 0) ? (mList.size() - 1) : pre;
-			}
-		}
-//		int currentPage = mCurrentPlayStoryInfo.getPage();
-//		int nextPage = mList.get(pre).getPage();
-//		if (nextPage != currentPage) {
-//			mViewPager.setCurrentItem(nextPage, true);
-//			mPagerAdapter.setCurrentPage(nextPage);
-//		}
-		startPlay(mList.get(pre));
+		pre = (pre < 0) ? (mDownloadList.size() - 1) : pre;
+		startPlay(mDownloadList.get(pre));
 	}
 
 	public void stop(View view) {
@@ -413,6 +472,7 @@ public class StoryItemActivity extends ActionBarActivity{
 					return;
 				}
 				mProgressBar.setProgress(currentPosition);
+				myHandler.sendMessage(myHandler.obtainMessage(StoryListener.MSG_UPDATE_AUDIO_TIME));
 			}
 		}
 	}
@@ -447,25 +507,20 @@ public class StoryItemActivity extends ActionBarActivity{
             switch (msg.what) {
                 case 0:
                     int status = (Integer)msg.obj;
-                    if (isDownloading(status)) {
-//                    	mDownloadBtn.setText("正在下载:0%");
+                    if (DownloadUtils.isDownloading(status)) {
                     	mDownloaDialog.updateProgress(0);
                         if (msg.arg2 < 0) {
                         } else {
-                        	int progress = getProgress(msg.arg1, msg.arg2);
+                        	int progress = Utils.getProgress(msg.arg1, msg.arg2);
                         	Log.d(TAG, "progress:" + progress);
                         	mDownloaDialog.updateProgress(progress);
-//                        	mDownloadBtn.setText("正在下载:" + progress + "%");
                         }
                     } else {
                         if (status == DownloadManager.STATUS_FAILED) {
                         	int reason = mDownloadManagerPro.getReason(mDownloadId);
                         	Toast.makeText(getApplicationContext(), "下载失败", Toast.LENGTH_SHORT).show();
-//                        	mDownloadBtn.setText("下载失败，点击重新下载");
                         	Log.e(TAG, "download failed.reason:" + reason);
                         } else if (status == DownloadManager.STATUS_SUCCESSFUL) {
-//                        	mDownloadBtn.setText("下载完成");
-//                        	mDownloadBtn.setEnabled(false);
                         } else {
                         }
                     }
@@ -479,7 +534,6 @@ public class StoryItemActivity extends ActionBarActivity{
 						mDownloaDialog.setOnDwonloadOverListener(new OnDownloadOverListener() {
 							@Override
 							public void downloadOver(StoryInfo info) {
-								// TODO Auto-generated method stub
 								Log.d(TAG, "startPlay,localpath:" + info.getLocalPath());
 								startPlay(info);
 							}
@@ -502,50 +556,110 @@ public class StoryItemActivity extends ActionBarActivity{
                 		Log.e(TAG, "myhandler.bundle is null");
 					}
                 	break;
+                case StoryListener.MSG_UPDATE_AUDIO_TIME:
+                	int progress = mMusicPlayerService.getPosition();
+                	mPlayBarCurrentTimeView.setText(Utils.mediaTimeFormat(progress));
+                	break;
             }
         }
     }
-
-    public static String getNotiPercent(long progress, long max) {
-        int rate = 0;
-        if (progress <= 0 || max <= 0) {
-            rate = 0;
-        } else if (progress > max) {
-            rate = 100;
-        } else {
-            rate = (int)((double)progress / max * 100);
-        }
-        return new StringBuilder(16).append(rate).append("%").toString();
-    }
     
-    public static int getProgress(long progress, long max) {
-        int rate = 0;
-        if (progress <= 0 || max <= 0) {
-            rate = 0;
-        } else if (progress > max) {
-            rate = 100;
-        } else {
-            rate = (int)((double)progress / max * 100);
-        }
-        return rate;
-    }
-    
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-	public static boolean isDownloading(int downloadManagerStatus) {
-        return downloadManagerStatus == DownloadManager.STATUS_RUNNING
-                || downloadManagerStatus == DownloadManager.STATUS_PAUSED
-                || downloadManagerStatus == DownloadManager.STATUS_PENDING;
-    }
-    
+	@Override
+	public void onTableSelect(int position) {
+		mCurrentTabPosition = position;
+		switch (position) {
+		case 0:
+			mAdapter.updateListView(mUnDownloadList);
+			break;
+		case 1:
+			mAdapter.updateListView(mDownloadList);
+			break;
+		default:
+			break;
+		}
+		mAdapter.notifyDataSetChanged();
+	}
+	
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		StoryInfo info = null;
+		switch (mCurrentTabPosition) {
+		case 0:
+			info = mUnDownloadList.get(position);
+			showPreDownloadDialog(info);
+			break;
+		case 1:
+			info = mDownloadList.get(position);
+			startPlay(info);
+			break;
+		default:
+			break;
+		}
+	}
+	
+	private void showPreDownloadDialog(final StoryInfo info){
+		if (info.getLocalPath() == null) {
+			final NiftyDialogBuilder dialogBuilder = new NiftyDialogBuilder(this, R.style.dialog_untran);
+			dialogBuilder.withTitle(info.getTitle())
+			.withTitleColor("#000000")
+			.withDividerColor("#11000000")
+			.withMessage("该故事尚未下载，是否下载\n下载需要50金币\n文件大小：" + Utils.getFormatSize(info.getSize()))
+			.isCancelableOnTouchOutside(true) 
+			.withDuration(50)
+			.withEffect(Effectstype.FadeIn) 
+			.withTipMessage(null)
+			.withButton1Text("取消") 
+			.withButton2Text("下载")
+			.setButton1Click(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dialogBuilder.dismiss();
+				}
+			})
+			.setButton2Click(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					//download
+					dialogBuilder.dismiss();
+					startDownload(info);
+				}
+			})
+			.show();
+		}
+	}
+	
+	private void startDownload(StoryInfo info){
+		mDownloaDialog = new StoryDownloadDialog(StoryItemActivity.this, info);
+		mDownloaDialog.setOnDwonloadOverListener(new OnDownloadOverListener() {
+			@Override
+			public void downloadOver(StoryInfo info) {
+				Log.d(TAG, "startPlay,localpath:" + info.getLocalPath());
+				mUnDownloadList.remove(info);
+				mDownloadList.add(info);
+				
+				Collections.sort(mDownloadList, mPinyinComparator);
+				Collections.sort(mUnDownloadList, mPinyinComparator);
+				mAdapter.notifyDataSetChanged();
+				
+				//对已下载的进行一下位置确认
+				for(StoryInfo storyInfo : mDownloadList){
+					//得到重新排序后每个字所在的位置
+					int position = mDownloadList.indexOf(storyInfo);
+					storyInfo.setPosition(position);
+				}
+				startPlay(info);
+				updateTabText();
+			}
+		});
+		mDownloaDialog.show();
+		mDownloadId = DownloadUtils.downloadStorys(StoryItemActivity.this, mDownloadManager, info);
+	}
 	
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		unbindService(mPlaybackConnection);
 		unregisterReceiver(mPlayerEvtReceiver);
-		if (mPagerAdapter != null) {
-			mPagerAdapter.unregisterMyKeyListener(storyListener);
-		}
 		
 		super.onDestroy();
 	}

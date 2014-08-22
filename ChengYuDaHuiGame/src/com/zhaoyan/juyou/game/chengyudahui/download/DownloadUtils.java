@@ -2,12 +2,6 @@ package com.zhaoyan.juyou.game.chengyudahui.download;
 
 import java.io.File;
 
-import com.baidu.frontia.FrontiaFile;
-import com.zhaoyan.common.util.PreferencesUtils;
-import com.zhaoyan.communication.util.Log;
-import com.zhaoyan.juyou.game.chengyudahui.dictate.StoryInfo;
-import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
-
 import android.annotation.TargetApi;
 import android.app.DownloadManager;
 import android.content.Context;
@@ -16,11 +10,22 @@ import android.os.Build;
 import android.os.Environment;
 import android.widget.Toast;
 
+import com.zhaoyan.common.util.PreferencesUtils;
+import com.zhaoyan.communication.util.Log;
+import com.zhaoyan.juyou.game.chengyudahui.dictate.StoryInfo;
+import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
+
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class DownloadUtils {
 	private static final String TAG = DownloadUtils.class.getSimpleName();
 	public DownloadUtils() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public static boolean isDownloading(int downloadManagerStatus) {
+		return downloadManagerStatus == DownloadManager.STATUS_RUNNING
+				|| downloadManagerStatus == DownloadManager.STATUS_PAUSED
+				|| downloadManagerStatus == DownloadManager.STATUS_PENDING;
 	}
 	
 	public static long downloadApp(Context context, DownloadManager dm, AppInfo appInfo){

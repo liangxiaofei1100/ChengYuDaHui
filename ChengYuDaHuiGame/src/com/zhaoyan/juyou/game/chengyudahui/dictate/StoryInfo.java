@@ -13,6 +13,7 @@ public class StoryInfo implements Parcelable{
 	private int position;
 	private int page;
 	private boolean isSelect;
+	private String sortLetter;
 	
 	public StoryInfo(){};
 
@@ -79,6 +80,14 @@ public class StoryInfo implements Parcelable{
 	public void setSelect(boolean isSelect) {
 		this.isSelect = isSelect;
 	}
+	
+	public String getSortLetter() {
+		return sortLetter;
+	}
+
+	public void setSortLetter(String sortLetter) {
+		this.sortLetter = sortLetter;
+	}
 
 	@Override
 	public int describeContents() {
@@ -113,6 +122,7 @@ public class StoryInfo implements Parcelable{
 		dest.writeInt(position);
 		dest.writeInt(page);
 		dest.writeInt(isSelect ? 1 : 0);
+		dest.writeString(sortLetter);
 	}
 
 	public void readFromParcel(Parcel in) {
@@ -124,6 +134,7 @@ public class StoryInfo implements Parcelable{
 		position = in.readInt();
 		page = in.readInt();
 		isSelect = in.readInt() == 1 ? true : false;
+		sortLetter = in.readString();
 	}
 	
 	

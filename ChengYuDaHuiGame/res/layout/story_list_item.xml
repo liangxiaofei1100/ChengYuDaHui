@@ -1,46 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/list_click_item_selector"
-    >
-    
-    <TextView 
-        android:id="@+id/story_item_tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp"
-        android:layout_toLeftOf="@+id/story_item_iv_icon"
-        android:singleLine="true"
-        android:paddingTop="10dp"
-    	android:paddingBottom="10dp"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:text="第一回"
-        />
-    
-    <ImageView 
-        android:id="@+id/story_item_iv_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="centerInside"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/game_stage_lock"
-        />
-    
-<!--     <Button  -->
-<!--         android:id="@+id/story_item_iv_icon" -->
-<!--         android:layout_width="wrap_content" -->
-<!--         android:layout_height="35.0dp" -->
-<!--         android:background="@drawable/ps__button_flat_dropbox" -->
-<!--         android:layout_alignParentRight="true" -->
-<!--         android:layout_marginRight="16dp" -->
-<!--         android:text="50金币" -->
-<!--         /> -->
+    android:gravity="center_vertical"
+    android:orientation="vertical" >
 
-</RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/story_rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.0" >
+
+        <TextView
+            android:id="@+id/story_tv_catalog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:paddingBottom="5dip"
+            android:paddingLeft="14dip"
+            android:paddingTop="16dip"
+            android:textColor="#ff33b5e5"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/story_tv_catalog"
+            android:background="#ff33b5e5" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.0"
+        android:background="@drawable/story_list_click_item_selector"
+        android:clickable="false"
+        android:focusable="false" >
+
+        <!-- <View -->
+        <!-- android:id="@+id/story_item_selected_bg" -->
+        <!-- android:layout_width="4dp" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:background="@color/titlebar_bg" -->
+        <!-- android:layout_alignParentLeft="true" -->
+        <!-- /> -->
+
+
+        <!-- <TextView -->
+        <!-- android:id="@+id/story_item_selected_bg" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="match_parent" -->
+        <!-- android:width="5dp" -->
+        <!-- android:background="@color/titlebar_bg" -->
+        <!-- android:textIsSelectable="false" -->
+        <!-- /> -->
+
+        <TextView
+            android:id="@+id/story_item_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="8dp"
+            android:layout_toLeftOf="@+id/story_item_duration"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:singleLine="true"
+            android:text="第一回"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/story_item_iv_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/game_stage_lock" />
+        
+        <TextView 
+            android:id="@+id/story_item_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/story_item_iv_icon"
+            android:layout_centerVertical="true"
+            android:text="12.32M"
+            />
+
+        <!-- <Button -->
+        <!-- android:id="@+id/story_item_iv_icon" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:layout_height="35.0dp" -->
+        <!-- android:background="@drawable/ps__button_flat_dropbox" -->
+        <!-- android:layout_alignParentRight="true" -->
+        <!-- android:layout_marginRight="16dp" -->
+        <!-- android:text="50金币" -->
+        <!-- /> -->
+
+    </RelativeLayout>
+
+</LinearLayout>

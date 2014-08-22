@@ -373,15 +373,15 @@ public class AppInfoActicity extends ActionBarActivity implements OnClickListene
             switch (msg.what) {
                 case 0:
                     int status = (Integer)msg.obj;
-                    if (isDownloading(status)) {
+                    if (DownloadUtils.isDownloading(status)) {
                     	mInfoTV.setText("正在下载:0%");
                     	mInfoTipTV.setVisibility(View.VISIBLE);
                     	mInfoTipTV.setText("(点击取消下载)");
                         if (msg.arg2 < 0) {
                         } else {
-                        	int progress = getProgress(msg.arg1, msg.arg2);
-                        	Log.d(TAG, "progress:" + progress);
-                        	mInfoTV.setText("正在下载:" + progress + "%");
+                        	String percent = Utils.getPercent(msg.arg1, msg.arg2);
+                        	Log.d(TAG, "percent:" + percent);
+                        	mInfoTV.setText("正在下载:" + percent);
                         }
                     } else {
                         if (status == DownloadManager.STATUS_FAILED) {
@@ -400,37 +400,6 @@ public class AppInfoActicity extends ActionBarActivity implements OnClickListene
                     break;
             }
         }
-    }
-
-    public static String getNotiPercent(long progress, long max) {
-        int rate = 0;
-        if (progress <= 0 || max <= 0) {
-            rate = 0;
-        } else if (progress > max) {
-            rate = 100;
-        } else {
-            rate = (int)((double)progress / max * 100);
-        }
-        return new StringBuilder(16).append(rate).append("%").toString();
-    }
-    
-    public static int getProgress(long progress, long max) {
-        int rate = 0;
-        if (progress <= 0 || max <= 0) {
-            rate = 0;
-        } else if (progress > max) {
-            rate = 100;
-        } else {
-            rate = (int)((double)progress / max * 100);
-        }
-        return rate;
-    }
-    
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-	public static boolean isDownloading(int downloadManagerStatus) {
-        return downloadManagerStatus == DownloadManager.STATUS_RUNNING
-                || downloadManagerStatus == DownloadManager.STATUS_PAUSED
-                || downloadManagerStatus == DownloadManager.STATUS_PENDING;
     }
     
     @Override

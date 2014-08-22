@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.DownloadManager;
-import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,7 +25,6 @@ import android.database.ContentObserver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -34,7 +32,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.baidu.a.a.a.a.a;
 import com.zhaoyan.common.file.APKUtil;
 import com.zhaoyan.common.util.DownloadManagerPro;
 import com.zhaoyan.common.util.PreferencesUtils;
@@ -46,7 +43,7 @@ import com.zhaoyan.juyou.bae.GetAppInfoBae;
 import com.zhaoyan.juyou.bae.GetAppInfoResultListener;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.activity.BackgroundMusicBaseActivity;
-import com.zhaoyan.juyou.game.chengyudahui.activity.BaseActivity;
+import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
 public class GetAppActivity extends BackgroundMusicBaseActivity implements
 		OnItemClickListener {
@@ -374,9 +371,9 @@ public class GetAppActivity extends BackgroundMusicBaseActivity implements
 
 			status = bytesAndStatus[2];
 
-			if (AppInfoActicity.isDownloading(status)) {
+			if (DownloadUtils.isDownloading(status)) {
 				progressBytes = bytesAndStatus[0];
-				percent = AppInfoActicity.getProgress(bytesAndStatus[0],
+				percent = Utils.getProgress(bytesAndStatus[0],
 						bytesAndStatus[1]);
 				appInfo.setProgressBytes(progressBytes);
 				appInfo.setPercent(percent);
