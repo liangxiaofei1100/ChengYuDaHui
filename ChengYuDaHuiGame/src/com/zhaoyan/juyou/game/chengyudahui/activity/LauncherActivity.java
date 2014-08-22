@@ -24,6 +24,7 @@ public class LauncherActivity extends BackgroundMusicBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getSupportActionBar().hide();
 		setContentView(R.layout.activity_launcher);
 		mContext = this;
 		

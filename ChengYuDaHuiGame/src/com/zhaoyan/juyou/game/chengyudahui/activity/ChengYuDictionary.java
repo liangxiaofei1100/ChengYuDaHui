@@ -3,7 +3,6 @@ package com.zhaoyan.juyou.game.chengyudahui.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -24,7 +23,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -41,7 +39,8 @@ import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
 import com.zhaoyan.juyou.game.chengyudahui.utils.ClipboadUtil;
 
-public class ChengYuDictionary extends Activity implements OnItemClickListener {
+public class ChengYuDictionary extends BackgroundMusicBaseActivity implements
+		OnItemClickListener {
 	private static final String TAG = ChengYuDictionary.class.getSimpleName();
 	private static final String CHENGYU_PREFERENCE = "chengyu_dictionary";
 	private static final int CHENGYU_TOTAL_NUMBER = 29349;
@@ -86,12 +85,11 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE); 
+		getSupportActionBar().hide();
 		setContentView(R.layout.activity_chengyu_dictionary);
 		mContext = this;
 		mChengyuQuery = new ChengyuQuery(getContentResolver());
 		mChengYuList = new ArrayList<ChengYu>();
-
 		initView();
 
 		mInitChengYuId = getLastChengYu();
@@ -223,7 +221,7 @@ public class ChengYuDictionary extends Activity implements OnItemClickListener {
 				intent.putExtra(FeedBackChengYuActivity.EXTRA_CHENGYU,
 						chengYu.name);
 				startActivity(intent);
-//				overridePendingTransition(R.anim.activity_right_in, 0);
+				// overridePendingTransition(R.anim.activity_right_in, 0);
 			}
 		}
 	}

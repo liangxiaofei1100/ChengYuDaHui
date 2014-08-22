@@ -18,12 +18,10 @@
     </style>
 
     <style name="LauncherTheme" parent="AppBaseTheme">
-        <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/bg_launcher</item>
     </style>
 
     <style name="ActivityTheme" parent="AppBaseTheme">
-        <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/bg_activity</item>
     </style>
 
