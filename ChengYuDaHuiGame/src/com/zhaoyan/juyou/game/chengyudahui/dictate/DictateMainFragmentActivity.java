@@ -9,8 +9,9 @@ import android.widget.TextView;
 
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BackgroundMusicBaseActivity;
 
-public class DictateMainFragmentActivity extends FragmentActivity {
+public class DictateMainFragmentActivity extends BackgroundMusicBaseActivity {
 
 	private static final String TAG = DictateMainFragmentActivity.class
 			.getSimpleName();
@@ -35,22 +36,34 @@ public class DictateMainFragmentActivity extends FragmentActivity {
 		Fragment fragment = null;
 		switch (position) {
 		case 0:
-			//汉字听写主界面
+			// 汉字听写主界面
+			if (mBackgroundMusicManager.isBackgroundMusicEnabled()
+					&& !mBackgroundMusicManager.isPlaying()) {
+				mBackgroundMusicManager.play();
+			}
 			fragment = new DictateMainFragment();
 			break;
 		case 1:
-			//听听天故事
+			// 听听天故事
+			if (mBackgroundMusicManager.isBackgroundMusicEnabled()
+					&& mBackgroundMusicManager.isPlaying()) {
+				mBackgroundMusicManager.pause();
+			}
 			fragment = new StoryMainFragment();
 			break;
 		case 2:
 		case 3:
 			Bundle args = new Bundle();
 			if (position == 2) {
-				//常用字书写
-				args.putString("level","中级");
+				// 常用字书写
+				args.putString("level", "中级");
 			} else {
-				//生僻字书写
-				args.putString("level","高级");
+				// 生僻字书写
+				args.putString("level", "高级");
+			}
+			if (mBackgroundMusicManager.isBackgroundMusicEnabled()
+					&& !mBackgroundMusicManager.isPlaying()) {
+				mBackgroundMusicManager.play();
 			}
 			fragment = new DictateItemFragment();
 			fragment.setArguments(args);
@@ -64,6 +77,18 @@ public class DictateMainFragmentActivity extends FragmentActivity {
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.fl_knowledge_item, fragment).commit();
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		if(mPosition==1){
+			if (mBackgroundMusicManager.isBackgroundMusicEnabled()
+					&& mBackgroundMusicManager.isPlaying()) {
+				mBackgroundMusicManager.pause();
+			}
+		}
 	}
 
 	public void setTitle(String title) {

@@ -30,13 +30,14 @@ import com.zhaoyan.communication.ipc.aidl.OnCommunicationListenerExternal;
 import com.zhaoyan.communication.ipc.aidl.User;
 import com.zhaoyan.juyou.game.chengyudahui.MainActivity;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BackgroundMusicBaseActivity;
 import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
 import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGameMsg;
 import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGameMsg.Command;
 import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGameMsg.GameType;
 import com.zhaoyan.juyou.game.chengyudahui.protocol.pb.SpeakGameProtos.SpeakGameMsg.RoleType;
 
-public class SpeakGameInternet extends Activity implements OnClickListener,
+public class SpeakGameInternet extends BackgroundMusicBaseActivity implements OnClickListener,
 		OnCommunicationListenerExternal {
 	private View mLoadingView, mSelectRoleView, mGameView, mRuleSettingView,
 			mLoadingText, mGameNextBtn, mGameRightBtn, rightLayout, nextLayout,

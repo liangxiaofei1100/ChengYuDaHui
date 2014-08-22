@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.zhaoyan.communication.cache.CacheableBitmapDrawable;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BackgroundMusicBaseActivity;
 import com.zhaoyan.juyou.game.chengyudahui.db.DictateData;
 import com.zhaoyan.juyou.game.chengyudahui.db.DictateData.DictateColums;
 import com.zhaoyan.juyou.game.chengyudahui.download.Conf;
@@ -34,7 +35,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 @SuppressLint("UseSparseArrays")
-public class DictateActivity extends Activity implements OnClickListener {
+public class DictateActivity extends BackgroundMusicBaseActivity implements OnClickListener {
 	private TextView mFirstPinyin, mSecondPinyin, mThirdPinyin, mFourthPinyin,
 			mDictateWordFirst, mDictateWordFourth, mDictateWordSecond,
 			mDictateWordThird;
