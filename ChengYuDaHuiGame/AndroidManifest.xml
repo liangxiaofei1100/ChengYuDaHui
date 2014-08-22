@@ -211,7 +211,8 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.knowledge.KnowledgeMainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ActivityTheme" />
+            android:theme="@style/ActivityTheme" 
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.service.MusicPlayerTestActivity"
             android:screenOrientation="portrait"

@@ -41,7 +41,7 @@ public class KnowledgeMainActivity extends FragmentActivity {
 
 		default:
 			//default
-			fragment = new GuessPictureFragment();
+			fragment = new ChengYuJieLongFragment();
 			break;
 		}
 		

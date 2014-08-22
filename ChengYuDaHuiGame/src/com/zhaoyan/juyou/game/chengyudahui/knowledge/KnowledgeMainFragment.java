@@ -99,7 +99,7 @@ public class KnowledgeMainFragment extends Fragment implements OnItemClickListen
 //		intent.setClass(getActivity(), KnowledgeItemActivity.class);
 //		intent.putExtra("path", path);
 //		startActivity(intent);
-		mActivity.selectItem(1);
+		mActivity.selectItem(2);
 		Log.d(TAG, "filepath:" + file.getAbsolutePath());
 	}
 	
