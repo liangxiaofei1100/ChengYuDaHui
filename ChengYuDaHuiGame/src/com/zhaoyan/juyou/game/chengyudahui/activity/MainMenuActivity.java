@@ -111,7 +111,13 @@ public class MainMenuActivity extends BackgroundMusicBaseActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (KeyEvent.KEYCODE_BACK == keyCode) {
 			moveTaskToBack(false);
+			mBackgroundMusicManager.stop();
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		mBackgroundMusicManager.stop();
 	}
 }

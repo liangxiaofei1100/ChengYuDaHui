@@ -10,6 +10,7 @@ import java.util.TimerTask;
 
 import com.zhaoyan.juyou.game.chengyudahui.MainActivity;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BackgroundMusicBaseActivity;
 import com.zhaoyan.juyou.game.chengyudahui.activity.ConnectFriendsActivity;
 import com.zhaoyan.juyou.game.chengyudahui.activity.UserInfoSettingActivity;
 import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
@@ -35,7 +36,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class SpeakGameActivity extends Activity implements OnClickListener {
+public class SpeakGameActivity extends BackgroundMusicBaseActivity implements OnClickListener {
 	private Button mLocalBtn, mInterBtn, mStartGameBtn, mGameTimeSetting;
 	private View mModeSelectView, mLocalGameView, mInterGameView, mBackView,
 			mGameSettingAndStartLayout, mLocalRightBtn, mLocalChangeBtn;

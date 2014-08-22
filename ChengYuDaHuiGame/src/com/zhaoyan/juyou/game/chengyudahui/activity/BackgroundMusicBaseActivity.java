@@ -38,14 +38,6 @@ public class BackgroundMusicBaseActivity extends BaseActivity {
 		}
 	}
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		if (mPlayWhenActivitySwitch) {
-			return;
-		}
-		mBackgroundMusicManager.stop();
-	}
 
 	@Override
 	public void startActivity(Intent intent) {
@@ -76,4 +68,13 @@ public class BackgroundMusicBaseActivity extends BaseActivity {
 	public void setPlayWhenActivitySwitch(boolean play) {
 		mPlayWhenActivitySwitch = play;
 	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		setPlayWhenActivitySwitch(true);
+		super.onBackPressed();
+		
+	}
+	
 }

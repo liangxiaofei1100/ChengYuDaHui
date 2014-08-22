@@ -108,7 +108,7 @@ public class DictateItemFragment extends Fragment {
 			intent.setClass(getActivity(), DictateActivity.class);
 			intent.putExtra("level", mLevelString);
 			intent.putExtra("index", arg2);
-			startActivity(intent);
+			mActivity.startActivity(intent);
 		}
 
 	}

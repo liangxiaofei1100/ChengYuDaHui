@@ -9,8 +9,9 @@ import android.widget.TextView;
 
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BackgroundMusicBaseActivity;
 
-public class KnowledgeMainActivity extends FragmentActivity {
+public class KnowledgeMainActivity extends BackgroundMusicBaseActivity {
 	private static final String TAG = KnowledgeMainActivity.class.getSimpleName();
 	
 	private TextView mTitleView;

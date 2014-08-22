@@ -363,7 +363,6 @@ public class PaintGameActivty extends Activity implements OnClickListener {
 
 		float valueDips = dip;
 		int valuePixels = (int) (valueDips * SCALE + 0.5f);
-		Log.e("ArbiterLiu", valuePixels + "@@@@@@@@@@@@@@@" + valueDips);
 		return valuePixels;
 
 	}
