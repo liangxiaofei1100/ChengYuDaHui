@@ -12,7 +12,6 @@ import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.DBConfig;
 import com.zhaoyan.juyou.game.chengyudahui.db.StoryData.ItemColums;
 import com.zhaoyan.juyou.game.chengyudahui.db.StoryData.TypeColums;
-import com.zhaoyan.juyou.game.chengyudahui.db.WordData.WordColums;
 
 
 /**
@@ -35,8 +34,8 @@ public class StoryProvider extends ContentProvider {
 	public static final int CHILD_SINGLE = 8;
 	public static final int FAIRY_TALE_COLLECTION = 9;
 	public static final int FAIRY_TALE_SINGLE = 10;
-	public static final int HISTORY_COLLECTION = 11;
-	public static final int HISTORY_SINGLE = 12;
+	public static final int HISTORY_WORLD_COLLECTION = 11;
+	public static final int HISTORY_WORLD_SINGLE = 12;
 	public static final int GOLD_CAT_COLLECTION = 13;
 	public static final int GOLD_CAT_SINGLE = 14;
 	public static final int XIYOUJI_COLLECTION = 15;
@@ -45,6 +44,8 @@ public class StoryProvider extends ContentProvider {
 	public static final int CHILD_SONG_SINGLE = 18;
 	public static final int TYPE_COLLECTION = 19;
 	public static final int TYPE_SINGLE = 20;
+	public static final int HISTORY_CN_COLLECTION = 21;
+	public static final int HISTORY_CN_SINGLE = 22;
 	
 	static {
 		mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -66,8 +67,8 @@ public class StoryProvider extends ContentProvider {
 		mUriMatcher.addURI(StoryData.AUTHORITY, ItemColums.FAIRY_TALE_TABLE_NAME, FAIRY_TALE_COLLECTION);
 		mUriMatcher.addURI(StoryData.AUTHORITY, ItemColums.FAIRY_TALE_TABLE_NAME + "/#", FAIRY_TALE_SINGLE);
 		
-		mUriMatcher.addURI(StoryData.AUTHORITY, ItemColums.HISTORY_TABLE_NAME, HISTORY_COLLECTION);
-		mUriMatcher.addURI(StoryData.AUTHORITY, ItemColums.HISTORY_TABLE_NAME + "/#", HISTORY_SINGLE);
+		mUriMatcher.addURI(StoryData.AUTHORITY, ItemColums.HISTORY_WORLD_TABLE_NAME, HISTORY_WORLD_COLLECTION);
+		mUriMatcher.addURI(StoryData.AUTHORITY, ItemColums.HISTORY_WORLD_TABLE_NAME + "/#", HISTORY_WORLD_SINGLE);
 		
 		mUriMatcher.addURI(StoryData.AUTHORITY, ItemColums.GOLD_CAT_TABLE_NAME, GOLD_CAT_COLLECTION);
 		mUriMatcher.addURI(StoryData.AUTHORITY, ItemColums.GOLD_CAT_TABLE_NAME + "/#", GOLD_CAT_SINGLE);
@@ -77,6 +78,9 @@ public class StoryProvider extends ContentProvider {
 		
 		mUriMatcher.addURI(StoryData.AUTHORITY, ItemColums.CHILD_SONG_TABLE_NAME, CHILD_SONG_COLLECTION);
 		mUriMatcher.addURI(StoryData.AUTHORITY, ItemColums.CHILD_SONG_TABLE_NAME + "/#", CHILD_SONG_SINGLE);
+		
+		mUriMatcher.addURI(StoryData.AUTHORITY, ItemColums.HISTORY_CN_TABLE_NAME, HISTORY_CN_COLLECTION);
+		mUriMatcher.addURI(StoryData.AUTHORITY, ItemColums.HISTORY_CN_TABLE_NAME + "/#", HISTORY_CN_SINGLE);
 	}
 
 	@Override
@@ -127,8 +131,8 @@ public class StoryProvider extends ContentProvider {
 		case FAIRY_TALE_COLLECTION:
 			builder.setTables(ItemColums.FAIRY_TALE_TABLE_NAME);
 			break;
-		case HISTORY_COLLECTION:
-			builder.setTables(ItemColums.HISTORY_TABLE_NAME);
+		case HISTORY_WORLD_COLLECTION:
+			builder.setTables(ItemColums.HISTORY_WORLD_TABLE_NAME);
 			break;
 		case GOLD_CAT_COLLECTION:
 			builder.setTables(ItemColums.GOLD_CAT_TABLE_NAME);
@@ -138,6 +142,9 @@ public class StoryProvider extends ContentProvider {
 			break;
 		case CHILD_SONG_COLLECTION:
 			builder.setTables(ItemColums.CHILD_SONG_TABLE_NAME);
+			break;
+		case HISTORY_CN_COLLECTION:
+			builder.setTables(ItemColums.HISTORY_CN_TABLE_NAME);
 			break;
 		default:
 			Log.e(TAG, "Unknwo Uri:" + arg0);

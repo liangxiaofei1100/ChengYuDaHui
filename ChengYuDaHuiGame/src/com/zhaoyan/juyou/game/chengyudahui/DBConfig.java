@@ -26,10 +26,11 @@ public class DBConfig {
 	public static final int STORY_SLEEP = 3;
 	public static final int STORY_CHILD = 4;
 	public static final int STORY_FAIRY_TALE = 5;
-	public static final int STORY_HISTORY = 6;
+	public static final int STORY_HISTORY_WORLD = 6;
 	public static final int STORY_GOLD_CAT = 7;
 	public static final int STORY_XIYOUJI = 8;
 	public static final int STORY_CHILD_SONG = 9;
+	public static final int STORY_HISTORY_CN = 10;
 	//story end
 	
 	//test

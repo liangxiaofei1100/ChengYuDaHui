@@ -5,4 +5,5 @@ public class Type {
 	public int typeNumber;
 	public String typeName;
 	public String folder;
+	public String tableName;
 }

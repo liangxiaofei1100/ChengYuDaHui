@@ -6,4 +6,5 @@ public class StoryData {
 	public String title;
 	public String fileName;
 	public long size;
+	public int duration;
 }

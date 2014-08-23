@@ -75,13 +75,19 @@ public class StoryItemAdapter extends BaseAdapter implements SectionIndexer{
 	
 		StoryInfo info = list.get(position);
 		viewHolder.titleView.setText(info.getTitle());
-		viewHolder.sizeView.setText(Utils.getFormatSize(info.getSize()));
 		
-		if (info.getLocalPath() != null && mSelectPosition == position) {
-			viewHolder.titleView.setTextColor(Color.BLUE);
+		
+		if (info.getLocalPath() != null) {
+			viewHolder.sizeView.setText(Utils.mediaTimeFormat(info.getDuration()));
+			if (mSelectPosition == position) {
+				viewHolder.titleView.setTextColor(Color.BLUE);
+			} else {
+				viewHolder.titleView.setTextColor(Color.BLACK);
+			}
 		} else {
-			viewHolder.titleView.setTextColor(Color.BLACK);
+			viewHolder.sizeView.setText(Utils.getFormatSize(info.getSize()));
 		}
+			
 		
 		return view;
 

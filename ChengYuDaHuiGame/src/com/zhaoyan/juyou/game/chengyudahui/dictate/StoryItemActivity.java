@@ -9,6 +9,7 @@ import android.annotation.TargetApi;
 import android.app.DownloadManager;
 import android.content.AsyncQueryHandler;
 import android.content.BroadcastReceiver;
+import android.content.ClipData.Item;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -266,8 +267,8 @@ public class StoryItemActivity extends ActionBarActivity implements OnTableSelec
 		case DBConfig.STORY_FAIRY_TALE:
 			uri = ItemColums.FAIRY_TALE_CONTENT_URI;
 			break;
-		case DBConfig.STORY_HISTORY:
-			uri = ItemColums.HISTORY_CONTENT_URI;
+		case DBConfig.STORY_HISTORY_WORLD:
+			uri = ItemColums.HISTORY_WORLD_CONTENT_URI;
 			break;
 		case DBConfig.STORY_GOLD_CAT:
 			uri = ItemColums.GOLD_CAT_CONTENT_URI;
@@ -277,6 +278,9 @@ public class StoryItemActivity extends ActionBarActivity implements OnTableSelec
 			break;
 		case DBConfig.STORY_CHILD_SONG:
 			uri = ItemColums.CHILD_SONG_CONTENT_URI;
+			break;
+		case DBConfig.STORY_HISTORY_CN:
+			uri = ItemColums.HISTORY_CN_CONTENT_URI;
 			break;
 		default:
 			break;
@@ -309,16 +313,19 @@ public class StoryItemActivity extends ActionBarActivity implements OnTableSelec
 				String pinyin;
 				String sortLetter;
 				String localPath;
+				int duration;
 				do {
 					title = cursor.getString(cursor.getColumnIndex(ItemColums.TITLE));
 					fileName = cursor.getString(cursor.getColumnIndex(ItemColums.FILENAME));
 					size = cursor.getLong(cursor.getColumnIndex(ItemColums.SIZE));
+					duration = cursor.getInt(cursor.getColumnIndex(ItemColums.DURATION));
 					
 					info = new StoryInfo();
 					info.setFolder(mStoryItem.getFolder());
 					info.setFileName(fileName);
 					info.setTitle(title);
 					info.setSize(size);
+					info.setDuration(duration);
 					localPath = DownloadUtils.getExistStoryLocalPath(
 							getApplicationContext(), mStoryItem.getFolder(), fileName);
 					info.setLocalPath(localPath);

@@ -72,6 +72,9 @@ public class StoryExcel {
 
 				cell = row.getCell(TypeSheet.COLUMN_FOLDER_INDEX);
 				type.folder = cell.getStringCellValue();
+				
+				cell = row.getCell(TypeSheet.COLUMN_TABLENAME_INDEX);
+				type.tableName = cell.getStringCellValue();
 
 				types.add(type);
 			}
@@ -111,6 +114,8 @@ public class StoryExcel {
 				cell = row.getCell(StorySheet.COLUMN_SIZE_INDEX);
 				storyData.size = (long) cell.getNumericCellValue();
 
+				//set duration 0
+				storyData.duration = 0;
 				storyDatas.add(storyData);
 			}
 		} catch (Exception e) {
@@ -134,6 +139,9 @@ public class StoryExcel {
 
 		public static final String COLUMN_FOLDER = "存放目录名称";
 		public static final int COLUMN_FOLDER_INDEX = 3;
+		
+		public static final String COLUMN_TABLENAME = "表名称";
+		public static final int COLUMN_TABLENAME_INDEX = 4;
 	}
 
 	class StorySheet {
@@ -142,10 +150,11 @@ public class StoryExcel {
 		public static final String SLEEP_SHEET_NAME = "睡前故事";
 		public static final String CHILD_SHEET_NAME = "幼儿故事";
 		public static final String FAIRY_TALE_SHEET_NAME = "世界童话故事";
-		public static final String HISTORY_SHEET_NAME = "世界历史故事";
+		public static final String HISTORY_WORLD_SHEET_NAME = "世界历史故事";
 		public static final String GOLDCAT_SHEET_NAME = "金猫传奇";
 		public static final String XIYOUJI_SHEET_NAME = "西游记";
 		public static final String CHILD_SONG_SHEET_NAME = "儿童歌曲大全";
+		public static final String HISTORY_CN_SHEET_NAME = "中国历史故事";
 
 		public static final String COLUMN_ID = "ID";
 		public static final int COLUMN_ID_INDEX = 0;
