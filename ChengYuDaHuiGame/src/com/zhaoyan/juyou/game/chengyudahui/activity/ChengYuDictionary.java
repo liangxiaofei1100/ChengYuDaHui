@@ -85,7 +85,6 @@ public class ChengYuDictionary extends BackgroundMusicBaseActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getSupportActionBar().hide();
 		setContentView(R.layout.activity_chengyu_dictionary);
 		mContext = this;
 		mChengyuQuery = new ChengyuQuery(getContentResolver());
