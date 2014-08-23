@@ -48,7 +48,7 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.ChengYuDictionary"
             android:screenOrientation="portrait"
-            android:theme="@style/SlideExitTheme"
+            android:theme="@style/ActivityTheme2"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
         <activity
