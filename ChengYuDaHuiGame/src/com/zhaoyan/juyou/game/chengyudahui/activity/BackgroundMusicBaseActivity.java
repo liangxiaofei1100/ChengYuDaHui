@@ -3,6 +3,8 @@ package com.zhaoyan.juyou.game.chengyudahui.activity;
 import com.zhaoyan.juyou.game.chengyudahui.BackgroundMusicManager;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -13,6 +15,7 @@ public class BackgroundMusicBaseActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		hideActionBar();
 		mBackgroundMusicManager = BackgroundMusicManager.getInstance();
 
 	}
@@ -37,7 +40,6 @@ public class BackgroundMusicBaseActivity extends BaseActivity {
 			mBackgroundMusicManager.pause();
 		}
 	}
-
 
 	@Override
 	public void startActivity(Intent intent) {
@@ -74,7 +76,31 @@ public class BackgroundMusicBaseActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		setPlayWhenActivitySwitch(true);
 		super.onBackPressed();
-		
 	}
-	
+
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+		setPlayWhenActivitySwitch(true);
+		super.finish();
+	}
+
+	private void hideActionBar() {
+		PackageManager packageManager = getPackageManager();
+		try {
+			ActivityInfo info = packageManager.getActivityInfo(
+					getComponentName(), 0);
+			String name = getResources().getResourceEntryName(info.theme);
+			if (name != null) {
+				if (name.equals("LauncherTheme")
+						|| name.equals("ActivityTheme")
+						|| name.equals("ActivityTheme2")) {
+					getSupportActionBar().hide();
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
