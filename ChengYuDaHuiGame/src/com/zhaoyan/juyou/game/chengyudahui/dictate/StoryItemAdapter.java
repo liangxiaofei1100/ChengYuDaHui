@@ -39,8 +39,12 @@ public class StoryItemAdapter extends BaseAdapter implements SectionIndexer{
 		return this.list.size();
 	}
 
-	public Object getItem(int position) {
-		return list.get(position);
+	public StoryInfo getItem(int position) {
+		if (list.size() > 0) {
+			return list.get(position);
+		}
+		
+		return null;
 	}
 
 	public long getItemId(int position) {
