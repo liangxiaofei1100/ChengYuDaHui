@@ -17,7 +17,6 @@ public class BackgroundMusicBaseActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		hideActionBar();
 		mBackgroundMusicManager = BackgroundMusicManager.getInstance();
-
 	}
 
 	@Override

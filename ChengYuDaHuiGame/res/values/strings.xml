@@ -67,5 +67,10 @@
     <string name="speak_pass_number">略过个数</string>
     <string name="speak_game_rule_setting">游戏规则设定</string>
     <string name="speak_game_number_unit">个</string>
+    
+    <string name="main_tab_set_study">学习</string>
+    <string name="main_tab_set_interaction">互动</string>
+    <string name="main_tab_set_friend">交友</string>
+    <string name="main_tab_set_me">我</string>
 
 </resources>

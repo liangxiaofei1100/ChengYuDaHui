@@ -21,5 +21,7 @@
     
      <color name="divider_color">#11000000</color>
      <color name="dialog_bg">#fff9f0f0</color>
+     
+     <color name="main_button_bar">#C24445</color>
 
 </resources>
