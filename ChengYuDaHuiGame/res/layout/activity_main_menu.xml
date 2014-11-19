@@ -13,11 +13,23 @@
         android:layout_alignParentTop="true"
         android:background="#F5C034"
          >
+         
+        <ImageView 
+            android:id="@+id/iv_title_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_launcher1"
+            />
+        
         <TextView
             android:id="@+id/tv_title_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" 
+            android:layout_toRightOf="@id/iv_title_icon"
+            android:layout_marginLeft="dp"
+            android:layout_centerVertical="true"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:text="Study"

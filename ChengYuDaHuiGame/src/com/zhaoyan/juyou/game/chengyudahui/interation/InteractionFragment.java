@@ -1,4 +1,4 @@
-package com.zhaoyan.juyou.game.chengyudahui.study;
+package com.zhaoyan.juyou.game.chengyudahui.interation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +19,8 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class StudyFragment extends Fragment implements OnItemClickListener{
-	private static final String TAG = StudyFragment.class.getSimpleName();
+public class InteractionFragment extends Fragment implements OnItemClickListener{
+	private static final String TAG = InteractionFragment.class.getSimpleName();
 	
 	private MainMenuActivity mActivity;
 	
@@ -32,6 +32,7 @@ public class StudyFragment extends Fragment implements OnItemClickListener{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		mActivity = (MainMenuActivity) getActivity();
+		
 	}
 	
 	@Override
@@ -49,11 +50,10 @@ public class StudyFragment extends Fragment implements OnItemClickListener{
 		//test
 		List<ListItemInfo> list = new ArrayList<ListItemInfo>();
 		ListItemInfo info = null;
-		
 		for (int i = 0; i < 4; i++) {
 			info = new ListItemInfo();
 			info.setIconId(R.drawable.avantar_test);
-			info.setTitle("学习界面测试" + i);
+			info.setTitle("互动界面测试" + i);
 			info.setSummary("这是一个测试Item" + i);
 			list.add(info);
 		}

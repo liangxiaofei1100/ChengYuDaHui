@@ -17,7 +17,7 @@
 
     <style name="LauncherTheme" parent="AppBaseTheme">
          <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@drawable/bg_launcher</item>
+        <item name="android:windowBackground">@drawable/splash</item>
     </style>
 
     <style name="ActivityTheme" parent="AppBaseTheme">

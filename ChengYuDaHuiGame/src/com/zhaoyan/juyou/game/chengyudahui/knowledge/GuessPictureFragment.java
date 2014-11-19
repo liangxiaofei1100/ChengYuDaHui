@@ -429,7 +429,7 @@ public class GuessPictureFragment extends Fragment implements OnClickListener, O
 		.withDividerColor("#11000000")
 		.withMessage(null)
 		.withTipMessage("小贴士:遇到困难可以点击提示寻找帮助哦")
-		.withIcon(getResources().getDrawable(R.drawable.ic_launcher))
+		.withIcon(getResources().getDrawable(R.drawable.ic_launcher1))
 		.isCancelableOnTouchOutside(false) 
 		.withDuration(450)
 		.withEffect(Effectstype.SlideBottom) 

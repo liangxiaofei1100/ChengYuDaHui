@@ -23,5 +23,11 @@
      <color name="dialog_bg">#fff9f0f0</color>
      
      <color name="main_button_bar">#C24445</color>
+     
+     <color name="friend_list_color1">#FAFBFF</color>
+     <color name="friend_list_color2">#FAEBF5</color>
+     <color name="friend_list_color3">#E9ECF3</color>
+     <color name="friend_list_color4">#E9DCDD</color>
+     <color name="friend_expand_bar">#7CD77A</color>
 
 </resources>

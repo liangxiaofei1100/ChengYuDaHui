@@ -1,8 +1,9 @@
-package com.zhaoyan.juyou.game.chengyudahui.study;
+package com.zhaoyan.juyou.game.chengyudahui.friend;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.zhaoyan.communication.ipc.aidl.User;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity;
 import com.zhaoyan.juyou.game.chengyudahui.adapter.ItemFragmentAdapter;
@@ -19,26 +20,27 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class StudyFragment extends Fragment implements OnItemClickListener{
-	private static final String TAG = StudyFragment.class.getSimpleName();
+public class FriendFragment extends Fragment implements OnItemClickListener{
+	private static final String TAG = FriendFragment.class.getSimpleName();
 	
 	private MainMenuActivity mActivity;
 	
 	private ListView mListView;
-	private ItemFragmentAdapter mAdapter;
+	private FriendAdapter mAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		mActivity = (MainMenuActivity) getActivity();
+		
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_list, null);
-		mListView = (ListView) rootView.findViewById(R.id.lv_listview);
+		View rootView = inflater.inflate(R.layout.fragment_friend_list, null);
+		mListView = (ListView) rootView.findViewById(R.id.lv_friend);
 		return rootView;
 	}
 	
@@ -47,18 +49,15 @@ public class StudyFragment extends Fragment implements OnItemClickListener{
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		//test
-		List<ListItemInfo> list = new ArrayList<ListItemInfo>();
-		ListItemInfo info = null;
-		
-		for (int i = 0; i < 4; i++) {
-			info = new ListItemInfo();
-			info.setIconId(R.drawable.avantar_test);
-			info.setTitle("学习界面测试" + i);
-			info.setSummary("这是一个测试Item" + i);
-			list.add(info);
+		List<User> list = new ArrayList<User>();
+		User user = null;
+		for (int i = 0; i < 12; i++) {
+			user = new User();
+			user.setUserName("用户" + i);
+			list.add(user);
 		}
 		
-		mAdapter = new ItemFragmentAdapter(mActivity, list);
+		mAdapter = new FriendAdapter(mActivity, list);
 		mListView.setAdapter(mAdapter);
 		mListView.setOnItemClickListener(this);
 	}
@@ -67,7 +66,7 @@ public class StudyFragment extends Fragment implements OnItemClickListener{
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		// TODO Auto-generated method stub
-		ListItemInfo itemInfo = mAdapter.getItem(position);
-		Toast.makeText(mActivity, "click:" + itemInfo.getTitle(), Toast.LENGTH_SHORT).show();
+		User user = mAdapter.getItem(position);
+		Toast.makeText(mActivity, "click:" + user.getUserName(), Toast.LENGTH_SHORT).show();
 	}
 }

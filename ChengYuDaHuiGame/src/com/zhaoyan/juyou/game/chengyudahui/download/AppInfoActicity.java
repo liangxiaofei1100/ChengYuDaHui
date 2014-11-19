@@ -147,7 +147,7 @@ public class AppInfoActicity extends ActionBarActivity implements OnClickListene
 //			mAppIconView.setPath(mAppInfo.getIconUrl());
 			boolean fromcache = mAppIconView.loadImage(Conf.URL_EX + mAppInfo.getIconUrl(), false, null);
 			if (!fromcache) {
-				mAppIconView.setImageResource(R.drawable.ic_launcher);
+				mAppIconView.setImageResource(R.drawable.ic_launcher1);
 			}
 			
 			mAppNameView.setText(mAppInfo.getLabel());

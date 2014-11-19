@@ -16,6 +16,9 @@ import com.zhaoyan.juyou.account.ZhaoYanAccount;
 import com.zhaoyan.juyou.account.ZhaoYanAccountManager;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.fragment.TestFragment;
+import com.zhaoyan.juyou.game.chengyudahui.friend.FriendFragment;
+import com.zhaoyan.juyou.game.chengyudahui.interation.InteractionFragment;
+import com.zhaoyan.juyou.game.chengyudahui.settings.WoFragment;
 import com.zhaoyan.juyou.game.chengyudahui.study.StudyFragment;
 
 /**
@@ -67,7 +70,7 @@ public class MainMenuActivity extends BackgroundMusicBaseActivity {
 		mTabButtons[2] = (Button) findViewById(R.id.tab_btn_friend);
 		mTabButtons[3] = (Button) findViewById(R.id.tab_btn_me);
 		mTabButtons[0].setSelected(true);
-		mTitleLabelView.setText(R.string.main_tab_set_study);
+		mTitleLabelView.setText(R.string.app_name);
 		
 		mViewPager = (ViewPager) findViewById(R.id.main_viewpager);
 		mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
@@ -111,15 +114,22 @@ public class MainMenuActivity extends BackgroundMusicBaseActivity {
 
 		@Override
 		public Fragment getItem(int arg0) {
+			Fragment fragment = null;
 			switch (arg0) {
 			case 0:
-				return new StudyFragment();
+				fragment = new StudyFragment();
+				break;
 			case 1:
+				fragment = new InteractionFragment();
+				break;
 			case 2:
+				fragment = new FriendFragment();
+				break;
 			case 3:
-				return TestFragment.newInstance(arg0);
+				fragment = new WoFragment();
+				break;
 			}
-			return null;
+			return fragment;
 		}
 
 		@Override

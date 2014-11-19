@@ -1,4 +1,4 @@
-package com.zhaoyan.juyou.game.chengyudahui.study;
+package com.zhaoyan.juyou.game.chengyudahui.adapter;
 
 import java.util.List;
 
@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.bean.ListItemInfo;
+import com.zhaoyan.juyou.game.chengyudahui.view.RoundedImageView;
 
 public class ItemFragmentAdapter extends BaseAdapter {
 	
@@ -48,9 +49,9 @@ public class ItemFragmentAdapter extends BaseAdapter {
 		if (convertView == null) {
 			view = mInflater.inflate(R.layout.fragment_list_item, null);
 			holder = new ViewHolder();
-			holder.imageView = (ImageView) view.findViewById(R.id.list_item_icon);
-			holder.titleView = (TextView) view.findViewById(R.id.list_item_title);
-			holder.summaryView = (TextView) view.findViewById(R.id.list_item_summary);
+			holder.imageView = (RoundedImageView) view.findViewById(R.id.head_view);
+			holder.titleView = (TextView) view.findViewById(R.id.username_view);
+			holder.summaryView = (TextView) view.findViewById(R.id.info_view);
 			
 			view.setTag(holder);
 		} else {
@@ -67,7 +68,7 @@ public class ItemFragmentAdapter extends BaseAdapter {
 	}
 	
 	private class ViewHolder{
-		ImageView imageView;
+		RoundedImageView imageView;
 		TextView titleView;
 		TextView summaryView;
 	}
