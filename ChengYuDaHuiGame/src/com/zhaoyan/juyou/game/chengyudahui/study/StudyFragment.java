@@ -3,11 +3,16 @@ package com.zhaoyan.juyou.game.chengyudahui.study;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.baidu.a.a.a.a.a;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity;
 import com.zhaoyan.juyou.game.chengyudahui.adapter.ItemFragmentAdapter;
 import com.zhaoyan.juyou.game.chengyudahui.bean.ListItemInfo;
+import com.zhaoyan.juyou.game.chengyudahui.study.story.StoryMainActivity;
+import com.zhaoyan.juyou.game.chengyudahui.study.write.WriteMainActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,10 +33,14 @@ public class StudyFragment extends Fragment implements OnItemClickListener{
 	private ItemFragmentAdapter mAdapter;
 	
 	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		mActivity = (MainMenuActivity) activity;
+	}
+	
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		mActivity = (MainMenuActivity) getActivity();
 	}
 	
 	@Override
@@ -50,11 +59,12 @@ public class StudyFragment extends Fragment implements OnItemClickListener{
 		List<ListItemInfo> list = new ArrayList<ListItemInfo>();
 		ListItemInfo info = null;
 		
+		String[] items = getResources().getStringArray(R.array.study_items);
 		for (int i = 0; i < 4; i++) {
 			info = new ListItemInfo();
 			info.setIconId(R.drawable.avantar_test);
-			info.setTitle("学习界面测试" + i);
-			info.setSummary("这是一个测试Item" + i);
+			info.setTitle(items[i]);
+			info.setSummary("xxxxxxxxxx");
 			list.add(info);
 		}
 		
@@ -66,8 +76,27 @@ public class StudyFragment extends Fragment implements OnItemClickListener{
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		// TODO Auto-generated method stub
 		ListItemInfo itemInfo = mAdapter.getItem(position);
-		Toast.makeText(mActivity, "click:" + itemInfo.getTitle(), Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent();
+		switch (position) {
+		case 0:
+			intent.setClass(mActivity, StoryMainActivity.class);
+			break;
+		case 1:
+			intent.setClass(mActivity, WriteMainActivity.class);
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		}
+		
+		try {
+			intent.putExtra("title", itemInfo.getTitle());
+			startActivity(intent);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

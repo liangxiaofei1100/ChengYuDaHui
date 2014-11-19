@@ -1,4 +1,4 @@
-package com.zhaoyan.juyou.game.chengyudahui.dictate;
+package com.zhaoyan.juyou.game.chengyudahui.study.write;
 
 import android.app.Activity;
 import android.os.Bundle;

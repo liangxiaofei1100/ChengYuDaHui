@@ -1,17 +1,13 @@
-package com.zhaoyan.juyou.game.chengyudahui.dictate;
+package com.zhaoyan.juyou.game.chengyudahui.study.story;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import android.annotation.TargetApi;
 import android.app.DownloadManager;
-import android.content.AsyncQueryHandler;
 import android.content.BroadcastReceiver;
-import android.content.ClipData.Item;
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -22,7 +18,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -43,19 +38,19 @@ import com.zhaoyan.common.util.DownloadManagerPro;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.DBConfig;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BaseActivity;
 import com.zhaoyan.juyou.game.chengyudahui.db.StoryData.ItemColums;
-import com.zhaoyan.juyou.game.chengyudahui.dictate.SideBar.OnTouchingLetterChangedListener;
-import com.zhaoyan.juyou.game.chengyudahui.dictate.StoryDownloadDialog.OnDownloadOverListener;
 import com.zhaoyan.juyou.game.chengyudahui.download.DownloadUtils;
-import com.zhaoyan.juyou.game.chengyudahui.knowledge.Word;
 import com.zhaoyan.juyou.game.chengyudahui.service.MusicPlayerService;
+import com.zhaoyan.juyou.game.chengyudahui.study.story.SideBar.OnTouchingLetterChangedListener;
+import com.zhaoyan.juyou.game.chengyudahui.study.story.StoryDownloadDialog.OnDownloadOverListener;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 import com.zhaoyan.juyou.game.chengyudahui.view.Effectstype;
 import com.zhaoyan.juyou.game.chengyudahui.view.NiftyDialogBuilder;
 import com.zhaoyan.juyou.game.chengyudahui.view.TableTitleView;
 import com.zhaoyan.juyou.game.chengyudahui.view.TableTitleView.OnTableSelectChangeListener;
 
-public class StoryItemActivity extends ActionBarActivity implements OnTableSelectChangeListener, OnItemClickListener{
+public class StoryItemActivity extends BaseActivity implements OnTableSelectChangeListener, OnItemClickListener{
 	private static final String TAG = StoryItemActivity.class.getSimpleName();
 	
 	private List<StoryInfo> mDownloadList = new ArrayList<StoryInfo>();
@@ -174,7 +169,7 @@ public class StoryItemActivity extends ActionBarActivity implements OnTableSelec
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.story_item);
 		Log.d(TAG, "onCreate start");
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		initItemActionBar();
 		
 		//getdata
 		mStoryItem = getIntent().getParcelableExtra("storyItem");
@@ -372,19 +367,6 @@ public class StoryItemActivity extends ActionBarActivity implements OnTableSelec
 	private void updateTabText(){
 		mTableTitleView.setTableTitle(0, "待下载(" + mUnDownloadList.size() + ")");
 		mTableTitleView.setTableTitle(1, "已下载(" + mDownloadList.size() + ")");
-	}
-	
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			finish();
-			break;
-		default:
-			break;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 	
 	public void startPlay(StoryInfo info){

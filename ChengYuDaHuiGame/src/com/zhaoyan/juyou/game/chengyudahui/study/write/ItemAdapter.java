@@ -1,4 +1,4 @@
-package com.zhaoyan.juyou.game.chengyudahui.dictate;
+package com.zhaoyan.juyou.game.chengyudahui.study.write;
 
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.db.DictateData.DictateColums;

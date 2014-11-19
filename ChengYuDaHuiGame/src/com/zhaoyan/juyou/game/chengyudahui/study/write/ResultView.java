@@ -1,4 +1,4 @@
-package com.zhaoyan.juyou.game.chengyudahui.dictate;
+package com.zhaoyan.juyou.game.chengyudahui.study.write;
 
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.zhaoyan.juyou.game.chengyudahui.dictate;
+package com.zhaoyan.juyou.game.chengyudahui.study.write;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.activity.BackgroundMusicBaseActivity;
+import com.zhaoyan.juyou.game.chengyudahui.study.story.StoryMainActivity;
 
 public class DictateMainFragmentActivity extends BackgroundMusicBaseActivity {
 
@@ -49,7 +50,7 @@ public class DictateMainFragmentActivity extends BackgroundMusicBaseActivity {
 					&& mBackgroundMusicManager.isPlaying()) {
 				mBackgroundMusicManager.pause();
 			}
-			fragment = new StoryMainFragment();
+//			fragment = new StoryMainActivity();
 			break;
 		case 2:
 		case 3:

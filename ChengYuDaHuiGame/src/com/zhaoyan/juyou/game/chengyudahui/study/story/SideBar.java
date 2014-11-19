@@ -1,4 +1,4 @@
-package com.zhaoyan.juyou.game.chengyudahui.dictate;
+package com.zhaoyan.juyou.game.chengyudahui.study.story;
 
 import android.content.Context;
 import android.graphics.Canvas;

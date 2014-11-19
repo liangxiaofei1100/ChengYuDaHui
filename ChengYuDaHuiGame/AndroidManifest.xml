@@ -204,7 +204,7 @@
                 android:value="333" />
         </activity>
         <activity
-            android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.DictateActivity"
+            android:name="com.zhaoyan.juyou.game.chengyudahui.study.write.DictateActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" >
         </activity>
@@ -217,8 +217,13 @@
             android:name="com.zhaoyan.juyou.game.chengyudahui.service.MusicPlayerTestActivity"
             android:screenOrientation="portrait"
              />
+        
         <activity
-            android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.StoryItemActivity"
+            android:name="com.zhaoyan.juyou.game.chengyudahui.study.story.StoryMainActivity"
+            android:screenOrientation="portrait"
+             />
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.study.story.StoryItemActivity"
             android:screenOrientation="portrait"
              />
         
@@ -227,11 +232,15 @@
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.BaikeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.DictateMainActivity"
+            android:name="com.zhaoyan.juyou.game.chengyudahui.study.write.WriteMainActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.study.write.DictateMainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" />
         <activity
-            android:name="com.zhaoyan.juyou.game.chengyudahui.dictate.DictateMainFragmentActivity"
+            android:name="com.zhaoyan.juyou.game.chengyudahui.study.write.DictateMainFragmentActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" />
 

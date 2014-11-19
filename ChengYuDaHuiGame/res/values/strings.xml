@@ -72,5 +72,29 @@
     <string name="main_tab_set_interaction">互动</string>
     <string name="main_tab_set_friend">交友</string>
     <string name="main_tab_set_me">我</string>
+    
+    <!-- study start-->
+    <string-array name="study_items">
+        <item>天天听故事</item>
+        <item>天天写汉字</item>
+        <item>天天练发音</item>
+        <item>天天学成语</item>
+    </string-array>
+    <string-array name="write_items">
+        <item>一年级</item>
+        <item>二年级</item>
+        <item>三年级</item>
+        <item>四年级</item>
+    </string-array>
+    <!-- study end -->
+    
+     <!-- interaction start-->
+    <string-array name="interaction_items">
+        <item>成语闯关</item>
+        <item>成语大会</item>
+        <item>生活百科</item>
+        <item>影视娱乐</item>
+    </string-array>
+    <!-- interaction end -->
 
 </resources>

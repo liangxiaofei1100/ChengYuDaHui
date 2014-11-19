@@ -51,7 +51,7 @@
             android:textSize="30.0dip"
             android:visibility="invisible" />
 
-        <com.zhaoyan.juyou.game.chengyudahui.dictate.SideBar
+        <com.zhaoyan.juyou.game.chengyudahui.study.story.SideBar
             android:id="@+id/story_sidebar"
             android:layout_width="30.0dip"
             android:layout_height="fill_parent"

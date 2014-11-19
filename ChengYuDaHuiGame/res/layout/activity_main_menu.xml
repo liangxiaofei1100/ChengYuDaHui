@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentTop="true"
-        android:background="#F5C034"
+        android:background="@color/titlebar_bg"
          >
          
         <ImageView 

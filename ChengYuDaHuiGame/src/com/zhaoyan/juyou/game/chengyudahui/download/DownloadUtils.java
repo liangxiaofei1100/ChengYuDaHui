@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.zhaoyan.common.util.PreferencesUtils;
 import com.zhaoyan.communication.util.Log;
-import com.zhaoyan.juyou.game.chengyudahui.dictate.StoryInfo;
+import com.zhaoyan.juyou.game.chengyudahui.study.story.StoryInfo;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
