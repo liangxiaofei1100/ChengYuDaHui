@@ -2,7 +2,6 @@ package com.zhaoyan.juyou.game.chengyudahui.friend;
 
 import java.util.List;
 
-import android.R.integer;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +25,7 @@ public class FriendAdapter extends BaseAdapter{
 	private ExpandViewOnClickListener mExpandViewOnClickListener = new ExpandViewOnClickListener();
 	
 	private int mClickPosition = -1;
+	
 
 	public FriendAdapter(Context context, List<User> mData) {
 		mInflater = LayoutInflater.from(context);
@@ -104,7 +104,6 @@ public class FriendAdapter extends BaseAdapter{
 		} else {
 			holder.expandView.setVisibility(View.GONE);
 		}
-		
 		User user = mData.get(position);
 		
 		holder.iconView.setImageResource(R.drawable.avantar_test);

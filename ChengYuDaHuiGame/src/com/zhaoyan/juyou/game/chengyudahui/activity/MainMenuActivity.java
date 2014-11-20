@@ -3,6 +3,7 @@ package com.zhaoyan.juyou.game.chengyudahui.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -20,11 +21,12 @@ import com.zhaoyan.juyou.game.chengyudahui.friend.FriendFragment;
 import com.zhaoyan.juyou.game.chengyudahui.interation.InteractionFragment;
 import com.zhaoyan.juyou.game.chengyudahui.settings.WoFragment;
 import com.zhaoyan.juyou.game.chengyudahui.study.StudyFragment;
+import com.zhaoyan.juyou.game.chengyudahui.view.ActionBar;
 
 /**
  * Main menu of the App.
  */
-public class MainMenuActivity extends BackgroundMusicBaseActivity {
+public class MainMenuActivity extends FragmentActivity {
 	private static final String TAG = MainMenuActivity.class.getSimpleName();
 	private Context mContext;
 	
@@ -41,36 +43,27 @@ public class MainMenuActivity extends BackgroundMusicBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_menu);
-		mContext = this;
 
 		initView();
+		
+		ActionBar actionBar = (ActionBar) findViewById(R.id.zy_action_bar);
+		actionBar.setTitle(getResources().getString(R.string.app_name));
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		ZhaoYanAccount account = ZhaoYanAccountManager
-				.getAccountFromLocal(mContext);
-	}
-	
-	public void setTitleLabel(String title){
-		mTitleLabelView.setText(title);
-	}
-	
-	public void setTitleLabel(int resId){
-		mTitleLabelView.setText(resId);
+//		ZhaoYanAccount account = ZhaoYanAccountManager
+//				.getAccountFromLocal(mContext);
 	}
 
 	private void initView() {
-		mTitleLabelView = (TextView) findViewById(R.id.tv_title_label);
-		
 		mTabButtons = new Button[4];
 		mTabButtons[0] = (Button) findViewById(R.id.tab_btn_study);
 		mTabButtons[1] = (Button) findViewById(R.id.tab_btn_interaction);
 		mTabButtons[2] = (Button) findViewById(R.id.tab_btn_friend);
 		mTabButtons[3] = (Button) findViewById(R.id.tab_btn_me);
 		mTabButtons[0].setSelected(true);
-		mTitleLabelView.setText(R.string.app_name);
 		
 		mViewPager = (ViewPager) findViewById(R.id.main_viewpager);
 		mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
@@ -166,13 +159,11 @@ public class MainMenuActivity extends BackgroundMusicBaseActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (KeyEvent.KEYCODE_BACK == keyCode) {
 			moveTaskToBack(false);
-			mBackgroundMusicManager.stop();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		mBackgroundMusicManager.stop();
 	}
 }

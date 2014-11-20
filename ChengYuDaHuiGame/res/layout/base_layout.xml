@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bar="http://schemas.android.com/apk/res-auto" 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.zhaoyan.juyou.game.chengyudahui.view.ActionBar 
+        android:id="@id/zy_action_bar" 
+        android:layout_height="@dimen/zy_action_bar_height"
+		android:layout_width="fill_parent"
+		android:background="?attr/zyActionBarBackground"
+		bar:type="normal"
+		bar:ab_title="@string/app_name" 
+        />
+
+    <FrameLayout
+        android:id="@+id/root_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/zy_action_bar" >
+    </FrameLayout>
+
+</RelativeLayout>

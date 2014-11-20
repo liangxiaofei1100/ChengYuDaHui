@@ -29,5 +29,8 @@
      <color name="friend_list_color3">#E9ECF3</color>
      <color name="friend_list_color4">#E9DCDD</color>
      <color name="friend_expand_bar">#7CD77A</color>
+     
+     <color name="zy_action_bar_tint">#F5C034</color>
+	<color name="zy_action_bar_divider_tint">#7fff</color>
 
 </resources>

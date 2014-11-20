@@ -3,12 +3,6 @@ package com.zhaoyan.juyou.game.chengyudahui.friend;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zhaoyan.communication.ipc.aidl.User;
-import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity;
-import com.zhaoyan.juyou.game.chengyudahui.adapter.ItemFragmentAdapter;
-import com.zhaoyan.juyou.game.chengyudahui.bean.ListItemInfo;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,9 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.zhaoyan.communication.ipc.aidl.User;
+import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity;
 
 public class FriendFragment extends Fragment implements OnItemClickListener{
 	private static final String TAG = FriendFragment.class.getSimpleName();

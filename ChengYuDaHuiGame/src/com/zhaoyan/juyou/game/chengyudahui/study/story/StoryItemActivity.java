@@ -22,8 +22,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -39,18 +37,20 @@ import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.DBConfig;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.activity.BaseActivity;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BaseZyActivity;
 import com.zhaoyan.juyou.game.chengyudahui.db.StoryData.ItemColums;
 import com.zhaoyan.juyou.game.chengyudahui.download.DownloadUtils;
 import com.zhaoyan.juyou.game.chengyudahui.service.MusicPlayerService;
 import com.zhaoyan.juyou.game.chengyudahui.study.story.SideBar.OnTouchingLetterChangedListener;
 import com.zhaoyan.juyou.game.chengyudahui.study.story.StoryDownloadDialog.OnDownloadOverListener;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
+import com.zhaoyan.juyou.game.chengyudahui.view.ActionBar;
 import com.zhaoyan.juyou.game.chengyudahui.view.Effectstype;
 import com.zhaoyan.juyou.game.chengyudahui.view.NiftyDialogBuilder;
 import com.zhaoyan.juyou.game.chengyudahui.view.TableTitleView;
 import com.zhaoyan.juyou.game.chengyudahui.view.TableTitleView.OnTableSelectChangeListener;
 
-public class StoryItemActivity extends BaseActivity implements OnTableSelectChangeListener, OnItemClickListener{
+public class StoryItemActivity extends BaseZyActivity implements OnTableSelectChangeListener, OnItemClickListener{
 	private static final String TAG = StoryItemActivity.class.getSimpleName();
 	
 	private List<StoryInfo> mDownloadList = new ArrayList<StoryInfo>();
@@ -169,11 +169,12 @@ public class StoryItemActivity extends BaseActivity implements OnTableSelectChan
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.story_item);
 		Log.d(TAG, "onCreate start");
-		initItemActionBar();
+		ActionBar actionBar = getZyActionBar();
+		actionBar.setActionHomeAsUpEnable(true);
 		
 		//getdata
 		mStoryItem = getIntent().getParcelableExtra("storyItem");
-		setTitle(mStoryItem.getTypeName());
+		actionBar.setTitle(mStoryItem.getTypeName());
 		
 		initView();
 		

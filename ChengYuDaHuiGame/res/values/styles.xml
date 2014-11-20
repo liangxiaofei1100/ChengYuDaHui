@@ -101,5 +101,64 @@
         <item name="android:textColor">#000000</item>
         <item name="android:gravity">center</item>
     </style>
+    
+    <!-- 
+	   The following themes inherits from the Theme.Light Android base theme. 
+	   They are strict copies of the previous themes which a large source of errors
+	   However, it looks like there are no way to overcome this (multiple inheritance
+	   is not permitted).
+	-->
+	<style name="Theme.ZhaoYan" parent="AppBaseTheme">
+	    <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        
+		<item name="zyActionBarTitleColor">@android:color/white</item>
+		<item name="zyActionBarBackground">@color/zy_action_bar_tint</item>
+		<item name="zyActionBarItemBackground">@drawable/zy_action_bar_item</item>
+		<item name="zyActionBarDividerDrawable">@color/zy_action_bar_divider_tint</item>
+		<item name="zyActionBarDividerWidth">1px</item>
+		<item name="zyActionBarApplicationDrawable">@null</item>
+		<item name="zyActionBarHomeDrawable">@null</item>
+		<item name="zyActionBarItemColorNormal">@android:color/white</item>
+		<item name="zyActionBarItemColorAlt">@android:color/black</item>
+		<item name="zyActionBarMaxItems">3</item>
+
+		<item name="zyActionBarStyle">@style/ZhaoYan.Widget.ActionBar</item>
+		<item name="zyActionBarTitleStyle">@style/ZhaoYan.Widget.ActionBar.Title</item>
+		<item name="zyActionBarItemStyle">@style/ZhaoYan.Widget.ActionBar.Item</item>
+	</style>
+	
+	<style name="ZhaoYan" />
+	<style name="ZhaoYan.Widget" />
+	
+
+
+	<!-- ActionBar related styles -->
+	<style name="ZhaoYan.Widget.ActionBar">
+		<item name="android:background">?attr/zyActionBarBackground</item>
+		<item name="android:layout_height">@dimen/zy_action_bar_height</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="dividerDrawable">?attr/zyActionBarDividerDrawable</item>
+		<item name="dividerWidth">?attr/zyActionBarDividerWidth</item>
+		<item name="homeDrawable">?attr/zyActionBarHomeDrawable</item>
+		<item name="maxItems">?attr/zyActionBarMaxItems</item>
+	</style>
+	
+	<style name="ZhaoYan.Widget.ActionBar.Dashboard">
+		<item name="type">dashboard</item>
+	</style>
+	
+	<style name="ZhaoYan.Widget.ActionBar.Empty">
+		<item name="type">empty</item>
+	</style>
+	
+	<style name="ZhaoYan.Widget.ActionBar.Item" parent="@style/ZhaoYan.Widget">
+		<item name="android:layout_width">@dimen/zy_action_bar_height</item>
+		<item name="android:background">?attr/zyActionBarItemBackground</item>
+	</style>
+	
+	<style name="ZhaoYan.Widget.ActionBar.Title" parent="@style/ZhaoYan.Widget">
+		<item name="android:textColor">?attr/zyActionBarTitleColor</item>
+	</style>
 
 </resources>

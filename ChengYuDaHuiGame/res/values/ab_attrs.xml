@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	
+	<!-- ActionBar related attributes -->
+	<attr name="zyActionBarTitleColor" format="color" />
+	<attr name="zyActionBarBackground" format="reference" />
+	<attr name="zyActionBarItemBackground" format="reference" />
+	<attr name="zyActionBarDividerDrawable" format="reference" />
+	<attr name="zyActionBarDividerWidth" format="dimension" />
+	<attr name="zyActionBarApplicationDrawable" format="reference" /> 
+	<attr name="zyActionBarHomeDrawable" format="reference" />
+	<attr name="zyActionBarItemColorNormal" format="reference|color" />
+	<attr name="zyActionBarItemColorAlt" format="reference|color" />
+	<attr name="zyActionBarMaxItems" format="integer" />
+
+	<attr name="zyActionBarStyle" format="reference" />
+	<attr name="zyActionBarTitleStyle" format="reference" />
+	<attr name="zyActionBarDividerStyle" format="reference" />
+	<attr name="zyActionBarItemStyle" format="reference" />
+
+	<attr name="zyTabIndicatorHeight" format="dimension" />
+	<attr name="zyTabIndicatorTextAppearance" format="reference" />
+	<attr name="zyTabIndicatorBackground" format="reference" />
+	
+	<attr name="zyTabIndicatorStyle" format="reference" />
+	
+	<!--			-->
+	<!-- Styleables -->
+	<!--			-->
+
+	<!-- ActionBar related attributes -->
+	<declare-styleable name="ActionBar">
+		<attr name="ab_title" format="string" />
+		<attr name="type">
+			<enum name="normal" value="0" />
+			<enum name="dashboard" value="1" />
+			<enum name="empty" value="2" />
+		</attr>
+		<attr name="dividerDrawable" format="reference"/>
+		<attr name="dividerWidth" format="integer"/>
+		<attr name="homeDrawable" format="reference" />
+		<attr name="maxItems" format="integer" />
+	</declare-styleable>
+	
+</resources>

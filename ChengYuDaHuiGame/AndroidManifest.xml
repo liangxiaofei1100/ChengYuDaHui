@@ -39,7 +39,7 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ActivityTheme" >
+            android:theme="@style/Theme.ZhaoYan" >
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.SettingActivity"
@@ -221,10 +221,12 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.study.story.StoryMainActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.ZhaoYan"
              />
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.study.story.StoryItemActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.ZhaoYan"
              />
         
         <activity
@@ -234,6 +236,7 @@
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.study.write.WriteMainActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.ZhaoYan"
             />
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.study.write.DictateMainActivity"

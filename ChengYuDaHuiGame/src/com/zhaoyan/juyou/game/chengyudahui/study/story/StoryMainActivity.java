@@ -20,9 +20,11 @@ import android.widget.Toast;
 
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.activity.BaseActivity;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BaseZyActivity;
 import com.zhaoyan.juyou.game.chengyudahui.db.StoryData.TypeColums;
+import com.zhaoyan.juyou.game.chengyudahui.view.ActionBar;
 
-public class StoryMainActivity extends BaseActivity implements OnItemClickListener {
+public class StoryMainActivity extends BaseZyActivity implements OnItemClickListener {
 	private static final String TAG = StoryMainActivity.class.getSimpleName();
 	
 	private ListView mListView;
@@ -30,15 +32,15 @@ public class StoryMainActivity extends BaseActivity implements OnItemClickListen
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.knowledge_fragment_main);
 		
-		initItemActionBar();
+		ActionBar actionBar = getZyActionBar();
+		actionBar.setActionHomeAsUpEnable(true);
 		
 		Intent intent = getIntent();
 		if(intent != null){
-			setTitle(intent.getStringExtra("title"));
+			actionBar.setTitle(intent.getStringExtra("title"));
 		}
 		
 		mListView = (ListView) findViewById(R.id.lv_knowledge);

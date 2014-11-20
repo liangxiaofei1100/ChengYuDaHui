@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<ImageView
+		android:id="@+id/zy_action_bar_home_item"
+		android:layout_width="@dimen/zy_action_bar_height"
+		android:layout_height="@dimen/zy_action_bar_height"
+		android:scaleType="fitCenter"
+		android:padding="8dp"
+		/>
+
+	<TextView
+		style="?attr/zyActionBarTitleStyle"
+		android:id="@+id/zy_action_bar_title"
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:layout_weight="1.0"
+		android:gravity="left|center_vertical"
+		android:singleLine="true"
+		android:textColor="?attr/zyActionBarTitleColor"
+		android:textSize="16sp"
+		android:textStyle="bold"
+		android:paddingRight="8dp"
+		android:paddingLeft="8dp" />
+
+</merge>

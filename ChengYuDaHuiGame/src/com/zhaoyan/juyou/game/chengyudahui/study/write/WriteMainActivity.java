@@ -14,22 +14,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.activity.BaseActivity;
+import com.zhaoyan.juyou.game.chengyudahui.activity.BaseZyActivity;
+import com.zhaoyan.juyou.game.chengyudahui.view.ActionBar;
 import com.zhaoyan.juyou.game.chengyudahui.view.LetterImageView;
 
-public class WriteMainActivity extends BaseActivity{
+public class WriteMainActivity extends BaseZyActivity{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_write_main);
 		
+		ActionBar actionBar = getZyActionBar();
+		actionBar.setActionHomeAsUpEnable(true);
+		
 		Intent intent = getIntent();
 		if (intent != null) {
-			setTitle(intent.getStringExtra("title"));
+			actionBar.setTitle(intent.getStringExtra("title"));
 		}
 		
-		initItemActionBar();
 		ListView listView = (ListView) findViewById(R.id.lv_write);
 		String[] items = getResources().getStringArray(R.array.write_items);
 		SampleListAdapter adapter = new SampleListAdapter(this, Arrays.asList(items));

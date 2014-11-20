@@ -1,40 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+     xmlns:bar="http://schemas.android.com/apk/res-auto" 
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" >
 
-    <RelativeLayout
-        android:id="@+id/rl_title"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_alignParentTop="true"
-        android:background="@color/titlebar_bg"
-         >
-         
-        <ImageView 
-            android:id="@+id/iv_title_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_margin="8dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_launcher1"
-            />
-        
-        <TextView
-            android:id="@+id/tv_title_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/iv_title_icon"
-            android:layout_marginLeft="dp"
-            android:layout_centerVertical="true"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:text="Study"
-            />
-    </RelativeLayout>
+    <com.zhaoyan.juyou.game.chengyudahui.view.ActionBar 
+        android:id="@id/zy_action_bar" 
+        android:layout_height="@dimen/zy_action_bar_height"
+		android:layout_width="fill_parent"
+		android:background="?attr/zyActionBarBackground"
+		bar:type="dashboard"
+		bar:ab_title="xxxxxxxx" 
+        />
 
     <LinearLayout
         android:id="@+id/main_bottom"
@@ -182,7 +162,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/main_bottom"
-        android:layout_below="@id/rl_title" 
+        android:layout_below="@id/zy_action_bar" 
         />
 
     <RelativeLayout
@@ -190,7 +170,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/main_bottom"
-        android:layout_below="@id/rl_title"
+        android:layout_below="@id/zy_action_bar"
         android:visibility="gone"
          />
 
