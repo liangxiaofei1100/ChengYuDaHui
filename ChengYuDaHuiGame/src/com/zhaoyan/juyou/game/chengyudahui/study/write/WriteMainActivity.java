@@ -5,11 +5,21 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.NinePatchDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,9 +50,11 @@ public class WriteMainActivity extends BaseZyActivity{
 	}
 	
 	private static class SampleListAdapter extends ArrayAdapter<String> {
+		private Context mContext;
 
         public SampleListAdapter(Context context, List<String> objects) {
             super(context, R.layout.activity_write_item, objects);
+            mContext = context;
         }
 
         @Override
@@ -60,5 +72,6 @@ public class WriteMainActivity extends BaseZyActivity{
 
             return convertView;
         }
+        
     }
 }

@@ -11,12 +11,13 @@
 
     <com.zhaoyan.juyou.game.chengyudahui.view.LetterImageView
         android:id="@+id/liv_write_num"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:scaleType="center"
          />
 
     <LinearLayout
+        android:id="@+id/ll_write_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"

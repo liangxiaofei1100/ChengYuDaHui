@@ -50,10 +50,13 @@ public class InteractionFragment extends Fragment implements OnItemClickListener
 		//test
 		List<ListItemInfo> list = new ArrayList<ListItemInfo>();
 		ListItemInfo info = null;
-		for (int i = 0; i < 4; i++) {
+		
+		String[] items = getResources().getStringArray(R.array.interaction_items);
+		
+		for (int i = 0; i < items.length; i++) {
 			info = new ListItemInfo();
 			info.setIconId(R.drawable.avantar_test);
-			info.setTitle("互动界面测试" + i);
+			info.setTitle(items[i]);
 			info.setSummary("这是一个测试Item" + i);
 			list.add(info);
 		}
