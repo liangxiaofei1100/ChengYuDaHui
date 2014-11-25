@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/liv_write_num"
-        android:background="@drawable/msg_bubble_incoming"
+        android:background="@drawable/msg_bubble_left"
         android:paddingLeft="48dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"

@@ -230,6 +230,12 @@
              />
         
         <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.friend.ChatActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ZhaoYan"
+             />
+        
+        <activity
             android:theme="@style/SlideTheme"
             android:name="com.zhaoyan.juyou.game.chengyudahui.activity.BaikeActivity"
             android:screenOrientation="portrait" />

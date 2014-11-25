@@ -3,6 +3,7 @@ package com.zhaoyan.juyou.game.chengyudahui.friend;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -66,5 +67,10 @@ public class FriendFragment extends Fragment implements OnItemClickListener{
 		// TODO Auto-generated method stub
 		User user = mAdapter.getItem(position);
 		Toast.makeText(mActivity, "click:" + user.getUserName(), Toast.LENGTH_SHORT).show();
+		
+		//test
+		Intent intent = new Intent();
+		intent.setClass(mActivity, ChatActivity.class);
+		startActivity(intent);
 	}
 }
