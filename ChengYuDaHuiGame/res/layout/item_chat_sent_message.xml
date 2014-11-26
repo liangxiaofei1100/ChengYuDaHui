@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
@@ -17,31 +18,28 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp" >
 
-        <ImageView
+        <com.zhaoyan.juyou.game.chengyudahui.view.RoundedImageView
             android:id="@+id/iv_avatar"
-            android:contentDescription="@string/app_name"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/avatar_height"
+            android:layout_height="@dimen/avatar_height"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="5dp"
-            android:background="@drawable/avantar_test"
-            android:scaleType="fitXY" />
+            android:scaleType="center"
+            app:riv_corner_radius="90dp" />
 
         <TextView
             android:id="@+id/tv_message"
             style="@style/chat_content_date_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/iv_avatar"
             android:background="@drawable/msg_bubble_right"
             android:maxWidth="225.0dip"
             android:minHeight="50dp"
             android:minWidth="50dp"
             android:paddingLeft="5dp"
-            android:paddingRight="15dp" />
+            android:paddingRight="20dp" />
 
         <ImageView
             android:id="@+id/iv_fail_resend"

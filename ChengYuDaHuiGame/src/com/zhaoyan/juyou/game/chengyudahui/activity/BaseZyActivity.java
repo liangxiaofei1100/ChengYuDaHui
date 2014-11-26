@@ -19,6 +19,7 @@ import com.zhaoyan.juyou.game.chengyudahui.view.ActionBar.OnActionBarListener;
 public class BaseZyActivity extends Activity {
 	protected Context mContext;
 	private ActionBar mActionBar;
+	private Toast mToast = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,14 @@ public class BaseZyActivity extends Activity {
 	
 	public ActionBar getZyActionBar(){
 		return mActionBar;
+	}
+	
+	public void showToast(String message) {
+		if (mToast != null) {
+			mToast.cancel();
+		}
+		mToast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+		mToast.show();
 	}
 
 	@Override

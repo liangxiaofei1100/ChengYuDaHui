@@ -144,7 +144,7 @@ public class TimeUtil {
 		return format.format(new Date(time));
 	}
 
-	/** 获取聊天时间：因为sdk的时间默认到秒故应该乘1000
+	/** 
 	  * @Title: getChatTime
 	  * @Description: TODO
 	  * @param @param timesamp
@@ -153,27 +153,26 @@ public class TimeUtil {
 	  * @throws
 	  */
 	public static String getChatTime(long timesamp) {
-		long clearTime = timesamp*1000;
 		String result = "";
 		SimpleDateFormat sdf = new SimpleDateFormat("dd");
 		Date today = new Date(System.currentTimeMillis());
-		Date otherDay = new Date(clearTime);
+		Date otherDay = new Date(timesamp);
 		int temp = Integer.parseInt(sdf.format(today))
 				- Integer.parseInt(sdf.format(otherDay));
 
 		switch (temp) {
 		case 0:
-			result = "今天 " + getHourAndMin(clearTime);
+			result = "今天 " + getHourAndMin(timesamp);
 			break;
 		case 1:
-			result = "昨天 " + getHourAndMin(clearTime);
+			result = "昨天 " + getHourAndMin(timesamp);
 			break;
 		case 2:
-			result = "前天 " + getHourAndMin(clearTime);
+			result = "前天 " + getHourAndMin(timesamp);
 			break;
 
 		default:
-			result = getTime(clearTime);
+			result = getTime(timesamp);
 			break;
 		}
 

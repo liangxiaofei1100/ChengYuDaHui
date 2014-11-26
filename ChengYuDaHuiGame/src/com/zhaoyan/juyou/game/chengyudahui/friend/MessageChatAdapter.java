@@ -5,8 +5,17 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.zhaoyan.communication.ipc.aidl.User;
+import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.view.RoundedImageView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +36,7 @@ import android.widget.TextView;
   * @date 2014-5-28 下午5:34:07
   */
 public class MessageChatAdapter extends BaseListAdapter<ZhaoYanMsg> {
+	private static final String TAG = MessageChatAdapter.class.getSimpleName();
 
 	//8种Item的类型
 	//文本
@@ -43,11 +53,25 @@ public class MessageChatAdapter extends BaseListAdapter<ZhaoYanMsg> {
 	private final int TYPE_RECEIVER_VOICE = 7;
 	
 	String currentObjectId = "";
+	
+	private DisplayImageOptions options;
+	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
 
 	public MessageChatAdapter(Context context,List<ZhaoYanMsg> msgList) {
 		// TODO Auto-generated constructor stub
 		super(context, msgList);
 		
+		options = new DisplayImageOptions.Builder()
+		.showImageForEmptyUri(R.drawable.ic_launcher)
+		.showImageOnFail(R.drawable.ic_launcher)
+		.resetViewBeforeLoading(true)
+		.cacheOnDisc(true)
+		.cacheInMemory(true)
+		.imageScaleType(ImageScaleType.EXACTLY)
+		.bitmapConfig(Bitmap.Config.RGB_565)
+		.considerExifParams(true)
+		.displayer(new FadeInBitmapDisplayer(300))
+		.build();
 	}
 
 	@Override
@@ -102,7 +126,7 @@ public class MessageChatAdapter extends BaseListAdapter<ZhaoYanMsg> {
 			convertView = createViewByType(item, position);
 		}
 		//文本类型
-		ImageView iv_avatar = ViewHolder.get(convertView, R.id.iv_avatar);
+		RoundedImageView iv_avatar = ViewHolder.get(convertView, R.id.iv_avatar);
 		final ImageView iv_fail_resend = ViewHolder.get(convertView, R.id.iv_fail_resend);//失败重发
 		final TextView tv_send_status = ViewHolder.get(convertView, R.id.tv_send_status);//发送状态
 		TextView tv_time = ViewHolder.get(convertView, R.id.tv_time);
@@ -120,7 +144,7 @@ public class MessageChatAdapter extends BaseListAdapter<ZhaoYanMsg> {
 		//点击头像进入个人资料
 		String avatar = item.getBelongAvatar();
 		if(avatar!=null && !avatar.equals("")){//加载头像-为了不每次都加载头像
-//			ImageLoader.getInstance().displayImage(avatar, iv_avatar, ImageLoadOptions.getOptions(),animateFirstListener);
+			ImageLoader.getInstance().displayImage(avatar, iv_avatar, ImageLoadOptions.getOptions(),animateFirstListener);
 		}else{
 			iv_avatar.setImageResource(R.drawable.avantar_test);
 		}
@@ -145,7 +169,7 @@ public class MessageChatAdapter extends BaseListAdapter<ZhaoYanMsg> {
 			}
 		});
 		
-		tv_time.setText(TimeUtil.getChatTime(Long.parseLong(item.getMsgTime())));
+		tv_time.setText(TimeUtil.getChatTime(item.getMsgTime()));
 		
 		if(getItemViewType(position)==TYPE_SEND_TXT
 //				||getItemViewType(position)==TYPE_SEND_IMAGE//图片单独处理
@@ -351,54 +375,51 @@ public class MessageChatAdapter extends BaseListAdapter<ZhaoYanMsg> {
 			}else{
 				showUrl = text;
 			}
+			Log.d(TAG, "imageUrl:" + showUrl);
 			//为了方便每次都是取本地图片显示
-//			ImageLoader.getInstance().displayImage(showUrl, iv_picture);
+			ImageLoader.getInstance().displayImage(showUrl, iv_picture);
 		}else{
-//			ImageLoader.getInstance().displayImage(text, iv_picture,options,new ImageLoadingListener() {
-//				
-//				@Override
-//				public void onLoadingStarted(String imageUri, View view) {
-//					// TODO Auto-generated method stub
-//					progress_load.setVisibility(View.VISIBLE);
-//				}
-//				
-//				@Override
-//				public void onLoadingFailed(String imageUri, View view,
-//						FailReason failReason) {
-//					// TODO Auto-generated method stub
-//					progress_load.setVisibility(View.INVISIBLE);
-//				}
-//				
-//				@Override
-//				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-//					// TODO Auto-generated method stub
-//					progress_load.setVisibility(View.INVISIBLE);
-//				}
-//				
-//				@Override
-//				public void onLoadingCancelled(String imageUri, View view) {
-//					// TODO Auto-generated method stub
-//					progress_load.setVisibility(View.INVISIBLE);
-//				}
-//			});
+			ImageLoader.getInstance().displayImage(text, iv_picture,options,new ImageLoadingListener() {
+				
+				@Override
+				public void onLoadingStarted(String imageUri, View view) {
+					progress_load.setVisibility(View.VISIBLE);
+				}
+				
+				@Override
+				public void onLoadingFailed(String imageUri, View view,
+						FailReason failReason) {
+					progress_load.setVisibility(View.INVISIBLE);
+				}
+				
+				@Override
+				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+					progress_load.setVisibility(View.INVISIBLE);
+				}
+				
+				@Override
+				public void onLoadingCancelled(String imageUri, View view) {
+					progress_load.setVisibility(View.INVISIBLE);
+				}
+			});
 		}
 	}
 	
-//	private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
-//
-//		static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
-//
-//		@Override
-//		public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-//			if (loadedImage != null) {
-//				ImageView imageView = (ImageView) view;
-//				boolean firstDisplay = !displayedImages.contains(imageUri);
-//				if (firstDisplay) {
-//					FadeInBitmapDisplayer.animate(imageView, 500);
-//					displayedImages.add(imageUri);
-//				}
-//			}
-//		}
-//	}
+	private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
+
+		static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
+
+		@Override
+		public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+			if (loadedImage != null) {
+				ImageView imageView = (ImageView) view;
+				boolean firstDisplay = !displayedImages.contains(imageUri);
+				if (firstDisplay) {
+					FadeInBitmapDisplayer.animate(imageView, 500);
+					displayedImages.add(imageUri);
+				}
+			}
+		}
+	}
 	
 }

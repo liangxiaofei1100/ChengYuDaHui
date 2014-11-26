@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -16,17 +17,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp" >
-
-        <ImageView
+        
+        <com.zhaoyan.juyou.game.chengyudahui.view.RoundedImageView
             android:id="@+id/iv_avatar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/avatar_height"
+            android:layout_height="@dimen/avatar_height"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:contentDescription="头像"
             android:layout_marginLeft="5dp"
-            android:background="@drawable/avantar_test"
-            android:scaleType="fitXY" />
+            android:scaleType="center"
+            app:riv_corner_radius="90dp" />
 
         <ImageView
             android:id="@+id/iv_picture"
@@ -36,8 +36,6 @@
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
             android:paddingRight="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/iv_avatar"
             android:adjustViewBounds="true"
             android:contentDescription="head"

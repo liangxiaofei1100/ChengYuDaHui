@@ -7,10 +7,11 @@ public class ZhaoYanMsg {
 	private int msgType;
 	private String belongId;
 	private String belongAvatar;//avator path in server
-	private String msgTime;
+	private long msgTime;
 	private int status;
-	private String content;
+	private String content;//1.如果是文本，那么content就是文本内容，2.如果是图片，那么content就是图片path
 	private String converstationId;
+	private String filePath;
 	
 	public int getMsgType() {
 		return msgType;
@@ -30,10 +31,10 @@ public class ZhaoYanMsg {
 	public void setBelongAvatar(String belongAvatar) {
 		this.belongAvatar = belongAvatar;
 	}
-	public String getMsgTime() {
+	public Long getMsgTime() {
 		return msgTime;
 	}
-	public void setMsgTime(String msgTime) {
+	public void setMsgTime(Long msgTime) {
 		this.msgTime = msgTime;
 	}
 	public int getStatus() {
@@ -54,9 +55,18 @@ public class ZhaoYanMsg {
 	public void setConverstationId(String converstationId) {
 		this.converstationId = converstationId;
 	}
+	public String getFilePath() {
+		return filePath;
+	}
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
 	public static ZhaoYanMsg createTextSendMsg(Context context, String targetId, String msg){
 		ZhaoYanMsg zhaoYanMsg = new ZhaoYanMsg();
 		zhaoYanMsg.setBelongId(targetId);
+		zhaoYanMsg.setMsgType(MsgConfig.TYPE_TEXT);
+		zhaoYanMsg.setContent(msg);
+		zhaoYanMsg.setMsgTime(System.currentTimeMillis());
 		//...
 		return zhaoYanMsg;
 	}
@@ -65,6 +75,18 @@ public class ZhaoYanMsg {
 			double latitude, double longtitude){
 		ZhaoYanMsg zhaoYanMsg = new ZhaoYanMsg();
 		zhaoYanMsg.setBelongId(targetId);
+		zhaoYanMsg.setMsgType(MsgConfig.TYPE_LOCATION);
+		zhaoYanMsg.setMsgTime(System.currentTimeMillis());
+		//...
+		return zhaoYanMsg;
+	}
+	
+	public static ZhaoYanMsg createImageSendMsg(Context context, String targetId, String path){
+		ZhaoYanMsg zhaoYanMsg = new ZhaoYanMsg();
+		zhaoYanMsg.setBelongId(targetId);
+		zhaoYanMsg.setMsgType(MsgConfig.TYPE_IMAGE);
+		zhaoYanMsg.setMsgTime(System.currentTimeMillis());
+		zhaoYanMsg.setContent("file://" + path);//for UIL to use,should add ex "file://"
 		//...
 		return zhaoYanMsg;
 	}

@@ -79,16 +79,6 @@ public class StoryMainActivity extends BaseZyActivity implements OnItemClickList
 		startActivity(intent);
 	}
 	
-	private Toast mToast = null;
-	private void showToast(String message){
-		if (mToast != null) {
-			mToast.cancel();
-		}
-		
-		mToast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
-		mToast.show();
-	}
-	
 	private class MyAdapter extends BaseAdapter{
 		
 		LayoutInflater inflater = null;

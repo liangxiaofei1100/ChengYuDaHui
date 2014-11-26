@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -254,49 +255,7 @@ public class ChatActivity extends BaseZyActivity implements OnClickListener,
 	 * @throws
 	 */
 	private void sendVoiceMessage(String local, int length) {
-//		manager.sendVoiceMessage(targetUser, local, length,
-//				new UploadListener() {
-//
-//					@Override
-//					public void onStart(ZhaoYanMsg msg) {
-//						// TODO Auto-generated method stub
-//						refreshMessage(msg);
-//					}
-//
-//					@Override
-//					public void onSuccess() {
-//						// TODO Auto-generated method stub
-//						mAdapter.notifyDataSetChanged();
-//					}
-//
-//					@Override
-//					public void onFailure(int error, String arg1) {
-//						// TODO Auto-generated method stub
-//						ShowLog("上传语音失败 -->arg1：" + arg1);
-//						mAdapter.notifyDataSetChanged();
-//					}
-//				});
-	}
-
-	Toast toast;
-
-	/**
-	 * 显示录音时间过短的Toast
-	 * @Title: showShortToast
-	 * @return void
-	 * @throws
-	 */
-	private Toast showShortToast() {
-//		if (toast == null) {
-//			toast = new Toast(this);
-//		}
-//		View view = LayoutInflater.from(this).inflate(
-//				R.layout.include_chat_voice_short, null);
-//		toast.setView(view);
-//		toast.setGravity(Gravity.CENTER, 0, 0);
-//		toast.setDuration(50);
-		toast = Toast.makeText(this, "showShordToast", Toast.LENGTH_SHORT);
-		return toast;
+		//TODO sendVoiceMessage
 	}
 
 	/**
@@ -334,7 +293,7 @@ public class ChatActivity extends BaseZyActivity implements OnClickListener,
 	 * @throws
 	 */
 	private void initOrRefresh() {
-//		if (mAdapter != null) {
+		if (mAdapter != null) {
 //			if (MyMessageReceiver.mNewNum != 0) {// 用于更新当在聊天界面锁屏期间来了消息，这时再回到聊天页面的时候需要显示新来的消息
 //				int news=  MyMessageReceiver.mNewNum;//有可能锁屏期间，来了N条消息,因此需要倒叙显示在界面上
 //				int size = initMsgData().size();
@@ -343,12 +302,12 @@ public class ChatActivity extends BaseZyActivity implements OnClickListener,
 //				}
 //				mListView.setSelection(mAdapter.getCount() - 1);
 //			} else {
-//				mAdapter.notifyDataSetChanged();
+				mAdapter.notifyDataSetChanged();
 //			}
-//		} else {
+		} else {
 			mAdapter = new MessageChatAdapter(this, initMsgData());
 			mListView.setAdapter(mAdapter);
-//		}
+		}
 	}
 
 	private void initAddView() {
@@ -504,7 +463,7 @@ public class ChatActivity extends BaseZyActivity implements OnClickListener,
 			@Override
 			public boolean onTouch(View arg0, MotionEvent arg1) {
 				// TODO Auto-generated method stub
-//				hideSoftInputView();
+				hideSoftInputView();
 				layout_more.setVisibility(View.GONE);
 				layout_add.setVisibility(View.GONE);
 				btn_chat_voice.setVisibility(View.VISIBLE);
@@ -559,39 +518,7 @@ public class ChatActivity extends BaseZyActivity implements OnClickListener,
 	 * 重发文本消息
 	 */
 	private void resendTextMsg(final View parentV, final Object values) {
-//		BmobChatManager.getInstance(ChatActivity.this).resendTextMessage(
-//				targetUser, (ZhaoYanMsg) values, new PushListener() {
-//
-//					@Override
-//					public void onSuccess() {
-//						// TODO Auto-generated method stub
-//						ShowLog("发送成功");
-//						((ZhaoYanMsg) values)
-//								.setStatus(MsgConfig.STATUS_SEND_SUCCESS);
-//						parentV.findViewById(R.id.progress_load).setVisibility(
-//								View.INVISIBLE);
-//						parentV.findViewById(R.id.iv_fail_resend)
-//								.setVisibility(View.INVISIBLE);
-//						parentV.findViewById(R.id.tv_send_status)
-//								.setVisibility(View.VISIBLE);
-//						((TextView) parentV.findViewById(R.id.tv_send_status))
-//								.setText("已发送");
-//					}
-//
-//					@Override
-//					public void onFailure(int arg0, String arg1) {
-//						// TODO Auto-generated method stub
-//						ShowLog("发送失败:" + arg1);
-//						((ZhaoYanMsg) values)
-//								.setStatus(MsgConfig.STATUS_SEND_FAIL);
-//						parentV.findViewById(R.id.progress_load).setVisibility(
-//								View.INVISIBLE);
-//						parentV.findViewById(R.id.iv_fail_resend)
-//								.setVisibility(View.VISIBLE);
-//						parentV.findViewById(R.id.tv_send_status)
-//								.setVisibility(View.INVISIBLE);
-//					}
-//				});
+		//TODO resendTextMsg
 		mAdapter.notifyDataSetChanged();
 	}
 
@@ -605,56 +532,12 @@ public class ChatActivity extends BaseZyActivity implements OnClickListener,
 	 * @throws
 	 */
 	private void resendFileMsg(final View parentV, final Object values) {
-//		BmobChatManager.getInstance(ChatActivity.this).resendFileMessage(
-//				targetUser, (ZhaoYanMsg) values, new UploadListener() {
-//
-//					@Override
-//					public void onStart(ZhaoYanMsg msg) {
-//						// TODO Auto-generated method stub
-//					}
-//
-//					@Override
-//					public void onSuccess() {
-//						// TODO Auto-generated method stub
-//						((ZhaoYanMsg) values)
-//								.setStatus(MsgConfig.STATUS_SEND_SUCCESS);
-//						parentV.findViewById(R.id.progress_load).setVisibility(
-//								View.INVISIBLE);
-//						parentV.findViewById(R.id.iv_fail_resend)
-//								.setVisibility(View.INVISIBLE);
-//						if (((ZhaoYanMsg) values).getMsgType() == MsgConfig.TYPE_VOICE) {
-//							parentV.findViewById(R.id.tv_send_status)
-//									.setVisibility(View.GONE);
-//							parentV.findViewById(R.id.tv_voice_length)
-//									.setVisibility(View.VISIBLE);
-//						} else {
-//							parentV.findViewById(R.id.tv_send_status)
-//									.setVisibility(View.VISIBLE);
-//							((TextView) parentV
-//									.findViewById(R.id.tv_send_status))
-//									.setText("已发送");
-//						}
-//					}
-//
-//					@Override
-//					public void onFailure(int arg0, String arg1) {
-//						// TODO Auto-generated method stub
-//						((ZhaoYanMsg) values)
-//								.setStatus(MsgConfig.STATUS_SEND_FAIL);
-//						parentV.findViewById(R.id.progress_load).setVisibility(
-//								View.INVISIBLE);
-//						parentV.findViewById(R.id.iv_fail_resend)
-//								.setVisibility(View.VISIBLE);
-//						parentV.findViewById(R.id.tv_send_status)
-//								.setVisibility(View.INVISIBLE);
-//					}
-//				});
+		//TODO resendFileMsg
 		mAdapter.notifyDataSetChanged();
 	}
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.edit_user_comment:// 点击文本输入框
 			mListView.setSelection(mListView.getCount() - 1);
@@ -682,7 +565,7 @@ public class ChatActivity extends BaseZyActivity implements OnClickListener,
 				layout_more.setVisibility(View.VISIBLE);
 				layout_add.setVisibility(View.VISIBLE);
 				layout_emo.setVisibility(View.GONE);
-//				hideSoftInputView();
+				hideSoftInputView();
 			} else {
 				if (layout_emo.getVisibility() == View.VISIBLE) {
 					layout_emo.setVisibility(View.GONE);
@@ -699,7 +582,7 @@ public class ChatActivity extends BaseZyActivity implements OnClickListener,
 			btn_chat_voice.setVisibility(View.GONE);
 			btn_chat_keyboard.setVisibility(View.VISIBLE);
 			btn_speak.setVisibility(View.VISIBLE);
-//			hideSoftInputView();
+			hideSoftInputView();
 			break;
 		case R.id.btn_chat_keyboard:// 键盘按钮，点击就弹出键盘并隐藏掉声音按钮
 			showEditState(false);
@@ -710,12 +593,9 @@ public class ChatActivity extends BaseZyActivity implements OnClickListener,
 				Toast.makeText(getApplicationContext(), "请输入文本信息", Toast.LENGTH_SHORT).show();
 				return;
 			}
-//			boolean isNetConnected = CommonUtils.isNetworkAvailable(this);
-//			if (!isNetConnected) {
-//				ShowToast(R.string.network_tips);
-//				 return;
-//			}
-			// 组装BmobMessage对象
+			//网络判断
+			
+			// 组装Message对象
 			ZhaoYanMsg message = ZhaoYanMsg.createTextSendMsg(this, targetId, msg);
 			// 默认发送完成，将数据保存到本地消息表和最近会话表中
 //			manager.sendTextMessage(targetUser, message);
@@ -816,7 +696,7 @@ public class ChatActivity extends BaseZyActivity implements OnClickListener,
 						cursor.close();
 						if (localSelectPath == null
 								|| localSelectPath.equals("null")) {
-//							ShowToast("找不到您想要的图片");
+							showToast("找不到您想要的图片");
 							return;
 						}
 						sendImageMessage(localSelectPath);
@@ -878,29 +758,11 @@ public class ChatActivity extends BaseZyActivity implements OnClickListener,
 			layout_add.setVisibility(View.GONE);
 			layout_emo.setVisibility(View.GONE);
 		}
-//		manager.sendImageMessage(targetUser, local, new UploadListener() {
-//
-//			@Override
-//			public void onStart(ZhaoYanMsg msg) {
-//				// TODO Auto-generated method stub
-//				ShowLog("开始上传onStart：" + msg.getContent() + ",状态："
-//						+ msg.getStatus());
-//				refreshMessage(msg);
-//			}
-//
-//			@Override
-//			public void onSuccess() {
-//				// TODO Auto-generated method stub
-//				mAdapter.notifyDataSetChanged();
-//			}
-//
-//			@Override
-//			public void onFailure(int error, String arg1) {
-//				// TODO Auto-generated method stub
-//				ShowLog("上传失败 -->arg1：" + arg1);
-//				mAdapter.notifyDataSetChanged();
-//			}
-//		});
+		
+		//TODO send operator
+		//test
+		ZhaoYanMsg msg = ZhaoYanMsg.createImageSendMsg(getApplicationContext(), targetId, local);
+		refreshMessage(msg);
 	}
 
 	/**
@@ -922,19 +784,10 @@ public class ChatActivity extends BaseZyActivity implements OnClickListener,
 			layout_more.setVisibility(View.VISIBLE);
 			layout_emo.setVisibility(View.VISIBLE);
 			layout_add.setVisibility(View.GONE);
-//			hideSoftInputView();
+			hideSoftInputView();
 		} else {
 			layout_more.setVisibility(View.GONE);
 			showSoftInputView();
-		}
-	}
-
-	// 显示软键盘
-	public void showSoftInputView() {
-		if (getWindow().getAttributes().softInputMode == WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
-			if (getCurrentFocus() != null)
-				((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
-						.showSoftInput(edit_user_comment, 0);
 		}
 	}
 
@@ -1129,12 +982,37 @@ public class ChatActivity extends BaseZyActivity implements OnClickListener,
 			return super.onKeyDown(keyCode, event);
 		}
 	}
+	
+	// 显示软键盘
+	public void showSoftInputView() {
+		if (getWindow().getAttributes().softInputMode == WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
+			if (getCurrentFocus() != null)
+				((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
+						.showSoftInput(edit_user_comment, 0);
+		}
+	}
+	
+	/** 隐藏软键盘
+	  * hideSoftInputView
+	  * @Title: hideSoftInputView
+	  * @Description: TODO
+	  * @param  
+	  * @return void
+	  * @throws
+	  */
+	public void hideSoftInputView() {
+		InputMethodManager manager = ((InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE));
+		if (getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
+			if (getCurrentFocus() != null)
+				manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+		}
+	}
 
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-//		hideSoftInputView();
+		hideSoftInputView();
 		try {
 			unregisterReceiver(receiver);
 		} catch (Exception e) {

@@ -66,8 +66,6 @@ public class FriendFragment extends Fragment implements OnItemClickListener{
 			long id) {
 		// TODO Auto-generated method stub
 		User user = mAdapter.getItem(position);
-		Toast.makeText(mActivity, "click:" + user.getUserName(), Toast.LENGTH_SHORT).show();
-		
 		//test
 		Intent intent = new Intent();
 		intent.setClass(mActivity, ChatActivity.class);

@@ -3,5 +3,7 @@
 
     <item android:drawable="@drawable/chat_send_p" android:state_enabled="false" android:state_pressed="false"/>
     <item android:drawable="@drawable/chat_send_n" android:state_enabled="true" android:state_pressed="true"/>
+     <item android:drawable="@drawable/chat_send_n" android:state_enabled="true" android:state_focused="true"/>
+    <item android:drawable="@drawable/chat_send_n"></item>
 
 </selector>
