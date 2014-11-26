@@ -24,6 +24,7 @@ public abstract class ActionBarItem {
          * @see R.drawable#gd_action_bar_add
          */
         Add,
+        More
     }
 
     protected Drawable mDrawable;
@@ -117,6 +118,10 @@ public abstract class ActionBarItem {
 //                drawableId = R.drawable.gd_action_bar_add;
 //                descriptionId = R.string.gd_add;
                 break;
+            case More:
+            	drawableId = R.drawable.action_bar_more;
+            	descriptionId = R.string.abc_action_menu_overflow_description;
+            	break;
 
             default:
                 // Do nothing but return null

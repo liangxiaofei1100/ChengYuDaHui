@@ -31,6 +31,7 @@ public class ActionBar extends LinearLayout {
      *             {@link ActionBar#addItem(greendroid.widget.ActionBarItem.Type, int)}
      */
     public static final int NONE = 0;
+    public static final int MORE = 1;
 
     /**
      * The Type specifies the layout of the ActionBar.
@@ -241,6 +242,9 @@ public class ActionBar extends LinearLayout {
      * @return
      */
     public ActionBarItem addItem(ActionBarItem.Type actionBarItemType) {
+    	if (actionBarItemType == ActionBarItem.Type.More) {
+			return addItem(ActionBarItem.createWithType(this, actionBarItemType), MORE);
+		}
         return addItem(ActionBarItem.createWithType(this, actionBarItemType), NONE);
     }
 

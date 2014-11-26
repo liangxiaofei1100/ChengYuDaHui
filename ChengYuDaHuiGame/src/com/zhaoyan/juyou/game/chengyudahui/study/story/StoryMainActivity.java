@@ -7,8 +7,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -23,6 +26,8 @@ import com.zhaoyan.juyou.game.chengyudahui.activity.BaseActivity;
 import com.zhaoyan.juyou.game.chengyudahui.activity.BaseZyActivity;
 import com.zhaoyan.juyou.game.chengyudahui.db.StoryData.TypeColums;
 import com.zhaoyan.juyou.game.chengyudahui.view.ActionBar;
+import com.zhaoyan.juyou.game.chengyudahui.view.ActionBar.OnActionBarListener;
+import com.zhaoyan.juyou.game.chengyudahui.view.ActionBarItem;
 
 public class StoryMainActivity extends BaseZyActivity implements OnItemClickListener {
 	private static final String TAG = StoryMainActivity.class.getSimpleName();
@@ -35,8 +40,24 @@ public class StoryMainActivity extends BaseZyActivity implements OnItemClickList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.knowledge_fragment_main);
 		
-		ActionBar actionBar = getZyActionBar();
+		final ActionBar actionBar = getZyActionBar();
 		actionBar.setActionHomeAsUpEnable(true);
+		actionBar.addItem(ActionBarItem.Type.More);
+		actionBar.setOnActionBarListener(new OnActionBarListener() {
+			
+			@Override
+			public void onActionBarItemClicked(int position) {
+				// TODO Auto-generated method stub
+				final ActionBarItem item = actionBar.getItem(position);
+				if (ActionBar.MORE == item.getItemId()) {
+					View view = item.getItemView();
+					TestPopupWindow popupWindow = new TestPopupWindow(StoryMainActivity.this, mClickListener);
+					int y_offset = getResources().getDimensionPixelOffset(R.dimen.popupwindow_offset);
+//					showToast("click more menu:" + y_offset);
+					popupWindow.showAtLocation(view, Gravity.RIGHT|Gravity.TOP, 10, y_offset);
+				}
+			}
+		});
 		
 		Intent intent = getIntent();
 		if(intent != null){
@@ -78,6 +99,15 @@ public class StoryMainActivity extends BaseZyActivity implements OnItemClickList
 		intent.setClass(this, StoryItemActivity.class);
 		startActivity(intent);
 	}
+	
+	private OnClickListener mClickListener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			
+		}
+	};
 	
 	private class MyAdapter extends BaseAdapter{
 		
