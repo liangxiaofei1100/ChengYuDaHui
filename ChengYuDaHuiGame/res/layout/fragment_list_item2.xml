@@ -6,17 +6,18 @@
     app:rippleAlpha="0.2"
     app:rippleColor="@color/titlebar_bg"
     app:rippleHover="true"
-    app:rippleOverlay="false" >
+    app:rippleOverlay="true" 
+    >
 
     <RelativeLayout
         android:id="@+id/friend_rl_card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="16dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="16dp" 
-        android:background="@drawable/test_selector"
+        android:paddingBottom="48dp"
+    	android:paddingLeft="16dp"
+    	android:paddingRight="16dp"
+    	android:paddingTop="48dp"
+    	android:background="@drawable/test_selector2"
         >
         
         <com.zhaoyan.juyou.game.chengyudahui.view.RoundedImageView

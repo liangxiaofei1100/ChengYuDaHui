@@ -24,5 +24,32 @@
             <enum name="mirror" value="2" />
         </attr>
     </declare-styleable>
+    
+    <declare-styleable name="MaterialRippleLayout">
+        <attr name="rippleColor" format="color" localization="suggested" />
+        <attr name="rippleDimension" format="dimension" localization="suggested" />
+        <attr name="rippleOverlay" format="boolean" localization="suggested" />
+        <attr name="rippleAlpha" format="float" localization="suggested" />
+        <attr name="rippleDuration" format="integer" localization="suggested" />
+        <attr name="rippleFadeDuration" format="integer" localization="suggested" />
+        <attr name="rippleHover" format="boolean" localization="suggested" />
+        <attr name="rippleBackground" format="color" localization="suggested" />
+        <attr name="rippleDelayClick" format="boolean" localization="suggested" />
+        <attr name="ripplePersistent" format="boolean" localization="suggested" />
+        <attr name="rippleInAdapter" format="boolean" localization="suggested" />
+    </declare-styleable>
+    <!-- 
+    app:rippleOverlay="true"              // if true, ripple is drawn in foreground; false - background
+	app:rippleColor="#ff0000"             // color of ripple
+	app:rippleAlpha="0.1"                 // alpha of ripple
+	app:rippleDimension="10dp"            // radius of hover and starting ripple
+	app:rippleHover="true"                // if true, a hover effect is drawn when view is touched
+	app:rippleInAdapter="true"            // if true, MaterialRippleLayout will optimize for use in AdapterViews
+	app:rippleDuration="350"              // duration of ripple animation
+	app:rippleFadeDuration="75"           // duration of fade out effect on ripple
+	app:rippleDelayClick="true"           // if true, delays calls to OnClickListeners until ripple effect ends
+	app:rippleBackground="#FFFFFF"        // background under ripple drawable; used with rippleOverlay="false"
+	app:ripplePersistent="true"           // if true, ripple background color persists after animation, until setRadius(0) is called
+     -->
 
 </resources>

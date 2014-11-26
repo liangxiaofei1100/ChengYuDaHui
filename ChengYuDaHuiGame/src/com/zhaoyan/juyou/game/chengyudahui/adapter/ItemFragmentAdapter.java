@@ -47,7 +47,7 @@ public class ItemFragmentAdapter extends BaseAdapter {
 		View view = null;
 		ViewHolder holder = null;
 		if (convertView == null) {
-			view = mInflater.inflate(R.layout.fragment_list_item, null);
+			view = mInflater.inflate(R.layout.fragment_list_item2, null);
 			holder = new ViewHolder();
 			holder.imageView = (RoundedImageView) view.findViewById(R.id.head_view);
 			holder.titleView = (TextView) view.findViewById(R.id.username_view);

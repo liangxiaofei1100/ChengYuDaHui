@@ -49,6 +49,12 @@ public class StoryMainActivity extends BaseZyActivity implements OnItemClickList
 			public void onActionBarItemClicked(int position) {
 				// TODO Auto-generated method stub
 				final ActionBarItem item = actionBar.getItem(position);
+				
+				if (position == ActionBar.OnActionBarListener.HOME_ITEM) {
+					finish();
+					return;
+				}
+				
 				if (ActionBar.MORE == item.getItemId()) {
 					View view = item.getItemView();
 					TestPopupWindow popupWindow = new TestPopupWindow(StoryMainActivity.this, mClickListener);

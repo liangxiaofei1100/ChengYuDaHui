@@ -8,8 +8,7 @@
     android:paddingRight="16dp"
     android:paddingTop="48dp"
     android:background="@drawable/card_one_bg"
-    tools:context="com.zhaoyan.juyou.game.chengyudahui.MainActivity$PlaceholderFragment" >
-
+    >
     <com.zhaoyan.juyou.game.chengyudahui.view.RoundedImageView
         android:id="@+id/head_view"
         android:layout_width="52dp"
@@ -41,5 +40,4 @@
             android:textColor="@android:color/darker_gray"
             />
     </LinearLayout>
-
 </RelativeLayout>

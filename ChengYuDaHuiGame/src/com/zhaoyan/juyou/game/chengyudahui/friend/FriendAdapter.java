@@ -58,12 +58,12 @@ public class FriendAdapter extends BaseAdapter{
 			holder = (ViewHolder) view.getTag();
 		}
 		
-		if (position % 2 == 0) {
-			view.setBackgroundResource(R.drawable.friend_list_bg2);
-		} else {
-			view.setBackgroundResource(R.drawable.friend_list_bg1);
-		}
-		
+//		if (position % 2 == 0) {
+//			view.setBackgroundResource(R.drawable.friend_list_bg2);
+//		} else {
+//			view.setBackgroundResource(R.drawable.friend_list_bg1);
+//		}
+//		
 		User user = mData.get(position);
 		
 		holder.iconView.setImageResource(R.drawable.avantar_test);
