@@ -5,4 +5,11 @@
     
     <drawable name="card_normal">#FED593</drawable>
     <drawable name="card_pressed">#Feddcc</drawable>
+    
+    <integer-array name="study_item_icons">
+        <item>@drawable/item_story</item>
+        <item>@drawable/item_write</item>
+        <item>@drawable/item_voice</item>
+        <item>@drawable/item_chengyu</item>
+    </integer-array>
 </resources>

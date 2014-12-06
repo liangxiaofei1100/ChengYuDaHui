@@ -47,9 +47,9 @@ public class ItemFragmentAdapter extends BaseAdapter {
 		View view = null;
 		ViewHolder holder = null;
 		if (convertView == null) {
-			view = mInflater.inflate(R.layout.fragment_list_item2, null);
+			view = mInflater.inflate(R.layout.fragment_list_item, null);
 			holder = new ViewHolder();
-			holder.imageView = (RoundedImageView) view.findViewById(R.id.head_view);
+			holder.imageView = (ImageView) view.findViewById(R.id.head_view);
 			holder.titleView = (TextView) view.findViewById(R.id.username_view);
 			holder.summaryView = (TextView) view.findViewById(R.id.info_view);
 			
@@ -68,7 +68,7 @@ public class ItemFragmentAdapter extends BaseAdapter {
 	}
 	
 	private class ViewHolder{
-		RoundedImageView imageView;
+		ImageView imageView;
 		TextView titleView;
 		TextView summaryView;
 	}

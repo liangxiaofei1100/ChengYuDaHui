@@ -37,6 +37,11 @@ public class MainMenuActivity extends FragmentActivity {
 	private ViewPager mViewPager;
 	private MainPagerAdapter mPagerAdapter;
 	
+	private static final int TAG_INDEX_FRIEND = 0;
+	private static final int TAG_INDEX_INTERACTION = 1;
+	private static final int TAG_INDEX_STUDY = 2;
+	private static final int TAG_INDEX_ME = 3;
+	
 	private TextView mTitleLabelView;
 
 	@Override
@@ -59,9 +64,9 @@ public class MainMenuActivity extends FragmentActivity {
 
 	private void initView() {
 		mTabButtons = new Button[4];
-		mTabButtons[0] = (Button) findViewById(R.id.tab_btn_study);
+		mTabButtons[0] = (Button) findViewById(R.id.tab_btn_friend);
 		mTabButtons[1] = (Button) findViewById(R.id.tab_btn_interaction);
-		mTabButtons[2] = (Button) findViewById(R.id.tab_btn_friend);
+		mTabButtons[2] = (Button) findViewById(R.id.tab_btn_study);
 		mTabButtons[3] = (Button) findViewById(R.id.tab_btn_me);
 		mTabButtons[0].setSelected(true);
 		
@@ -75,16 +80,16 @@ public class MainMenuActivity extends FragmentActivity {
 	public void onTabSelect(View view) {
 		switch (view.getId()) {
 		case R.id.tab_btn_study:
-			mTabIndex = 0;
+			mTabIndex = TAG_INDEX_STUDY;
 			break;
 		case R.id.tab_btn_interaction:
-			mTabIndex = 1;
+			mTabIndex = TAG_INDEX_INTERACTION;
 			break;
 		case R.id.tab_btn_friend:
-			mTabIndex = 2;
+			mTabIndex = TAG_INDEX_FRIEND;
 			break;
 		case R.id.tab_btn_me:
-			mTabIndex = 3;
+			mTabIndex = TAG_INDEX_ME;
 			break;
 		}
 		
@@ -110,13 +115,13 @@ public class MainMenuActivity extends FragmentActivity {
 			Fragment fragment = null;
 			switch (arg0) {
 			case 0:
-				fragment = new StudyFragment();
+				fragment = new FriendFragment();
 				break;
 			case 1:
 				fragment = new InteractionFragment();
 				break;
 			case 2:
-				fragment = new FriendFragment();
+				fragment = new StudyFragment();
 				break;
 			case 3:
 				fragment = new WoFragment();

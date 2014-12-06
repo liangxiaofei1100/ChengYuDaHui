@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.zhaoyan.communication.ipc.aidl.User;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity;
+import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
 public class FriendFragment extends Fragment implements OnItemClickListener{
 	private static final String TAG = FriendFragment.class.getSimpleName();
@@ -65,6 +66,11 @@ public class FriendFragment extends Fragment implements OnItemClickListener{
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		// TODO Auto-generated method stub
+		System.out.println("onItemClick");
+		if (Utils.isFasDoubleClick()) {
+			System.out.println("fast dowuble clicl");
+			return;
+		}
 		User user = mAdapter.getItem(position);
 		//test
 		Intent intent = new Intent();

@@ -80,6 +80,13 @@
         <item>天天练发音</item>
         <item>天天学成语</item>
     </string-array>
+    
+    <string-array name="study_items_hints">
+        <item>XXXXXX</item>
+        <item>XXXXXX</item>
+        <item>XXXXXX</item>
+        <item>XXXXXX</item>
+    </string-array>
     <string-array name="write_items">
         <item>一年级</item>
         <item>二年级</item>

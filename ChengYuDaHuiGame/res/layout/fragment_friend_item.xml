@@ -6,7 +6,9 @@
     app:rippleAlpha="0.2"
     app:rippleColor="@color/titlebar_bg"
     app:rippleHover="true"
-    app:rippleOverlay="false" >
+    app:rippleOverlay="false" 
+    app:rippleDimension="5dp"
+    >
 
     <RelativeLayout
         android:id="@+id/friend_rl_card"

@@ -19,32 +19,32 @@
     <LinearLayout
         android:id="@+id/main_bottom"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="56dp"
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
-
+        
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" >
 
             <Button
-                android:id="@+id/tab_btn_study"
+                android:id="@+id/tab_btn_friend"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/main_button_bar"
-                android:drawableTop="@drawable/tab_test_btn"
+                android:drawableTop="@drawable/main_tab_friend_selector"
                 android:onClick="onTabSelect"
                 android:paddingBottom="2dip"
                 android:paddingTop="7dip"
                 android:scaleType="matrix"
-                android:text="@string/main_tab_set_study"
+                android:text="@string/main_tab_set_friend"
                 android:textColor="@drawable/tab_textcolor"
                 android:textSize="12sp" />
 
             <ImageView
-                android:id="@+id/iv_study_tips"
+                android:id="@+id/iv_friend_tips"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -56,7 +56,7 @@
                 android:gravity="center"
                 android:visibility="invisible" />
         </RelativeLayout>
-
+        
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -67,7 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/main_button_bar"
-                android:drawableTop="@drawable/tab_test_btn"
+                android:drawableTop="@drawable/main_tab_interation_selector"
                 android:onClick="onTabSelect"
                 android:paddingBottom="2dip"
                 android:paddingTop="7dip"
@@ -96,21 +96,21 @@
             android:layout_weight="1" >
 
             <Button
-                android:id="@+id/tab_btn_friend"
+                android:id="@+id/tab_btn_study"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/main_button_bar"
-                android:drawableTop="@drawable/tab_test_btn"
+                android:drawableTop="@drawable/main_tab_study_selector"
                 android:onClick="onTabSelect"
                 android:paddingBottom="2dip"
                 android:paddingTop="7dip"
                 android:scaleType="matrix"
-                android:text="@string/main_tab_set_friend"
+                android:text="@string/main_tab_set_study"
                 android:textColor="@drawable/tab_textcolor"
                 android:textSize="12sp" />
 
             <ImageView
-                android:id="@+id/iv_friend_tips"
+                android:id="@+id/iv_study_tips"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -133,7 +133,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/main_button_bar"
-                android:drawableTop="@drawable/tab_test_btn"
+                android:drawableTop="@drawable/main_tab_me_selector"
                 android:onClick="onTabSelect"
                 android:paddingBottom="2dip"
                 android:paddingTop="7dip"

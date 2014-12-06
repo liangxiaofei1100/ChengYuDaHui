@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -64,10 +65,11 @@ public class WriteMainActivity extends BaseZyActivity{
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_write_item, parent, false);
             }
 
-            LetterImageView letterImageView = (LetterImageView) convertView.findViewById(R.id.liv_write_num);
-            letterImageView.setOval(true);
+            TextView letterImageView = (TextView) convertView.findViewById(R.id.tv_write_num);
+//            letterImageView.setOval(true);
             TextView textView = (TextView) convertView.findViewById(R.id.tv_item_title);
-            letterImageView.setLetter(((position + 1) + "").charAt(0));
+            letterImageView.setText(((position + 1) + "").charAt(0) + "");
+//            letterImageView.setLetter(((position + 1) + "").charAt(0));
             textView.setText(name);
 
             return convertView;

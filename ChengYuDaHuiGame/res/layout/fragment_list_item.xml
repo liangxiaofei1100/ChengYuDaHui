@@ -1,43 +1,54 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhaoyan.juyou.game.chengyudahui.view.MaterialRippleLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="48dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="48dp"
-    android:background="@drawable/card_one_bg"
-    >
-    <com.zhaoyan.juyou.game.chengyudahui.view.RoundedImageView
-        android:id="@+id/head_view"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
-        android:layout_marginRight="10dp"
-        android:scaleType="center"
-        app:riv_corner_radius="90dp"
-         />
-    
-    <LinearLayout 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/head_view"
+    android:layout_height="70dp"
+    app:rippleAlpha="0.2"
+    app:rippleColor="@color/titlebar_bg"
+    app:rippleHover="true"
+    app:rippleOverlay="true" 
+    app:rippleDuration="100"
+    xmlns:app1="http://schemas.android.com/apk/res/com.zhaoyan.juyou.game.chengyudahui">
+
+    <RelativeLayout
+        android:id="@+id/friend_rl_card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="48dp"
+    	android:paddingLeft="16dp"
+    	android:paddingRight="16dp"
+    	android:paddingTop="48dp"
+    	android:background="@drawable/test_selector2"
         >
-        <TextView 
-            android:id="@+id/username_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            />
         
-        <TextView 
-            android:id="@+id/info_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/darker_gray"
-            />
-    </LinearLayout>
-</RelativeLayout>
+        <ImageView
+                android:id="@+id/head_view"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginRight="10dp"
+                android:scaleType="fitCenter"
+                 />
+        
+         <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/head_view"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/username_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/info_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/darker_gray" />
+            </LinearLayout>
+    </RelativeLayout>
+
+</com.zhaoyan.juyou.game.chengyudahui.view.MaterialRippleLayout>

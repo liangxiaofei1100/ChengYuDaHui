@@ -8,31 +8,49 @@
     android:paddingRight="10dp"
     android:paddingTop="16dp"
     tools:context="com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity" >
-
-    <com.zhaoyan.juyou.game.chengyudahui.view.LetterImageView
-        android:id="@+id/liv_write_num"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:scaleType="center"
-         />
+    
+    <RelativeLayout 
+        android:id="@+id/rl_write_num"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_centerVertical="true"
+        >
+        
+        <ImageView 
+            android:layout_width="match_parent" 
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/red_circle_bg"
+            android:layout_centerInParent="true"
+            />
+        
+        <TextView 
+            android:id="@+id/tv_write_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            />
+        
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/ll_write_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/liv_write_num"
-        android:background="@drawable/msg_bubble_left"
+        android:layout_toRightOf="@id/rl_write_num"
+        android:background="@drawable/item_bg_part2"
         android:paddingLeft="48dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:layout_marginRight="16dp"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/tv_item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:textSize="20sp" />
 
     </LinearLayout>

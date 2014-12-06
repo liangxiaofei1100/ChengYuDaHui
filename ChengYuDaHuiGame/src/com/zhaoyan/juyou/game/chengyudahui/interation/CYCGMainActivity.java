@@ -70,10 +70,10 @@ public class CYCGMainActivity extends BaseZyActivity{
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_write_item, parent, false);
             }
 
-            LetterImageView letterImageView = (LetterImageView) convertView.findViewById(R.id.liv_write_num);
-            letterImageView.setOval(true);
+            TextView letterImageView = (TextView) convertView.findViewById(R.id.tv_write_num);
+//            letterImageView.setOval(true);
             TextView textView = (TextView) convertView.findViewById(R.id.tv_item_title);
-            letterImageView.setLetter(((position + 1) + "").charAt(0));
+            letterImageView.setText(((position + 1) + "").charAt(0) + "");
             textView.setText(name);
 
             return convertView;

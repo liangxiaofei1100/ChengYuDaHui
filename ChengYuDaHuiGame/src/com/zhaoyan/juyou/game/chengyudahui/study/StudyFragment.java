@@ -3,16 +3,10 @@ package com.zhaoyan.juyou.game.chengyudahui.study;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.baidu.a.a.a.a.a;
-import com.zhaoyan.juyou.game.chengyudahui.R;
-import com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity;
-import com.zhaoyan.juyou.game.chengyudahui.adapter.ItemFragmentAdapter;
-import com.zhaoyan.juyou.game.chengyudahui.bean.ListItemInfo;
-import com.zhaoyan.juyou.game.chengyudahui.study.story.StoryMainActivity;
-import com.zhaoyan.juyou.game.chengyudahui.study.write.WriteMainActivity;
-
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,9 +14,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+
+import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity;
+import com.zhaoyan.juyou.game.chengyudahui.adapter.ItemFragmentAdapter;
+import com.zhaoyan.juyou.game.chengyudahui.bean.ListItemInfo;
+import com.zhaoyan.juyou.game.chengyudahui.study.story.StoryMainActivity;
+import com.zhaoyan.juyou.game.chengyudahui.study.write.WriteMainActivity;
+import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
 public class StudyFragment extends Fragment implements OnItemClickListener{
 	private static final String TAG = StudyFragment.class.getSimpleName();
@@ -53,20 +54,23 @@ public class StudyFragment extends Fragment implements OnItemClickListener{
 	
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		//test
 		List<ListItemInfo> list = new ArrayList<ListItemInfo>();
 		ListItemInfo info = null;
 		
-		String[] items = getResources().getStringArray(R.array.study_items);
+		Resources res = getResources();
+		String[] items = res.getStringArray(R.array.study_items);
+		TypedArray dra= res.obtainTypedArray(R.array.study_item_icons);
+		String[] itemHints = res.getStringArray(R.array.study_items_hints);
 		for (int i = 0; i < 4; i++) {
 			info = new ListItemInfo();
-			info.setIconId(R.drawable.avantar_test);
+			info.setIconId(dra.getResourceId(i, 0));
 			info.setTitle(items[i]);
-			info.setSummary("xxxxxxxxxx");
+			info.setSummary(itemHints[i]);
 			list.add(info);
 		}
+		dra.recycle();
 		
 		mAdapter = new ItemFragmentAdapter(mActivity, list);
 		mListView.setAdapter(mAdapter);
@@ -76,6 +80,9 @@ public class StudyFragment extends Fragment implements OnItemClickListener{
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		if (Utils.isFasDoubleClick()) {
+			return;
+		}
 		ListItemInfo itemInfo = mAdapter.getItem(position);
 		Intent intent = new Intent();
 		switch (position) {

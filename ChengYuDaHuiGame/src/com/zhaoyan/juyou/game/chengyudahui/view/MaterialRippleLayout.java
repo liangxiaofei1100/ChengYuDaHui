@@ -1,6 +1,7 @@
 package com.zhaoyan.juyou.game.chengyudahui.view;
 
 import com.zhaoyan.juyou.game.chengyudahui.R;
+import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -35,6 +36,9 @@ import android.widget.FrameLayout;
 import static android.view.GestureDetector.SimpleOnGestureListener;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
+/**
+ * https://github.com/balysv/material-ripple
+ */
 @SuppressLint("NewApi")
 public class MaterialRippleLayout extends FrameLayout {
 
@@ -86,7 +90,7 @@ public class MaterialRippleLayout extends FrameLayout {
     private GestureDetector   gestureDetector;
     private PerformClickEvent pendingClickEvent;
     private PressedEvent      pendingPressEvent;
-
+  
     public static RippleBuilder on(View view) {
         return new RippleBuilder(view);
     }
