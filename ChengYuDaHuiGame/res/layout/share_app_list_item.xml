@@ -31,7 +31,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/ps__button_flat_dropbox"
+            android:background="@drawable/ps_button_flat_dropbox"
             android:focusable="false"
             android:gravity="center"
             android:minWidth="100dp"

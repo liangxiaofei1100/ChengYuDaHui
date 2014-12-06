@@ -162,7 +162,7 @@
             android:id="@+id/ll_info_dl"
             android:layout_width="match_parent"
             android:layout_height="35.0dp"
-            android:background="@drawable/ps__button_flat_dropbox"
+            android:background="@drawable/ps_button_flat_dropbox"
             android:layout_alignParentBottom="true"
             android:gravity="center"
             android:orientation="horizontal" >

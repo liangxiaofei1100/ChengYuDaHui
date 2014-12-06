@@ -88,10 +88,9 @@
         <item>XXXXXX</item>
     </string-array>
     <string-array name="write_items">
-        <item>一年级</item>
-        <item>二年级</item>
-        <item>三年级</item>
-        <item>四年级</item>
+        <item>初级</item>
+        <item>中级</item>
+        <item>高级</item>
     </string-array>
     <!-- study end -->
     

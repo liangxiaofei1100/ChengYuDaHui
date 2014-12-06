@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ItemAdapter extends CursorAdapter {
@@ -19,23 +20,22 @@ public class ItemAdapter extends CursorAdapter {
 	}
 
 	@Override
-	public void bindView(View arg0, Context arg1, Cursor arg2) {
+	public void bindView(View view, Context arg1, Cursor arg2) {
 		// TODO Auto-generated method stub
 		String s = arg2.getString(arg2.getColumnIndex(DictateColums.RESULT));
-		ViewHolder holder=(ViewHolder) arg0.getTag();
+		ViewHolder holder=(ViewHolder) view.getTag();
 		if(holder!=null)
 			holder.tv.setText((arg2.getPosition()+1)+"");
 		if (s != null) {
 			if (s.equals("right")) {
-				arg0.setBackgroundResource(R.drawable.dictate_right_item_selector);
+				holder.imageView.setImageResource(R.drawable.write_result_right);
 				return;
 			} else if (s.equals("wrong")) {
-				arg0.setBackgroundResource(R.drawable.dictate_wrong_item_selector);
+				holder.imageView.setImageResource(R.drawable.write_result_wrong);
 				return;
 			}
-
 		}
-		arg0.setBackgroundResource(R.drawable.short_btn_bg_selector);
+		holder.imageView.setImageResource(R.drawable.write_result_unknow);
 	}
 
 	@Override
@@ -46,11 +46,13 @@ public class ItemAdapter extends CursorAdapter {
 		ViewHolder holder=new ViewHolder();
 		 v= layoutInflater.inflate(R.layout.dictate_ietm, null);
 		 holder.tv=(TextView) v.findViewById(R.id.tv_dictate_item);
+		 holder.imageView = (ImageView) v.findViewById(R.id.iv_dictate_icon);
 		 v.setTag(holder);
 		 return v;
 	}
 
 	public  class ViewHolder{
 		TextView tv;
+		ImageView imageView;
 	}
 }

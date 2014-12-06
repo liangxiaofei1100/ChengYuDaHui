@@ -18,6 +18,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -29,7 +31,13 @@ import com.zhaoyan.juyou.game.chengyudahui.activity.BaseZyActivity;
 import com.zhaoyan.juyou.game.chengyudahui.view.ActionBar;
 import com.zhaoyan.juyou.game.chengyudahui.view.LetterImageView;
 
-public class WriteMainActivity extends BaseZyActivity{
+public class WriteMainActivity extends BaseZyActivity implements OnItemClickListener{
+	
+	SampleListAdapter mAdapter = null;
+	
+	public static final int LEVEL_0 = 0;
+	public static final int LEVEL_1 = 1;
+	public static final int LEVEL_2 = 2;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +54,9 @@ public class WriteMainActivity extends BaseZyActivity{
 		
 		ListView listView = (ListView) findViewById(R.id.lv_write);
 		String[] items = getResources().getStringArray(R.array.write_items);
-		SampleListAdapter adapter = new SampleListAdapter(this, Arrays.asList(items));
-		listView.setAdapter(adapter);
+		mAdapter = new SampleListAdapter(this, Arrays.asList(items));
+		listView.setAdapter(mAdapter);
+		listView.setOnItemClickListener(this);
 	}
 	
 	private static class SampleListAdapter extends ArrayAdapter<String> {
@@ -76,4 +85,30 @@ public class WriteMainActivity extends BaseZyActivity{
         }
         
     }
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		Intent intent = new Intent(getApplicationContext(), WriteItemActivity.class);
+		String title = mAdapter.getItem(position);
+		int level = 0;
+		switch (position) {
+		case 0:
+			//初级
+			level = LEVEL_0;
+			break;
+		case 1:
+			//中级
+			level = LEVEL_1;
+			break;
+		case 2:
+			//高级
+			level = LEVEL_2;
+			break;
+		}
+		
+		intent.putExtra("title", title);
+		intent.putExtra("level", level);
+		startActivity(intent);
+	}
 }

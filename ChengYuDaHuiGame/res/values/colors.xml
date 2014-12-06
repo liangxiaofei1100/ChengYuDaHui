@@ -32,5 +32,8 @@
      
      <color name="zy_action_bar_tint">#F5C034</color>
 	<color name="zy_action_bar_divider_tint">#7fff</color>
+	
+	<color name="write_bg_pressed">#F63139</color>
+	<color name="write_bg_normal">#DF2C34</color>
 
 </resources>

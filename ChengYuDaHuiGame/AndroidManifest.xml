@@ -245,6 +245,11 @@
             android:theme="@style/Theme.ZhaoYan"
             />
         <activity
+            android:name="com.zhaoyan.juyou.game.chengyudahui.study.write.WriteItemActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ZhaoYan"
+            />
+        <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.study.write.DictateMainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActivityTheme" />
