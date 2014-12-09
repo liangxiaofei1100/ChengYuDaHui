@@ -1,5 +1,6 @@
 package com.zhaoyan.juyou.game.chengyudahui.study.write;
 
+import com.zhaoyan.communication.util.Log;
 import com.zhaoyan.juyou.game.chengyudahui.R;
 import com.zhaoyan.juyou.game.chengyudahui.db.DictateData.DictateColums;
 
@@ -13,25 +14,32 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ItemAdapter extends CursorAdapter {
+	private static final String TAG = ItemAdapter.class.getSimpleName();
 
 	public ItemAdapter(Context context, Cursor c) {
-		super(context, c);
+		super(context, c, false);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void bindView(View view, Context arg1, Cursor arg2) {
+	public void bindView(View view, Context arg1, Cursor cursor) {
 		// TODO Auto-generated method stub
-		String s = arg2.getString(arg2.getColumnIndex(DictateColums.RESULT));
-		ViewHolder holder=(ViewHolder) view.getTag();
-		if(holder!=null)
-			holder.tv.setText((arg2.getPosition()+1)+"");
-		if (s != null) {
-			if (s.equals("right")) {
-				holder.imageView.setImageResource(R.drawable.write_result_right);
+		String result = cursor.getString(cursor
+				.getColumnIndex(DictateColums.RESULT));
+		ViewHolder holder = (ViewHolder) view.getTag();
+		int position = cursor.getPosition();
+
+		holder.tv.setText((position + 1) + "");
+
+		Log.d(TAG, position + ":" + result);
+		if (result != null) {
+			if (result.equals("right")) {
+				holder.imageView
+						.setImageResource(R.drawable.write_result_right);
 				return;
-			} else if (s.equals("wrong")) {
-				holder.imageView.setImageResource(R.drawable.write_result_wrong);
+			} else if (result.equals("wrong")) {
+				holder.imageView
+						.setImageResource(R.drawable.write_result_wrong);
 				return;
 			}
 		}
@@ -40,18 +48,17 @@ public class ItemAdapter extends CursorAdapter {
 
 	@Override
 	public View newView(Context arg0, Cursor arg1, ViewGroup arg2) {
-		// TODO Auto-generated method stub
 		View v;
 		LayoutInflater layoutInflater = LayoutInflater.from(arg0);
-		ViewHolder holder=new ViewHolder();
-		 v= layoutInflater.inflate(R.layout.dictate_ietm, null);
-		 holder.tv=(TextView) v.findViewById(R.id.tv_dictate_item);
-		 holder.imageView = (ImageView) v.findViewById(R.id.iv_dictate_icon);
-		 v.setTag(holder);
-		 return v;
+		ViewHolder holder = new ViewHolder();
+		v = layoutInflater.inflate(R.layout.dictate_ietm, null);
+		holder.tv = (TextView) v.findViewById(R.id.tv_dictate_item);
+		holder.imageView = (ImageView) v.findViewById(R.id.iv_dictate_icon);
+		v.setTag(holder);
+		return v;
 	}
 
-	public  class ViewHolder{
+	public class ViewHolder {
 		TextView tv;
 		ImageView imageView;
 	}

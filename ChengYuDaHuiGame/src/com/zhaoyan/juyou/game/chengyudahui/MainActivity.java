@@ -19,9 +19,9 @@ import android.widget.Button;
 
 import com.zhaoyan.juyou.game.chengyudahui.activity.GetGoldActivity;
 import com.zhaoyan.juyou.game.chengyudahui.db.ChengyuData.ChengyuColums;
-import com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty;
 import com.zhaoyan.juyou.game.chengyudahui.speakgame.SpeakGameActivity;
 import com.zhaoyan.juyou.game.chengyudahui.study.StudyActivity;
+import com.zhaoyan.juyou.game.chengyudahui.study.write.PaintGameActivty;
 
 public class MainActivity extends ActionBarActivity implements OnClickListener {
 	public static Button mStudyBtn, mSpeakBtn, mPaintBtn, mScoreBtn;

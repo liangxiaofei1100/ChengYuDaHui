@@ -3,6 +3,7 @@
 import java.io.File;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +18,7 @@ import com.zhaoyan.juyou.game.chengyudahui.utils.CopyFileUtil;
  * @author yuri
  * @date 2014-11-18 10:29:58
  */
-public class SplashActivity extends BackgroundMusicBaseActivity {
+public class SplashActivity extends Activity {
 
 	private static final int GO_HOME = 100;
 	private static final int GO_LOGIN = 200;

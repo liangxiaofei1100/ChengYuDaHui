@@ -186,7 +186,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.zhaoyan.juyou.game.chengyudahui.paint.PaintGameActivty"
+            android:name="com.zhaoyan.juyou.game.chengyudahui.study.write.PaintGameActivty"
             android:screenOrientation="portrait"
             android:theme="@style/dialog_style" />
         <activity
@@ -204,9 +204,9 @@
                 android:value="333" />
         </activity>
         <activity
-            android:name="com.zhaoyan.juyou.game.chengyudahui.study.write.DictateActivity"
+            android:name="com.zhaoyan.juyou.game.chengyudahui.study.write.WriteDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ActivityTheme" >
+            android:theme="@style/Theme.ZhaoYan" >
         </activity>
         <activity
             android:name="com.zhaoyan.juyou.game.chengyudahui.knowledge.KnowledgeMainActivity"
@@ -245,19 +245,10 @@
             android:theme="@style/Theme.ZhaoYan"
             />
         <activity
-            android:name="com.zhaoyan.juyou.game.chengyudahui.study.write.WriteItemActivity"
+            android:name="com.zhaoyan.juyou.game.chengyudahui.study.write.WriteLevelActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.ZhaoYan"
             />
-        <activity
-            android:name="com.zhaoyan.juyou.game.chengyudahui.study.write.DictateMainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ActivityTheme" />
-        <activity
-            android:name="com.zhaoyan.juyou.game.chengyudahui.study.write.DictateMainFragmentActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ActivityTheme" />
-
         <provider
             android:name="com.zhaoyan.juyou.game.chengyudahui.db.ZyProvider"
             android:authorities="com.zhaoyan.juyou.game.chengyudahui.db.ZyProvider"

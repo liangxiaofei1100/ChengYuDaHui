@@ -1,4 +1,4 @@
-package com.zhaoyan.juyou.game.chengyudahui.paint;
+package com.zhaoyan.juyou.game.chengyudahui.study.write;
 
 import java.util.HashMap;
 import java.util.Map;

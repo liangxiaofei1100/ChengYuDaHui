@@ -52,6 +52,9 @@ public class MessageChatAdapter extends BaseListAdapter<ZhaoYanMsg> {
 	private final int TYPE_SEND_VOICE =6;
 	private final int TYPE_RECEIVER_VOICE = 7;
 	
+	public static final String TEST_SEND_OBJECT_ID = "9923df23";
+	public static final String TEST_RECEIVER_OBJECT_ID = "sdfsdf88sdf";
+	
 	String currentObjectId = "";
 	
 	private DisplayImageOptions options;
@@ -60,6 +63,8 @@ public class MessageChatAdapter extends BaseListAdapter<ZhaoYanMsg> {
 	public MessageChatAdapter(Context context,List<ZhaoYanMsg> msgList) {
 		// TODO Auto-generated constructor stub
 		super(context, msgList);
+		//test
+		currentObjectId = TEST_SEND_OBJECT_ID;
 		
 		options = new DisplayImageOptions.Builder()
 		.showImageForEmptyUri(R.drawable.ic_launcher)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -18,34 +18,63 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp" >
 
-        <com.zhaoyan.juyou.game.chengyudahui.view.RoundedImageView
-            android:id="@+id/iv_avatar"
-            android:layout_width="@dimen/avatar_height"
-            android:layout_height="@dimen/avatar_height"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="5dp"
-            android:scaleType="center"
-            app:riv_corner_radius="90dp" />
+        <RelativeLayout
+            android:id="@+id/rl_avatar"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_centerVertical="true" >
 
-        <TextView
-            android:id="@+id/tv_message"
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/test_bg_left" />
+
+            <com.zhaoyan.juyou.game.chengyudahui.view.RoundedImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="@dimen/avatar_height"
+                android:layout_height="@dimen/avatar_height"
+                android:layout_centerInParent="true"
+                android:scaleType="center"
+                app:riv_corner_radius="90dp" />
+
+            <TextView
+                android:id="@+id/tv_write_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@android:color/white"
+                android:textSize="24sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_write_layout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/iv_avatar"
-            android:background="@drawable/msg_bubble_left"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="left|center"
-            android:lineSpacingExtra="2dp"
-            android:maxWidth="225.0dip"
-            android:minWidth="50dp"
-            android:minHeight="50dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="5dp"
-            android:textColor="#ff000000"
-            android:textSize="15sp" />
+            android:layout_height="58dp"
+            android:layout_alignBottom="@+id/rl_avatar"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:layout_toRightOf="@id/rl_avatar"
+            android:background="@drawable/item_bg_part2"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            >
 
+            <TextView
+                android:id="@+id/tv_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="left|center"
+                android:lineSpacingExtra="2dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="5dp"
+                android:textColor="#ff000000"
+                android:textSize="15sp" />
+        </LinearLayout>
     </RelativeLayout>
 
 </LinearLayout>

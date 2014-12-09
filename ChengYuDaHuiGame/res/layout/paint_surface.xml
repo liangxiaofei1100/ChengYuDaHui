@@ -39,14 +39,14 @@
                 android:layout_height="50dip"
                 android:clickable="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/short_btn_bg_selector" />
+                android:src="@drawable/button_gray_selector" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@string/paint_clean"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -61,14 +61,14 @@
                 android:layout_height="50dip"
                 android:clickable="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/short_btn_bg_selector" />
+                android:src="@drawable/button_blue_selector" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@string/game_confirm"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </RelativeLayout>

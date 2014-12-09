@@ -307,6 +307,15 @@ public class ChatActivity extends BaseZyActivity implements OnClickListener,
 		} else {
 			mAdapter = new MessageChatAdapter(this, initMsgData());
 			mListView.setAdapter(mAdapter);
+			
+			//test
+			ZhaoYanMsg zhaoYanMsg = ZhaoYanMsg.createTextSendMsg(getApplicationContext(), MessageChatAdapter.TEST_SEND_OBJECT_ID, "这是一个发送消息测试");
+			mAdapter.add(zhaoYanMsg);
+			
+			ZhaoYanMsg zhaoYanMsg2 = ZhaoYanMsg.createTextSendMsg(getApplicationContext(), MessageChatAdapter.TEST_RECEIVER_OBJECT_ID, "这是一个接收消息测试");
+			mAdapter.add(zhaoYanMsg2);
+			mAdapter.notifyDataSetChanged();
+			//test
 		}
 	}
 

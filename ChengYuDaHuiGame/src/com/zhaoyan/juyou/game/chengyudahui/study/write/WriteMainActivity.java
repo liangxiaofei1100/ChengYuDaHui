@@ -89,7 +89,7 @@ public class WriteMainActivity extends BaseZyActivity implements OnItemClickList
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		Intent intent = new Intent(getApplicationContext(), WriteItemActivity.class);
+		Intent intent = new Intent(getApplicationContext(), WriteLevelActivity.class);
 		String title = mAdapter.getItem(position);
 		int level = 0;
 		switch (position) {
