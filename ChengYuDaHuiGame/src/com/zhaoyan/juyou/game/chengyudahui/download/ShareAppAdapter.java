@@ -101,7 +101,7 @@ public class ShareAppAdapter extends BaseAdapter {
 		boolean fromCache = holder.imageView.loadImage(Conf.URL_EX + appInfo.getIconUrl(),
 				false, null);
 		if (!fromCache) {
-			holder.imageView.setImageResource(R.drawable.ic_launcher1);
+			holder.imageView.setImageResource(R.drawable.ic_launcher);
 		}
 
 		String size = Utils.getFormatSize(appInfo.getAppSize());

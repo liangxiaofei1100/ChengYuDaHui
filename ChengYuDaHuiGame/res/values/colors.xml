@@ -35,5 +35,10 @@
 	
 	<color name="write_bg_pressed">#F63139</color>
 	<color name="write_bg_normal">#DF2C34</color>
+	
+	<color name="red">#FFC93437</color>
+    <color name="blue">#FF375BF1</color>
+    <color name="yellow">#FFF7D23E</color>
+    <color name="green">#FF34A350</color>
 
 </resources>

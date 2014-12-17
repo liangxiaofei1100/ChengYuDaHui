@@ -51,5 +51,9 @@
 	app:rippleBackground="#FFFFFF"        // background under ripple drawable; used with rippleOverlay="false"
 	app:ripplePersistent="true"           // if true, ripple background color persists after animation, until setRadius(0) is called
      -->
+     
+     <declare-styleable name="CircularProgress">
+        <attr name="borderWidth" format="dimension" />
+    </declare-styleable>
 
 </resources>

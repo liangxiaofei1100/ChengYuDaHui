@@ -66,7 +66,7 @@ public class FriendAdapter extends BaseAdapter{
 //		
 		User user = mData.get(position);
 		
-		holder.iconView.setImageResource(R.drawable.avantar_test);
+		holder.iconView.setImageResource(R.drawable.default_avatar);
 		holder.usernameView.setText(user.getUserName());
 		holder.infoView.setText("用户列表测试:" + position);
 		

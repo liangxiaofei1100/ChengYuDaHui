@@ -45,6 +45,7 @@ import com.zhaoyan.juyou.game.chengyudahui.study.story.SideBar.OnTouchingLetterC
 import com.zhaoyan.juyou.game.chengyudahui.study.story.StoryDownloadDialog.OnDownloadOverListener;
 import com.zhaoyan.juyou.game.chengyudahui.utils.Utils;
 import com.zhaoyan.juyou.game.chengyudahui.view.ActionBar;
+import com.zhaoyan.juyou.game.chengyudahui.view.CircularProgress;
 import com.zhaoyan.juyou.game.chengyudahui.view.Effectstype;
 import com.zhaoyan.juyou.game.chengyudahui.view.NiftyDialogBuilder;
 import com.zhaoyan.juyou.game.chengyudahui.view.TableTitleView;
@@ -87,7 +88,8 @@ public class StoryItemActivity extends BaseZyActivity implements OnTableSelectCh
 	private SideBar mSideBar;
 	private TextView mTipTextView;
 	private StoryItemAdapter mAdapter;
-	private ProgressBar mLoadingBar;
+//	private ProgressBar mLoadingBar;
+	private CircularProgress mLoadingBar;
 	
 	private CharacterParser mCharacterParser;
 	private PinyinComparator mPinyinComparator;
@@ -226,7 +228,7 @@ public class StoryItemActivity extends BaseZyActivity implements OnTableSelectCh
 			}
 		});
 		
-		mLoadingBar = (ProgressBar) findViewById(R.id.story_bar_loading);
+		mLoadingBar = (CircularProgress) findViewById(R.id.story_bar_loading);
 		
 		mListView = (ListView) findViewById(R.id.story_listview);
 		mListView.setOnItemClickListener(this);

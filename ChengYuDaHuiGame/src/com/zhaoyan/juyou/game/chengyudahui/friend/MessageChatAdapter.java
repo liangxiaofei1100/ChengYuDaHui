@@ -151,7 +151,7 @@ public class MessageChatAdapter extends BaseListAdapter<ZhaoYanMsg> {
 		if(avatar!=null && !avatar.equals("")){//加载头像-为了不每次都加载头像
 			ImageLoader.getInstance().displayImage(avatar, iv_avatar, ImageLoadOptions.getOptions(),animateFirstListener);
 		}else{
-			iv_avatar.setImageResource(R.drawable.avantar_test);
+			iv_avatar.setImageResource(R.drawable.default_avatar);
 		}
 		
 		iv_avatar.setOnClickListener(new OnClickListener() {

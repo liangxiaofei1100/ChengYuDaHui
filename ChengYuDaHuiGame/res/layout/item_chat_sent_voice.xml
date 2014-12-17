@@ -36,7 +36,7 @@
                 android:layout_width="@dimen/avatar_height"
                 android:layout_height="@dimen/avatar_height"
                 android:scaleType="center"
-                android:src="@drawable/avantar_test"
+                android:src="@drawable/default_avatar"
                 app:riv_corner_radius="90dp" />
         </FrameLayout>
 

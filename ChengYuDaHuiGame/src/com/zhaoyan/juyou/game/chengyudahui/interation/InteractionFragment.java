@@ -8,6 +8,8 @@ import com.zhaoyan.juyou.game.chengyudahui.activity.MainMenuActivity;
 import com.zhaoyan.juyou.game.chengyudahui.adapter.ItemFragmentAdapter;
 import com.zhaoyan.juyou.game.chengyudahui.bean.ListItemInfo;
 
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -51,15 +53,18 @@ public class InteractionFragment extends Fragment implements OnItemClickListener
 		List<ListItemInfo> list = new ArrayList<ListItemInfo>();
 		ListItemInfo info = null;
 		
-		String[] items = getResources().getStringArray(R.array.interaction_items);
-		
+		Resources res = getResources();
+		String[] items = res.getStringArray(R.array.interaction_items);
+		TypedArray dra= res.obtainTypedArray(R.array.interation_item_icons);
+		String[] itemHints = res.getStringArray(R.array.interaction_item_hints);
 		for (int i = 0; i < items.length; i++) {
 			info = new ListItemInfo();
-			info.setIconId(R.drawable.avantar_test);
+			info.setIconId(dra.getResourceId(i, 0));
 			info.setTitle(items[i]);
-			info.setSummary("这是一个测试Item" + i);
+			info.setSummary(itemHints[i]);
 			list.add(info);
 		}
+		dra.recycle();
 		
 		mAdapter = new ItemFragmentAdapter(mActivity, list);
 		mListView.setAdapter(mAdapter);
